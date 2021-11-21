@@ -1,116 +1,98 @@
-Solidity
+سالیدیتی
 ========
 
-Solidity is an object-oriented, high-level language for implementing smart
-contracts. Smart contracts are programs which govern the behaviour of accounts
-within the Ethereum state.
 
-Solidity is a `curly-bracket language <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_.
-It is influenced by C++, Python and JavaScript, and is designed to target the Ethereum Virtual Machine (EVM).
-You can find more details about which languages Solidity has been inspired by in
-the :doc:`language influences <language-influences>` section.
+سالیدیتی   یک زبان شیء گرا  و سطح بالا  برای پیاده سازی قراردادهای هوشمند  می‌باشد. قرارداد‌های هوشمند، برنامه‌هایی هستند که رفتار حساب‌ها  در داخل حالت اتریوم  را کنترل می‌کنند.
 
-Solidity is statically typed, supports inheritance, libraries and complex
-user-defined types among other features.
 
-With Solidity you can create contracts for uses such as voting, crowdfunding, blind auctions,
-and multi-signature wallets.
 
-When deploying contracts, you should use the latest released
-version of Solidity. Apart from exceptional cases, only the latest version receives
-`security fixes<https://github.com/ethereum/solidity/security/policy#supported-versions>`.
-Furthermore, breaking changes as well as
-new features are introduced regularly. We currently use
-a 0.x version number `to indicate this fast pace of change <https://semver.org/#spec-item-4>`_.
+سالیدیتی یک `زبان آکلادی <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_ می‌باشد که از زبان‌هایی مانند سی پلاس پلاس ، پایتون و جاوا اسکریپت تأثیر گرفته و برای هدف قراردادن EVM  یا ماشینِ مجازیِ اتریوم  طراحی شده‌است.
+
+
+سالیدیتی از نوع استاتیک   می‌باشد. از ویژگی‌های ارث بری ، کتابخانه‌ها  و انواع نوع‌های پیچیده تعریف شده توسط کاربر  پشتیبانی می‌کند.
+
+با سالیدیتی می‌توانید قراردادهایی را برای کاربردهایی از قبیل رأی‌گیری ، سرمایه گذاری جمعی ، مزایده کور  و کیف پول‌ با امضای چندگانه  استفاده کنید.
+
+هنگام استقرار  قرارداد‌ها، باید از آخرین نسخه سالیدیتی منتشر شده استفاده کنید. به این دلیل که تغییرات جدید ، ویژگی‌های جدید  و رفع باگ‌ها  به طور منظم معرفی می‌شوند. ما در حال حاضر از نسخه 0.X برای `نشان دادن این تغییرات سریع <https://semver.org/#spec-item-4>`_ استفاده می‌کنیم.
+
 
 .. warning::
 
-  Solidity recently released the 0.8.x version that introduced a lot of breaking
-  changes. Make sure you read :doc:`the full list <080-breaking-changes>`.
 
-Ideas for improving Solidity or this documentation are always welcome,
-read our :doc:`contributors guide <contributing>` for more details.
+       سالیدیتی به تازگی نسخه 0.8.X را منتشر کرده که تغییرات جدید را معرفی می‌کند. حتماً :doc:`لیست کامل <080-breaking-changes>` را مطالعه کنید.
 
-Getting Started
+ایده‌های بهبود سالیدیتی یا این مستند همیشه مورد استقبال قرار میگیرد، برای جزئیات بیشتر :doc:`راهنمای همکاری <contributing>` را مطالعه کنید.
+
+
+شروع
 ---------------
 
-**1. Understand the Smart Contract Basics**
+**1. درک مبانی قراردادهای هوشمند**
 
-If you are new to the concept of smart contracts we recommend you to get started by digging
-into the "Introduction to Smart Contracts" section, which covers:
+اگر با مفهوم قراردادهای هوشمند آشنا هستید، به شما توصیه می‌کنیم که با جستجوی بخش "معرفی قراردادهای هوشمند" شروع به کار کنید، که شامل موارد زیر است:
 
-* :ref:`A simple example smart contract <simple-smart-contract>` written in Solidity.
-* :ref:`Blockchain Basics <blockchain-basics>`.
-* :ref:`The Ethereum Virtual Machine <the-ethereum-virtual-machine>`.
+* :ref:`یک مثال ساده از قرارداد هوشمند  <simple-smart-contract>` که با سالیدیتی نوشته شده‌است.
+* :ref:`مبانی بلاکچین <blockchain-basics>`.
+* :ref:`ماشین مجازی اتریوم <the-ethereum-virtual-machine>`.
 
-**2. Get to Know Solidity**
+**2.	آشنایی با سالیدیتی**
 
-Once you are accustomed to the basics, we recommend you read the :doc:`"Solidity by Example" <solidity-by-example>`
-and “Language Description” sections to understand the core concepts of the language.
+هنگامی که با مبانی اولیه آشنا شدید، توصیه می‌کنیم برای درک مفاهیم اصلی زبان، بخش‌های :doc:`"سالیدیتی با مثال" <solidity-by-example>`
+و "شرح زبان" را بخوانید.
 
-**3. Install the Solidity Compiler**
+**3. 	نصب کامپایلر  سالیدیتی**
 
-There are various ways to install the Solidity compiler,
-simply choose your preferred option and follow the steps outlined on the :ref:`installation page <installing-solidity>`.
+روش های مختلفی برای نصب کامپایلر سالیدیتی وجود دارد، به سادگی گزینه مورد نظر خود را انتخاب کنید و مراحل ذکر شده در :ref:`صفحه نصب <installing-solidity>` را دنبال کنید.
+
+
+
 
 .. hint::
-  You can try out code examples directly in your browser with the
-  `Remix IDE <https://remix.ethereum.org>`_. Remix is a web browser based IDE
-  that allows you to write, deploy and administer Solidity smart contracts, without
-  the need to install Solidity locally.
 
+  می‌توانید نمونه‌های کد را مستقیماً در مرورگر خود با `ویرایشگر متن ریمیکس <https://remix.ethereum.org>`_ امتحان کنید. ریمیکس یک ویرایشگر متن مبتنی بر مرورگر وب است که به شما امکان می‌دهد، بدون نیاز به نصب سالیدیتی به صورت محلی، قراردادهای هوشمند سالیدیتی را بنویسید، دیپلوی و مدیریت کنید.
+  
 .. warning::
-    As humans write software, it can have bugs. You should follow established
-    software development best-practices when writing your smart contracts. This
-    includes code review, testing, audits, and correctness proofs. Smart contract
-    users are sometimes more confident with code than their authors, and
-    blockchains and smart contracts have their own unique issues to
-    watch out for, so before working on production code, make sure you read the
-    :ref:`security_considerations` section.
+   
+    نرم افزار به عنوان نوشته‌ی انسان، می‌تواند باگ داشته باشد. هنگام نوشتن قراردادهای هوشمند خود، باید بهترین شیوه‌های توسعه نرم افزار را دنبال کنید. شیوه‌های توسعه نرم افزار شامل بازبینی ، آزمایش ، حسابرسی  و اثبات صحتِ  کد می‌باشد. کاربران قرارداد هوشمند گاهی اوقات به خودِ کد نسبت به نویسندگان آن‌ها اطمینان بیشتری دارند. بلاکچین‌ها و قراردادهای هوشمند مسائل منحصر به فرد خود را دارند، که باید مراقب آنها باشید. بنابراین قبل از کار بر روی تولید کد، حتماً قسمت  :ref:`ملاحظات امنیتی <security_considerations>` را مطالعه کنید.
+ 
 
-**4. Learn More**
+**4.	یادگیری بیشتر**
 
-If you want to learn more about building decentralized applications on Ethereum, the
-`Ethereum Developer Resources <https://ethereum.org/en/developers/>`_
-can help you with further general documentation around Ethereum, and a wide selection of tutorials,
-tools and development frameworks.
+اگر می‌خواهید در مورد ساخت برنامه‌های غیرمتمرکز در اتریوم اطلاعات بیشتری کسب کنید، `منابع توسعه دهنده اتریوم <https://ethereum.org/en/developers/>`_ می‌توانند به شما در تهیه مستندِ عمومیِ بیشتر در مورد اتریوم و انتخاب گسترده‌ای از آموزش‌ها، ابزارها و چارچوب‌های توسعه کمک کنند.
 
-If you have any questions, you can try searching for answers or asking on the
-`Ethereum StackExchange <https://ethereum.stackexchange.com/>`_, or
-our `Gitter channel <https://gitter.im/ethereum/solidity/>`_.
+ اگر سؤالی دارید، می‌توانید جواب‌ها را جستجو کنید یا از طریق `Ethereum StackExchange <https://ethereum.stackexchange.com/>`_, یا `کانال Gitter <https://gitter.im/ethereum/solidity/>`_  ما بپرسید.
 
 .. _translations:
 
-Translations
+ترجمه‌ها
 ------------
 
-Community volunteers help translate this documentation into several languages.
-They have varying degrees of completeness and up-to-dateness. The English
-version stands as a reference.
+داوطلبان جامعه سالیدیتی به ترجمه این مستندات به چندین زبان کمک می‌کنند. این‌ مستندات سطوح مختلفی از کامل و بروز بودن را دارند. نسخه انگلیسی به عنوان مرجع می‌باشد.
 
 .. note::
 
+   
    We recently set up a new GitHub organization and translation workflow to help streamline the
    community efforts. Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_
    for information on how to contribute to the community translations moving forward.
 
-* `French <https://solidity-fr.readthedocs.io>`_ (in progress)
-* `Italian <https://github.com/damianoazzolini/solidity>`_ (in progress)
-* `Japanese <https://solidity-jp.readthedocs.io>`_
-* `Korean <https://solidity-kr.readthedocs.io>`_ (in progress)
-* `Russian <https://github.com/ethereum/wiki/wiki/%5BRussian%5D-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity>`_ (rather outdated)
-* `Simplified Chinese <https://learnblockchain.cn/docs/solidity/>`_ (in progress)
-* `Spanish <https://solidity-es.readthedocs.io>`_
-* `Turkish <https://github.com/denizozzgur/Solidity_TR/blob/master/README.md>`_ (partial)
+* `فرانسوی <https://solidity-fr.readthedocs.io>`_ (در حال انجام)
+* `ایتالیایی <https://github.com/damianoazzolini/solidity>`_ (در حال انجام)
+* `ژاپنی <https://solidity-jp.readthedocs.io>`_
+* `کره‌ای <https://solidity-kr.readthedocs.io>`_ (در حال انجام)
+* `روسی <https://github.com/ethereum/wiki/wiki/%5BRussian%5D-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity>`_ (نسبتاً قدیمی)
+* `چینی <https://learnblockchain.cn/docs/solidity/>`_ (در حال انجام)
+* `اسپانیایی <https://solidity-es.readthedocs.io>`_
+* `ترکی <https://github.com/denizozzgur/Solidity_TR/blob/master/README.md>`_ (جزئی)
 
-Contents
+فهرست
 ========
 
-:ref:`Keyword Index <genindex>`, :ref:`Search Page <search>`
+:ref:`فهرست کلمات <genindex>`, :ref:`صفحه جستجو <search>`
 
 .. toctree::
    :maxdepth: 2
-   :caption: Basics
+   :caption: مبانی
 
    introduction-to-smart-contracts.rst
    installing-solidity.rst
@@ -118,7 +100,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Language Description
+   :caption: توضیحات زبان
 
    layout-of-source-files.rst
    structure-of-a-contract.rst
@@ -132,7 +114,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Compiler
+   :caption: کامپایلر
 
    using-the-compiler.rst
    analysing-compilation-output.rst
