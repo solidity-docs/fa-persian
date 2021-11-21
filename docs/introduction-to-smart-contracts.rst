@@ -1,18 +1,16 @@
 ###############################
-Introduction to Smart Contracts
+مقدمه‌ای بر قراد‌های هوشمند 
 ###############################
 
-.. _simple-smart-contract:
+.. _یک قرارداد هوشمند ساده :
 
 ***********************
-A Simple Smart Contract
+یک قرارداد هوشمند ساده 
 ***********************
 
-Let us begin with a basic example that sets the value of a variable and exposes
-it for other contracts to access. It is fine if you do not understand
-everything right now, we will go into more detail later.
+بیایید با یک مثال ابتدایی شروع کنیم که مقدار یک متغیر را تعیین می‌کند و آن را در معرض دسترسی سایر قراردادها قرار می‌دهد. اینکه الان شما متوجه چیزی نمی‌شوید طبیعی می‌باشد، بعداً به جزئیات بیشتری خواهیم پرداخت.
 
-Storage Example
+مثال ذخیره سازی
 ===============
 
 .. code-block:: solidity
@@ -32,29 +30,13 @@ Storage Example
         }
     }
 
-The first line tells you that the source code is licensed under the
-GPL version 3.0. Machine-readable license specifiers are important
-in a setting where publishing the source code is the default.
+خط اول به شما می‌گوید کد منبع ، تحت مجوز GPL نسخه 3.0 می‌باشد. در جایی که انتشار کد منبع به صورت پیشفرض  باشد، مشخص کننده‌هایِ مجوز قابلِ خواندن توسطِ ماشین  مهم هستند.
+خط بعدی مشخص می‌کند کد منبع برای سالیدیتی نسخه 0.4.16 یا نسخه جدیدتر زبان نوشته شده است، اما شامل نسخه 0.9.0 نمی‌باشد. بخاطر اینکه قرارداد هوشمند می‌تواند رفتار متفاوتی داشته ‌باشد، به این هدف که اطمینان حاصل شود قرارداد هوشمند نتواند با نسخه جدید کامپایلر، کامپایل شود. :ref:`پراگما <pragma>` (Pragmas) دستورالعمل‌های رایج برای کامپایلرها در مورد نحوه برخورد با کد منبع می‌باشند (به عنوان مثال  `پراگما یکبار  (pragma once) <https://en.wikipedia.org/wiki/Pragma_once>`_ ). 
 
-The next line specifies that the source code is written for
-Solidity version 0.4.16, or a newer version of the language up to, but not including version 0.9.0.
-This is to ensure that the contract is not compilable with a new (breaking) compiler version, where it could behave differently.
-:ref:`Pragmas<pragma>` are common instructions for compilers about how to treat the
-source code (e.g. `pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_).
+قراردادها در سالیدتی به معنای مجموعه‌ای از کد (*توابع* آن‌ها) و داده‌ها (*حالت* آن‌ها) است که در یک آدرس خاص در بلاکچین اتریوم قرار دارند. خط ``;uint storedData``  یک متغیر حالت  به نام ``storedData``  از نوع ``uint``  (عددِ صحیحِ بدونِ علامت  256 بیتی) را مشخص می‌کند. می‌توان آن را به عنوان یک اسلات  در پایگاه داده در نظر بگیرید که می‌توانید با فراخوانی توابع کدی که پایگاه داده را مدیریت می‌کند، آن‌ها را جستوجو کرده و ویرایش کنید. در این مثال، قرارداد توابع  ``set`` و ``get``  را تعریف می‌کند که  برای ویرایش  یا بازیابی  مقدار متغیر استفاده شود.
 
-A contract in the sense of Solidity is a collection of code (its *functions*) and
-data (its *state*) that resides at a specific address on the Ethereum
-blockchain. The line ``uint storedData;`` declares a state variable called ``storedData`` of
-type ``uint`` (*u*\nsigned *int*\eger of *256* bits). You can think of it as a single slot
-in a database that you can query and alter by calling functions of the
-code that manages the database. In this example, the contract defines the
-functions ``set`` and ``get`` that can be used to modify
-or retrieve the value of the variable.
 
-To access a member (like a state variable) of the current contract, you do not typically add the ``this.`` prefix,
-you just access it directly via its name.
-Unlike in some other languages, omitting it is not just a matter of style,
-it results in a completely different way to access the member, but more on this later.
+همانند سایر زبان‌‌های رایج، برای دسترسی به یک متغیر حالت، نیازی به پیشوند ``.this``  ندارید. این قرارداد جدا از اینکه هنوز کار زیادی انجام نداده‌است (به دلیل زیرساخت‌های ساخته شده توسط اتریوم) اجازه می‌دهد هر شخص یک عدد را ذخیره کند، که این عدد توسط هر شخصی در دنیا بدون هیچ روش امکان پذیر برای جلوگیری از انتشار آن قابل دسترس می‌باشد. هر شخصی می‌تواند مجدداً تابع ``set``   را فراخوانی کند و عدد را رونویسی کند، اما عدد در تاریخچه‌ِ بلاکچین هنوز ذخیره بماند. بعداً خواهید دید که چگونه می‌توانید محدودیت‌های دسترسی را اعمال کنید تا فقط شما بتوانید عدد را تغییر دهید. 
 
 This contract does not do much yet apart from (due to the infrastructure
 built by Ethereum) allowing anyone to store a single number that is accessible by
