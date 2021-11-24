@@ -3,49 +3,31 @@
 .. _installing-solidity:
 
 ################################
-Installing the Solidity Compiler
+نصب کامپایلر سالیدیتی
 ################################
 
-Versioning
+نسخه بندی 
 ==========
 
-Solidity versions follow `semantic versioning <https://semver.org>`_ and in addition to
-releases, **nightly development builds** are also made available.  The nightly builds
-are not guaranteed to be working and despite best efforts they might contain undocumented
-and/or broken changes. We recommend using the latest release. Package installers below
-will use the latest release.
+نسخه‌های سالیدیتی از `نسخه بندی سمننتیکی <https://semver.org>`_  پیروی می‌کنند و علاوه بر این نسخه‌ها، **نسخه‌های توسعه شبانه**  نیز در دسترس هستند. کارکردن نسخه‌های نسخه شبانه تضمین نمی‌شود و علی‌رغم همه تلاش‌ها ممکن است تغییرات غیرمستند و یا تغییرات جدید  را شامل شوند. توصیه می‌کنیم از آخرین نسخه استفاده کنید. بسته‌های نصبی زیر از آخرین نسخه استفاده خواهند کرد.
 
-Remix
+ریمیکس
 =====
 
-*We recommend Remix for small contracts and for quickly learning Solidity.*
+*ریمیکس را برای قراردادهای کوچک و برای یادگیری سریع سالیدیتی توصیه می‌کنیم. *
 
-`Access Remix online <https://remix.ethereum.org/>`_, you do not need to install anything.
-If you want to use it without connection to the Internet, go to
-https://github.com/ethereum/remix-live/tree/gh-pages and download the ``.zip`` file as
-explained on that page. Remix is also a convenient option for testing nightly builds
-without installing multiple Solidity versions.
+می‌توانید به صورت آنلاین به `ریمیکس <https://remix.ethereum.org/>`_  دسترسی داشته باشید و نیازی به نصب هیچ چیزی ندارید. اگر می‌خواهید بدون اتصال به اینترنت از آن استفاده کنید، به  https://github.com/ethereum/remix-live/tree/gh-pages مراجعه کنید و فایل  ``zip.``  را همانطور که در آن صفحه توضیح داده شده بارگیری کنید. ریمیکس همچنین یک گزینه مناسب برای تست نسخه شبانه بدون نصب چندین نسخه سالیدیتی است.
 
-Further options on this page detail installing commandline Solidity compiler software
-on your computer. Choose a commandline compiler if you are working on a larger contract
-or if you require more compilation options.
+این صفحه گزینه‌های بیشتر برای نصب نرم افزار کامپایلر سالیدیتی  روی رایانه شما با خط فرمان را توضیح می‌دهد. اگر در حال کار بر روی قرارداد بزرگتر هستید یا به گزینه‌های کامپایل بیشتری نیاز دارید، یک کامپایلر خط فرمان  انتخاب کنید.
 
 .. _solcjs:
 
 npm / Node.js
 =============
 
-Use ``npm`` for a convenient and portable way to install ``solcjs``, a Solidity compiler. The
-`solcjs` program has fewer features than the ways to access the compiler described
-further down this page. The
-:ref:`commandline-compiler` documentation assumes you are using
-the full-featured compiler, ``solc``. The usage of ``solcjs`` is documented inside its own
-`repository <https://github.com/ethereum/solc-js>`_.
+برای نصب راحت و قابل حمل ``solcjs`` یک کامپایلر سالیدیتی، از ``npm``  استفاده کنید. برنامه `solcjs`  دارای ویژگی‌های  کمتری نسبت به راه‌های دسترسی به کامپایلر است که در این صفحه توضیح داده شده است. مستندات  :ref:`commandline-compiler`  فرض می‌کند که از کامپایلر کامل  ``solc`` استفاده می‌کنید. استفاده از  ``solcjs``   در `مخزن <https://github.com/ethereum/solc-js>`_ خود ثبت شده است.
 
-Note: The solc-js project is derived from the C++
-`solc` by using Emscripten which means that both use the same compiler source code.
-`solc-js` can be used in JavaScript projects directly (such as Remix).
-Please refer to the solc-js repository for instructions.
+توجه داشته باشید: پروژه solc-js از C++ `solc` با استفاده از Emscripten مشتق گرفته شده‌است، به این معنی که هر دو از کد منبع کامپایلر یکسانی استفاده می‌کنند. `solc-js`  را می‌توان مستقیماً در پروژه‌های جاوا اسکریپت (مانند ریمیکس) استفاده کرد. لطفاً به مخزن solc-js برای مشاهده دستورات مراجعه کنید.
 
 .. code-block:: bash
 
@@ -53,20 +35,16 @@ Please refer to the solc-js repository for instructions.
 
 .. note::
 
-    The commandline executable is named ``solcjs``.
+  خط فرمان اجرایی  ``solcjs`` نام دارد.
 
-    The commandline options of ``solcjs`` are not compatible with ``solc`` and tools (such as ``geth``)
-    expecting the behaviour of ``solc`` will not work with ``solcjs``.
+ گزینه‌های خط فرمان  ``solcjs`` با  ``solc`` سازگار نیستند و ابزارها (مانند  ``geth``) انتظار دارند رفتار  ``solc`` با  ``solcjs`` کار نکند.
 
-Docker
+داکر
 ======
 
-Docker images of Solidity builds are available using the ``solc`` image from the ``ethereum`` organisation.
-Use the ``stable`` tag for the latest released version, and ``nightly`` for potentially unstable changes in the develop branch.
+تصاویر داکر  از نسخه‌های سالیدیتی با استفاده از تصویر ``solc``   از سازمان ``ethereum``  در دسترس است. از برچسب  ``stable``  برای آخرین نسخه منتشر شده و nightly  برای تغییرات احتمالی ناپایدار در شاخه‌ی نسخه استفاده می‌کند.
 
-The Docker image runs the compiler executable, so you can pass all compiler arguments to it.
-For example, the command below pulls the stable version of the ``solc`` image (if you do not have it already),
-and runs it in a new container, passing the ``--help`` argument.
+تصویر داکر کامپایلر اجرایی را اجرا می‌کند، بنابراین می‌توانید تمام آرگومان‌های کامپایلر را به آن منتقل کنید. به عنوان مثال، دستور زیر نسخه پایدار  تصویر  ``solc`` را دریافت می‌کند (اگر قبلاً آن را ندارید)، و آن را در یک محفظه جدید اجرا می‌کند و آرگومان ``help--`` را عبور می‌دهد.
 
 .. code-block:: bash
 
