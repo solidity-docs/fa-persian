@@ -50,14 +50,13 @@ npm / Node.js
 
     docker run ethereum/solc:stable --help
 
-You can also specify release build versions in the tag, for example, for the 0.5.4 release.
+همچنین می‌توانید نسخه‌هایِ توسعهِ منتشر شده را با برچسب مشخص کنید، به عنوان مثال، برای نسخه 0.5.4.
 
 .. code-block:: bash
 
     docker run ethereum/solc:0.5.4 --help
 
-To use the Docker image to compile Solidity files on the host machine mount a
-local folder for input and output, and specify the contract to compile. For example.
+برای استفاده از تصویر داکر برای کامپایل فایل‌های سالیدیتی در دستگاه میزبان، یک پوشه محلی برای ورودی و خروجی نصب کرده و قرارداد کامپایل را مشخص کنید. برای مثال:
 
 .. code-block:: bash
 
@@ -72,14 +71,12 @@ self-contained (i.e. it does not refer to any external files that would have to 
 
     docker run ethereum/solc:stable --standard-json < input.json > output.json
 
-Linux Packages
+بسته‌های لینوکس
 ==============
 
-Binary packages of Solidity are available at
-`solidity/releases <https://github.com/ethereum/solidity/releases>`_.
+بسته‌های باینری سالیدیتی در مخزن گیتهاب  `سالیدیتی/ انتشارات   <https://github.com/ethereum/solidity/releases>`_  موجود است.
 
-We also have PPAs for Ubuntu, you can get the latest stable
-version using the following commands:
+ما همچنین PPAs برای اوبونتو  داریم، می‌توانید آخرین نسخه پایدار  را با استفاده از دستورات زیر دریافت کنید:
 
 .. code-block:: bash
 
@@ -87,7 +84,7 @@ version using the following commands:
     sudo apt-get update
     sudo apt-get install solc
 
-The nightly version can be installed using these commands:
+نسخه شبانه را می‌توان با استفاده از این دستورات زیر نصب کرد:
 
 .. code-block:: bash
 
@@ -96,16 +93,13 @@ The nightly version can be installed using these commands:
     sudo apt-get update
     sudo apt-get install solc
 
-We are also releasing a `snap package <https://snapcraft.io/>`_, which is
-installable in all the `supported Linux distros <https://snapcraft.io/docs/core/install>`_. To
-install the latest stable version of solc:
+ما همچنین یک `بسته اسنپ <https://snapcraft.io/>`_  را منتشر می‌کنیم که در `توزیع‌های پشتیبانی شده لینوکس <https://snapcraft.io/docs/core/install>`_  قابل نصب است. برای نصب آخرین نسخه پایدار solc:
 
 .. code-block:: bash
 
     sudo snap install solc
 
-If you want to help testing the latest development version of Solidity
-with the most recent changes, please use the following:
+اگر می‌خواهید آخرین نسخه توسعه دهنده سالیدیتی را با جدیدترین تغییرات آزمایش کنید، لطفاً از موارد زیر استفاده کنید:
 
 .. code-block:: bash
 
@@ -113,29 +107,24 @@ with the most recent changes, please use the following:
 
 .. note::
 
-    The ``solc`` snap uses strict confinement. This is the most secure mode for snap packages
-    but it comes with limitations, like accessing only the files in your ``/home`` and ``/media`` directories.
-    For more information, go to `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.
+   اسنپ  ``solc`` از سختگیری شدید استفاده می‌کند. این حالت امن‌ترین حالت برای بسته‌های فوری است اما با محدودیت‌هایی همراه است، مثلاً شما فقط به فایل‌های موجود در دایرکتوری‌های ``home/``   و  ``media/``  دسترسی خواهید داشت. برای کسب اطلاعات بیشتر، به `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.  مراجعه کنید.
 
-Arch Linux also has packages, albeit limited to the latest development version:
+آرک لینوکس  همچنین دارای بسته‌هایی است، البته محدود به آخرین نسخه توسعه می‌باشد:
 
 .. code-block:: bash
 
     pacman -S solidity
 
-Gentoo Linux has an `Ethereum overlay <https://overlays.gentoo.org/#ethereum>`_ that contains a Solidity package.
-After the overlay is setup, ``solc`` can be installed in x86_64 architectures by:
+جنتو لینوکس  دارای `همپوشانی اتریوم <https://overlays.gentoo.org/#ethereum>`_   می‌باشد که حاوی بسته سالیدیتی است. پس از راه اندازی این همپوشانی ،   ``solc`` را می‌توان در معماری x86_64 توسط فرمان زیر نصب کرد:
 
 .. code-block:: bash
 
     emerge dev-lang/solidity
 
-macOS Packages
+بسته‌های مک‌او اس
 ==============
 
-We distribute the Solidity compiler through Homebrew
-as a build-from-source version. Pre-built bottles are
-currently not supported.
+ما کامپایلر سالیدیتی را از طریق هوم‌برو  به عنوان نسخهِ ساخته شده از منبع  توزیع می‌کنیم. مخزن‌های از پیش ساخته شده در حال حاضر پشتیبانی نمی‌شوند.
 
 .. code-block:: bash
 
@@ -144,16 +133,13 @@ currently not supported.
     brew tap ethereum/ethereum
     brew install solidity
 
-To install the most recent 0.4.x / 0.5.x version of Solidity you can also use ``brew install solidity@4``
-and ``brew install solidity@5``, respectively.
+برای نصب جدیدترین نسخه سالیدیتی 0.4.x / 0.5.x می‌توانید به ترتیب از ``brew install solidity@4`` و  ``brew install solidity@5``  استفاده کنید.
 
-If you need a specific version of Solidity you can install a
-Homebrew formula directly from Github.
+اگر به نسخه خاصی از سالیدیتی نیاز دارید، می‌توانید فرمول هوم‌برو  را مستقیماً از گیتهاب نصب کنید.
 
-View
-`solidity.rb commits on Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_.
+لینک  `solidity.rb commits on Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_  را مشاهده کنید.
 
-Copy the commit hash of the version you want and check it out on your machine.
+هشِ کامیت‌های  نسخه موردنظر خود را کپی کرده و در دستگاه خود بررسی کنید.
 
 .. code-block:: bash
 
