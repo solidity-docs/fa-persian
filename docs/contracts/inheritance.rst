@@ -1,40 +1,33 @@
 .. index:: ! inheritance, ! base class, ! contract;base, ! deriving
 
 ***********
-Inheritance
+وراثت
 ***********
 
-Solidity supports multiple inheritance including polymorphism.
+سالیدتی چندین نوع وراثت را قبول می کند، از جمله چند ریختی را.
 
-Polymorphism means that a function call (internal and external)
-always executes the function of the same name (and parameter types)
-in the most derived contract in the inheritance hierarchy.
-This has to be explicitly enabled on each function in the
-hierarchy using the ``virtual`` and ``override`` keywords.
-See :ref:`Function Overriding <function-overriding>` for more details.
+چند ریختی یعنی اینکه در فراخوانی تابع(داخلی و خارجی) همیشه تابعی را اجرا می کند که به
+همان نام ( و نوع های ورودی ها) در سلسله مراتب وراثتی آن قرارداد باشد.این امر باید به
+صراحت در هر تابع در سلسله مراتب با استفاده از کلمه های کلیدی مجازی ``virtual`` و
+بازنویسی ``override`` فعال شود. برای جزئیات بیشتر به :ref:`بازنویسی تابع <function-overriding>` تابع مراجعه کنید.
 
-It is possible to call functions further up in the inheritance
-hierarchy internally by explicitly specifying the contract
-using ``ContractName.functionName()`` or using ``super.functionName()``
-if you want to call the function one level higher up in
-the flattened inheritance hierarchy (see below).
+با مشخص کردن ``()ContractName.functionName`` می توانید تابع را در سلسله مراتب
+وراثتی بصورت داخلی فراخوانی کنید و یا اگر می خواهید تابع را از یک سطح بالاتر در سلسله
+مراتب وراثتی فراخوانی کنید از ``()super.functionName`` استفاده کنید(به زیر توجه کنید).
 
-When a contract inherits from other contracts, only a single
-contract is created on the blockchain, and the code from all the base contracts
-is compiled into the created contract. This means that all internal calls
-to functions of base contracts also just use internal function calls
-(``super.f(..)`` will use JUMP and not a message call).
+وقتی قراردادی از یک قراداد دیگر ارث می پذیرد، تنها فقط یک قرارداد در بلاکچین تولید شده
+است، و کل کد قرارداد اصلی در قراداد تولید شده بصورت کامپایل شده قرار گرفته است. این
+بدان معناست که تمامی فراخوانی داخلی توابع قرارداد اصلی نیز مثل فراخوانی داخلی تابع
+خواهد بود( ``(..)super.f`` از JUMP بجای یک فراخوانی پیغامی استفاده خواهد کرد).
 
-State variable shadowing is considered as an error.  A derived contract can
-only declare a state variable ``x``, if there is no visible state variable
-with the same name in any of its bases.
+ سایه(shadowing) متغیر وضعیت به عنوان خطا در نظر گرفته می شود. یک قرارداد ارث
+ گرفته شده فقط می تواند یک متغیر حالت  ``x``  را تعریف کند، در صورتی که هیچ متغیر حالت
+ قابل مشاهده ای با همان نام در هیچ یک از قرارداده هالی والد آن وجود نداشته باشد.
 
-The general inheritance system is very similar to
-`Python's <https://docs.python.org/3/tutorial/classes.html#inheritance>`_,
-especially concerning multiple inheritance, but there are also
-some :ref:`differences <multi-inheritance>`.
+سیستم وراثت عمومی بسیار شبیه به `پایتون <https://docs.python.org/3/tutorial/classes.html#inheritance>`_ است، بویژه در موارد تفاوت
+وراثت چندگانه، اما :ref:`تفاوت هایی <multi-inheritance>` نیز وجود دارد.
 
-Details are given in the following example.
+جزئیات در مثال زیر آمده است.
 
 .. code-block:: solidity
 
@@ -122,9 +115,8 @@ Details are given in the following example.
         uint info;
     }
 
-Note that above, we call ``Destructible.destroy()`` to "forward" the
-destruction request. The way this is done is problematic, as
-seen in the following example:
+نکته بالا اینکه، ما ``()Destructible.destroy`` را فراخوانی کرده ایم برای "جلو" بردن درخواست
+تخریب. نخوه انجام کار مشکل ساز است ، همانطور که در مثال زیر نشان داده شده است:
 
 .. code-block:: solidity
 
@@ -154,9 +146,9 @@ seen in the following example:
         function destroy() public override(Base1, Base2) { Base2.destroy(); }
     }
 
-A call to ``Final.destroy()`` will call ``Base2.destroy`` because we specify it
-explicitly in the final override, but this function will bypass
-``Base1.destroy``. The way around this is to use ``super``:
+فراخوانی ``()Final.destroy`` ، ``Base2.destroy`` را فراخوانی خواهد کرد زیرا ما آن را به طور
+صریح در بازنویسی نهایی مشخص کرده ایم، اما تابع ``Base1.destroy`` را دور می زند، راه حل
+این است که از ``super`` استفاده کنید:
 
 .. code-block:: solidity
 
@@ -187,33 +179,29 @@ explicitly in the final override, but this function will bypass
         function destroy() public override(Base1, Base2) { super.destroy(); }
     }
 
-If ``Base2`` calls a function of ``super``, it does not simply
-call this function on one of its base contracts.  Rather, it
-calls this function on the next base contract in the final
-inheritance graph, so it will call ``Base1.destroy()`` (note that
-the final inheritance sequence is -- starting with the most
-derived contract: Final, Base2, Base1, Destructible, owned).
-The actual function that is called when using super is
-not known in the context of the class where it is used,
-although its type is known. This is similar for ordinary
-virtual method lookup.
+اگر ``Base2`` یک تابع از ``super`` را فراخوانی کند، این تابع را به سادگی در یکی از قرارداد های
+پایه(پدر) خود فراخوانی نمی کند. بلکه، این تابع را در قرارداد پایه ی بعدی در نمودار وراثت
+نهایی فراخوانی می کند، بنابراین ``()Base1.destroy`` (توجه داشته باشید که طبق ترتیب وراثت
+نهایی -- بهمراه گرفته شده از آخرین قرارداد  : Final, Base2, Base1, Destructible,
+owned) تعلق دارد. تابع واقعی که هنگام استفاده از super فراخوانی می شود، در زمینه
+کلاس مورد استفاده مشخص نیست، گرچه نوع آن مشخص است. این مورد متداول مشابه
+جستجوی روشهای مجازی است. 
 
 .. index:: ! overriding;function
 
 .. _function-overriding:
 
-Function Overriding
+بازنویسی تابع 
 ===================
 
-Base functions can be overridden by inheriting contracts to change their
-behavior if they are marked as ``virtual``. The overriding function must then
-use the ``override`` keyword in the function header.
-The overriding function may only change the visibility of the overridden function from ``external`` to ``public``.
-The mutability may be changed to a more strict one following the order:
-``nonpayable`` can be overridden by ``view`` and ``pure``. ``view`` can be overridden by ``pure``.
-``payable`` is an exception and cannot be changed to any other mutability.
+توابع پایه را می توان با ارث پذیری قرارداد ها، رفتار آنها را باز نویسی کرد در صورتی که بصورت
+مجازی ``virtual`` نشان گذاری شده باشند. سپس در تابع اصلی باید از کلمه کلیدی ``override`` استفاده
+شده باشد. تابعی که بازنویسی می شود ممکن است از تابعی که بازنویسی شده است فقط
+میدان دید خارجی ``external`` یا عمومی ``public`` داشته باشد. تغییر پذیری ممکن است به دنبال دستور العمل دقیق
+تر تغییر کند: غیر قابل پرداخت ``nonpayable`` می تواند بصورت ``pure`` یا ``view`` بازنویسی شود. قابل پرداخت ``payable``
+یک استثنا است و نمی توان آن را بصورت دیگر حالت های تغییر پذیر عوض کرد.
 
-The following example demonstrates changing mutability and visibility:
+مثال زیر عوض شدن تغییر پذیری و میدان دید را نشان می دهد:
 
 .. code-block:: solidity
 
@@ -232,12 +220,12 @@ The following example demonstrates changing mutability and visibility:
         function foo() override public pure {}
     }
 
-For multiple inheritance, the most derived base contracts that define the same
-function must be specified explicitly after the ``override`` keyword.
-In other words, you have to specify all base contracts that define the same function
-and have not yet been overridden by another base contract (on some path through the inheritance graph).
-Additionally, if a contract inherits the same function from multiple (unrelated)
-bases, it has to explicitly override it:
+برای وراثت چندگانه، آخزین قراردادهای پایه ای که از آنها گرفته شده است تابع را تعریف می
+کند، تابعی که از آن گرفته شده است باید صراحتا بعد از تعریف با کلمه کلیدی ``override`` نشان
+گذاری شود. به عبارت دیگر، شما باید قراردادهای پایه ای که همان تابع را تعریف می کنند را
+مشخص کنید و نباید آن تابع تا  به حال در جای دیگری از همان قراردادهای پایه بازنویسی شده
+باشند( در همان مسیر در نمودار وراثت). علاوه بر این، اگر یک قرارداد تابع یکسانی را از چند جا
+پایه های(غیر مرتبط) ارثبری کند، باید آن را صراحتا باز نویسی کند:
 
 .. code-block:: solidity
 
@@ -261,10 +249,9 @@ bases, it has to explicitly override it:
         function foo() public override(Base1, Base2) {}
     }
 
-An explicit override specifier is not required if
-the function is defined in a common base contract
-or if there is a unique function in a common base contract
-that already overrides all other functions.
+اگر تابع در یک قرارداد پایه مشترک تعریف شده باشد یا اگر یک تابع منحصر به فرد در یک
+قرارداد پایه شمترک وجود داشته باشد که قبلا همه توابع دیگر بازنویسی شده گرفته باشد، تعیین
+بازنویسی صریح(explicit) نیاز نیست.
 
 .. code-block:: solidity
 
@@ -277,31 +264,27 @@ that already overrides all other functions.
     // No explicit override required
     contract D is B, C {}
 
-More formally, it is not required to override a function (directly or
-indirectly) inherited from multiple bases if there is a base contract
-that is part of all override paths for the signature, and (1) that
-base implements the function and no paths from the current contract
-to the base mentions a function with that signature or (2) that base
-does not implement the function and there is at most one mention of
-the function in all paths from the current contract to that base.
+به طور دقیقتر، اجباری نیست بازنویسی یک تابع که به صورت (مستقیم یا غیر مستقیم) از چند
+پایه ارثبری کرده باشد اگر آنجا یک قراردادی باشد که بخشی از تمام مسیر برای امضا
+بازنویسی اعلام کند، و (1) پیاده سازی پایه تابع انجام شده و مسیری از قرارداد جاری به پایه
+توسط تابعی به همراه امضا آن اشاره می کند  یا (2) پیاده سازی پایه تابع انجام نشده و حداکثر
+یک اشاره به تابع مذکور در تمام مسیرها در قرارداد جاری وجود دارد.
 
-In this sense, an override path for a signature is a path through
-the inheritance graph that starts at the contract under consideration
-and ends at a contract mentioning a function with that signature
-that does not override.
+معنی اش این است که مسیر بازنویسی یک امضا ، مسیری است معادل یک مسیر در نمودار
+وراثتی که از قرارداد مورد نظر شروع و در یک قرارداد اشاره شده یک تابع به همراه امضا آن
+که بازنویسی نشده است پایان می یابد.
 
-If you do not mark a function that overrides as ``virtual``, derived
-contracts can no longer change the behaviour of that function.
+اگر تابعی را به عنوان ``virtual`` که بازنویسی شده است نشان گذاری نکنید، قرارداد هایی که آن
+تابع را به ارث می برند نمی توانند رفتار آن را تغییر دهند.
 
 .. note::
 
-  Functions with the ``private`` visibility cannot be ``virtual``.
+  توابعی که با میدان دید ``private`` هستند نمی توانند ``virtual``  باشند.
 
 .. note::
 
-  Functions without implementation have to be marked ``virtual``
-  outside of interfaces. In interfaces, all functions are
-  automatically considered ``virtual``.
+  توابع بدون پیاده سازی باید در خارج از رابط ها بصورت ``virtual`` علامت گذاری شوند. در
+  رابط ها، همه توابع به صورت خودکار ``virtual`` در نظر گرفته می شوند.
 
 .. note::
 
@@ -310,9 +293,8 @@ contracts can no longer change the behaviour of that function.
   case where the function is defined in multiple bases.
 
 
-Public state variables can override external functions if the
-parameter and return types of the function matches the getter function
-of the variable:
+متغیرهای حالت عمومی می توانند توابع خارجی را نادیده بگیرند در صورتی که پارامترها(ورودی
+ها) و نوع بازگشتی تابع با تابع گیرنده و متغیر های آن تطابق داشته باشند:
 
 .. code-block:: solidity
 
@@ -331,20 +313,20 @@ of the variable:
 
 .. note::
 
-  While public state variables can override external functions, they themselves cannot
-  be overridden.
+  متغیرهای حالت عمومی می توانند توابع خارجی را بازنویسی کنند، در حالی 
+  که خود آنها تمی توانند باز نویسی شوند.
 
 .. index:: ! overriding;modifier
 
 .. _modifier-overriding:
 
-Modifier Overriding
-===================
+بازنویسی اصلاح کننده
+====================
 
-Function modifiers can override each other. This works in the same way as
-:ref:`function overriding <function-overriding>` (except that there is no overloading for modifiers). The
-``virtual`` keyword must be used on the overridden modifier
-and the ``override`` keyword must be used in the overriding modifier:
+اصلاح کننده های تابع می توانند یکدیدگر را بازنویسی کنند. این کار به همان نحوی که :ref:`بازنویسی تابع <function-overriding>`
+صورت می گیرد انجام می شود( با این تفاوت که برای اصلاح کننده ها بارگذاری وجود
+ندارد). کلمه کلیدی ``virtual`` در اصلاح کننده های باز نویسی شده باید استفاده شود و کلمه
+کلیدی ``override`` باید در اصلاح کننده های بازنویسی استفاده شود:
 
 .. code-block:: solidity
 
@@ -362,8 +344,7 @@ and the ``override`` keyword must be used in the overriding modifier:
     }
 
 
-In case of multiple inheritance, all direct base contracts must be specified
-explicitly:
+در صورت وراثت متعدد، کلیه قراردادهای پایه مستقیم باید صراحتا مشخص شوند:
 
 .. code-block:: solidity
 
@@ -391,27 +372,22 @@ explicitly:
 
 .. _constructor:
 
-Constructors
+سازنده ها 
 ============
 
-A constructor is an optional function declared with the ``constructor`` keyword
-which is executed upon contract creation, and where you can run contract
-initialisation code.
+سازنده یک تابع اختیاری است که با کلید واژه ``constructor`` اعلام می شود که پس از ایجاد
+قرارداد اجرا می شود و در آنجا می توانید کد راه اندازی قرارداد را اجرا کنید.
 
-Before the constructor code is executed, state variables are initialised to
-their specified value if you initialise them inline, or their :ref:`default value<default-value>` if you do not.
+قبل از اجرای کد سازنده، متغیر های حالت در صورتی که مقدار دهی اولیه شده باشند مقدار
+دهی می شوند، یا اگر مقدار دهی نکرده باشید بصورت :ref:`پیش فرض مقدار<default-value>` دهی می شوند
 
-After the constructor has run, the final code of the contract is deployed
-to the blockchain. The deployment of
-the code costs additional gas linear to the length of the code.
-This code includes all functions that are part of the public interface
-and all functions that are reachable from there through function calls.
-It does not include the constructor code or internal functions that are
-only called from the constructor.
+پس از اجرای سازنده، کد نهایی قرارداد در بلاکچین استقرار داده می شود. استقرار کد هزینه
+گاز اضافی خطی بر طول کد دارد. این کد شامل همه توابع ای است که بخشی ار رابط عمومی
+هستند و بخشی تمامی توابعی که از طریق فراخوانی تابعی قابل دسترس هستند. این شامل کد
+سازنده یا توابع داخلی که فقط از سازنده فرا خوانی می شوند
 
-If there is no
-constructor, the contract will assume the default constructor, which is
-equivalent to ``constructor() {}``. For example:
+در صورتی که سازنده وجود نداشته باشد، قرارداد سازنده پیش فرض را در نظر می گیرد که
+معادل ``{} ()constructor`` می باشد . برای مثال:
 
 .. code-block:: solidity
 
@@ -430,27 +406,28 @@ equivalent to ``constructor() {}``. For example:
         constructor() {}
     }
 
-You can use internal parameters in a constructor (for example storage pointers). In this case,
-the contract has to be marked :ref:`abstract <abstract-contract>`, because these parameters
-cannot be assigned valid values from outside but only through the constructors of derived contracts.
+شما می توانید از ورودی های داخلی در سازنده( به عنوان مثال اشاره گر های ذخیره سازی)
+استفاده کنید. در این حالت، قرارداد باید :ref:`abstract <abstract-contract>` باشد ، زیرا به این ورودی ها نمی توان
+مقادیر معتبر از خارج داد، بلکه فقط از طریق سازنده ی قرادادی که از آن اجرا شده است
+امکان پذیر می باشد.
 
 .. warning ::
-    Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
-    This syntax was deprecated and is not allowed anymore in version 0.5.0.
+    تا قبل از نسخه 0.4.22، سازنده ها به عنوان تابع هم نام با نام قرارداد تعریف می
+    شدند. این نحوه نوشتاری منسوخ شد و دیگر از نسخه 0.5.0 مجاز نیست.
 
 .. warning ::
-    Prior to version 0.7.0, you had to specify the visibility of constructors as either
-    ``internal`` or ``public``.
+    تا قبل از نسخه 0.7.0، شما باید محدوده ی دید سازنده ها را توسط ``internal`` یا
+    ``public`` مشخص می کردید.
 
 
 .. index:: ! base;constructor
 
-Arguments for Base Constructors
+آرگومانها برای سازنده های پایه 
 ===============================
 
-The constructors of all the base contracts will be called following the
-linearization rules explained below. If the base constructors have arguments,
-derived contracts need to specify all of them. This can be done in two ways:
+سازنده های کلیه قرارداد های پایه طبق قوانین خطی که در زیر توضیح داده شده است،
+فراخوانی می شوند. اگر سازنده های پایه ورودی داشته باشند، در قراردادشان باید آنها مشخص
+شوند. این کار به دو روش قابل انجام است:
 
 .. code-block:: solidity
 
@@ -472,45 +449,39 @@ derived contracts need to specify all of them. This can be done in two ways:
         constructor(uint _y) Base(_y * _y) {}
     }
 
-One way is directly in the inheritance list (``is Base(7)``).  The other is in
-the way a modifier is invoked as part of
-the derived constructor (``Base(_y * _y)``). The first way to
-do it is more convenient if the constructor argument is a
-constant and defines the behaviour of the contract or
-describes it. The second way has to be used if the
-constructor arguments of the base depend on those of the
-derived contract. Arguments have to be given either in the
-inheritance list or in modifier-style in the derived constructor.
-Specifying arguments in both places is an error.
+روش اول مستقیما از طریق لیست ورارثت است (``is Base(7)``). روش دیگر از روش اول به این
+صورت است که یک اصلاح کننده به عنوان بخشی از سازنده فراخوانی شده استفاده یم شود
+(``Base(_y * _y)``). انجام روش اول راحت تر است اگر ورودی سازنده یک ثابت باید و رفتار
+قرارداد را تعریف کند یا آن را توصیف کند. روش دوم زمانی باید مورد استفاده قرار گیرد که
+ورودی های تابع سازنده پایه به مقادیر قرادادی که دارد وابسته باشد. ورودی ها ارثی بصورت
+لیستی یا به سبک اصلاح کننده در سازنده آن قرارداد باید ارائه شوند. تعیین ورودی ها در هر دو
+ی مکانها یک خطا است.
 
-If a derived contract does not specify the arguments to all of its base
-contracts' constructors, it will be abstract.
+اگر یک قرارداد ارث گرفته شده ورودی های همه سازنده های قرارداد پایه خود را مشخص نکند،
+abstract خواهد بود.
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
 .. _multi-inheritance:
 
-Multiple Inheritance and Linearization
+وراثت چندگانه و خطی سازی
 ======================================
 
-Languages that allow multiple inheritance have to deal with
-several problems.  One is the `Diamond Problem <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_.
-Solidity is similar to Python in that it uses "`C3 Linearization <https://en.wikipedia.org/wiki/C3_linearization>`_"
-to force a specific order in the directed acyclic graph (DAG) of base classes. This
-results in the desirable property of monotonicity but
-disallows some inheritance graphs. Especially, the order in
-which the base classes are given in the ``is`` directive is
-important: You have to list the direct base contracts
-in the order from "most base-like" to "most derived".
-Note that this order is the reverse of the one used in Python.
+زبانهایی که امکان وراثت متعدد را دارند، با مشکلات متعددی روبرو هستند.
+یکی از آنها `مشکل الماس <https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem>`_ است.
+سالیدیتی مشابه پایتون است زیرا از "`خطی سازی C3 <https://en.wikipedia.org/wiki/C3_linearization>`_" برای اعمال نظم خاصی
+در نمودار غیر چرخشی جهت دار(DAG) کلاسهای پایه استفاده می کند. این منجر به ویژگی
+مطلوب یکنواختی می شود اما برخی از نمودار های ارثی را ممنوع می کند. بخصوص، ترتیب
+اینکه کدام کلاسهای پایه در درستور ``is`` مهم است: شما باید مستقیما قراردادهای پایه را به
+ترتیب "شبیه ترین" تا "مشتق شده ترین" فهرست کنید. توجه داشته باشید که این ترتیب
+معکوس فقط در پایتون مورد استفاده قرار می گیرد.
 
-Another simplifying way to explain this is that when a function is called that
-is defined multiple times in different contracts, the given bases
-are searched from right to left (left to right in Python) in a depth-first manner,
-stopping at the first match. If a base contract has already been searched, it is skipped.
+یک روش ساده دیگر برای توضیح این امر این است که وقتی تابعی فراخوانی می شود که
+چندین بار در قرارداد های مختلف تعریف شده است، پایه های داده شده از راست به چپ ( چپ
+به راست در پایتون) به صورت عمقی-اول جستجو می شوند و در اولین تطابق متوقف می
+شوند. اگر قرارداد پایه قبلا جستجو شده باشد، از آن صرفنظر می شود.
 
-In the following code, Solidity will give the
-error "Linearization of inheritance graph impossible".
+در کد زیر ، سالیدیتی خطای "خطی سازی نمودار وراثت غیر ممکن است" خواهد داد.
 
 .. code-block:: solidity
 

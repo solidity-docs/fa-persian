@@ -2,18 +2,17 @@
 
 .. _modifiers:
 
-******************
-Function Modifiers
-******************
+********************
+اصلاح کننده های تابع
+********************
 
-Modifiers can be used to change the behaviour of functions in a declarative way.
-For example,
-you can use a modifier to automatically check a condition prior to executing the function.
+اصلاح کننده ها جهت تغییر رفتار توابع به روش تعریف وار استفاده می شوند. برای مثال، شما
+می توانید از یک اصلاح کننده جهت اعمال پیش شرط به صورت اتوماتیک برای اجرای آن تابع
+استفاده کنید.
 
-Modifiers are
-inheritable properties of contracts and may be overridden by derived contracts, but only
-if they are marked ``virtual``. For details, please see
-:ref:`Modifier Overriding <modifier-overriding>`.
+اصلاح کننده ها ویژگی های وراثتی قرارداد ها هستند و ممکن است توسط قرارداد هایی که
+نشات گرفته شده اند باز نویسی شوند. اما فقط زمانی که بصورت ``virtual`` نشانه گذاری شده
+باشند. برای جزئیات، لطفا از بخش :ref:`Modifier Overriding <modifier-overriding>` دیدن کنید.
 
 .. code-block:: solidity
 
@@ -100,34 +99,35 @@ if they are marked ``virtual``. For details, please see
         }
     }
 
-If you want to access a modifier ``m`` defined in a contract ``C``, you can use ``C.m`` to
-reference it without virtual lookup. It is only possible to use modifiers defined in the current
-contract or its base contracts. Modifiers can also be defined in libraries but their use is
-limited to functions of the same library.
+اگر می خواهید به یک اصلاح کننده ی ``m`` تعریف شده در یک قرارداد ``C`` دسترسی پیدا کنید، می
+توانید از ``C.m`` برای ارجاع دادن آن بدون بازپرسی مجازی استفاده کنید. این فقط در اصلاح
+کننده های تعریف شده در قرارداد جاری یا قراردادهای اصلی(base) قابل استفاده است. اصلاح
+کننده ها را می توان در کتابخانه ها نیز تعریف کرد اما محدود به توابع داخل همان کتابخانه می
+ماند.
 
-Multiple modifiers are applied to a function by specifying them in a
-whitespace-separated list and are evaluated in the order presented.
+اصلاح کننده های متعدد بر روی یک تابع با مشخص کردن آنها در یک فضای خالی-جدا شده
+اعمال می شوند و به ترتیب نماش داده شده ارزیابی می شوند.
 
-Modifiers cannot implicitly access or change the arguments and return values of functions they modify.
-Their values can only be passed to them explicitly at the point of invocation.
+اصلاح کننده ها نمی توانند به طور ضمنی به ورودی های تابع دسترسی داشته یا آنها را تغییر
+داده و یا مقادیر بازگشتی را برگردانند. مقادیر آنها فقط به صراحت هنگام فراخوانی به آنها
+منتقل می شود.
 
-Explicit returns from a modifier or function body only leave the current
-modifier or function body. Return variables are assigned and
-control flow continues after the ``_`` in the preceding modifier.
+بازگشت واضح(Explicit) از یک اصلاح کننده یا بدنه تابع فقط از اصلاح کننده جاری و یا بنده تابع
+خارج می شود. متغیر های اختصاص داده شده باز می گردند و کنترل جریان ``_`` از اصلاح کننده
+قبلی ادامه می یابد.
 
 .. warning::
-    In an earlier version of Solidity, ``return`` statements in functions
-    having modifiers behaved differently.
+   در نسخه قدیمی سالیدیتی، دستورات ``return`` در توابع اصلاح کننده ها با رفتار متفاوت
+   عمل می کنند.
 
-An explicit return from a modifier with ``return;`` does not affect the values returned by the function.
-The modifier can, however, choose not to execute the function body at all and in that case the return
-variables are set to their :ref:`default values<default-value>` just as if the function had an empty
-body.
+یک بازگشت واضح از یک اصلاح کننده با ``;return`` روی مقادیر بازگشتی توسط تابع تاثیر نمی
+گذارد. با این حال، اصلاح کننده می تواند بدنه تابع را به طور کلی اجرا نکند و در این صورت
+متغیر های باز گشتی بر روی :ref:`مقادیر پیش فرض<default-value>` خود تنظیم می شوند درست مانند اینکه تابع
+دارای یک بدن خالی باشد.
 
-The ``_`` symbol can appear in the modifier multiple times. Each occurrence is replaced with
-the function body.
+نماد ``_`` می تواند چندین بار در اصلاح کننده ظاهر شود. هر رخداد با بدنه تابع جایگزین می شود.
 
-Arbitrary expressions are allowed for modifier arguments and in this context,
-all symbols visible from the function are visible in the modifier. Symbols
-introduced in the modifier are not visible in the function (as they might
-change by overriding).
+عبارت های دلخواه برای ورودی (آرگومان) های اصلاح کننده مجاز هستند و در این مورد ، همه
+نماد های قابل مشاهده در تابع در اصلاح کننده نیز قابل مشاهده هستند.
+نماد های معرفی شده در اصلاح کننده در تابع قابل مشاهده نیستند(زیرا ممکن است توسط
+بازنویسی(overriding) در آن تغییر کنند)
