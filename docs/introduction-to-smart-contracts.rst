@@ -208,7 +208,7 @@ while providing the sender with error details using the ``InsufficientBalance`` 
 
 .. note::
     تضمین نمی‌شود که تراکنش در بلاک بعدی یا هر بلاک مشخص خاص در آینده لحاظ شود، زیرا این کار به عهده ارسال کننده نمی‌باشد، بلکه ماینرها باید تعیین کنند که تراکنش در کدام بلاک لحاظ شود. 
-    
+
     اگر می‌خواهید فراخوانی قراردادتان را در آینده زمان بندی کنید، می توانید از `alarm clock <https://www.ethereum-alarm-clock.com/>`_  یا سرویس اوراکل مشابه استفاده کنید.
 
 
@@ -217,248 +217,131 @@ while providing the sender with error details using the ``InsufficientBalance`` 
 .. index:: !evm, ! ethereum virtual machine
 
 ****************************
-The Ethereum Virtual Machine
+ماشین مجازی اتریوم 
 ****************************
 
-Overview
+مرور کلی
 ========
 
-The Ethereum Virtual Machine or EVM is the runtime environment
-for smart contracts in Ethereum. It is not only sandboxed but
-actually completely isolated, which means that code running
-inside the EVM has no access to network, filesystem or other processes.
-Smart contracts even have limited access to other smart contracts.
+ماشین مجازی اتریوم  یا EVM محیط زمان اجرای قراردادهای هوشمند در اتریوم می‌باشد. EVM نه تنها یک جعبه است بلکه در واقع کاملاً ایزوله شده است، به این معنی که کدی که در داخل EVM اجرا می شود، به شبکه و فایل سیستم  یا سایر فرآیندها دسترسی ندارد. در قراردادهای هوشمند حتی دسترسی به سایر قراردادهای هوشمند محدود است.
 
 .. index:: ! account, address, storage, balance
 
 .. _accounts:
 
-Accounts
+حساب‌ها
 ========
 
-There are two kinds of accounts in Ethereum which share the same
-address space: **External accounts** that are controlled by
-public-private key pairs (i.e. humans) and **contract accounts** which are
-controlled by the code stored together with the account.
+در اتریوم دو نوع حساب وجود دارد که فضای آدرس یکسانی را به اشتراک می‌گذارند: **حساب های خارجی**  که توسط جفت کلید عمومی-خصوصی  (به عنوان مثال انسان) کنترل می‌شوند و **حساب‌های قراردادی**  که توسط کدی که همراه با حساب ذخیره می‌شود کنترل می‌شوند.
 
-The address of an external account is determined from
-the public key while the address of a contract is
-determined at the time the contract is created
-(it is derived from the creator address and the number
-of transactions sent from that address, the so-called "nonce").
+آدرس یک حساب خارجی  از کلید عمومی مشخص می‌شود در حالی که آدرس قرارداد در زمان ایجاد قرارداد مشخص می‌شود (از آدرس سازنده و تعداد تراکنش‌های ارسال شده از آن آدرس مشتق گرفته شده است، که  به اصطلاح " نانس " نامیده می‌شود).
 
-Regardless of whether or not the account stores code, the two types are
-treated equally by the EVM.
+صرف نظر از اینکه حساب، کد را ذخیره می‌کند یا نه، EVM با این دو نوع حساب به صورت برابر رفتار می‌کند.
 
-Every account has a persistent key-value store mapping 256-bit words to 256-bit
-words called **storage**.
+هر حساب دارای یک حافظه کلید-مقدار  ثابت است که کلمات 256 بیتی را با کلمات 256 بیتی که  **storage** نامیده می‌شود.
 
-Furthermore, every account has a **balance** in
-Ether (in "Wei" to be exact, ``1 ether`` is ``10**18 wei``) which can be modified by sending transactions that
-include Ether.
+علاوه بر این، هر حساب **بالانسی** معادل به اتر دارد (به طور دقیق در wei  ، ``1 ether``  معادل ``10**18 wei``  است) که می‌تواند با ارسال تراکنش‌هایی که شامل اتر هستند، اصلاح شود.
 
 .. index:: ! transaction
 
-Transactions
+تراکنش‌ها 
 ============
 
-A transaction is a message that is sent from one account to another
-account (which might be the same or empty, see below).
-It can include binary data (which is called "payload") and Ether.
+تراکنش پیامی است که از یک حساب به حساب دیگر ارسال می‌شود (که ممکن است یکسان یا خالی باشد، به مطالب زیر مراجعه کنید). تراکنش‌ها می‌تواند شامل داده‌های باینری (که "پیلود " نامیده می‌شود) و اتر باشند.
 
-If the target account contains code, that code is executed and
-the payload is provided as input data.
+اگر حساب مقصد حاوی کد باشد، آن کد اجرا می شود و پیلود به عنوان داده ورودی ارائه می‌شود.
 
-If the target account is not set (the transaction does not have
-a recipient or the recipient is set to ``null``), the transaction
-creates a **new contract**.
-As already mentioned, the address of that contract is not
-the zero address but an address derived from the sender and
-its number of transactions sent (the "nonce"). The payload
-of such a contract creation transaction is taken to be
-EVM bytecode and executed. The output data of this execution is
-permanently stored as the code of the contract.
-This means that in order to create a contract, you do not
-send the actual code of the contract, but in fact code that
-returns that code when executed.
+اگر حساب مقصد  تنظیم نشده باشد ( یعنی تراکنش گیرنده نداشته باشد یا  ``null``تنظیم شده‌ باشد)، تراکنش **قرارداد جدید** ایجاد می‌کند. همانطور که قبلاً ذکر شد، آدرس آن قرارداد آدرس صفر  نمی‌باشد، بلکه آدرسی است که از فرستنده و تعداد تراکنش‌های ارسال شده آن ("نانس") گرفته شده است. پیلود چنین تراکنش ایجاد قرارداد به عنوان بایت کد  EVM در نظر گرفته شده و اجرا می‌شود. داده‌های خروجی این اجرا به عنوان کدِ قرارداد برای همیشه ذخیره می‌شود. این بدان معناست که برای ایجاد قرارداد، شما کد واقعی قرارداد را ارسال نمی‌کنید، بلکه در واقع کدی که هنگام اجرا، آن کد را برمی‌گرداند .
 
 .. note::
-  While a contract is being created, its code is still empty.
-  Because of that, you should not call back into the
-  contract under construction until its constructor has
-  finished executing.
+  هنگامی که یک قرارداد در حال ایجاد باشد، کد آن هنوز خالی است. به همین دلیل، تا زمانی که سازنده آن، اجرای آن را به اتمام نرسانده، نباید مجدداً قرارداد در حال ساخت را فراخونی مجدد کنید.
 
 .. index:: ! gas, ! gas price
 
-Gas
+گاز
 ===
 
-Upon creation, each transaction is charged with a certain amount of **gas**,
-whose purpose is to limit the amount of work that is needed to execute
-the transaction and to pay for this execution at the same time. While the EVM executes the
-transaction, the gas is gradually depleted according to specific rules.
+به محض ایجاد، هر تراکنش با مقدار مشخصی **گاز** شارژ می شود، هدف آن محدود کردن میزان کار مورد نیاز برای انجام تراکنش و پرداخت همزمان هزینه این اجرا است. هنگامی که EVM تراکنش را انجام می‌دهد، گاز طبق قوانین خاص به تدریج خالی می‌شود.
 
-The **gas price** is a value set by the creator of the transaction, who
-has to pay ``gas_price * gas`` up front from the sending account.
-If some gas is left after the execution, it is refunded to the creator in the same way.
+**gas price** مقداری است که توسط سازنده تراکنش تنظیم می‌شود و باید  ``gas_price * gas`` را قبل از حساب ارسالی پرداخت کند. اگر پس از اجرا مقداری گاز باقی مانده باشد، به همان روش به سازنده بازپرداخت می‌شود.
 
-If the gas is used up at any point (i.e. it would be negative),
-an out-of-gas exception is triggered, which reverts all modifications
-made to the state in the current call frame.
+اگر گاز در هر نقطه مصرف شود (یعنی منفی باشد)، یک استثناء اتمام گاز ایجاد می‌شود، که تمام تغییرات و اصلاحات ایجاد شده در حالت  را در این چارچوب فراخوانی فعلی، باز می‌گرداند .
 
 .. index:: ! storage, ! memory, ! stack
 
-Storage, Memory and the Stack
+فضای ذخیره سازی  ، حافظه مِمُوری  و پشته
 =============================
 
-The Ethereum Virtual Machine has three areas where it can store data-
-storage, memory and the stack, which are explained in the following
-paragraphs.
+ماشین مجازی اتریوم دارای سه فضا برای ذخیره سازی داده می‌باشد: فضای ذخیره سازی یا storage، حافظه موقت یا مِمُوری و پشته، که در پاراگراف‌های زیر توضیح داده شده‌اند.
 
-Each account has a data area called **storage**, which is persistent between function calls
-and transactions.
-Storage is a key-value store that maps 256-bit words to 256-bit words.
-It is not possible to enumerate storage from within a contract, it is
-comparatively costly to read, and even more to initialise and modify storage. Because of this cost,
-you should minimize what you store in persistent storage to what the contract needs to run.
-Store data like derived calculations, caching, and aggregates outside of the contract.
-A contract can neither read nor write to any storage apart from its own.
+هر حساب دارای یک فضای داده به نام **storage** می‌باشد، که بین تابع فراخوانی و تراکنش‌ها ثابت است.
 
-The second data area is called **memory**, of which a contract obtains
-a freshly cleared instance for each message call. Memory is linear and can be
-addressed at byte level, but reads are limited to a width of 256 bits, while writes
-can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
-accessing (either reading or writing) a previously untouched memory word (i.e. any offset
-within a word). At the time of expansion, the cost in gas must be paid. Memory is more
-costly the larger it grows (it scales quadratically).
+storage یک حافظه کلید_مقدار  می‌باشد که کلمات 256 بیتی را با کلمات 256 بیتی نگاشت  می‌کند. محاسبه storage از طریق قرارداد امکان پذیر نیست، خواندن آن نسبتاً پر هزینه است و برای مقدار دهی و ویرایش کردن پر هزینه‌تر هم می‌باشد. به دلیل این هزینه‌ها، شما باید آنچه را که در storage ذخیره می‌کنید، به میزانِ نیازِ قرارداد برای انجام این کار به حداقل برسانید. . داده‌هایی مانند محاسبه مشتق، کش کردن  و جمع آوری داده‌‌های خارج از قرارداد، را در آن ذخیره کنید. یک قرارداد نمی‌تواند در هر storage ای به جز storage خودش بنویسد یا بخواند.
 
-The EVM is not a register machine but a stack machine, so all
-computations are performed on a data area called the **stack**. It has a maximum size of
-1024 elements and contains words of 256 bits. Access to the stack is
-limited to the top end in the following way:
-It is possible to copy one of
-the topmost 16 elements to the top of the stack or swap the
-topmost element with one of the 16 elements below it.
-All other operations take the topmost two (or one, or more, depending on
-the operation) elements from the stack and push the result onto the stack.
-Of course it is possible to move stack elements to storage or memory
-in order to get deeper access to the stack,
-but it is not possible to just access arbitrary elements deeper in the stack
-without first removing the top of the stack.
+دومین فضای داده **مِمُوری**  نامیده می‌شود، که هر قرارداد یک نمونهِ پاکِ تازه برای هر فراخونی پیام بدست می‌آورد. مِمُوری خطی است و می‌توان آن را در سطح بایت آدرس دهی کرد، اما خواندن مِمُوری به عرض 256 بیت محدود می‌شود، در هنگام نوشتن می‌تواند 8 بیت یا 256 بیت عرض داشته باشد. هنگام دسترسی (خواندن یا نوشتن) به یک کلمه مِمُوری که قبلا دست نخورده است (یعنی هر آفست  درون یک کلمه)، مِمُوری با یک کلمه (256 بیتی) گسترش می‌یابد. در زمان گسترش، هزینه گاز باید پرداخت شود. حافظه هرچه بزرگتر شود گرانتر است (هزینه گاز به صورت درجه دو اندازه گیری می‌شود).
+
+EVM یک ماشین ثبت نیست بلکه یک ماشین پشته است، بنابراین تمام محاسبات در یک فضای داده به نام **پشته** انجام می‌شود. حداکثر اندازه آن 1024 عنصر است و شامل کلمات 256 بیتی است. دسترسی به پشته به روش "بالا انتها" که در زیر توضیح داده شده‌است، محدود می‌باشد: 
+امکان کپی کردن یکی از 16 عنصر بالاتر در بالای پشته یا تعویض بالاترین عنصر با یکی از 16 عنصر زیر آن وجود دارد. تمام عملیات دیگر دو عنصر بالاتر (یا یک یا بیشتر، بسته به عملیات) را از پشته گرفته و نتیجه را در پشته درج میکنند. مطمئناً امکان دسترسی عناصر پشته به storage یا مِمُوری برای دستیابی عمیق تر به پشته وجود دارد، اما دسترسی به عناصر دلخواه در اعماق پشته بدون برداشتن قسمت بالای پشته امکان پذیر نیست.
+
 
 .. index:: ! instruction
 
-Instruction Set
+مجموعه دستورالعمل‌ها
 ===============
 
-The instruction set of the EVM is kept minimal in order to avoid
-incorrect or inconsistent implementations which could cause consensus problems.
-All instructions operate on the basic data type, 256-bit words or on slices of memory
-(or other byte arrays).
-The usual arithmetic, bit, logical and comparison operations are present.
-Conditional and unconditional jumps are possible. Furthermore,
-contracts can access relevant properties of the current block
-like its number and timestamp.
+بیتی یا برشی از مِمُوری  (یا سایر آرایه‌های بایت ) کار می‌کنند. عملیات حسابی ، بیتی ، منطقی  و مقایسه‌ای   معمول وجود دارد. پرش‌های شرطی و غیر شرطی  امکان پذیر است. علاوه بر این، قراردادها می‌توانند به ویژگی‌های مربوط به بلاک فعلی مانند شماره  و برچسب زمان  آن دسترسی داشته باشند. 
 
-For a complete list, please see the :ref:`list of opcodes <opcodes>` as part of the inline
-assembly documentation.
+برای لیست کامل، لطفاً به :ref:`لیست آپکد <opcodes>`   به عنوان بخشی از مستند اسمبلی داخلی  مراجعه کنید.
+
 
 .. index:: ! message call, function;call
 
-Message Calls
+پیام های فراخوانی 
 =============
 
-Contracts can call other contracts or send Ether to non-contract
-accounts by the means of message calls. Message calls are similar
-to transactions, in that they have a source, a target, data payload,
-Ether, gas and return data. In fact, every transaction consists of
-a top-level message call which in turn can create further message calls.
+قراردادها می‌توانند سایر قراردادها را فراخوانی کنند یا اتر را از طریق پیام‌های فراخوانی به حساب‌های غیر قراردادی بفرستند. پیام‌های فراخوانی مانند تراکنش‌ها هستند، بدین معنی که دارای منبع ، مقصد ، پیلود داده ، اتر ، گاز  و داده‌های برگشتی هستند. در واقع، هر تراکنش از یک پیام فراخوانی سطح بالا  تشکیل شده است که به نوبه خود می‌تواند پیام‌های فراخوانی دیگری ایجاد کند.
 
-A contract can decide how much of its remaining **gas** should be sent
-with the inner message call and how much it wants to retain.
-If an out-of-gas exception happens in the inner call (or any
-other exception), this will be signaled by an error value put onto the stack.
-In this case, only the gas sent together with the call is used up.
-In Solidity, the calling contract causes a manual exception by default in
-such situations, so that exceptions "bubble up" the call stack.
+  یک قرارداد می‌تواند تصمیم بگیرد که چه مقدار از **گاز** باقیمانده آن باید با پیام فراخوانی داخلی ارسال شود و چه مقدار آن را می‌خواهد نگهداری کند. اگر یک استثنای اتمام-گاز  در فراخوانی داخلی (یا هر استثناء دیگر) اتفاق بیفتد، با یک مقدار خطا روی پشته  نشان داده می‌شود. در این حالت، فقط گاز ارسالی همراه با فراخوانی مصرف می‌شود. در سالیدیتی، فراخوانی قرارداد به طور پیش فرض در چنین شرایطی باعث یک استثناء دستی می‌شود، به طوری که استثناء فراخوانی، پشته را به صورت " پنجره نمایش " نمایش می‌دهد.
 
-As already said, the called contract (which can be the same as the caller)
-will receive a freshly cleared instance of memory and has access to the
-call payload - which will be provided in a separate area called the **calldata**.
-After it has finished execution, it can return data which will be stored at
-a location in the caller's memory preallocated by the caller.
-All such calls are fully synchronous.
+همانطور که قبلاً گفته شد، قرارداد فراخوانی شده (که می‌تواند همان فراخوانی کننده باشد) یک مِمُوری تازه پاک شده را دریافت می‌کند و به فراخوانی پیلود  دسترسی دارد- که در یک فضای جداگانه به نام فراخوانی داده یا **calldata** ارائه می‌شود. پس از پایان اجرا، داده‌هایی را که در مکانی از مِمُوری فراخوانی کننده که از قبل توسط فراخوانی کننده اختصاص داده شده‌است و در آن ذخیره خواهند شد، را می‌تواند برگرداند. همه‌ی این تماس‌ها کاملاً همگام هستند.
 
-Calls are **limited** to a depth of 1024, which means that for more complex
-operations, loops should be preferred over recursive calls. Furthermore,
-only 63/64th of the gas can be forwarded in a message call, which causes a
-depth limit of a little less than 1000 in practice.
+فراخوانی‌ها به عمق 1024 **محدود می‌‌شوند**، این بدان معنی است که برای انجام عملیات پیچیده‌تر، حلقه‌ها  بر فراخوانی‌های مکرر باید ترجیح داده شوند. بعلاوه، فقط 63/64امین از گاز می‌تواند در یک پیام فراخوانی فوروارد شود، که در عمل باعث ایجاد عمق کمتر از 1000 می‌شود.
 
 .. index:: delegatecall, callcode, library
 
-Delegatecall / Callcode and Libraries
+Delegatecall / Callcode و کتابخانه ها
 =====================================
 
-There exists a special variant of a message call, named **delegatecall**
-which is identical to a message call apart from the fact that
-the code at the target address is executed in the context of the calling
-contract and ``msg.sender`` and ``msg.value`` do not change their values.
+نوع خاصی از پیام های فراخوانی به نام ** **delegatecall وجود دارد، که همانند یک پیام فراخوانی می‌باشند، جدا از این واقعیت که کد در آدرس مقصد در قرارداد فراخوانی کننده  اجرا می‌شود و ``msg.sender`` و ``msg.value``  مقادیر خود را تغییر نمی‌دهند.
 
-This means that a contract can dynamically load code from a different
-address at runtime. Storage, current address and balance still
-refer to the calling contract, only the code is taken from the called address.
+این بدان معناست که یک قرارداد می‌تواند به صورت پویا در زمان اجرا، کد را از آدرس دیگری بارگیری کند. Storage، آدرس فعلی و بالانس هنوز به قرارداد فراخوانی کننده اشاره دارد و فقط کد از آدرس فراخوانی شده گرفته شده‌است.
 
-This makes it possible to implement the "library" feature in Solidity:
-Reusable library code that can be applied to a contract's storage, e.g. in
-order to implement a complex data structure.
+delegatecall امکان ویژگی "کتابخانه" در سالیدیتی را فراهم می‌کند: کد کتابخانه قابل استفاده مجدد می‌باشد که می‌تواند در storage قرارداد اعمال شود. به عنوان مثال به منظور پیاده سازی یک ساختار داده پیچیده .
 
 .. index:: log
 
-Logs
+گزارش‌ها 
 ====
 
-It is possible to store data in a specially indexed data structure
-that maps all the way up to the block level. This feature called **logs**
-is used by Solidity in order to implement :ref:`events <events>`.
-Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the blockchain.
-Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
-possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole blockchain
-(so-called "light clients") can still find these logs.
-
+  می‌توان داده‌ها را در یک ساختار داده‌ای با نمایه خاص ذخیره کرد که همه راه‌ها تا سطح بلوک را نشان می‌دهد. این ویژگی **لاگ یا گزارش** نامیده شده‌است که توسط سالیدیتی به منظور اجرای :ref:`رویداد‌ها <events>` استفاده می‌شود. قراردادها پس از ایجاد نمی‌توانند به لاگ داده‌ها دسترسی داشته باشند، اما از خارج از بلاکچین می‌توان به صورت کارآمد به آنها دسترسی داشته باشند. از آنجا که بخشی از لاگ داده‌ها در `فیلتر‌های بلوم <https://en.wikipedia.org/wiki/Bloom_filter>`_  ذخیره می‌شوند، جستجوی این داده‌ها به روشی کارآمد و رمزنگاری شده امکان پذیر‌است، بنابراین جفت‌های شبکه‌ای که کل بلاکچین را بارگیری نمی‌کنند (به اصطلاح "کلاینت لایت") هنوز هم می‌توانند این لاگ‌ها را پیدا کنید.
 .. index:: contract creation
 
-Create
+ايجاد كردن
 ======
 
-Contracts can even create other contracts using a special opcode (i.e.
-they do not simply call the zero address as a transaction would). The only difference between
-these **create calls** and normal message calls is that the payload data is
-executed and the result stored as code and the caller / creator
-receives the address of the new contract on the stack.
+قراردادها حتی می‌توانند قراردادهای دیگری را با استفاده از یک آپکد خاص  ایجاد کنند (یعنی آدرس صفر  را به عنوان یک تراکنش به سادگی صدا نمی‌زنند). تنها تفاوت بین **فراخوانی‌های ایجاد**  و پیام‌های فراخوانی عادی  این است که داده‌های پیلود  اجرا می‌شوند و نتیجه به عنوان کد  و فراخوانی کننده ، ذخیره می‌شود. ایجاد کننده، آدرس قرارداد جدید را روی پشته  دریافت می‌کند.
 
 .. index:: selfdestruct, self-destruct, deactivate
 
-Deactivate and Self-destruct
+غیرفعال کردن و خود تخریبی
 ============================
 
-The only way to remove code from the blockchain is when a contract at that
-address performs the ``selfdestruct`` operation. The remaining Ether stored
-at that address is sent to a designated target and then the storage and code
-is removed from the state. Removing the contract in theory sounds like a good
-idea, but it is potentially dangerous, as if someone sends Ether to removed
-contracts, the Ether is forever lost.
+تنها راه حذف کد از بلاکچین زمانی است که قراردادی در آن آدرس عملیات  ``selfdestruct``  را انجام دهد. باقی مانده اتر ذخیره شده در آن آدرس به مقصد تعیین شده ارسال می‌شود و سپس storage و کد از حالت  خارج می‌شود. حذف قرارداد از نظر تئوری یک ایده خوب به نظر می‌رسد، اما به طور بالقوه خطرناک است، زیرا اگر کسی اتر را به قراردادهای حذف شده بفرستد، اتر برای همیشه از بین می‌رود.
 
 .. warning::
-    Even if a contract is removed by ``selfdestruct``, it is still part of the
-    history of the blockchain and probably retained by most Ethereum nodes.
-    So using ``selfdestruct`` is not the same as deleting data from a hard disk.
+   حتی اگر قراردادی با  ``selfdestruct``  حذف شود، هنوز به عنوان بخشی از تاریخچهِ بلاکچین باقی می‌ماند و احتمالاً توسط اکثر گره‌های اتریوم نگهداری شود. بنابراین استفاده از ``selfdestruct``  با حذف داده‌ها از روی هارد دیسک یکسان نیست.
 
 .. note::
-    Even if a contract's code does not contain a call to ``selfdestruct``,
-    it can still perform that operation using ``delegatecall`` or ``callcode``.
+   حتی اگر کد قرارداد فاقد فراخوانی  ``selfdestruct``باشد، باز هم می‌تواند آن عملیات را با استفاده از  ``delegatecall``  یا  ``callcode`` انجام دهد.
 
-If you want to deactivate your contracts, you should instead **disable** them
-by changing some internal state which causes all functions to revert. This
-makes it impossible to use the contract, as it returns Ether immediately.
+اگر می‌خواهید قراردادهای خود را غیرفعال  کنید، در عوض باید آنها را با تغییر حالت داخلی  که باعث برگشت همه توابع می‌شود، **غیرفعال** کنید. این امر استفاده از قرارداد را غیرممکن می‌کند، زیرا بلافاصله اتر را برمی‌گرداند.
