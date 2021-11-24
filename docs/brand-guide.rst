@@ -1,86 +1,82 @@
-####################
-Solidity Brand Guide
-####################
+######################
+راهنمای برند سالیدیتی
+######################
 
-This brand guide features information on Solidity's brand policy and
-logo usage guidelines.
+این راهنمای برند سالیدتی اطلاعاتی در مورد قوانین برند سالیدیتی و دستورالعمل استفاده از
+لوگو را دارد.
 
-The Solidity Brand
+برند سالیدیتی
 ==================
 
-The Solidity programming language is an open-source, community project
-governed by a core team. The core team is sponsored by the `Ethereum
-Foundation <https://ethereum.foundation/>`_.
+زبان برنامه نویسی سالیدیتی یک پروژه منبع باز (open source) و جامعه ای است که توسط
+تیم هسته اداره می شود. تیم هسته توسط `بنیاد اتریوم <https://ethereum.foundation/>`_ حمایت مالی می شود.
 
-This document aims to provide information about how to best use the
-Solidity brand name and logo.
+هدفت این ستند ارائه اطلاعاتی در مورد چگونگی استفاده بهینه از نام و لوگوی تجاری سالیدیتی
+است.
 
-We encourage you to read this document carefully before using the
-brand name or the logo. Your cooperation is highly appreciated!
+ما شما را تشویق می کنیم قبل از استفاده از نام و لوگو، این سند را با دقت مطالعه کنید. از
+همکاری شما بسیار سپاسگزاریم.!
 
-Solidity Brand Name
+نام تجاری سالیدیتی
 ===================
 
-"Solidity" should be used to refer to the Solidity programming language
-solely.
+"سالیدیتی" باید فقط برای ارجاع به زبان برنامه نویسی سالیدیتی استفاده شود.
 
-Please do not use "Solidity":
+لطفا "سالیدیتی" را استفاده نکنید:
 
-- To refer to any other programming language.
+- برای ارجاع به دیگر زیان های برنامه نویسی.
 
-- In a way that is misleading or may imply association of unrelated
-  modules, tools, documentation, or other resources with the Solidity
-  programming language.
+- روش هایی که ممکن است گمراه کننده باشد
+  یا ماژول ها، ابزار ها ، اسناد یا سایر منابع غیر مرتبط
+  با زبان برنامه نویسی سالیدیتی باشد.
 
-- In ways that confuse the community as to whether the Solidity
-  programming language is open-source and free to use.
+- روش هایی که جامعه را نسبت به منبع باز و رایگان
+  بودن زبان برنامه نویسی سالیدیتی گمراه کن.
 
-Solidity Logo License
+مجوز لوگوی سالیدیتی 
 =====================
 
 .. image:: https://i.creativecommons.org/l/by/4.0/88x31.png
   :width: 88
   :alt: Creative Commons License
 
-The Solidity logo is distributed and licensed under a `Creative Commons
-Attribution 4.0 International License <https://creativecommons.org/licenses/by/4.0/>`_.
+لوگوی سالیدیتی تحت مجوز بین المللی `Creative Commons Attribution 4.0 International License <https://creativecommons.org/licenses/by/4.0/>`_ بخش شده و مجوز می گیرد.
 
-This is the most permissive Creative Commons license and allows reuse
-and modifications for any purpose.
+این  راحترین مجوز Creative commons است و اجازه استفاده مجدد و تغییر برای هر نوع
+هدفی را می دهد.
 
-You are free to:
+شما آزاد هستید:
 
-- **Share** — Copy and redistribute the material in any medium or format.
+- **اشتراک گذاری** — کپی و پخش مجدد مطالب در هر مجرا یا رسانه
 
-- **Adapt** — Remix, transform, and build upon the material for any
-  purpose, even commercially.
+- **سازگار** —  از مواد برای هر هدفی ریمیکس کردن، تغییر شکل دادن استفاده کنید حتی برای مقاصد تجاری 
 
-Under the following terms:
+تحت شرایط زیر :
 
-- **Attribution** — You must give appropriate credit, provide a link to
-  the license, and indicate if changes were made. You may do so in any
-  reasonable manner, but not in any way that suggests the the Solidity
-  core team endorses you or your use.
+- **تخصیص** — شما باید اعتبار مناسبی فراهم کنید، لینکی به مجوز ارائه دهید و اگر تغییرات
+  ایجاد شده است آنها را نشان دهید. شما می توانید این کار را به هر روش منطقی انجام
+  دهید، اما هر روشی یا استفاده ای که شما انجام می دهید را تیم هسته تایید و پشتش را
+  امضا نمی کند.
 
-When using the Solidity logo, please respect the Solidity logo guidelines.
+هنگام استفاده از لوگوی سالیدیتی، لطفا به راهنمای استفاده از لوگو احترام بگذارید.
 
-Solidity Logo Guidelines
-========================
+راهنمای استفاده لوگوی سالیدیتی
+===============================
 
 .. image:: logo.svg
   :width: 256
 
-*(Right click on the logo to download it.)*
+*(روی لوگو راست کلیک کرده و آن را دانلود کنید)*
 
-Please do not:
+لطفا اعمال زیر را انجام ندهید:
 
-- Change the ratio of the logo (do not stretch it or cut it).
+- لطفا نسبت های لوگو را تغییر ندهید ( آن را برش یا عریض نکنید).
 
-- Change the colors of the logo, unless it is absolutely necessary.
+- رنگ لوگو را تغییر ندهید، مگر خیلی ضروری باشد.
 
-Credits
-=======
+اعتبارات
+=========
 
-This document was, in parts, derived from the `Python Software
-Foundation Trademark Usage Policy <https://www.python.org/psf/trademarks/>`_
-and the `Rust Media Guide <https://www.rust-lang.org/policies/media-guide>`_.
+بخشی از این سند از قوانین
+`Python Software Foundation Trademark Usage Policy <https://www.python.org/psf/trademarks/>`_ و
+`Rust Media Guide <https://www.rust-lang.org/policies/media-guide>`_  گرفته است. 
