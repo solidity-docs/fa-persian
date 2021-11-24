@@ -1,113 +1,108 @@
-############
-Contributing
-############
+#######
+همکاری
+#######
 
-Help is always welcome and there are plenty of options how you can contribute to Solidity.
+همیشه از کمک دیگران استقبال می شود و گزینه های زیادی وجود دارد که چگونه می توانید به سالیدیتی کمک کنید.
 
-In particular, we appreciate support in the following areas:
+به ویژه، از حمایت های شما در زمینه های زیر قدردانی می کنیم:
 
-* Reporting issues.
-* Fixing and responding to `Solidity's GitHub issues
-  <https://github.com/ethereum/solidity/issues>`_, especially those tagged as
-  `"good first issue" <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ which are
-  meant as introductory issues for external contributors.
-* Improving the documentation.
-* Translating the documentation into more languages.
-* Responding to questions from other users on `StackExchange
-  <https://ethereum.stackexchange.com>`_ and the `Solidity Gitter Chat
-  <https://gitter.im/ethereum/solidity>`_.
-* Getting involved in the language design process by proposing language changes or new features in the `Solidity forum <https://forum.soliditylang.org/>`_ and providing feedback.
+* گزارش ایراد ها
+* رفع و پاسخگویی به `ایراد های سالیدیتی در گیت هاب
+  <https://github.com/ethereum/solidity/issues>`_، مخصوصا مواردی که با عنوان "
+  `"اولین ایراد خوب" <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ بر چسب خورده اند مقدمه ای برای همکاری کنندگان خارجی است.
+* بهبود اسناد سالیدیتی (documentation).
+* ترجمه اسناد به زبان های بیشتر.
+* پاسخگویی به سوالات دیگر کاربر ها در `stackExchange <https://ethereum.stackexchange.com>`_ و سالیدیتی  `Solidity Gitter Chat <https://gitter.im/ethereum/solidity>`_.
+* با روند طراحی زبان مشغول شدن بوسیله پیشنهاد تغییرات زبانی یا ویژگی های جدید در `فروم سالیدتی <https://forum.soliditylang.org/>`_ با ارائه باز خورد.
 
-To get started, you can try :ref:`building-from-source` in order to familiarize
-yourself with the components of Solidity and the build process. Also, it may be
-useful to become well-versed at writing smart-contracts in Solidity.
+در شروع، برای آشنایی با خود اجزا های سالیدیتی و روند ساخت (build) سالیدیتی، می توانید
+ساختن از منبع :ref:`building-from-source` را امتحان کنید. همچنین، داشتن مهارت کافی در نوشتن
+قرار داد های سالیدیتی ممکن است مفید باشد.
 
-Please note that this project is released with a `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_. By participating in this project - in the issues, pull requests, or Gitter channels - you agree to abide by its terms.
+لطفا توجه داشته باشید که این پروژه `یک کد مشارکتی <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ است.
+با شرکت در این پروژه – در ایرادها، درخواست های پول(pull)، یا کانال های gitter – شما قبول می کنید که قوانین آن را رعایت کنید.
 
-Team Calls
-==========
+تماس های تیمی
+=============
 
-If you have issues or pull requests to discuss, or are interested in hearing what
-the team and contributors are working on, you can join our public team calls:
+اگر مشکلات یا در خواست های پول(pull) دارید برای مطرح کردن، یا علاقمند به شنیدن این
+هستید که تیم و مشارکت کنندگان مشغول به چه کار هایی هستند، می توانید به تماس های
+تیمی عمومی ما بپیوندید: 
 
-- Mondays at 3pm CET/CEST.
-- Wednesdays at 2pm CET/CEST.
+- دوشنبه ها ساعت 3 بعد از ظهر CET/CEST( به وقت مرکزی تابستانی اروپا)
+- چهارشنبه ها ساعت 2 بعد از ظهر CET/CEST( به وقت مرکزی تابستانی اروپا)
 
-Both calls take place on `Jitsi <https://meet.komputing.org/solidity>`_.
+هر دو وقت تماس در `Jitsi <https://meet.komputing.org/solidity>`_ بر قرار می شود.
 
-How to Report Issues
-====================
+چطوری ایراد ها را گزارش دهیم
+============================
 
-To report an issue, please use the
-`GitHub issues tracker <https://github.com/ethereum/solidity/issues>`_. When
-reporting issues, please mention the following details:
+برای گزارش یک ایراد، از 
+`ردیاب ایرادات GitHub <https://github.com/ethereum/solidity/issues>`_  استفاده کنید.
+هنگام گزارش ایرادات ، لطفا جزئیات زیر را ذکر کنید:
 
-* Solidity version.
-* Source code (if applicable).
-* Operating system.
-* Steps to reproduce the issue.
-* Actual vs. expected behaviour.
+* نسخه سالیدیتی.
+* کد منبع (در صورت امکان).
+* سیستم عامل.
+* مراحلی که بتوان دوباره همان ایراد رخ دهد.
+* رفتار در عمل و رفتار مورد انتظار.
 
-Reducing the source code that caused the issue to a bare minimum is always
-very helpful and sometimes even clarifies a misunderstanding.
+به حداقل رسانی کد منبع که باعث رخداد ایراد می شود همیشه بسیار مفید است و حتی بعضی
+اوقات یک سوء تفاهم را روشن می کند.
 
-Workflow for Pull Requests
-==========================
+روند کاری برای درخواست های pull
+===============================
 
-In order to contribute, please fork off of the ``develop`` branch and make your
-changes there. Your commit messages should detail *why* you made your change
-in addition to *what* you did (unless it is a tiny change).
+برای مشارکت، لطفا از شاخه ``develop`` یک چنگال(fork) (کپی) بگیرید و تغییرات خود را آنجا
+انجام دهید. پیام های ارتکابی(commit) شما باید جزئیات اینکه *چه چیزی* در کد و *چرا* تغییر داده
+اید را توضیح دهد (مگر اینکه یک تغییر کوچک باشد).
 
-If you need to pull in any changes from ``develop`` after making your fork (for
-example, to resolve potential merge conflicts), please avoid using ``git merge``
-and instead, ``git rebase`` your branch. This will help us review your change
-more easily.
+اگر برای عمل pull نیاز به هرنوع تغییری از شاخه ``develop`` برای ساختن (کپی) چنگال خود دارید(
+برای مثال، برای برطرف کردن تداخلات هنگام ادغام)، لطفا از ``git merge`` استفاده نکرده و در
+عوض از ``git rebase`` برای شاخه خود استفاده کنید. این به ما کمک خواهد کرد تا به راحتی
+تغییرات شما را باز بینی کنیم.
 
-Additionally, if you are writing a new feature, please ensure you add appropriate
-test cases under ``test/`` (see below).
+علاوه بر این، اگر در حال نوشتن ویژگی جدید هستید، لطفا مطمئن شوید که موارد آزمایشی
+مناسب را بخش ``test/`` قرار داده اید/(به زیر توجه کنید) :
 
-However, if you are making a larger change, please consult with the `Solidity Development Gitter channel
-<https://gitter.im/ethereum/solidity-dev>`_ (different from the one mentioned above, this one is
-focused on compiler and language development instead of language usage) first.
+با این حال، اگر تغییر بزرگتری ایجاد می کنید، لطفا اول با کانال `Solidity Development Gitter channel
+<https://gitter.im/ethereum/solidity-dev>`_ توسعه سالیدیتی مشورت کنید
+( متفاوت از یک مورد که در بالا ذکر شد، این مورد بجای کاربرد زبان ، به کامپایلر و توسعه زبان اشاره می کند)
 
-New features and bugfixes should be added to the ``Changelog.md`` file: please
-follow the style of previous entries, when applicable.
+ویژگی های جدید و رفع اشکالات باید به فایل ``Changelog.md`` اضافه شود: لطفا در صورت
+نیاز سبک نوشته های قبلی را دنبال کنید
 
-Finally, please make sure you respect the `coding style
-<https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md>`_
-for this project. Also, even though we do CI testing, please test your code and
-ensure that it builds locally before submitting a pull request.
+نهایتا، لطفا مطمئن شوید که به `سبک برنامه <https://github.com/ethereum/solidity/blob/develop/CODING_STYLE.md>`_ نویسی این پروژه احترام گذاشته اید. همچنین،
+درسته که ما آزمایش CI را انجام می دهیم، لطفا کد خود را آزمایش کرده و قبل از ارسال
+درخواست pull اطمینان حاصل کنید که بصورت محلی قابل ساخت (build) است.
 
-Thank you for your help!
+از کمک شما متشکریم!
 
-Running the Compiler Tests
-==========================
+اجرای تست های کامپایلر
+======================
 
-Prerequisites
+پیش نیاز ها
 -------------
 
-For running all compiler tests you may want to optionally install a few
-dependencies (`evmone <https://github.com/ethereum/evmone/releases>`_,
-`libz3 <https://github.com/Z3Prover/z3>`_, and
+برخی از تست ها به کتابخانه evmone و برخی دیگر به libz3 نیاز دارند. (`evmone <https://github.com/ethereum/evmone/releases>`_,
+`libz3 <https://github.com/Z3Prover/z3>`_, و
 `libhera <https://github.com/ewasm/hera>`_).
 
-On macOS some of the testing scripts expect GNU coreutils to be installed.
-This can be easiest accomplished using Homebrew: ``brew install coreutils``.
+در سیستم عامل مک برخی اسکریپت های تست انتظار دارند که GNU coreutils (ابزار های
+هسته) نصب شده باشند. با استفاده از دستور Homebrew می توان به راحتی ابراز های هسته
+را نصب کرد: ``brew install coreutils``.
 
-Running the Tests
------------------
+اجرای تست ها
+------------
 
-Solidity includes different types of tests, most of them bundled into the
-`Boost C++ Test Framework <https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html>`_ application ``soltest``.
-Running ``build/test/soltest`` or its wrapper ``scripts/soltest.sh`` is sufficient for most changes.
+سالیدیتی شامل انواع مختلفی از تست ها است، بیشتر آنها وصل به بسته `Boost C++ Test Framework <https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html>`_
+برنامه ``soltest`` می باشند. اجرای ``build/test/soltest``  یا پوشش دهنده اش ``scripts/soltest.sh`` برای
+بیشتر تغییرات کافی است.
 
-The ``./scripts/tests.sh`` script executes most Solidity tests automatically,
-including those bundled into the `Boost C++ Test Framework <https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html>`_
-application ``soltest`` (or its wrapper ``scripts/soltest.sh``), as well as command line tests and
-compilation tests.
+اسکریپت ``scripts/test.sh/.`` به صورت اتوماتیک بیشتر تست های سالیدتی را اجرا می کند ، هم بسته های `Boost C++ Test Framework <https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html>`_ برنامه ``soltest`` (یا پوشش دهنده ی ``scripts/soltest.sh``) ، همچنین تست های
+تلفیقی و خط فرمان را اجرا می کند.
 
-The test system automatically tries to discover the location of
-the `evmone <https://github.com/ethereum/evmone/releases>`_ for running the semantic tests.
+سیستم تست به صورت اتوماتیک از پوشه جاری سعی می کند مکان کتابخانه `evmone <https://github.com/ethereum/evmone/releases>`_ کشف کند .
 
 The ``evmone`` library must be located in the ``deps`` or ``deps/lib`` directory relative to the
 current working directory, to its parent or its parent's parent. Alternatively an explicit location
@@ -129,61 +124,65 @@ extension ``.so`` on Linux, ``.dll`` on Windows systems and ``.dylib`` on macOS.
 For running SMT tests, the ``libz3`` library must be installed and locatable
 by ``cmake`` during compiler configure stage.
 
-If the ``libz3`` library is not installed on your system, you should disable the
-SMT tests by exporting ``SMT_FLAGS=--no-smt`` before running ``./scripts/tests.sh`` or
-running ``./scripts/soltest.sh --no-smt``.
-These tests are ``libsolidity/smtCheckerTests`` and ``libsolidity/smtCheckerTestsJSON``.
+اگر کتابخانه ``libz3`` در سیستم شما نصب نشده باشد، شما باید تست های SMT را غیر فعال
+کنید بوسیله اضافه کردن ``SMT_FLAGS=--no-smt`` قبل از اجرای ``scripts/tests.sh/.`` یا
+اجرای ``scripts/soltest.sh --no-smt/.`` این تست ها ``libsolidity/smtCheckerTests``  و
+``libsolidity/smtCheckerTestsJSON`` هستند.
 
 .. note ::
 
-    To get a list of all unit tests run by Soltest, run ``./build/test/soltest --list_content=HRF``.
+    برای گرفتن لیست واحد های تست اجرا شونده توسط soltest ، دستور . ``build/test/soltest --list_content=HRF/.`` اجرا کنید.
 
-For quicker results you can run a subset of, or specific tests.
+برا گرفتن نتیجه سریعتر شما می توانید زیر مجموعه تست ها یا تست های مد نظر خود را اجرا کنید.
 
-To run a subset of tests, you can use filters:
-``./scripts/soltest.sh -t TestSuite/TestName``,
-where ``TestName`` can be a wildcard ``*``.
+برای اجرای زیر مجموعه تست ها، شما می توانید از فیلترهای :
+``scripts/soltest.sh -t TestSuite/TestName/.``,
+که بجای ``TestName`` از ``*`` نیز می توانید استفاده کنید. 
 
-Or, for example, to run all the tests for the yul disambiguator:
-``./scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-smt``.
+یا، مثلا ، برای اجرای تمامی تست های ابهام زدایی یول:
 
-``./build/test/soltest --help`` has extensive help on all of the options available.
+``scripts/soltest.sh -t "yulOptimizerTests/disambiguator/*" --no-smt/.`` می توانید استفاده کنید.
 
-See especially:
+``build/test/soltest --help/.``  دارای بخش راهنمای گسترده به همراه تمامی گزینه های موجود است.
 
-- `show_progress (-p) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/show_progress.html>`_ to show test completion,
-- `run_test (-t) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/run_test.html>`_ to run specific tests cases, and
-- `report-level (-r) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/report_level.html>`_ give a more detailed report.
+به ویژه مشاهده کنید:
+
+- `show_progress (-p) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/show_progress.html>`_ زمان اتمام تست را نشان می دهد,
+- `run_test (-t) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/run_test.html>`_ برای اجرای تست های خاص و
+- `report-level (-r) <https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/utf_reference/rt_param_reference/report_level.html>`_ یک گزارش دقیقتر ارائه می دهد.
 
 .. note ::
 
-    Those working in a Windows environment wanting to run the above basic sets
-    without libz3. Using Git Bash, you use: ``./build/test/Release/soltest.exe -- --no-smt``.
-    If you are running this in plain Command Prompt, use ``.\build\test\Release\soltest.exe -- --no-smt``.
+    آنهایی که در محیط ویندوزی می خواهند مجموعه های ساده ی بالا را بدون کتابخانه
+    libz3 اجرا کنند. از گیت بش(bash) ``build/test/Release/soltest.exe -- --no-smt\.`` استفاده کنند.
+    اگر در محیط دستوری اجرا می کنید از ``build\test\Release\soltest.exe -- --no-smt\.`` استفاده کنید.
 
-If you want to debug using GDB, make sure you build differently than the "usual".
-For example, you could run the following command in your ``build`` folder:
+اگر برای ایرادیابی(debug) از GDB استفاده می کنید، اطمینان حاصل کنید که به غیر از حالت
+“usual” عمل ساخت را انجام می دهید. برای مثال، شما می توانید با دستور زیر در پوشه
+``build`` عمل کنید:
+
 .. code-block:: bash
 
    cmake -DCMAKE_BUILD_TYPE=Debug ..
    make
 
-This creates symbols so that when you debug a test using the ``--debug`` flag,
-you have access to functions and variables in which you can break or print with.
+با این کار سمبل هایی ایجاد می شود که زمان ایرادیابی یک تست با نشان ``debug--``  از
+آنها استفاده می شوند. شما به توابع و متغیر هایی دسترسی خواهید داشت که زمان ایراد یابی
+می توانید آنها را متوقف کرده یا چاپ کنید.
 
-The CI runs additional tests (including ``solc-js`` and testing third party Solidity
-frameworks) that require compiling the Emscripten target.
+CI تست های اضافه تری را اجرا می کند ( شامل ``solc-js`` و  تست های جداگانه framework
+سالیدیتی) که نیازمند کامپایل Emscripten هدف است.
 
-Writing and Running Syntax Tests
---------------------------------
+نوشتن و اجرای تست های نوشتاری
+-----------------------------
 
-Syntax tests check that the compiler generates the correct error messages for invalid code
-and properly accepts valid code.
-They are stored in individual files inside the ``tests/libsolidity/syntaxTests`` folder.
-These files must contain annotations, stating the expected result(s) of the respective test.
-The test suite compiles and checks them against the given expectations.
+تست های نوشتاری کد خطای صحیح تولید شده توسط کامپایلر را بررسی می کند و کد پیام
+های نامعتبر را با کد های معتبر قابل پذیرش تغییر می دهد. آنها در فایل جداگانه ای داخل پوشه
+``tests/libsolidity/syntaxTests``  قرار می گیرند. این فایل ها باید حاوی حاشیه نویسی باشند،
+طبق نتایج مورد انتظار و تست مربوطه وضعیت دهی شده باشند. مجموعه تست بر عکس
+انتظارات دریافتی ، کامپایل و بررسی خود را انجام می دهد.
 
-For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.sol``
+برای مثال: ``test/libsolidity/syntaxTests/double_stateVariable_declaration.sol/.``
 
 .. code-block:: solidity
 
@@ -194,15 +193,18 @@ For example: ``./test/libsolidity/syntaxTests/double_stateVariable_declaration.s
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
-A syntax test must contain at least the contract under test itself, followed by the separator ``// ----``. The comments that follow the separator are used to describe the
-expected compiler errors or warnings. The number range denotes the location in the source where the error occurred.
-If you want the contract to compile without any errors or warning you can leave
-out the separator and the comments that follow it.
+یک تست نوشتاری باید شامل حداقل تست خود قرارداد و به همراه آن جدا کننده ی ``// ----`` باشد.
+توضیحاتی که بعد از جداکننده می آید برای توصیف خطاها یا هشدار های کامپایلر مدنظر
+استفاده می شود. محدوده اعدادی که نمایش داده می شود محل رخ داد خطا در منبع را نشان
+می دهد. اگر می خواهید قرار داد بدون خطا یا هشدار کامپایل شود، می توانید جدا کننده و
+توضیحات که در آن است را کنار بگذارید.
 
-In the above example, the state variable ``variable`` was declared twice, which is not allowed. This results in a ``DeclarationError`` stating that the identifier was already declared.
+در مثال بالا، متغیر وضعیت ``variable`` دو بار تعریف شده است که غیر مجاز است. این منجر به
+یک خطای تعریف ``DeclarationError`` میشود که مشخص می کند متغیر قبلا تعریف شده است.
 
-The ``isoltest`` tool is used for these tests and you can find it under ``./build/test/tools/``. It is an interactive tool which allows
-editing of failing contracts using your preferred text editor. Let's try to break this test by removing the second declaration of ``variable``:
+ابزار تست ``isoltest`` برای این کاربرد استفاده می شود و می توانید آن را در ``/build/test/tools/.`` 
+بیابید. این یک ابزار تعاملی است که به شما اجازه می دهد قرار داد های ناموفق را با استفاده
+از ویراشکر مورد علاقه خود ویرایش کنید. بیایید سعی کنیم این تست را با حذف تعریف دوم متغیر ``variable`` متوقف کنیم:
 
 .. code-block:: solidity
 
@@ -212,7 +214,7 @@ editing of failing contracts using your preferred text editor. Let's try to brea
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
-Running ``./build/test/isoltest`` again results in a test failure:
+اجرای ``build/test/isoltest/.`` دوباره منجر به تست ناموفق میشود : 
 
 .. code-block:: text
 
@@ -228,19 +230,19 @@ Running ``./build/test/isoltest`` again results in a test failure:
             Success
 
 
-``isoltest`` prints the expected result next to the obtained result, and also
-provides a way to edit, update or skip the current contract file, or quit the application.
+``isotest`` نتیجه مورد انتظار را کنار نتیجه بدست آمده چاپ می کند، و همچنین روشی برای
+ویرایش، بروز رسانی یا رد کردن فایل قرار داد فعلی، یا خروج از برنامه را ارائه می دهد.
 
-It offers several options for failing tests:
+چندین گزینه برای تست های ناموفق پیشنهاد می کند:
 
-- ``edit``: ``isoltest`` tries to open the contract in an editor so you can adjust it. It either uses the editor given on the command line (as ``isoltest --editor /path/to/editor``), in the environment variable ``EDITOR`` or just ``/usr/bin/editor`` (in that order).
-- ``update``: Updates the expectations for contract under test. This updates the annotations by removing unmet expectations and adding missing expectations. The test is then run again.
-- ``skip``: Skips the execution of this particular test.
-- ``quit``: Quits ``isoltest``.
+- ``isoltest`` : ``edit`` تلاش می کند قرار داد را در یک ویراشگر باز کند تا بتوانید آن را ویرایش کنید. با ویرایشگر ارائه شده در خط فرمان ( به عنوان ``isotest --editor /path/to/editor``) در متغیر محیطی ``EDITOR`` یا فقط از مسیر ``/usr/bin/editor`` (به ترتیب) استفاده می کند.
+- ``update``:  انتظارات مربوط به قرارداد تحت تست را بروزرسانی می کند. با حذف حاشیه نویسی هایی که با انتظارات مغایرت دارند و اضافه کردن حاشیه نویسی هایی که طبق انتظارات از قلم افتاده اند عمل بروز رسانی را انجام می دهد. سپس تست را مجددا اجرا می کند.
+- ``skip``:  اجرای این تست را رد می کند.
+- ``quit``: از ``isotest`` خارج می شود.
 
-All of these options apply to the current contract, expect ``quit`` which stops the entire testing process.
+تمامی این گزینه ها بر قرار داد جاری اعمال می شوند به غیر از گزینه خروج ``quit`` که کل روند تست را متوقف می کند.
 
-Automatically updating the test above changes it to
+به صورت خودکار بروز رسانی تست بالا آن را تغییر می دهد به
 
 .. code-block:: solidity
 
@@ -249,7 +251,7 @@ Automatically updating the test above changes it to
     }
     // ----
 
-and re-run the test. It now passes again:
+و اجرای دوباره تست . حالا دوباره از تست قبول می شود:
 
 .. code-block:: text
 
@@ -259,23 +261,26 @@ and re-run the test. It now passes again:
 
 .. note::
 
-    Choose a name for the contract file that explains what it tests, e.g. ``double_variable_declaration.sol``.
-    Do not put more than one contract into a single file, unless you are testing inheritance or cross-contract calls.
-    Each file should test one aspect of your new feature.
+    نامی برای فایل قرارداد انتخاب کنید که توضیح دهد چه چیزی را تست می کنید، برای
+    مثال ``double_variable_declaration.sol``. به هیچ وجه بیش از یک قرار داد داخل یک فایل
+    قرار ندهید، مگر اینکه در حال تست فراخوانی های وراثتی بین قرارداد ها باشید. هر فایل باید
+    یک جنبه از ویژگی جدید شما را تست کند.
 
 
-Running the Fuzzer via AFL
-==========================
+اجرای فازر(Fuzzer) توسط AFL
+===========================
 
-Fuzzing is a technique that runs programs on more or less random inputs to find exceptional execution
-states (segmentation faults, exceptions, etc). Modern fuzzers are clever and run a directed search
-inside the input. We have a specialized binary called ``solfuzzer`` which takes source code as input
-and fails whenever it encounters an internal compiler error, segmentation fault or similar, but
-does not fail if e.g., the code contains an error. This way, fuzzing tools can find internal problems in the compiler.
+فازینگ (Fuzzing) تکنیکی است که برنامه ها را با ورودی های کم و زیاد تصادفی برای یافتن
+حالت های استثنایی ( ایراد های تقسیم بندی(segmentation) حافظه، استثناها و غیره) اجرا
+می کند. فازر های جدید هوشمند هستند و داخل ورودی از جستجوی مدیریت-شده(directed
+search) استفاده می کنند. ما برنامه اختصاصی بنام ``solfuzzer`` داریم که کد منبع(
+code) را به عنوان ورودی می گیرید و هر زمان که با خطاهایی مثل یک خطای داخلی کامپایلر،
+خطای تقسیم بندی(segmentation) حافظه و یا موارد مشابه، بر خورد کند متوقف نمی شود مثلا اگر کد دارای خطا باشد
+به این ترتیب، ابزار های فازینگ می توانند مشکلات داخلی را در کامپایلر پیدا کنند
 
-We mainly use `AFL <https://lcamtuf.coredump.cx/afl/>`_ for fuzzing. You need to download and
-install the AFL packages from your repositories (afl, afl-clang) or build them manually.
-Next, build Solidity (or just the ``solfuzzer`` binary) with AFL as your compiler:
+ما عمدتا از `AFL <https://lcamtuf.coredump.cx/afl/>`_ برای فازینگ استفاده می کنیم. شما باید بسته های نرم
+افزاری AFL را دانلود و نصب کنید (بسته afl , afl-clang) یا آنها را بصورت دستی بسازید
+(build کنید). سپس سالیدیتی ( یا فقط برنامه ``solfuzzer`` )بسازید و به همراه AFL به عنوان کامپایلر :
 
 .. code-block:: bash
 
@@ -285,7 +290,7 @@ Next, build Solidity (or just the ``solfuzzer`` binary) with AFL as your compile
     cmake .. -DCMAKE_C_COMPILER=path/to/afl-gcc -DCMAKE_CXX_COMPILER=path/to/afl-g++
     make solfuzzer
 
-At this stage you should be able to see a message similar to the following:
+در این مرحله باید بتوانید پیامی مشابه پیام زیر را مشاهده کنید:
 
 .. code-block:: text
 
@@ -296,7 +301,7 @@ At this stage you should be able to see a message similar to the following:
     [+] Instrumented 1949 locations (64-bit, non-hardened mode, ratio 100%).
     [100%] Linking CXX executable solfuzzer
 
-If the instrumentation messages did not appear, try switching the cmake flags pointing to AFL's clang binaries:
+اگر پیام های ابزار های ساخت ظاهر نشد، پرچم های cmake را که به با برنامه های  AFL clang  ارتباط دارند، تغییر دهید.
 
 .. code-block:: bash
 
@@ -305,7 +310,7 @@ If the instrumentation messages did not appear, try switching the cmake flags po
     cmake .. -DCMAKE_C_COMPILER=path/to/afl-clang -DCMAKE_CXX_COMPILER=path/to/afl-clang++
     make solfuzzer
 
-Otherwise, upon execution the fuzzer halts with an error saying binary is not instrumented:
+در غیر این صورت، هنگام اجرای فازر متوقف می شود به همراه خطایی که می گوید برنامه بدرستی ساخته نشده است:
 
 .. code-block:: text
 
@@ -327,9 +332,9 @@ Otherwise, upon execution the fuzzer halts with an error saying binary is not in
              Location : check_binary(), afl-fuzz.c:6920
 
 
-Next, you need some example source files. This makes it much easier for the fuzzer
-to find errors. You can either copy some files from the syntax tests or extract test files
-from the documentation or the other tests:
+در مرحله بعدی، به برخی از فایل های منبع نیاز دارید. این کار باعث می شود  فازر خطایابی را
+خیلی راحت انجام دهد. می توانید فایل ها را از تست های نوشتاری کپی برداری کنید یا فایل
+های تستی را از مستندات یا سایر تست ها استخراج کنید :
 
 .. code-block:: bash
 
@@ -340,160 +345,164 @@ from the documentation or the other tests:
     # extract from documentation:
     path/to/solidity/scripts/isolate_tests.py path/to/solidity/docs
 
-The AFL documentation states that the corpus (the initial input files) should not be
-too large. The files themselves should not be larger than 1 kB and there should be
-at most one input file per functionality, so better start with a small number of.
-There is also a tool called ``afl-cmin`` that can trim input files
-that result in similar behaviour of the binary.
+در اسناد AFL آمده است که حجم (فایل های ورودی) نباید خیلی بزرگ باشد. خود فایل ها نباید
+بزرگتر از 1 کیلو بایت باشند و باید حداکثر یک فایل ورودی در هر عملکرد داشته باشد، بنابراین
+بهتر است با تعداد کوچک شروع کرد. همچنین ابزاری بنام ``afl-cm`` وجود دارد که می تواند فایل
+های ورودی که منجر به رفتار مشابه برنامه می شوند، اصلاح کند.
 
-Now run the fuzzer (the ``-m`` extends the size of memory to 60 MB):
+حالا فزر را اجرا کنید( گزینه ``-m`` اندازه حافظه را تا 60MB مگابایت افزایش می دهد):
 
 .. code-block:: bash
 
     afl-fuzz -m 60 -i /tmp/test_cases -o /tmp/fuzzer_reports -- /path/to/solfuzzer
 
-The fuzzer creates source files that lead to failures in ``/tmp/fuzzer_reports``.
-Often it finds many similar source files that produce the same error. You can
-use the tool ``scripts/uniqueErrors.sh`` to filter out the unique errors.
+فازر فایل های منبع را که منجر به خرابی می شوند را در ``/tmp/fuzzer_reports`` ایجاد می
+کند. اغلب بسیاری از فایل های منبع را پیدا می کند که خطای مشابه دارند. برای فیلتر کردن
+خطاهای منحصر به فرد(unique) می توانید از ابزار ``scripts/uniqueErrors.sh`` استفاده کنید.
 
-Whiskers
-========
+ریز مو ها
+==========
 
-*Whiskers* is a string templating system similar to `Mustache <https://mustache.github.io>`_. It is used by the
-compiler in various places to aid readability, and thus maintainability and verifiability, of the code.
+ریزموها یک سیستم الگوی رشته ای شبیه سیبیل `Mustache <https://mustache.github.io>`_ است. در مکان های مختلف
+برای کمک به افزایش خوانایی توسط کامپایلر استفاده می شود، و در نتیجه در نگهداری پذیری
+و اثبات پذیری کد استفاده می شود.
 
-The syntax comes with a substantial difference to Mustache. The template markers ``{{`` and ``}}`` are
-replaced by ``<`` and ``>`` in order to aid parsing and avoid conflicts with :ref:`yul`
-(The symbols ``<`` and ``>`` are invalid in inline assembly, while ``{`` and ``}`` are used to delimit blocks).
-Another limitation is that lists are only resolved one depth and they do not recurse. This may change in the future.
+نحوه ی نوشتاری تفاوت اساسی با سیبیل(Mustache) دارد. نشانگر های الگو ``{{``  و  ``}}``  با
+``<`` و ``>`` جهت جلوگیری تداخل حین خواند کد با :ref:`yul` (نماد های ``<`` و ``>`` در کد تو خطی اسمبلی نامعتبر هستند
+در صورتی که از ``{`` و ``}`` جهت تعیین محدوده بلوک استفاده می شوند) جایگزین شده اند.
+محدودیت دیگر این است که لیست ها در یک عمق مقرر شده اند و باز گشتی نیستند. این محدودیت ممکن در آینده تغییر کند.
 
-A rough specification is the following:
+جزئیات تقریبی موارد زیر است:
 
-Any occurrence of ``<name>`` is replaced by the string-value of the supplied variable ``name`` without any
-escaping and without iterated replacements. An area can be delimited by ``<#name>...</name>``. It is replaced
-by as many concatenations of its contents as there were sets of variables supplied to the template system,
-each time replacing any ``<inner>`` items by their respective value. Top-level variables can also be used
-inside such areas.
+هنگام برخورد با ``<name>`` مقدار-رشته ای متصل به متغیر فراهم شده با ``name`` بدون هیچ کم
+و کسری و تکرار جایگزین می شود. یک منطقه را می توان بوسیله ``<#name>...</name>`` 
+محدود کرد. به تعداد کاندیدا هایی که در محتوا وجود دارند و مجموعه متغیر هایی
+که به سیستم الگو ارائه شده است جایگزینی مقادیری که داخل ``<inner>`` است، صورت
+می پذیرد. 
 
-There are also conditionals of the form ``<?name>...<!name>...</name>``, where template replacements
-continue recursively either in the first or the second segment depending on the value of the boolean
-parameter ``name``. If ``<?+name>...<!+name>...</+name>`` is used, then the check is whether
-the string parameter ``name`` is non-empty.
+همچنین نوع شرطی ``<?name>...<!name>...</name>`` وجود دارد که بسته به شرط
+بخش اول یا دوم را بصورت بازگشتی از الگوی ارائه شده جایگزین می کند. اگر از ``<?+name>...<!+name>...</+name>``
+استفاده شود ، بررسی می کند که پارامتر ``name``
+خالی نباشد.
 
 .. _documentation-style:
 
-Documentation Style Guide
-=========================
+راهنمای سبک مستندات
+====================
 
-In the following section you find style recommendations specifically focusing on documentation
-contributions to Solidity.
+در بخش زیر شما توصیه های سبک مستندات را پیدا می کنید بخصوص بر روی مشارکت
+کنندگان مستندات تمرکز شده است.
 
-English Language
+زبان انگلیسی 
 ----------------
 
-Use English, with British English spelling preferred, unless using project or brand names. Try to reduce the usage of
-local slang and references, making your language as clear to all readers as possible. Below are some references to help:
+از زبان انگلیسی استفاده کنید با لهجه انگلیسی،  مگر اینکه از نام پروژه یا برندی استفاده می
+کنید. سعی کنید از زبان عامیانه و اصطلاحات محلی کمتر استفاده کنید، حدالمکان زبان خود را
+برای خوانندگان واضح کنید. در زیر برخی از منابع برای کمک وجود دارند: 
 
-* `Simplified technical English <https://en.wikipedia.org/wiki/Simplified_Technical_English>`_
-* `International English <https://en.wikipedia.org/wiki/International_English>`_
-* `British English spelling <https://en.oxforddictionaries.com/spelling/british-and-spelling>`_
+* `انگلیسی فنی ساده <https://en.wikipedia.org/wiki/Simplified_Technical_English>`_
+* `انگلیسی بین المللی <https://en.wikipedia.org/wiki/International_English>`_
+* `لهجه بریتیش انگلیسی <https://en.oxforddictionaries.com/spelling/british-and-spelling>`_
 
 
 .. note::
 
-    While the official Solidity documentation is written in English, there are community contributed :ref:`translations`
-    in other languages available. Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_
+    در حالی که مستندات رسمی سالیدیتی به زبان انگلیسی نوشته شده است، توسط
+    مشارکت کنندگان جامعه ترجمه هایی :ref:`translations` به زبان های دیگر موجود است.
+    
+    Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_
     for information on how to contribute to the community translations.
 
-Title Case for Headings
+حروف بزرگ برای عناوین 
 -----------------------
 
-Use `title case <https://titlecase.com>`_ for headings. This means capitalise all principal words in
-titles, but not articles, conjunctions, and prepositions unless they start the
-title.
+از موارد `حروف بزرگ <https://titlecase.com>`_ برای عناوین استفاده کنید. یعنی  تمام کلمات اصلی را در عناوین بزرگ
+بنویسید ، اما نه در مقالات ، حروف ربط و اضافه، مگر اینکه آنها در ابتدای عنوان باشند.
 
-For example, the following are all correct:
+به عنوان مثال موارد زیر صحیح است: 
 
-* Title Case for Headings.
-* For Headings Use Title Case.
-* Local and State Variable Names.
-* Order of Layout.
+* حروف بزرگ برای عناوین.
+* برای عناوینی که حرف بزرگ دارند.
+* نام متغیر های وضعیت و محلی.
+* ترتیب ساختار.
 
-Expand Contractions
+باز کردن مخفف ها
 -------------------
 
-Use expanded contractions for words, for example:
+از مخفف های باز استفاده کنید، برای مثال:
 
-* "Do not" instead of "Don't".
-* "Can not" instead of "Can't".
+* "Do not"  بجای "Don't".
+* "Can not"  بجای "Can't".
 
-Active and Passive Voice
+صدای فعال و منفعل 
 ------------------------
 
-Active voice is typically recommended for tutorial style documentation as it
-helps the reader understand who or what is performing a task. However, as the
-Solidity documentation is a mixture of tutorials and reference content, passive
-voice is sometimes more applicable.
+صدای فعال معمولا برای مستندات آموزشی توصیه می شود زیرا به خواننده کمک می کند تا
+درک کند چه کسی یا چه کاری را انجام می دهد.با این حال، از آنجایی که مستندات سالیدیتی
+مخلوطی از آموزشها و محتوای مرجع است، صدای منفعل گاهی کاربرد بیشتری دارد.
 
-As a summary:
+بصورت خلاصه:
 
-* Use passive voice for technical reference, for example language definition and internals of the Ethereum VM.
-* Use active voice when describing recommendations on how to apply an aspect of Solidity.
+* از صدای منفعل برای مرجع فنی استفاده کنید، برای مثال تعاریف زبان و داخلی های ماشین مجازی اتریوم.
+* هنگام توصیف توصیه های مر بوز به نحوه ی استفاده از جنبه های سالیدیتی، از صدای فعال استفاده کنید
 
-For example, the below is in passive voice as it specifies an aspect of Solidity:
+به عنوان مثال، در زیر صدای منفعل وجود دارد زیرا جنبه ای از سالیدیتی را مشخص می کند:
 
-  Functions can be declared ``pure`` in which case they promise not to read
-  from or modify the state.
+  توابع ای را می توان  خالص  ``pure`` تعریف کرد که آنها قول می دهند وضعیت را نخوانده و اصلاح نکنند.
 
-For example, the below is in active voice as it discusses an application of Solidity:
+به عنوان مثال، در زیر در مورد استفاده از سالیدیتی آمده است، صدای فعال وجود دارد:
 
-  When invoking the compiler, you can specify how to discover the first element
-  of a path, and also path prefix remappings.
+  هنگام فراخوانی کامپایلر، می توانید نحوه ی کشف اولبن عنصر در مسیر و همچنین
+  نگاشت مجدد پیشوند مسیر را مشخص کنید
 
-Common Terms
-------------
+اصطلاحات رایج 
+--------------
 
-* "Function parameters" and "return variables", not input and output parameters.
+* "پارامتر های تابع" و "متغیر های بازگشتی" ، پارامتر های ورودی و خروجی نیستند.
 
-Code Examples
+نمونه های کد
 -------------
 
-A CI process tests all code block formatted code examples that begin with ``pragma solidity``, ``contract``, ``library``
-or ``interface`` using the ``./test/cmdlineTests.sh`` script when you create a PR. If you are adding new code examples,
-ensure they work and pass tests before creating the PR.
+وقتی که شما یک ارتباط عمومی ایجاد می کنید در فراید CI تمام بلوک های کد قالبندی شده
+طبق مثال ها که بهمراه ``pragma solidity``، ``قرارداد``، ``کتابخانه`` یا ``رابط``  هستند توسط 
+``test/cmdlineTests.sh/.`` تست می شوند.
 
-Ensure that all code examples begin with a ``pragma`` version that spans the largest where the contract code is valid.
-For example ``pragma solidity >=0.4.0 <0.9.0;``.
 
-Running Documentation Tests
+اطمینان حاصل کنید که تمامی مثال های کد با نسخه ای از ``pragma`` شروع شود که کستردگی
+نسخه آنها در قرار داد معتبر باشد. برای مثال : ``pragma solidity >=0.4.0 <0.9.0;``
+
+اجرای تست های مستندات 
 ---------------------------
 
-Make sure your contributions pass our documentation tests by running ``./scripts/docs.sh`` that installs dependencies
-needed for documentation and checks for any problems such as broken links or syntax issues.
+با اجرای ``scripts/docs.sh/.`` مطمئن شوید که مشارکت های شما از تست های مستندات ما با
+موفقیت خارج شده است  که وابستگی های مورد نیاز برای اسناد را نصب می کند و هرگونه
+مشکل مانند لینک های خراب و ایراد های نوشتاری را بررسی می کند.
 
-Solidity Language Design
+طراحی زبان سالیدیتی
 ========================
 
-To actively get involved in the language design process and share your ideas concerning the future of Solidity,
-please join the `Solidity forum <https://forum.soliditylang.org/>`_.
+برای اینکه فعالانه در گیر فرایند طراحی زبان شوید و ایده های خود را در مورد آینده سالیدیتی
+به اشتراک بگذارید، لطفا به `انجمن سالیدتی <https://forum.soliditylang.org/>`_ بپیوندید.
 
-The Solidity forum serves as the place to propose and discuss new language features and their implementation in
-the early stages of ideation or modifications of existing features.
+انجمن سالیدیتی به عنوان محلی برای پیشنهاد و بحث در مورد ویژگی های جدید زبان و اجرای
+آنها در مراحل اولیه ایده پردازی یا اصلاح ویژگی در دسترس است.
 
-As soon as proposals get more tangible, their
-implementation will also be discussed in the `Solidity GitHub repository <https://github.com/ethereum/solidity>`_
-in the form of issues.
+به محض اینکه پیشنهاد ها قابل لمس تر شدند، اجرای آنها نیز در `مخزن گیت هاب سالیدیتی <https://github.com/ethereum/solidity>`_ در
+بخش مسائل مورد بحث قرار می گیرد.
 
-In addition to the forum and issue discussions, we regularly host language design discussion calls in which selected
-topics, issues or feature implementations are debated in detail. The invitation to those calls is shared via the forum.
+علاوه بر بحث های انجمن و بخش مسائل ، ما به طور منظم میزبان  گفتگو های بحث در مورد
+طراحی زبان هستیم که در آن مسائل، موضوعات یا پیاده سازی های انتخاب شده، با جزئیات
+بحث می شوند. دعوت به این گفتگو ها از طریق انجمن به اشتراک گذاشته می شود.
 
-We are also sharing feedback surveys and other content that is relevant to language design in the forum.
+ما همچنین بررسی باز خورد ها و سایر مطالب مرتبط با طراحی زبان را در انجمن به اشتراک می گذاریم.
 
-If you want to know where the team is standing in terms or implementing new features, you can follow the implementation status in the `Solidity Github project <https://github.com/ethereum/solidity/projects/43>`_.
-Issues in the design backlog need further specification and will either be discussed in a language design call or in a regular team call. You can
-see the upcoming changes for the next breaking release by changing from the default branch (`develop`) to the `breaking branch <https://github.com/ethereum/solidity/tree/breaking>`_.
+اگر می خواهید بدانید تیم از نظر اجرای ویژگی های جدید در کجا قرار دارد، می توانید وضعیت
+پیاده سازی را در `گیت هاب پروژه سالیدیتی <https://github.com/ethereum/solidity/projects/43>`_ دنبال کنید. مسائل موجود در پس زمینه طراحی
+نیاز به جزئیات بیشتری دارند و در یک گفتگوی طارحی زبان یا در یک گفتگوی معمولی تیمی
+مورد بحث قرار می گیرند. با تغییر از شاخه پیش فرض (`توسعه`) به `شاخه جدید <https://github.com/ethereum/solidity/tree/breaking>`_، می توانید
+تغییرات بعدی را برای نسخه جدید بعدی مشاهده کنید.
 
-For ad-hoc cases and questions you can reach out to us via the `Solidity-dev Gitter channel <https://gitter.im/ethereum/solidity-dev>`_, a
-dedicated chatroom for conversations around the Solidity compiler and language development.
+برای موارد و سوالات موقتی می توانید از طریق کانال `Solidity-dev Gitter channel <https://gitter.im/ethereum/solidity-dev>`_ با ما ارتباط
+برقرار کنید، یک اتاق گفتگوی اختصاصی برای بحث در مورد کامپایلر سالیدیتی و توسعه زبان ایجاد شده است.
 
-We are happy to hear your thoughts on how we can improve the language design process to be even more collaborative and transparent.
+ما نظرات شما را در مورد اینگه چگونه می توانیم روند طراحی زبان را بهبود بخشیم حتی با همکاری بیشتر یا نیمه خوشحال می شویم، بشنویم.

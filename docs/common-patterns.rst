@@ -1,5 +1,5 @@
 ###############
-Common Patterns
+الگو های مرسوم
 ###############
 
 .. index:: withdrawal
@@ -7,23 +7,21 @@ Common Patterns
 .. _withdrawal_pattern:
 
 *************************
-Withdrawal from Contracts
+برداشت از قراردادها
 *************************
 
-The recommended method of sending funds after an effect
-is using the withdrawal pattern. Although the most intuitive
-method of sending Ether, as a result of an effect, is a
-direct ``transfer`` call, this is not recommended as it
-introduces a potential security risk. You may read
-more about this on the :ref:`security_considerations` page.
+روش پیشنهادی برای ارسال وجوه پس از یک تاثیر ، استفاده از الگوی برداشت است. اگرچه
+روش بصری ارسال اتر، به عنوان نتیجه یک تاثیر، یک فراخوانی ``ارسال`` مستقیم است، اما این
+توصیه نمی شود زیرا خطر بالقوه امنیتی ایجاد می کند. ممکن است در مورد این موضوع در
+صفحه ی ملاحظات امنیتی :ref:`security_considerations` بیشتر مطالعه کنید.
 
-The following is an example of the withdrawal pattern in practice in
-a contract where the goal is to send the most money to the
-contract in order to become the "richest", inspired by
-`King of the Ether <https://www.kingoftheether.com/>`_.
+در زیر نمونه کاربردی از الگوی برداشت در یک قرارداد است که هدف آن ارسال بیشترین مبلغ
+به قرارداد جهت تبدیل شدن به "ثروتمندترین"  است.
+که از `King of the Ether <https://www.kingoftheether.com/>`_ الهام گرفته شده است.
 
-In the following contract, if you are no longer the richest,
-you receive the funds of the person who is now the richest.
+
+در قرارداد ذیل ، اگر شما دیگر ثروتمند ترین نباشید، شما بودجه شخصی را دریافت می کنید که
+اکنون ثروتمندترین است.
 
 .. code-block:: solidity
 
@@ -61,7 +59,7 @@ you receive the funds of the person who is now the richest.
         }
     }
 
-This is as opposed to the more intuitive sending pattern:
+این بر خلاف الگوی بصری ارسال است:
 
 .. code-block:: solidity
 
@@ -90,44 +88,38 @@ This is as opposed to the more intuitive sending pattern:
         }
     }
 
-Notice that, in this example, an attacker could trap the
-contract into an unusable state by causing ``richest`` to be
-the address of a contract that has a receive or fallback function
-which fails (e.g. by using ``revert()`` or by just
-consuming more than the 2300 gas stipend transferred to them). That way,
-whenever ``transfer`` is called to deliver funds to the
-"poisoned" contract, it will fail and thus also ``becomeRichest``
-will fail, with the contract being stuck forever.
+توجه داشته باشید که ، در این مثال ، یک مهاجم می تواند قرارداد را به حالت غیر قابل استفاده
+در بیاورد، زیرا ثروتمندترین ``richest`` آدرس ، آردس قرار دادی است که توابع دریافت و عقبگرد دارد و از
+کار می افتند ( به عنوان مثال با استفاده از ``()revert`` یا فقط با مصرف بیش از 2300 هزینه
+گاز ارسال شده به آنها). به این ترتیب ، هر زمانی که تابع انتقال ``transfer`` برای تحویل وجوه به قرارداد
+"سمی شده" فرا خوانی شود ، شکست خواهد خورد و بنابراین ثروتمندترین ``becomeRichest`` نیز شکست خواهد
+خورد، این قرداد برای همیشه گیر می کند.
 
-In contrast, if you use the "withdraw" pattern from the first example,
-the attacker can only cause his or her own withdraw to fail and not the
-rest of the contract's workings.
+
+در عوض ، اگر از الگوی "برداشت" از مثال اول استفاده کنید، مهاجم می تواند ، باعث کند
+شدن برداشت خود شود و نه با بقیه بخش های قرارداد کار داشته باشد.
 
 .. index:: access;restricting
 
 ******************
-Restricting Access
+محدود کردن دسترسی
 ******************
 
-Restricting access is a common pattern for contracts.
-Note that you can never restrict any human or computer
-from reading the content of your transactions or
-your contract's state. You can make it a bit harder
-by using encryption, but if your contract is supposed
-to read the data, so will everyone else.
+محدود کردن دسترسی الگوی مرسومی برای قراردادهاست. توجه داشته باشید که شما هرگز
+نمی توانید انسانی یا رایانه ای را از خواندن محتوای معاملات یا وضعیت قرار داد خود منع کنید.
+با استفاده از رمزگذاری می توانید این کار را کمی سخت کنید، اما اگر قرار  باشد قرارداد های
+دیگر قراداد شما را بخوانند ، دیگران نیز این کار را می توانند انجام دهند.
 
-You can restrict read access to your contract's state
-by **other contracts**. That is actually the default
-unless you declare your state variables ``public``.
+شما می توانید دسترسی خواندن وضعیت قرارداد خود با **سایر قرارداد ها** را محدود کنید. در
+واقع این پیش فرض است مگر اینکه متغیر های وضعیت خود را به حالت عمومی ``public`` تعریف کنید.
 
-Furthermore, you can restrict who can make modifications
-to your contract's state or call your contract's
-functions and this is what this section is about.
+علاوه بر این ، شما می توانید افرادی را که می توانند وضعیت قرار داد شما را تغییر دهند ی
+توابع قرار داد شما را فراخوانی کنند، محدود کنید و این همان چیزی است که این بخش دنبال
+می کند.
 
 .. index:: function;modifier
 
-The use of **function modifiers** makes these
-restrictions highly readable.
+استفاده از توابع **اصلاح کننده** این محدودیت ها را بسیار خوانا می کند.
 
 .. code-block:: solidity
     :force:
@@ -229,69 +221,53 @@ restrictions highly readable.
         }
     }
 
-A more specialised way in which access to function
-calls can be restricted will be discussed
-in the next example.
+یک روش تخصصی تر که می تواند دسترسی به فراخوانی توابع را محدود کند ، در مثال بعدی بحث خواهد شد.
 
 .. index:: state machine
 
 *************
-State Machine
+ماشین وضعیت
 *************
 
-Contracts often act as a state machine, which means
-that they have certain **stages** in which they behave
-differently or in which different functions can
-be called. A function call often ends a stage
-and transitions the contract into the next stage
-(especially if the contract models **interaction**).
-It is also common that some stages are automatically
-reached at a certain point in **time**.
+قرارداد ها اغلب به عنوان یک ماشین وضعیت عمل می کنند، به این معنی است که آنها دارای
+**مراحل** خاصی هستند که در آنها رفتار متفاوتی دارند که در آن حالت می توان توابع مختلفی را
+فرا خوانی کرد. فراخوانی توابع معمولا یک مرحله را به پایان می رساند و قرار داد را به مرحله
+بعدی منتقل می کند ( مخصوصا اگر مدل قرار داد از نوع **تعاملی** باشد). همچنین نرمال است ک
+برخی از مراحل به صور خودکار در یک بازه **زمانی** مشخص انجام می شوند.
 
-An example for this is a blind auction contract which
-starts in the stage "accepting blinded bids", then
-transitions to "revealing bids" which is ended by
-"determine auction outcome".
+به عنوان مثال این قرار داد یک حراج کور است که از مرحله " پذیرش پیشنهادات کور" شروع
+می شود، سپس به مرحله "آشکار کردن پیشنهادات" منتقل می شود و با مرحله "تعیین نتیجه
+حراج" به پایان می رسد.
+
 
 .. index:: function;modifier
 
-Function modifiers can be used in this situation
-to model the states and guard against
-incorrect usage of the contract.
+در این شرایط می توان از توابع تغییر دهنده برای مدل سازی حالت ها و جلوگیری از استفاده نادرست از قرار داد استفاده کرد.
 
-Example
+مثال
 =======
 
-In the following example,
-the modifier ``atStage`` ensures that the function can
-only be called at a certain stage.
+در مثال زیر ، تابع تغییر دهنده ``atStage`` اطمینان حاصل می کند که تابع فقط در یک مرحله خاص فراخوانی شود.
 
-Automatic timed transitions
-are handled by the modifier ``timedTransitions``, which
-should be used for all functions.
+ انتقال به موقع بصورت خودکار توسط تابع تغیر دهنده ``timedTransitions`` انجام می شود، که باید در همه توابع استفاده شود.
 
 .. note::
-    **Modifier Order Matters**.
-    If atStage is combined
-    with timedTransitions, make sure that you mention
-    it after the latter, so that the new stage is
-    taken into account.
+    **ترتیب توابع تغییر دهنده مهم است**.
+    اگر atStage با timedTansitions ترکیب
+    شده است، مطمئن شوید که بعد از مرحله دومی آن را ذکر کرده اید، تا مرحله جدید محسوب
+    شود.
 
-Finally, the modifier ``transitionNext`` can be used
-to automatically go to the next stage when the
-function finishes.
+نهایتا، با استفاده از تابع تغییر دهنده ``transitionNext`` می توان به طور خودکار پس از اتمام
+روال تابع به مرحله بعد رفت.
 
 .. note::
-    **Modifier May be Skipped**.
-    This only applies to Solidity before version 0.4.0:
-    Since modifiers are applied by simply replacing
-    code and not by using a function call,
-    the code in the transitionNext modifier
-    can be skipped if the function itself uses
-    return. If you want to do that, make sure
-    to call nextStage manually from those functions.
-    Starting with version 0.4.0, modifier code
-    will run even if the function explicitly returns.
+    **می توان از تابع تغییر دهنده صرف نظر کرد**.
+    این مورد فقط در سالیدیتی نسخه 0.4.0 به قبل اعمال می شود:
+    از انجایی که تغیردهنده ها فقط با جایگزینی کد اعمال می شوند
+    و نه با استفاده از یک فراخوانی تابع، در صورت استفاده در بخش باز گشت تابع ،  از کد تغیر
+    دهنده می توان صرف نظر کرد. اگر می خواهید این کار را انجام دهید، مطمئن شوید که
+    بصورت دستی تابع NextStage را از آن تابع ها فراخوانی می کنید. با شروع نسخه 0.4.0 کد
+    تغیر دهندها حتی اگر تابع صراحا هم برگردد، اجرا می شوند.
 
 .. code-block:: solidity
     :force:

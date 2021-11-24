@@ -1,59 +1,55 @@
 .. index:: style, coding style
 
-#############
-Style Guide
-#############
+###################
+راهنمای سبک نوشتاری
+###################
 
-************
-Introduction
-************
+*****
+مقدمه
+*****
 
-This guide is intended to provide coding conventions for writing solidity code.
-This guide should be thought of as an evolving document that will change over
-time as useful conventions are found and old conventions are rendered obsolete.
+این راهنما در نظر دارد در مورد نحوه ی کد نویسی سالیدیتی صحبت کند. این راهنما همواره در حال تکامل است و با
+گذشت زمان امکان دارد قواعد جدید جایگزین قواعد قبلی شود.
 
-Many projects will implement their own style guides.  In the event of
-conflicts, project specific style guides take precedence.
+بسیاری از پروژه ها سبک نوشتاری خود را پیاده سازی می کنند. درصورتی که تداخلی رخ دهد، سبک نوشتاری خاص
+در پروژه الویت پیدا می کند.
 
-The structure and many of the recommendations within this style guide were
-taken from python's
-`pep8 style guide <https://www.python.org/dev/peps/pep-0008/>`_.
+ساختار بسیاری از سبک نوشتاری های پیشنهاد شده (recommended) از  `سبک نوشتاری pep8 <https://www.python.org/dev/peps/pep-0008/>`_ بر
+گرفته شده است.
 
-The goal of this guide is *not* to be the right way or the best way to write
-solidity code.  The goal of this guide is *consistency*.  A quote from python's
-`pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
-captures this concept well.
+هدف این راهنما ارائه روش صحیح و یا بهترین روش برای کد نویسی سالیدیتی نیست. هدف این راهنما یکپارچگی است.
+`pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_ صراحتا این مفهوم را نشان بیان می کند.
 
 .. note::
 
-    A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.
+    یک سبک نوشتار در مورد یکپارچگی است. سبک نوشتاری به همراه یکپارچگی مهم است. یکپارچگی در یک پروژه بسیار مهم است.یکپارچگی در یک ماژول یا تابع از همه مهمتر است.
 
-    But most importantly: **know when to be inconsistent** -- sometimes the style guide just doesn't apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don't hesitate to ask!
+    اما مهمتر از همه: **دانستن زمان غیر یکپارچه بودن است** -- بعضی اوغات یکپارچگی در نظر گرفته نمی شود. در صورت شک، به امثال دیگر نگاه کنید و تصمیم بگیرید کدام بهتر است و از پرسیدن سوال دریغ نکنید!
 
 
 ***********
-Code Layout
+نحوه چیدمان
 ***********
 
 
-Indentation
-===========
+تو رفتگی
+========
 
-Use 4 spaces per indentation level.
+برای هر سطح تو رفتگی از 4 عدد دکمه space استفاده کنید.
 
-Tabs or Spaces
+Tabs یا Spaces
 ==============
 
-Spaces are the preferred indentation method.
+روش دکمه  space برای تو رفتگی مقدم تر است.
 
-Mixing tabs and spaces should be avoided.
+از ادغام tab ها و space ها باید جلوگیری شود.
 
-Blank Lines
+خط های خالی
 ===========
 
-Surround top level declarations in solidity source with two blank lines.
+تعاریف های سطح اول خود را به دو خط خالی در سورس کد(source code) سالیدتی احاطه کنید.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -74,7 +70,7 @@ Yes:
         // ...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -92,11 +88,11 @@ No:
         // ...
     }
 
-Within a contract surround function declarations with a single blank line.
+داخل قراردادی که تعاریف تابع با یک خط احاطه شده اند.
 
-Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)
+خط های خالی بین گروه های مرتبط می توانند حذف شوند( مثل تابع stub به عنوان یک قرارداد انتزاعی (abstract contact))
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -119,7 +115,7 @@ Yes:
         }
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -143,22 +139,21 @@ No:
 
 .. _maximum_line_length:
 
-Maximum Line Length
+ماکسیموم طول خط
 ===================
 
-Keeping lines under the `PEP 8 recommendation <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ to a maximum of 79 (or 99)
-characters helps readers easily parse the code.
+`طبق پیشنهاد PEP8 <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ ماکسیموم طول هرخط 79 (یا 99) کاراکتر باشد به خواننده کمک می کند تا به راحتی کد رابخواند.
 
-Wrapped lines should conform to the following guidelines.
+خط های پیچیده باید قوانین ذیل را رعایت کنند:
 
-1. The first argument should not be attached to the opening parenthesis.
-2. One, and only one, indent should be used.
-3. Each argument should fall on its own line.
-4. The terminating element, :code:`);`, should be placed on the final line by itself.
+1. ورودی (argument) اول نباید پس از پاراتز باز باشد.
+2. یک و فقط یک تورفتگی باید استفاده شود.
+3. هر ورودی (argument) باید در خط خودش باشد.
+4. نشانگرپایان دهنده :code:`(;)` ، باید به تنهایی درآخرین خط قرار گیرد.
 
-Function Calls
+فراخوانی تابع
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -168,7 +163,7 @@ Yes:
         longArgument3
     );
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -198,9 +193,9 @@ No:
         longArgument2,
         longArgument3);
 
-Assignment Statements
+بیانیه های انتسابات
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -211,7 +206,7 @@ Yes:
         argument4
     );
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -220,9 +215,9 @@ No:
                                                                        argument3,
                                                                        argument4);
 
-Event Definitions and Event Emitters
+تعاریف رخداد ها و تولید کنندگان رخداد
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -242,7 +237,7 @@ Yes:
         options
     );
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -258,17 +253,17 @@ No:
                       amount,
                       options);
 
-Source File Encoding
+کدگذاری فایل منبع
 ====================
 
-UTF-8 or ASCII encoding is preferred.
+UTF-8 یا ASCII مقبول تر است.
 
 Imports
 =======
 
-Import statements should always be placed at the top of the file.
+بیانیه های import حتما باید در بالای فایل نوشته شوند.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -285,7 +280,7 @@ Yes:
         // ...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -304,24 +299,24 @@ No:
         // ...
     }
 
-Order of Functions
-==================
+ترتیب توابع
+===========
 
-Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.
+ترتیب بندی به خواننده کمک می کند تا بتواند مشخص کند کدام توابع می توانند فراخوانی شوند و پیدا کردن تعاریف توابع سازنده وعقب گرد راحتر می شود.
 
-Functions should be grouped according to their visibility and ordered:
+توابع باید طبق میدان دید و ترتیبشان گروهبندی شوند:
 
-- constructor
-- receive function (if exists)
-- fallback function (if exists)
-- external
-- public
-- internal
-- private
+- سازنده
+- تابع گیرنده (اگر وجود داشته باشد)
+- تابع عقب گرد ( اگر وجود داشته باشد)
+- خارجی
+- عمومی
+- داخلی
+- خصوصی
 
-Within a grouping, place the ``view`` and ``pure`` functions last.
+داخل یک گروهبندی ، مکان توابع ``view``  و ``pure`` را در آخر بگذارید.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -359,7 +354,7 @@ Yes:
         // ...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -391,48 +386,48 @@ No:
         // ...
     }
 
-Whitespace in Expressions
-=========================
+فضای خالی در اصطلاحات
+=====================
 
-Avoid extraneous whitespace in the following  situations:
+در شرایط زیر از فضاهای خالی خودداری کنید: 
 
-Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.
+بلافاصله داخل پاراتزها، آکولاد ها و کوروشه ها، به جز تعاریف توابع تک خطی.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
     spam(ham[1], Coin({name: "ham"}));
 
-No:
+خیر:
 
 .. code-block:: solidity
 
     spam( ham[ 1 ], Coin( { name: "ham" } ) );
 
-Exception:
+استثنا:
 
 .. code-block:: solidity
 
     function singleLine() public { spam(); }
 
-Immediately before a comma, semicolon:
+بلافاصله بعد از نقطه ویرگول (;):
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
     function spam(uint i, Coin coin) public;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
     function spam(uint i , Coin coin) public ;
 
-More than one space around an assignment or other operator to align with another:
+بیش از یک space در کنار یک انتساب یا  دیگرعامل ها جهت منظم کردن با یکدیگر.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -440,7 +435,7 @@ Yes:
     y = 2;
     long_variable = 3;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -448,9 +443,9 @@ No:
     y             = 2;
     long_variable = 3;
 
-Don't include a whitespace in the receive and fallback functions:
+فضای خالی را در توابع دریافت و عقبگرد قرار ندهید:
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -462,7 +457,7 @@ Yes:
         ...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -475,18 +470,16 @@ No:
     }
 
 
-Control Structures
-==================
+ساختار های کنترلی
+=================
 
-The braces denoting the body of a contract, library, functions and structs
-should:
+آکولاد ها بدنه ی یک قرارداد، کتابخانه، توابع نشان را می دهند و ساختارشان باید:
 
-* open on the same line as the declaration
-* close on their own line at the same indentation level as the beginning of the
-  declaration.
-* The opening brace should be preceded by a single space.
+* باید در همان خط تعاریف باز شوند
+* باید در خطی که در همان سطح تورفتگی از اول تعریف باز شده اند ، بسته شوند
+* یک فضای خالی باید قبل از آکولاد باز باشد
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -500,7 +493,7 @@ Yes:
         }
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -515,15 +508,14 @@ No:
         }
     }
 
-The same recommendations apply to the control structures ``if``, ``else``, ``while``,
-and ``for``.
+همین توصیه ها برای ساختار های کنترلی  ``if`` ، ``else`` ، ``while``  و ``for`` پیشنهاد می شود.
 
-Additionally there should be a single space between the control structures
-``if``, ``while``, and ``for`` and the parenthetic block representing the
-conditional, as well as a single space between the conditional parenthetic
+به علاوه یک فضای خالی باید بین ساختار های کنترلی ``if`` ، ``while`` و ``for`` باشد و یک فضای خالی بین بلوک پارانتزی
+شرطی  و آکولاد شروع بلوک شرطی باید باشد. 
+as well as a single space between the conditional parenthetic
 block and the opening brace.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -535,7 +527,7 @@ Yes:
         ...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -550,17 +542,16 @@ No:
     for (...) {
         ...;}
 
-For control structures whose body contains a single statement, omitting the
-braces is ok *if* the statement is contained on a single line.
+برای ساختار های کنترلی که بنده ی آنها یک بیانیه دارد ، نداشتن آکولاد مشکلی ایجاد نمی کند اگر بیانیه *if* شامل یک خط باشد.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
     if (x < 10)
         x += 1;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -570,11 +561,10 @@ No:
             value: 42
         }));
 
-For ``if`` blocks which have an ``else`` or ``else if`` clause, the ``else`` should be
-placed on the same line as the ``if``'s closing brace. This is an exception compared
-to the rules of other block-like structures.
+برای بلوک های ``if`` که دارای یک ``else`` یا ``else if``  هستند ``else`` باید در همان خطی که آکولاد ``if`` تمام می شوند، قرار
+گیرد. در مقایسه با قواعد دیگر ساختار های بلوکی-شکل این یک استثنا است.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -592,7 +582,7 @@ Yes:
     else
         x -= 1;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -603,18 +593,16 @@ No:
         x -= 1;
     }
 
-Function Declaration
-====================
+تعاریف توابع
+=============
 
-For short function declarations, it is recommended for the opening brace of the
-function body to be kept on the same line as the function declaration.
+برای تعریف توابع کوتاه ، پیشنهاد می شود که آکولاد باز بنده ی تابع در همان خط تعریف تابع بماند.
 
-The closing brace should be at the same indentation level as the function
-declaration.
+آکولا بسته باید در همان سطح تورفتگی تعریف تابع بسته شود.
 
-The opening brace should be preceded by a single space.
+قبل آکولاد باز باید از یک فضای خالی استفاده کرد.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -626,7 +614,7 @@ Yes:
         return x + 1;
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -646,15 +634,15 @@ No:
     function increment(uint x) public pure returns (uint) {
         return x + 1;}
 
-The modifier order for a function should be:
+ترتیب اصلاح کنندگان (modifier) یک تابع باید:
 
-1. Visibility
-2. Mutability
-3. Virtual
-4. Override
-5. Custom modifiers
+1. میدان دید
+2. تغییر پذیری (mutability)
+3. مجازی
+4. بازنویسی تابع (override)
+5. اصلاح کنندگان شخصی (custom modifiers)
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -666,7 +654,7 @@ Yes:
         selfdestruct(owner);
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -678,12 +666,11 @@ No:
         selfdestruct(owner);
     }
 
-For long function declarations, it is recommended to drop each argument onto
-it's own line at the same indentation level as the function body.  The closing
-parenthesis and opening bracket should be placed on their own line as well at
-the same indentation level as the function declaration.
+برای تعاریف طولانی تابع، توصیه می شود که هر ورودی (argument) را در همان سطح تو
+رفتگی بدنه تابع قرار دهید. پرانتز بسته و آکولاد باز باید در خط خود قرار بگیرند و همان سطح
+تورفتگی تابع را داشته باشند. 
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -700,7 +687,7 @@ Yes:
         doSomething();
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -728,10 +715,10 @@ No:
         doSomething();
     }
 
-If a long function declaration has modifiers, then each modifier should be
-dropped to its own line.
+اگر یک تابع با تعریف طولانی دارای تابع تغییردهنده(modifier) باشد،  هر تابع تغییر دهنده باید
+در خط خود قرار گیرد.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -757,7 +744,7 @@ Yes:
         doSomething();
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -783,9 +770,9 @@ No:
         doSomething();
     }
 
-Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the :ref:`Maximum Line Length <maximum_line_length>` section.
+پارامتر های خروجی و بیانیه های بازگشتی باید به همان سبک توصیه شده خطوط طولانی در قسمت :ref:`ماکسیموم طول خط <maximum_line_length>` .
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -810,7 +797,7 @@ Yes:
         );
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -831,11 +818,11 @@ No:
                 veryLongReturnArg1);
     }
 
-For constructor functions on inherited contracts whose bases require arguments,
-it is recommended to drop the base constructors onto new lines in the same
-manner as modifiers if the function declaration is long or hard to read.
+برای توابع سازنده در قراردادهای وراثتی که نیازمند ورودی(argument) است، اگر تعریف تابع
+طولانی یا خواندنش سخت باشد، توصیه می شود توابع سازنده های اساسی را به همان شیوه
+توابع تغییر دهنده(modifier) روس خط جدید قرار دهید.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -868,7 +855,7 @@ Yes:
         }
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -918,26 +905,25 @@ No:
     }
 
 
-When declaring short functions with a single statement, it is permissible to do it on a single line.
+هنگام تعریف توابع کوتاهی که یک عبارت دارند، انجام این کار در یک خط مجاز است.
 
-Permissible:
+مجاز:
 
 .. code-block:: solidity
 
     function shortFunction() public { doSomething(); }
 
-These guidelines for function declarations are intended to improve readability.
-Authors should use their best judgement as this guide does not try to cover all
-possible permutations for function declarations.
+این آموزه ها برای بهبود خوانایی تعریف توابع بودند. نویسندگان باید از بهترین قضاوت خود
+استفاده کنند راهنمای وی نمی تواند تمامی جایگزینی های احتمالی تعریف توابع را پوشش دهد.
 
-Mappings
+نگاشت ها
 ========
 
-In variable declarations, do not separate the keyword ``mapping`` from its
-type by a space. Do not separate any nested ``mapping`` keyword from its type by
-whitespace.
+در تعاریف متغیر ، از دکمه فاصله(space) جهت جداسازی کلمه کلیدی ``mapping`` با بخش
+تعریف-نوع استفاده نکنید. کلمه کلیدی ``mapping`` تو در تو را از طریق دکمه فاصله(space) با
+بخش-نوع خودشان جدا نکنید.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -946,7 +932,7 @@ Yes:
     mapping(uint => mapping(bool => Data[])) public data;
     mapping(uint => mapping(uint => s)) data;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -955,47 +941,46 @@ No:
     mapping (uint => mapping (bool => Data[])) public data;
     mapping(uint => mapping (uint => s)) data;
 
-Variable Declarations
-=====================
+تعاریف متغیر 
+============
 
-Declarations of array variables should not have a space between the type and
-the brackets.
+در تعریف متغیر های آرایه ای نباید بین بخش نوع و کروشه باز و بسته فاصله باشد.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
     uint[] x;
 
-No:
+خیر:
 
 .. code-block:: solidity
 
     uint [] x;
 
 
-Other Recommendations
-=====================
+توصیه های دیگر
+==============
 
-* Strings should be quoted with double-quotes instead of single-quotes.
+* رشته ها بجای تک کوتنشن (‘) باید با جفت کوتنشن (“) نمایش داده شوند.
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
     str = "foo";
     str = "Hamlet says, 'To be or not to be...'";
 
-No:
+خیر:
 
 .. code-block:: solidity
 
     str = 'bar';
     str = '"Be yourself; everyone else is already taken." -Oscar Wilde';
 
-* Surround operators with a single space on either side.
+* بین هر دو طرف عملگر ها باید فاصله باشد.
 
-Yes:
+بله:
 
 .. code-block:: solidity
     :force:
@@ -1005,7 +990,7 @@ Yes:
     x += 3 + 4;
     x |= y && z;
 
-No:
+خیر:
 
 .. code-block:: solidity
     :force:
@@ -1015,12 +1000,11 @@ No:
     x += 3+4;
     x |= y&&z;
 
-* Operators with a higher priority than others can exclude surrounding
-  whitespace in order to denote precedence.  This is meant to allow for
-  improved readability for complex statement. You should always use the same
-  amount of whitespace on either side of an operator:
+* عملگر هایی که دارای الویت بالایی نسبت به دیگر عملگر ها دارند می توانند فضای خالی نداشته
+  باشند. برای افزایش خوانایی در عبارات پیچیده مجاز است. فضای خالی در هر دو طرف عملگر
+  باید به یک مقدار (یکسان) باشد:
 
-Yes:
+بله:
 
 .. code-block:: solidity
 
@@ -1028,7 +1012,7 @@ Yes:
     x = 2*y + 3*z;
     x = (a+b) * (a-b);
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -1036,86 +1020,86 @@ No:
     x = y+z;
     x +=1;
 
-***************
-Order of Layout
-***************
+************
+ترتیب چیدمان
+************
 
-Layout contract elements in the following order:
+چیدمان عناصر قرارداد به ترتیب ذیل است:
 
-1. Pragma statements
-2. Import statements
-3. Interfaces
-4. Libraries
-5. Contracts
+1. بیانیه Pragma
+2. بیانیه Import
+3. رابط ها (Interfaces)
+4. کتابخانه ها (Libraries)
+5. قرارداد ها
 
-Inside each contract, library or interface, use the following order:
+در داخل هر قرارداد، کتابخانه یا رابط به ترتیب ذیل است:
 
-1. Type declarations
-2. State variables
-3. Events
-4. Functions
+1. تعاریف نوع (Type declarations)
+2. متغیر های وضعیت (State variables)
+3. رخداد ها (Events)
+4. توابع
 
 .. note::
 
-    It might be clearer to declare types close to their use in events or state
-    variables.
+    امکان دارد تعریف نوع ها نزدیک رخداد ها یا متغیر های وضعیت کد را واضح تر کند.
 
-******************
-Naming Conventions
-******************
+*************
+اصول نامگذاری
+*************
 
-Naming conventions are powerful when adopted and used broadly.  The use of
-different conventions can convey significant *meta* information that would
-otherwise not be immediately available.
+اصول نامگذاری زمانی قدرتمند هستند که به صورت سرتاسری وفق داده و استفاده شوند.
+استفاده از اصول مختلف اطلاعات *اضافی* منتقل می کند یا به بیان دیگر بلافاصله در دسترس
+نخواهد بود.
 
-The naming recommendations given here are intended to improve the readability,
-and thus they are not rules, but rather guidelines to try and help convey the
-most information through the names of things.
+توصیه های نامگذاری که در اینجا ارائه می شوند برای بهبود دادن به خوانایی است.
+پس آنها قواعد نیستند، بلکه دستورالعمل هایی هستند که برای انتقال اطلاعات بیشتر از طریق
+نام چیز ها کمک می کنند.
 
-Lastly, consistency within a codebase should always supersede any conventions
-outlined in this document.
-
-
-Naming Styles
-=============
-
-To avoid confusion, the following names will be used to refer to different
-naming styles.
-
-* ``b`` (single lowercase letter)
-* ``B`` (single uppercase letter)
-* ``lowercase``
-* ``lower_case_with_underscores``
-* ``UPPERCASE``
-* ``UPPER_CASE_WITH_UNDERSCORES``
-* ``CapitalizedWords`` (or CapWords)
-* ``mixedCase`` (differs from CapitalizedWords by initial lowercase character!)
-* ``Capitalized_Words_With_Underscores``
-
-.. note:: When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms in mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.
+نهایتا، یکپارچگی در داخل یک مقر کد(codebase) همیشه باید جانشین هر نوع اصولیکه در این
+سند ذکر شده است، شود
 
 
-Names to Avoid
-==============
+سبک های نامگذاری
+================
 
-* ``l`` - Lowercase letter el
-* ``O`` - Uppercase letter oh
-* ``I`` - Uppercase letter eye
+برای جلوگیری از سردرگمی، از نام های زیر برای اشاره به سبک های مختلف نامگذاری استفاده
+خواهد شد.
 
-Never use any of these for single letter variable names.  They are often
-indistinguishable from the numerals one and zero.
+* ``b`` ( تک کلمه کوچک-چین(lowercase))
+* ``B`` ( تک کلمه بزرگ-چین(uppercase))
+* ``lowercase`` (کوچک-چین)
+* ``lower_case_with_underscores`` (کوچک-چین به همراه خط زیر)
+* ``UPPERCASE`` (بزرگ-چین)
+* ``UPPER_CASE_WITH_UNDERSCORES`` (بزرگ-چین به همراه خط زیر)
+* ``CapitalizedWords`` (or CapWords) ( یا کلمات با حروف بزرگ اول) (CapWord)
+* ``mixedCase`` (مثل نوع قبل است با این تفاوت که حرف اول کلمه اول کوچک و باقی حرف اول کلمات دیگر بزرگ)
+* ``Capitalized_Words_With_Underscores``  ( مثل نوع ما قبل با این تفاوت که از خط زیر نیر استفاده می شود)
+
+.. note:: هنگام استفاده از CapitalizedWords تمام حروف کلمه اولیه را با حروف بزرگ وارد کنید. بنابراین HTTPServerError بهتر از HttpServerError است. هنگام استفاده از mixedCase تمام حروف کلمه اولیه کوچک و بقیه کلمات را با حرف بزرگ اول بنویسید. بنابراین xmlHTTPRequest بهتر از XMLHTTPRequest است.
 
 
-Contract and Library Names
-==========================
+نام های اجتنابی
+===============
 
-* Contracts and libraries should be named using the CapWords style. Examples: ``SimpleToken``, ``SmartBank``, ``CertificateHashRepository``, ``Player``, ``Congress``, ``Owned``.
-* Contract and library names should also match their filenames.
-* If a contract file includes multiple contracts and/or libraries, then the filename should match the *core contract*. This is not recommended however if it can be avoided.
+* ``l`` - حرف ال کوچک
+* ``O`` - حرف او بزرگ
+* ``I`` - حرف آی بزرگ
 
-As shown in the example below, if the contract name is ``Congress`` and the library name is ``Owned``, then their associated filenames should be ``Congress.sol`` and ``Owned.sol``.
+هرگز از اینها برای متغیر های تک حرفی استفاده نکنید. آنها اغلب با اعداد صفر و یک قاطی می
+شوند و غیر قابل تشخیص هستند.
 
-Yes:
+
+نام های قرار داد و کتابخانه
+===========================
+
+* قراردادها و کتابخانه ها باید به سبک CapWord نام گذاری شوند. امثال: ``SimpleToken`` ، ``SmartBank`` ، ``CertificateHashRepository`` ، ``Player`` ،  ``Congress``  ، ``Owned``.
+* قرارداد و کتابخانه باید همچنین با نام فایلشان هم نام باشند.
+* اگر فایل یک قرارداد شامل چندین قرارداد و/یا کتابخانه باشد، آنگاه نام فایل *قرارداد هسته* با نام قرارداد باید هم نام باشد. این توصیه نمی شود به هر حال در صورت امکان باید اجتناب شود.
+
+همانطور که در مثال زیر نماش داده شده است، اگر نام قرارداد ``Congress`` باشد و نام کتابخانه
+اش Owned باشد، آنگاه نام فایل های مربوطه باید ``Congress.sol`` و ``Owned.sol`` باشند.
+
+بله:
 
 .. code-block:: solidity
 
@@ -1140,7 +1124,7 @@ Yes:
         }
     }
 
-and in ``Congress.sol``:
+و داخل ``Congress.sol``:
 
 .. code-block:: solidity
 
@@ -1154,7 +1138,7 @@ and in ``Congress.sol``:
         //...
     }
 
-No:
+خیر:
 
 .. code-block:: solidity
 
@@ -1179,7 +1163,7 @@ No:
         }
     }
 
-and in ``Congress.sol``:
+و داخل ``Congress.sol``:
 
 .. code-block:: solidity
 
@@ -1194,65 +1178,65 @@ and in ``Congress.sol``:
         //...
     }
 
-Struct Names
-==========================
-
-Structs should be named using the CapWords style. Examples: ``MyCoin``, ``Position``, ``PositionXY``.
-
-
-Event Names
-===========
-
-Events should be named using the CapWords style. Examples: ``Deposit``, ``Transfer``, ``Approval``, ``BeforeTransfer``, ``AfterTransfer``.
-
-
-Function Names
+نام های ساختار
 ==============
 
-Functions should use mixedCase. Examples: ``getBalance``, ``transfer``, ``verifyOwner``, ``addMember``, ``changeOwner``.
+ساختار ها باید به سبک CapWords نام گذاری شوند. امثال: ``MyCoin`` ، ``Position`` ،  ``PositionXY``. 
 
 
-Function Argument Names
-=======================
+نام های رخداد
+=============
 
-Function arguments should use mixedCase. Examples: ``initialSupply``, ``account``, ``recipientAddress``, ``senderAddress``, ``newOwner``.
-
-When writing library functions that operate on a custom struct, the struct
-should be the first argument and should always be named ``self``.
+رخداد ها باید به سبک CapWords نام گذاری شوند. امثال: ``Deposit`` ، ``Transfer`` ، ``Approval`` ، ``BeforeTransfer`` ، ``AfterTransfer``.
 
 
-Local and State Variable Names
-==============================
+نام های تابع 
+==============
 
-Use mixedCase. Examples: ``totalSupply``, ``remainingSupply``, ``balancesOf``, ``creatorAddress``, ``isPreSale``, ``tokenExchangeRate``.
+توابع باید از سبک mixedCase استفاده کنند. امثال : ``getBalance`` ، ``transfer`` ، ``verifyOwner`` ، ``addMember`` ، ``changeOwner``.
 
 
-Constants
+نام های ورودی تابع
+==================
+
+ورودی های تابع باید از سبک mixedCase استفاده کنند. امثال : ``initialSupply`` ، ``account`` ، ``recipientAddress`` ، ``senderAddress`` ، ``newOwner``.
+
+زمان نوشتن توابع کتابخانه ای که روی یک ساختار خاص کار می کنند ، ساختار باید اولین ورودی
+(argument) باشد و باید همیشه نامش ``self`` باشد.
+
+
+نام های متغیر های  وضعیت و محلی
+===============================
+
+از mixedCase استفاده می شود امثال :  ``totalSupply`` ، ``remainingSupply`` ، ``balancesOf`` ،  ``creatorAddress`` ، ``isPreSale`` ، ``tokenExchangeRate``.
+
+
+ثابت ها
 =========
 
-Constants should be named with all capital letters with underscores separating
-words. Examples: ``MAX_BLOCKS``, ``TOKEN_NAME``, ``TOKEN_TICKER``, ``CONTRACT_VERSION``.
+تمامی ثابت ها باید با حروف بزرگ و جداشده با خط زیر نام گذاری شوند. امثال:
+``MAX_BLOCKS`` ،  ``TOKEN_NAME`` ، ``TOKEN_TICKER`` ، ``CONTRACT_VERSION``.
 
 
-Modifier Names
-==============
+نام های اصلاح کننده
+===================
 
-Use mixedCase. Examples: ``onlyBy``, ``onlyAfter``, ``onlyDuringThePreSale``.
+از mixedCase استفاده می شود امثال : ``onlyBy`` ، ``onlyAfter`` ، ``onlyDuringThePreSale``.
 
 
 Enums
 =====
 
-Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: ``TokenGroup``, ``Frame``, ``HashStyle``, ``CharacterLocation``.
+Enums در سبک تعاریف ساده باید از روش نام گذاری CapWords استفاده شود. امثال:  ``TokenGroup`` ، ``Frame`` ، ``HashStyle`` ، ``CharacterLocation``.
 
 
-Avoiding Naming Collisions
-==========================
+اجتناب از تداخل نام گذاری
+===========================
 
 * ``single_trailing_underscore_``
 
-This convention is suggested when the desired name collides with that of a
-built-in or otherwise reserved name.
+این اصول زمانی پیشنهاد می شود که نام مورد نظر با نام داخلی یا نام دیگر رزرو شده ای
+تداخل داشته باشد.
 
 .. _style_guide_natspec:
 
@@ -1260,12 +1244,11 @@ built-in or otherwise reserved name.
 NatSpec
 *******
 
-Solidity contracts can also contain NatSpec comments. They are written with a
-triple slash (``///``) or a double asterisk block (``/** ... */``) and
-they should be used directly above function declarations or statements.
+قرارداد های سالیدیتی می توانند شامل توضیحات NatSpec باشند. آنها باید به همراه سه
+اسلش (``///``) و یا یک بلوک دو ستاره ای (``/** ... */``)  مستقیما بالای تعاریف تابع یا بیانیه ها
+استفاده می شوند.
 
-For example, the contract from :ref:`a simple smart contract <simple-smart-contract>` with the comments
-added looks like the one below:
+برای مثال، قراردادی از :ref:`یک قرارداد ساده هوشمند <simple-smart-contract>` به همراه توضیحات اضافه شده شبیه مثال زیر است:
 
 .. code-block:: solidity
 
@@ -1292,6 +1275,6 @@ added looks like the one below:
         }
     }
 
-It is recommended that Solidity contracts are fully annotated using :ref:`NatSpec <natspec>` for all public interfaces (everything in the ABI).
+توصیه می شود که قرارداد های سالیدیتی کلا با :ref:`NatSpec <natspec>` برای تمامی رابط های عمومی (هر چیزی که داخل ABI است) حاشیه نویسی شوند.
 
-Please see the section about :ref:`NatSpec <natspec>` for a detailed explanation.
+لطفا برای توضیحات دقیق به بخش مربوط به :ref:`NatSpec <natspec>` مراجعه کنید.
