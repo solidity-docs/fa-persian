@@ -3,32 +3,18 @@
 .. _voting:
 
 ******
-Voting
+رای گیری
 ******
 
-The following contract is quite complex, but showcases
-a lot of Solidity's features. It implements a voting
-contract. Of course, the main problems of electronic
-voting is how to assign voting rights to the correct
-persons and how to prevent manipulation. We will not
-solve all problems here, but at least we will show
-how delegated voting can be done so that vote counting
-is **automatic and completely transparent** at the
-same time.
 
-The idea is to create one contract per ballot,
-providing a short name for each option.
-Then the creator of the contract who serves as
-chairperson will give the right to vote to each
-address individually.
+قرارداد زیر کاملاً پیچیده است، اما بسیاری از ویژگی‌های سالیدیتی را به نمایش می‌گذارد. قرارداد رای گیری را اجرا می‌کند. البته، مشکلات اصلی رای گیری الکترونیکی نحوه واگذاری حق رای به افراد صحیح و نحوه جلوگیری از دستکاری است. ما همه مشکلات را در اینجا حل نخواهیم کرد، اما حداقل نشان خواهیم داد که چگونه می‌توان رای گیریِ نمایندگان را انجام داد تا شمارش آراء در همان زمان **به صورت خودکار و کاملاً شفاف** انجام شود..
 
-The persons behind the addresses can then choose
-to either vote themselves or to delegate their
-vote to a person they trust.
+ایده این است که یک قرارداد برای هر رأی ایجاد شود و نام کوتاهی برای هر گزینه ارائه شود. سپس خالق قرارداد که به عنوان رئیس فعالیت می‌کند به هر آدرس به طور جداگانه حق رای می‌دهد.
 
-At the end of the voting time, ``winningProposal()``
-will return the proposal with the largest number
-of votes.
+افراد پشت آدرس‌ها می‌توانند انتخاب کنند که یا خود رأی دهند یا رای خود را به شخصی که به او اعتماد دارند واگذار کنند.
+
+در پایان زمان رای گیری، ``()winningProposal``  پیشنهاد را با بیشترین تعداد رای برمیگرداند.
+
 
 .. code-block:: solidity
 
@@ -184,8 +170,7 @@ of votes.
     }
 
 
-Possible Improvements
+بهبودهای احتمالی
 =====================
 
-Currently, many transactions are needed to assign the rights
-to vote to all participants. Can you think of a better way?
+در حال حاضر، تراکنش‌ها زیادی برای واگذاری حق رأی به همه شرکت کنندگان مورد نیاز است. آیا می‌توانید به راه بهتری فکر کنید؟
