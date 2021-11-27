@@ -43,9 +43,10 @@
 
 برای یک عدد صحیح نوع  ``X`` ، می‌توانید از  ``type(X).min`` و ``type(X).max``  برای دستیابی به حداقل و حداکثر مقدار قابل نمایش توسط نوع استفاده کنید.
 
-
+ 
 .. warning::
 
+  
 
   Integers in Solidity are restricted to a certain range. For example, with ``uint32``, this is ``0`` up to ``2**32 - 1``.
   There are two modes in which arithmetic is performed on these types: The "wrapping" or "unchecked" mode and the "checked" mode.
@@ -58,17 +59,21 @@
 
 مقدار مقایسه‌گر، مقداری است که با مقایسه مقدار عدد صحیح  بدست می‌آید.
 
-Bit operations
+عملیات‌های بیتی (Bit operations)
 ^^^^^^^^^^^^^^
 
-Bit operations are performed on the two's complement representation of the number.
-This means that, for example ``~int256(0) == int256(-1)``.
+عملیات بیت بر روی نمایش مکمل دو انجام می‌شود. این بدان معنی است که به عنوان 
+مثال  ``int256(0) == int256(-1)~`` .
 
-Shifts
+
+
+شیفت‌ها 
 ^^^^^^
 
-The result of a shift operation has the type of the left operand, truncating the result to match the type.
-The right operand must be of unsigned type, trying to shift by a signed type will produce a compilation error.
+شیفت‌ها نتیجه یک عمل جابجایی دارای نوع عملوند  سمت چپ می‌باشند و نتیجه را متناسب با نوع آن کوتاه 
+می‌کنند. عملوند سمت راست باید از نوع بدون علامت  باشد. تلاش برای جابجایی با نوع با علامت  خطای کامپایل 
+ایجاد می‌کند.
+
 
 Shifts can be "simulated" using multiplication by powers of two in the following way. Note that the truncation
 to the type of the left operand is always performed at the end, but not mentioned explicitly.
@@ -77,43 +82,45 @@ to the type of the left operand is always performed at the end, but not mentione
 - ``x >> y`` is equivalent to the mathematical expression ``x / 2**y``, rounded towards negative infinity.
 
 .. warning::
-    Before version ``0.5.0`` a right shift ``x >> y`` for negative ``x`` was equivalent to
-    the mathematical expression ``x / 2**y`` rounded towards zero,
-    i.e., right shifts used rounding up (towards zero) instead of rounding down (towards negative infinity).
+
+    قبل از نسخه  ``0.5.0``  شیفت راست  ``x >> y``   برای منفی  ``x``  معادل ``x / 2**y`` بود، یعنی 
+    از شیفت‌های راست به جای گرد کردن (به سمت بی نهایت منفی) از گرد کردن (به سمت صفر) استفاده 
+    می‌شد.
+
+
 
 .. note::
-    Overflow checks are never performed for shift operations as they are done for arithmetic operations.
-    Instead, the result is always truncated.
+    بررسی‌های سرریز همانطور که برای عملیات حسابی انجام می‌شود هرگز برای عملیات شیفت انجام نمی‌شود. در عوض، نتیجه همیشه کوتاه می‌شود.
 
-Addition, Subtraction and Multiplication
+جمع، تفریق و ضرب
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Addition, subtraction and multiplication have the usual semantics, with two different
-modes in regard to over- and underflow:
+جمع، تفریق و ضرب سمنتیک معمول را دارند، با توجه به دو حالت مختلف از نظر سرریز  و زیرریز   :
 
-By default, all arithmetic is checked for under- or overflow, but this can be disabled
-using the :ref:`unchecked block<unchecked>`, resulting in wrapping arithmetic. More details
-can be found in that section.
+به طور پیش فرض، تمام محاسبات زیرریز  و سریز بررسی می‌شود، اما این می‌تواند با استفاده از :ref:`unchecked block<unchecked>`
+غیرفعال شود، در نتیجه محاسبات پیچیده می‌شود. جزئیات بیشتر را می‌توان در آن بخش یافت.
 
-The expression ``-x`` is equivalent to ``(T(0) - x)`` where
-``T`` is the type of ``x``. It can only be applied to signed types.
-The value of ``-x`` can be
-positive if ``x`` is negative. There is another caveat also resulting
-from two's complement representation:
 
-If you have ``int x = type(int).min;``, then ``-x`` does not fit the positive range.
-This means that ``unchecked { assert(-x == x); }`` works, and the expression ``-x``
-when used in checked mode will result in a failing assertion.
+عبارت  ``x-`` برابر است با  ``(T(0) - x)`` که  ``T``  نوع  ``x`` است. فقط در انواع امضا شده قابل استفاده است. 
+اگر  ``x`` منفی باشد مقدار   ``x-`` می‌تواند مثبت باشد. اخطار دیگری نیز وجود دارد که ناشی از نمایش مکمل دو  است:
 
-Division
+
+
+اگر  ``;int x = type(int).min`` داشته باشید،  ``x-``  با رنج مثبت متناسب نیست. این به این 
+معنی است که  ``unchecked { assert(-x == x); }``  کار می‌کند، و عبارت  ``x-``  هنگامی 
+که در حالت checked استفاده ‌شود، منجر به اعلان شکست  می‌شود.
+
+
+
+تقسیم  
 ^^^^^^^^
 
-Since the type of the result of an operation is always the type of one of
-the operands, division on integers always results in an integer.
-In Solidity, division rounds towards zero. This means that ``int256(-5) / int256(2) == int256(-2)``.
+از آنجا که نوع نتیجه یک عملیات همیشه نوع یکی از عملوندها  است، تقسیم بر اعداد صحیح همیشه منجر به 
+یک عدد صحیح می‌شود. در سالیدیتی، تقسیم به سمت صفر گرد می‌شود. این بدان معنی است که
+``int256(-5) / int256(2) == int256(-2)``.
 
-Note that in contrast, division on :ref:`literals<rational_literals>` results in fractional values
-of arbitrary precision.
+ توجه داشته باشید که در مقابل، تقسیم بر روی :ref:`لیترال‌ها<rational_literals>`  منجر به مقادیر کسری دلخواه می‌شود.
+
 
 .. note::
   Division by zero causes a :ref:`Panic error<assert-and-require>`. This check can **not** be disabled through ``unchecked { ... }``.
