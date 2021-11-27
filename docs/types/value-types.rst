@@ -1,21 +1,19 @@
 .. index:: ! value type, ! type;value
 .. _value-types:
 
-Value Types
+انواع مقدار 
 ===========
 
-The following types are also called value types because variables of these
-types will always be passed by value, i.e. they are always copied when they
-are used as function arguments or in assignments.
+انواع زیر را نیز انواع مقدار می‌نامند زیرا متغیرهای این نوع‌ها همیشه از نظر مقدار منتقل می‌شوند، یعنی وقتی که به عنوان آرگومان تابع یا در "انتساب‌ها " استفاده میشوند، همیشه کپی می‌شوند.
 
 .. index:: ! bool, ! true, ! false
 
-Booleans
+بولین
 --------
+  
+``bool``: مقادیر ممکن ثابت‌های ``true``  و  ``false`` هستند.
 
-``bool``: The possible values are constants ``true`` and ``false``.
-
-Operators:
+عملگر‌ها:
 
 *  ``!`` (logical negation)
 *  ``&&`` (logical conjunction, "and")
@@ -23,27 +21,31 @@ Operators:
 *  ``==`` (equality)
 *  ``!=`` (inequality)
 
-The operators ``||`` and ``&&`` apply the common short-circuiting rules. This means that in the expression ``f(x) || g(y)``, if ``f(x)`` evaluates to ``true``, ``g(y)`` will not be evaluated even if it may have side-effects.
+اپراتورها ``||``  و  ``&&``  قوانین متداول اتصال کوتاه  را اعمال می‌کنند. این بدان معنی است که در عبارت ``f(x) || g(y)`` ، اگر ``f(x)``  به صورت  ``true``  ارزیابی شود،  ``g(y)`` حتی اگر دارای عوارض جانبی باشد نیز ارزیابی نخواهد شد.
+ 
+
 
 .. index:: ! uint, ! int, ! integer
 .. _integers:
 
-Integers
+عدد صحیح یا اینتیجر
 --------
 
-``int`` / ``uint``: Signed and unsigned integers of various sizes. Keywords ``uint8`` to ``uint256`` in steps of ``8`` (unsigned of 8 up to 256 bits) and ``int8`` to ``int256``. ``uint`` and ``int`` are aliases for ``uint256`` and ``int256``, respectively.
+``int`` / ``uint``:  عددهای صحیح با علامت و بدون علامت در اندازه های مختلف. کلمات کلیدی  ``uint8`` تا  ``uint256``  در گام‌های  ``8`` (بدون علامت 8 تا 256 بیت) و ``int8`` تا  ``int256`` . ``uint`` و  ``int`` به ترتیب نام مستعار برای  ``uint256`` و  ``int256`` هستند.
 
-Operators:
 
-* Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
-* Bit operators: ``&``, ``|``, ``^`` (bitwise exclusive or), ``~`` (bitwise negation)
-* Shift operators: ``<<`` (left shift), ``>>`` (right shift)
-* Arithmetic operators: ``+``, ``-``, unary ``-`` (only for signed integers), ``*``, ``/``, ``%`` (modulo), ``**`` (exponentiation)
+عملگرها:
 
-For an integer type ``X``, you can use ``type(X).min`` and ``type(X).max`` to
-access the minimum and maximum value representable by the type.
+*	مقایسه‌گرها :  ``<=`` ، ``<`` ، ``==`` ، ``!=`` ، ``>=`` ، ``>`` (ارزیابی به  ``bool`` )
+*	عملگرهای بیت :  ``&`` ، ``|`` ، ``^`` (bitwise exclusive یا) ،  ``~`` (bitwise negation)
+*	عملگرهای شیفت کردن :  ``>>`` (شیفت چپ) ، ``<<`` (شیفت راست)
+*	عملگرهای حسابی :  ``+`` ,``-`` ، unary ``-``  (فقط برای اعداد صحیح با علامت) ، ``*`` ، ``/`` ، ``%``  (باقیمانده) ،  ``**`` (توان)
+
+برای یک عدد صحیح نوع  ``X`` ، می‌توانید از  ``type(X).min`` و ``type(X).max``  برای دستیابی به حداقل و حداکثر مقدار قابل نمایش توسط نوع استفاده کنید.
+
 
 .. warning::
+
 
   Integers in Solidity are restricted to a certain range. For example, with ``uint32``, this is ``0`` up to ``2**32 - 1``.
   There are two modes in which arithmetic is performed on these types: The "wrapping" or "unchecked" mode and the "checked" mode.
@@ -51,10 +53,10 @@ access the minimum and maximum value representable by the type.
   of the type, the call is reverted through a :ref:`failing assertion<assert-and-require>`. You can switch to "unchecked" mode
   using ``unchecked { ... }``. More details can be found in the section about :ref:`unchecked <unchecked>`.
 
-Comparisons
+مقایسه‌گر‌ها
 ^^^^^^^^^^^
 
-The value of a comparison is the one obtained by comparing the integer value.
+مقدار مقایسه‌گر، مقداری است که با مقایسه مقدار عدد صحیح  بدست می‌آید.
 
 Bit operations
 ^^^^^^^^^^^^^^
