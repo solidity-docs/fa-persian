@@ -214,53 +214,63 @@ to the type of the left operand is always performed at the end, but not mentione
 ایده پشت این تمایز این است که  ``address payable`` آدرسی است که می‌توانید اتر را به آن بفرستید، در حالی که نمی‌توان با یک  ``address`` ساده اتر ارسال کرد.
 
 
-Type conversions:
+تبدیل‌های نوع::
 
-Implicit conversions from ``address payable`` to ``address`` are allowed, whereas conversions from ``address`` to ``address payable``
-must be explicit via ``payable(<address>)``.
+تبدیل‌های ضمنی از  ``address payable`` به ``address`` مجاز است، در حالی که تبدیل از  ``address`` به  ``address payable`` باید از طریق ``payable(<address>)`` صریح باشد.
 
-Explicit conversions to and from ``address`` are allowed for ``uint160``, integer literals,
-``bytes20`` and contract types.
 
-Only expressions of type ``address`` and contract-type can be converted to the type ``address
-payable`` via the explicit conversion ``payable(...)``. For contract-type, this conversion is only
-allowed if the contract can receive Ether, i.e., the contract either has a :ref:`receive
-<receive-ether-function>` or a payable fallback function. Note that ``payable(0)`` is valid and is
-an exception to this rule.
+تبدیل صریح به و از  ``address`` برای آدرس‌های  ``uint160``، لیترال‌های عدد صحیح ، ``bytes20`` و انواع قرارداد مجاز است.
+
+فقط عبارات نوع  ``address`` و نوع قرارداد را می توان از طریق تبدیل 
+صریح  ``(...)payable`` به  ``address payable`` تبدیل کرد. برای نوع قرارداد، این تبدیل فقط در 
+صورتی مجاز است که قرارداد بتواند اتر را دریافت کند، به عنوان مثال، قرارداد تابع دریافت  یا  برگشتی قابل 
+پرداخت  داشته باشد. توجه داشته باشید که  ``payable(0)`` معتبر است و از این قاعده مستثنی است.
+
 
 .. note::
-    If you need a variable of type ``address`` and plan to send Ether to it, then
-    declare its type as ``address payable`` to make this requirement visible. Also,
-    try to make this distinction or conversion as early as possible.
 
-Operators:
+    اگر به متغیر نوع  ``address`` نیاز دارید و قصد دارید اتر را برای آن ارسال کنید، نوع آن را به عنوان 
+    آدرس  ``address payable`` مشخص کنید تا این نیاز قابل مشاهده باشد. همچنین، سعی کنید این 
+    تمایز یا تغییر را در اسرع وقت انجام دهید.
 
-* ``<=``, ``<``, ``==``, ``!=``, ``>=`` and ``>``
+  
+عملگرها:
+
+*   ``<=``, ``<``, ``==``, ``!=``, ``>=`` و ``>``
+
 
 .. warning::
-    If you convert a type that uses a larger byte size to an ``address``, for example ``bytes32``, then the ``address`` is truncated.
-    To reduce conversion ambiguity version 0.4.24 and higher of the compiler force you make the truncation explicit in the conversion.
-    Take for example the 32-byte value ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
 
-    You can use ``address(uint160(bytes20(b)))``, which results in ``0x111122223333444455556666777788889999aAaa``,
-    or you can use ``address(uint160(uint256(b)))``, which results in ``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc``.
+    اگر نوعی را که از اندازه بایت بزرگتری استفاده می‌کند به  ``address`` تبدیل کنید، به عنوان مثال 
+    ``bytes32``  ، سپس به  ``address`` کوتاه می‌شود. برای کاهش ابهام تبدیل ورژن 0.4.24 و بالاتر 
+    کامپایلر شما را مجبور به کوتاه کردن صریح در تبدیل می‌کند. به عنوان مثال مقدار 32 بایت 
+    ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC`` را در نظر بگیرید.
+
+    می توانید از آدرس  ``address(uint160(bytes20(b)))``  استفاده کنید که نتیجه آن 
+    ``0x111122223333444455556666777788889999aAaa`` است، یا می‌توانید از آدرس 
+    ``address(uint160(uint256(b)))`` استفاده کنید، که منجر به 
+     ``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc`` می‌شود .
+
 
 .. note::
-    The distinction between ``address`` and ``address payable`` was introduced with version 0.5.0.
-    Also starting from that version, contracts do not derive from the address type, but can still be explicitly converted to
-    ``address`` or to ``address payable``, if they have a receive or payable fallback function.
+
+    تمایز بین ``address`` و ``address payable`` با ورژن 0.5.0 معرفی شده‌است. همچنین از آن 
+    ورژن، قراردادها از نوع آدرس مشتق گرفته نمی‌شوند، اما اگر تابع  payable fallback یا receive 
+    داشته باشند، هنوز میتوان به صورت صریح به ``address`` و ``address payable`` تبدیل شوند. 
+
 
 .. _members-of-addresses:
 
-Members of Addresses
+اعضای آدرس‌ها
 ^^^^^^^^^^^^^^^^^^^^
 
-For a quick reference of all members of address, see :ref:`address_related`.
+برای مراجعه سریع به کلیه اعضای آدرس، به :ref:`اعضای انواع آدرس<address_related>` مراجعه کنید.
 
-* ``balance`` and ``transfer``
 
-It is possible to query the balance of an address using the property ``balance``
-and to send Ether (in units of wei) to a payable address using the ``transfer`` function:
+* ``balance`` و  ``transfer``
+
+می‌توان با استفاده از ویژگی ``balance`` ، بالانس یک آدرس را جستوجو کرد و با استفاده از تابع  ``transfer`` اتر (در واحدهای وی ) را به یک آدرس قابل پرداخت  ارسال کرد:
+
 
 .. code-block:: solidity
     :force:
@@ -269,35 +279,41 @@ and to send Ether (in units of wei) to a payable address using the ``transfer`` 
     address myAddress = address(this);
     if (x.balance < 10 && myAddress.balance >= 10) x.transfer(10);
 
-The ``transfer`` function fails if the balance of the current contract is not large enough
-or if the Ether transfer is rejected by the receiving account. The ``transfer`` function
-reverts on failure.
+
+اگر بالانس قرارداد فعلی به اندازه کافی بزرگ نباشد یا انتقال اتر توسط حساب دریافت کننده رد شود، تابع 
+``transfer`` از کار می‌افتد. تابع ``transfer`` در صورت شکست برمی‌گردد.
+
 
 .. note::
-    If ``x`` is a contract address, its code (more specifically: its :ref:`receive-ether-function`, if present, or otherwise its :ref:`fallback-function`, if present) will be executed together with the ``transfer`` call (this is a feature of the EVM and cannot be prevented). If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.
 
+    اگر ``x``  یک آدرس قرارداد باشد، کد آن (به طور خاص تر: تابع :ref:`Receive Ether<receive-ether-function>` در صورت وجود، یا در غیر 
+    این صورت :ref:`تابع Fallback<fallback-function>` در صورت وجود) همراه با فراخوانی ``transfer`` اجرا می‌شود (این ویژگی 
+    EVM است و نمی‌توان جلوی آن را گرفت ) اگر گاز آن اجرا تمام شود یا به هر صورتی از کار بیفتد، انتقال اتر 
+    برگردانده می‌شود و قرارداد جاری با استثنا متوقف می‌شود.
+
+   
 * ``send``
-
-Send is the low-level counterpart of ``transfer``. If the execution fails, the current contract will not stop with an exception, but ``send`` will return ``false``.
+Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت عدم اجرا، قرارداد فعلی با استثنا متوقف نخواهد شد، اما ``send``  مقدار  ``false`` را برمیگرداند.
 
 .. warning::
-    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
-    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
-    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
-    use a pattern where the recipient withdraws the money.
 
-* ``call``, ``delegatecall`` and ``staticcall``
+    ستفاده از ``send`` خطرات زیادی دارد: اگر فراخوانی پشته عمق 1024 باشد (که همیشه می‌تواند توسط 
+    فراخوانی کننده مجبور شود) انتقال شکست میخورد و اگر گاز گیرنده شما تمام شود نیز از کار می‌افتد. بنابراین 
+    برای انجام مطمئن انتقال اتر، همیشه مقدار برگشتی ``send`` ، را با استفاده از   ``transfer`` کنید 
+    یا حتی بهتراست که: از الگویی استفاده کنید که گیرنده پول را برداشت کند.
 
-In order to interface with contracts that do not adhere to the ABI,
-or to get more direct control over the encoding,
-the functions ``call``, ``delegatecall`` and ``staticcall`` are provided.
-They all take a single ``bytes memory`` parameter and
-return the success condition (as a ``bool``) and the returned data
-(``bytes memory``).
-The functions ``abi.encode``, ``abi.encodePacked``, ``abi.encodeWithSelector``
-and ``abi.encodeWithSignature`` can be used to encode structured data.
 
-Example:
+
+* 	``call`` ، ``delegatecall`` و  ``staticcall``
+
+برای برقراری ارتباط با قراردادهایی که به ABI پایبند نیستند، یا برای گرفتن کنترل مستقیم‌تری بر روی رمزگذاری 
+، توابع  ``call`` ، ``delegatecall`` و  ``staticcall`` ارائه شده‌اند. همه آنها یک 
+پارامتر  ``bytes memory`` را می‌گیرند و شرایط موفقیت (به عنوان  ``bool`` ) و داده های برگشتی 
+(  ``bytes memory`` ) را برمی‌گردانند. از توابع ``abi.encode`` ،  ``abi.encodePacked`` ، 
+``abi.encodeWithSelector`` و  ``abi.encodeWithSignature`` می‌توان برای 
+رمزگذاری داده‌های ساختار یافته  استفاده کرد.
+
+مثال:
 
 .. code-block:: solidity
 
@@ -306,56 +322,58 @@ Example:
     require(success);
 
 .. warning::
-    All these functions are low-level functions and should be used with care.
-    Specifically, any unknown contract might be malicious and if you call it, you
-    hand over control to that contract which could in turn call back into
-    your contract, so be prepared for changes to your state variables
-    when the call returns. The regular way to interact with other contracts
-    is to call a function on a contract object (``x.f()``).
+
+    همه این توابع، توابع سطح پایینی هستند و باید با احتیاط استفاده شوند. به طور خاص، هر قرارداد ناشناخته‌ای ممکن است مخرب باشد و در صورت تماس با آن، کنترل آن قرارداد را به شما واگذار می‌کند که می‌تواند به نوبه خود به قرارداد شما بازگردد، بنابراین در زمان بازگشت فراخوانی‌ها خود را برای تغییراتی که روی متغیرهای حالت شما اتفاق می‌افتد آماده کنید. روش متداول برای برقراری ارتباط با سایر قراردادها، فراخوانی یک تابع در یک شی قرارداد (``()x.f``) است.
+    
 
 .. note::
-    Previous versions of Solidity allowed these functions to receive
-    arbitrary arguments and would also handle a first argument of type
-    ``bytes4`` differently. These edge cases were removed in version 0.5.0.
 
-It is possible to adjust the supplied gas with the ``gas`` modifier:
+    ورژن های قبلی سالیدیتی به این توابع اجازه می‌دهد آرگومان‌های دلخواه را دریافت کنند و همچنین اولین آرگومان از نوع  ``bytes4`` را به گونه دیگری مدیریت کنند. این موارد در نسخه 0.5.0 حذف شده‌اند.
+
+تنظیم گاز تامین شده با اصلاح کننده   ``gas``  امکان پذیر است:
+
 
 .. code-block:: solidity
 
     address(nameReg).call{gas: 1000000}(abi.encodeWithSignature("register(string)", "MyName"));
 
-Similarly, the supplied Ether value can be controlled too:
+به طور مشابه، مقدار اتر عرضه شده نیز می‌تواند کنترل شود:
 
 .. code-block:: solidity
 
     address(nameReg).call{value: 1 ether}(abi.encodeWithSignature("register(string)", "MyName"));
 
-Lastly, these modifiers can be combined. Their order does not matter:
+سرانجام، این اصلاح کننده‌ها می‌توانند ترکیب شوند. ترتیب آنها مهم نیست:
 
 .. code-block:: solidity
 
     address(nameReg).call{gas: 1000000, value: 1 ether}(abi.encodeWithSignature("register(string)", "MyName"));
 
-In a similar way, the function ``delegatecall`` can be used: the difference is that only the code of the given address is used, all other aspects (storage, balance, ...) are taken from the current contract. The purpose of ``delegatecall`` is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
+به روشی مشابه می‌توان از تابع  ``delegatecall`` استفاده کرد: تفاوت در این است که فقط از کد آدرس 
+داده شده استفاده می‌شود، تمام ‌جنبه‌های دیگر (storage ، balance ، ...) از قرارداد فعلی گرفته شده‌اند. 
+هدف از فراخوانی  ``delegatecall`` استفاده از کد کتابخانه است که در قرارداد دیگری ذخیره شده‌است. 
+کاربر باید اطمینان حاصل کند که ساختار storage در هر دو قرارداد برای استفاده از delegatecall  مناسب است.
+
 
 .. note::
-    Prior to homestead, only a limited variant called ``callcode`` was available that did not provide access to the original ``msg.sender`` and ``msg.value`` values. This function was removed in version 0.5.0.
 
-Since byzantium ``staticcall`` can be used as well. This is basically the same as ``call``, but will revert if the called function modifies the state in any way.
+    قبل از homestead، فقط یک نوع محدود به نام ``callcode`` در دسترس بود که دسترسی به مقادیر 
+    اولیه  ``msg.sender`` و  ``msg.value`` را فراهم نمی‌کرد. این تابع در نسخه 0.5.0 حذف شد.
 
-All three functions ``call``, ``delegatecall`` and ``staticcall`` are very low-level functions and should only be used as a *last resort* as they break the type-safety of Solidity.
+از آنجا که  بیزانس ``staticcall``  نیز می‌تواند مورد استفاده قرار گیرد. این اساساً همان ``call`` است، اما اگر تابع فراخوانی شده به هر طریقی حالت را تغییر دهد، برمی‌گردد.
 
-The ``gas`` option is available on all three methods, while the ``value`` option is only available
-on ``call``.
+هر سه تابع  ``call`` ،  ``delegatecall`` و ``staticcall``  تابع‌های سطح پایینی هستند و فقط به عنوان *آخرین راه حل* باید از آنها استفاده شود زیرا باعث از بین رفتن ایمنی بودن نوع سالیدیتی می‌شوند.
 
-.. note::
-    It is best to avoid relying on hardcoded gas values in your smart contract code,
-    regardless of whether state is read from or written to, as this can have many pitfalls.
-    Also, access to gas might change in the future.
+گزینه  ``gas`` در هر سه روش موجود است، در حالی که گزینه  ``value`` برای  ``delegatecall`` پشتیبانی نمی‌شود.
+
 
 .. note::
-    All contracts can be converted to ``address`` type, so it is possible to query the balance of the
-    current contract using ``address(this).balance``.
+   بهتر است بدون توجه به اینکه آیا حالت از آن خوانده می شود یا روی آن نوشته شده است، از تکیه بر مقادیر گاز سخت رمزگذاری شده در کد قرارداد هوشمند خود جلوگیری کنید، زیرا این امر می تواند مشکلات زیادی را به همراه داشته باشد. همچنین، دسترسی به گاز ممکن است در آینده تغییر کند.
+
+
+.. note::
+   
+    کلیه قراردادها را می‌توان به نوع  ``address`` تبدیل کرد، بنابراین می‌توان بالانس قرارداد فعلی را با استفاده از  ``address(this).balance`` جستوجو کرد.
 
 .. index:: ! contract type, ! type; contract
 
@@ -364,48 +382,52 @@ on ``call``.
 Contract Types
 --------------
 
-Every :ref:`contract<contracts>` defines its own type.
-You can implicitly convert contracts to contracts they inherit from.
-Contracts can be explicitly converted to and from the ``address`` type.
 
-Explicit conversion to and from the ``address payable`` type is only possible
-if the contract type has a receive or payable fallback function.  The conversion is still
-performed using ``address(x)``. If the contract type does not have a receive or payable
-fallback function, the conversion to ``address payable`` can be done using
-``payable(address(x))``.
-You can find more information in the section about
-the :ref:`address type<address>`.
+انواع قرارداد
+هر :ref:`قراردادی<contracts>` نوع خاص خود را مشخص می‌کند. به طور ضمنی می‌توانید قراردادها را به قراردادهایی که از آنها به ارث می‌برند تبدیل کنید. قراردادها را می‌توان به طور صریح به نوع ``address``   تبدیل و از آنها تغییر داد.
+
+تبدیل صریح به نوع  ``address payable`` فقط از آنجا امکان پذیر است که نوع قرارداد تابع برگشتی قابل دریافت یا پرداخت داشته باشد. تبدیل هنوز با استفاده از  ``address(x)`` انجام می‌شود. اگر نوع قرارداد تابع برگشت پذیر یا قابل پرداخت نباشد، تبدیل به  ``address payable`` را می‌توان با استفاده از ``payable(address(x))`` انجام داد. در بخش مربوط به نوع :ref:`آدرس<address>` می‌توانید اطلاعات بیشتری کسب کنید.
+
+
 
 .. note::
-    Before version 0.5.0, contracts directly derived from the address type
-    and there was no distinction between ``address`` and ``address payable``.
+    
+    قبل از ورژن 0.5.0، قراردادها مستقیماً از نوع آدرس نشأت می‌گرفتند و هیچ تفاوتی بین ``address``  و  ``address payable`` وجود نداشت.
 
-If you declare a local variable of contract type (``MyContract c``), you can call
-functions on that contract. Take care to assign it from somewhere that is the
-same contract type.
 
-You can also instantiate contracts (which means they are newly created). You
-can find more details in the :ref:`'Contracts via new'<creating-contracts>`
-section.
+اگر متغیر محلی را از نوع قرارداد  (``MyContract c``) مشخص کنید، می‌توانید توابع مربوط به آن قرارداد را فراخوانی کنید. مراقب باشید که آن را از جایی اختصاص دهید که همان نوع قرارداد باشد.
 
-The data representation of a contract is identical to that of the ``address``
-type and this type is also used in the :ref:`ABI<ABI>`.
+شما همچنین می‎توانید قراردادها را فوری (یعنی آنهایی که تازه ایجاد شده‌اند) قرار دهید. جزئیات بیشتر را می‌توانید در بخش :ref:`"قرارداد از طریق new"<creating-contracts>` پیدا کنید.
 
-Contracts do not support any operators.
+نمایش داده‌های یک قرارداد با نوع  ``address`` یکسان است و از این نوع در :ref:`ABI<ABI>` نیز استفاده می‌شود.
+قراردادها از هیچ عملگری پشتیبانی نمی‌کنند.
 
-The members of contract types are the external functions of the contract
-including any state variables marked as ``public``.
+اعضای انواع قرارداد، توابع خارجی قرارداد شامل هر متغیر حالت است که به عنوان  ``public`` مشخص شده‌است.
 
-For a contract ``C`` you can use ``type(C)`` to access
-:ref:`type information<meta-type>` about the contract.
+برای قرارداد  ``C`` می‌توانید از ``type(C)``  برای دسترسی به :ref:`اطلاعات مربوط به تایپ<meta-type>` استفاده کنید.
+
+آرایه‌های بایت با اندازه ثابت 
+
 
 .. index:: byte array, bytes32
 
-Fixed-size byte arrays
+آرایه‌های بایت با اندازه ثابت 
 ----------------------
 
-The value types ``bytes1``, ``bytes2``, ``bytes3``, ..., ``bytes32``
-hold a sequence of bytes from one to up to 32.
+مقدارهای مختلف ``bytes32`` ، ... ، ``bytes3`` ، ``bytes2`` ، ``bytes1`` توالی بایت را از یک تا 32 نگه می‌دارد.
+
+
+عملگرها:
+•	مقایسه ها: <=، <، ==، !=، >=، > (ارزیابی به  bool)
+•	عملگرهای بیت:  &، |، ^ (bitwise exclusive یا) ، ~  (bitwise negation)
+•	عملگرهای شیفت :  << (شیفت چپ) ،  >> (شیفت راست)
+
+*    مقایسه ها: ``=>`` ، ``>`` ، ``==`` ، ``=!`` ، ``=<`` ، ``<`` (ارزیابی به  ``bool``)
+*     عملگرهای بیت:  ``&`` ، ``|`` ، ``^`` (bitwise exclusive یا) ، ``~``  (bitwise negation)
+*     عملگرهای شیفت :  ``>>`` (شیفت چپ) ،  ``<<`` (شیفت راست)
+*     دسترسی به Index: اگر  ``x`` از نوع  ``bytesI`` باشد، سپس ``x[k]`` برای  ``0 <= k < I``   بایت  ``k`` را برمی‌گردانم (فقط برای خواندن).
+* Shift operators: ``<<`` (left shift), ``>>`` (right shift)
+* Index access: If ``x`` is of type ``bytesI``, then ``x[k]`` for ``0 =< k < I`` returns the ``k`` th byte (read-only).
 
 Operators:
 
