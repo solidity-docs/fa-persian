@@ -2,67 +2,67 @@
 
 .. _reference-types:
 
-Reference Types
+انواع مرجع (Reference Types)
 ===============
 
-Values of reference type can be modified through multiple different names.
-Contrast this with value types where you get an independent copy whenever
-a variable of value type is used. Because of that, reference types have to be handled
-more carefully than value types. Currently, reference types comprise structs,
-arrays and mappings. If you use a reference type, you always have to explicitly
-provide the data area where the type is stored: ``memory`` (whose lifetime is limited
-to an external function call), ``storage`` (the location where the state variables
-are stored, where the lifetime is limited to the lifetime of a contract)
-or ``calldata`` (special data location that contains the function arguments).
+مقادیر نوع مرجع را می‌توان از طریق چندین نام مختلف اصلاح کرد. هر زمان که متغیر از نوع مقدار  استفاده 
+شود، در جایی که یک کپی مستقل دریافت می‌کنید نوع مرجع را با انواع مقدار مقایسه کنید. به همین دلیل، 
+انواع مرجع باید با دقت بیشتری از انواع مقادیر رسیدگی شوند. در حال حاضر، انواع مرجع شامل structها، 
+آرایه‌ها و mapping ها است. اگر از یک نوع مرجع استفاده می‌کنید، همیشه باید صریحاً منطقه داده‎ای  را که 
+نوع در آن ذخیره شده‌است فراهم کنید:  ``memory``  (طول عمر آن فقط به یک فراخوانی کنند تابع خارجی 
+محدود می‌شود)،   ``storage`` (مکانی که متغیرهای حالت در آن ذخیره می‌شوند، جایی که طول عمر آنها به 
+طول عمر قرارداد محدود می‌شود) یا  ``calldata`` (مکان داده ویژه‌ای که شامل آرگومان‌های تابع است).
 
-An assignment or type conversion that changes the data location will always incur an automatic copy operation,
-while assignments inside the same data location only copy in some cases for storage types.
+
+
+یک انتساب یا تبدیل نوع که مکان داده را تغییر می‌دهد، همیشه موجب یک عملیات کپی خودکار خواهد شد، در 
+حالی که انتساب در داخل همان مکان داده فقط در برخی موارد برای انواع storage  کپی می‌شوند.
 
 .. _data-location:
 
-Data location
+مکان داده (Data location)
 -------------
 
-Every reference type has an additional
-annotation, the "data location", about where it is stored. There are three data locations:
-``memory``, ``storage`` and ``calldata``. Calldata is a non-modifiable,
-non-persistent area where function arguments are stored, and behaves mostly like memory.
+  هر نوع مرجع حاوی یادداشت اضافی است، "data location"، در مورد مکانی که ذخیره می‌شود. سه مکان 
+  داده وجود دارد:  ``memory``  ،  ``storage`` و  ``calldata`` . 
+  ``calldata`` یک منطقه غیرقابل تغییر و غیرقابل ماندگاری است که آرگومان‌های تابع در آن ذخیره می‌شود و 
+  بیشتر مانند مِمُوری رفتار می‌کند. برای پارامترهای توابع خارجی لازم است اما می‌تواند برای سایر متغیرها نیز استفاده شود.
+  
+
 
 .. note::
-    If you can, try to use ``calldata`` as data location because it will avoid copies and
-    also makes sure that the data cannot be modified. Arrays and structs with ``calldata``
-    data location can also be returned from functions, but it is not possible to
-    allocate such types.
+   
+     اگر می‌توانید، سعی کنید از  ``calldata`` به عنوان مکان داده استفاده کنید زیرا از کپی جلوگیری می‌کند 
+     و همچنین مطمئن می‌شوید که داده‌ها قابل اصلاح نیستند. آرایه‌ها و struct های دارای مکان  داده  ``calldata`` نیز می‌توانند از توابع برگردانده شوند، اما اختصاص چنین نوع‌هایی امکان پذیر نیست.
+
 
 .. note::
+
+
     Prior to version 0.6.9 data location for reference-type arguments was limited to
     ``calldata`` in external functions, ``memory`` in public functions and either
     ``memory`` or ``storage`` in internal and private ones.
     Now ``memory`` and ``calldata`` are allowed in all functions regardless of their visibility.
 
+    
 .. note::
-    Prior to version 0.5.0 the data location could be omitted, and would default to different locations
-    depending on the kind of variable, function type, etc., but all complex types must now give an explicit
-    data location.
+    
+     قبل از نسخه 0.5.0 ، مکان داده را می‌توان حذف کرد، و بسته به نوع متغیر، نوع تابع و غیره به مکان‌های مختلف پیش فرض می‌رود ، اما اکنون همه انواع پیچیده باید یک مکان داده مشخص داشته باشند.
+
 
 .. _data-location-assignment:
 
-Data location and assignment behaviour
+مکان داده و رفتار انتساب (Data location and assignment behaviour)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Data locations are not only relevant for persistency of data, but also for the semantics of assignments:
+مکان داده  نه تنها برای ماندگاری داده‌ها بلکه برای معنای انتساب‌ها نیز مهم هستند:
 
-* Assignments between ``storage`` and ``memory`` (or from ``calldata``)
-  always create an independent copy.
-* Assignments from ``memory`` to ``memory`` only create references. This means
-  that changes to one memory variable are also visible in all other memory
-  variables that refer to the same data.
-* Assignments from ``storage`` to a **local** storage variable also only
-  assign a reference.
-* All other assignments to ``storage`` always copy. Examples for this
-  case are assignments to state variables or to members of local
-  variables of storage struct type, even if the local variable
-  itself is just a reference.
+
+*	انتساب‌ها  بین ``storage``  و  ``memory`` (یا از  ``calldata`` ) همیشه یک کپی مستقل ایجاد می‌کنند.
+*	انتساب‌ها از  ``memory`` به  ``memory`` فقط مراجع را ایجاد می‌کند. این بدان معناست که تغییرات در یک متغیر مِمُوری در سایر متغیرهای مِمُوری که به داده‌های مشابه ارجاع می‌کنند نیز قابل مشاهده‌است.
+*	انتساب‌ها از ``storage``  به یک متغیر  storage  محلی** نیز فقط یک مرجع اختصاص می‌دهند** .
+*	سایر انتسابات به ``storage`` همیشه کپی می‌شوند. نمونه‌هایی برای این مورد، انتساب به متغیرهای حالت یا اعضای متغیرهای محلی از نوع  storage struct می‌باشند، حتی اگر متغیر محلی فقط یک مرجع باشد.
+
 
 .. code-block:: solidity
 
@@ -100,39 +100,44 @@ Data locations are not only relevant for persistency of data, but also for the s
 
 .. _arrays:
 
-Arrays
+آرایه‌ها
 ------
 
-Arrays can have a compile-time fixed size, or they can have a dynamic size.
+آرایه‌ها می‌توانند اندازه ثابت زمان کامپایل داشته باشند، یا می‌توانند اندازه پویا داشته باشند.
 
-The type of an array of fixed size ``k`` and element type ``T`` is written as ``T[k]``,
-and an array of dynamic size as ``T[]``.
 
-For example, an array of 5 dynamic arrays of ``uint`` is written as
-``uint[][5]``. The notation is reversed compared to some other languages. In
-Solidity, ``X[3]`` is always an array containing three elements of type ``X``,
-even if ``X`` is itself an array. This is not the case in other languages such
-as C.
+نوع آرایه‌ای با اندازه ثابت ``k`` و نوع عنصر  ``T`` به صورت  ``T[k]`` و آرایه‌ای با اندازه پویا به صورت  ``[]T`` نوشته می‌شود.
 
-Indices are zero-based, and access is in the opposite direction of the
-declaration.
 
-For example, if you have a variable ``uint[][5] memory x``, you access the
-seventh ``uint`` in the third dynamic array using ``x[2][6]``, and to access the
-third dynamic array, use ``x[2]``. Again,
-if you have an array ``T[5] a`` for a type ``T`` that can also be an array,
-then ``a[2]`` always has type ``T``.
+به عنوان مثال، آرایه‌ای از 5 آرایه دینامیکی ``uint`` به صورت  ``uint[][5]`` نوشته می‌شود. علامت گذاری 
+در مقایسه با برخی از زبان‌های دیگر معکوس می‌شود. در سالیدیتی ،  ``X[3]`` همیشه یک آرایه است که شامل 
+سه عنصر از نوع  ``X`` است، حتی اگر  ``X`` خودش یک آرایه باشد. این مورد در زبان‌های دیگر مانند C وجود ندارد.
 
-Array elements can be of any type, including mapping or struct. The general
-restrictions for types apply, in that mappings can only be stored in the
-``storage`` data location and publicly-visible functions need parameters that are :ref:`ABI types <ABI>`.
 
-It is possible to mark state variable arrays ``public`` and have Solidity create a :ref:`getter <visibility-and-getters>`.
-The numeric index becomes a required parameter for the getter.
 
-Accessing an array past its end causes a failing assertion. Methods ``.push()`` and ``.push(value)`` can be used
-to append a new element at the end of the array, where ``.push()`` appends a zero-initialized element and returns
-a reference to it.
+شاخص‌ها  مبتنی بر صفر هستند و دسترسی در خلاف جهت اعلامیه  است.
+
+
+به عنوان مثال، اگر یک متغیر   ``uint[][5] memory x`` داشته باشید، با استفاده از ``x[2][6]``  به 
+``uint``  هفتم در آرایه پویای سوم دسترسی پیدا می‌کنید و برای دسترسی به آرایه پویای سوم، از ``x[2]`` استفاده 
+کنید. باز هم اگر یک آرایه  ``T[5]`` aبرای نوع  ``T`` دارید که می‌تواند یک آرایه نیز باشد،  ``a[2]`` همیشه 
+نوع  ``T`` را دارد.
+
+
+عناصر آرایه می‌توانند از هر نوع شامل mapping یا struct باشند. محدودیت‌های کلی برای انواع اعمال 
+می‌شود، به این دلیل که mapping‌ها فقط در محل داده  ``storage`` می‌توانند ذخیره شوند و توابع قابل 
+مشاهده به صورت عمومی، نیاز به پارامترهایی دارند که از نوع :ref:`ABI types <ABI>` باشند. 
+
+
+می‌توان آرایه‌های متغیر حالت را به صورت  ``public`` علامت گذاری کرد و از سالیدیتی برای ایجاد یک 
+:ref:`getter <visibility-and-getters>` استفاده کرد. شاخص عددی به یک پارامتر مورد نیاز برای  getter تبدیل می‌شود.
+
+
+
+دستیابی به آرایه‌ای که از انتهای آن گذشته است، ادعای ناموفقی را ایجاد می‌کند. از روش های  ``()push.`` 
+و  ``push(value).``  می‌توان برای افزودن یک عنصر جدید در انتهای آرایه استفاده کرد، جایی 
+که ``()push.`` یک عنصر مقداردهی شده صفر را اضافه می‌کند و مرجعی را به آن برمی‌گرداند.
+
 
 .. index:: ! string, ! bytes
 
@@ -140,40 +145,53 @@ a reference to it.
 
 .. _bytes:
 
-``bytes`` and ``string`` as Arrays
+bytes و string  به عنوان آرایه‌ها
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  متغیرهای نوع  ``bytes`` و ``string``  آرایه‌های خاصی هستند. ``bytes``  مانند  ``[]bytes1`` است، اما در 
+  calldata و مِمُوری کاملاً بسته بندی شده است. ``string`` برابر با ``bytes``  است اما اجازه دسترسی به 
+  طول  یا index  را نمی‌دهد.
 
 Variables of type ``bytes`` and ``string`` are special arrays. The ``bytes`` type is similar to ``bytes1[]``,
 but it is packed tightly in calldata and memory. ``string`` is equal to ``bytes`` but does not allow
 length or index access.
 
-Solidity does not have string manipulation functions, but there are
-third-party string libraries. You can also compare two strings by their keccak256-hash using
-``keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))`` and
-concatenate two strings using ``bytes.concat(bytes(s1), bytes(s2))``.
+سالیدیتی توابع دستکاری  string  ندارد، اما کتابخانه‌هایstring  طرف سوم وجود دارد. همچنین 
+می‌توانید دو  string  را توسط keccak256-hash آنها با استفاده از 
+``keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))``  مقایسه کنید و دو رشته را با استفاده از  ``bytes.concat(bytes(s1), bytes(s2))``  بهم پیوست دهید.
 
-You should use ``bytes`` over ``bytes1[]`` because it is cheaper,
-since ``bytes1[]`` adds 31 padding bytes between the elements. As a general rule,
-use ``bytes`` for arbitrary-length raw byte data and ``string`` for arbitrary-length
-string (UTF-8) data. If you can limit the length to a certain number of bytes,
-always use one of the value types ``bytes1`` to ``bytes32`` because they are much cheaper.
+
+
+از آنجا که  ``[]bytes1`` سی و یک لایه بایت بین عناصر اضافه می‌کند، شما باید از ``bytes``  بیش 
+از ``[]bytes1`` استفاده کنید زیرا ارزان‌تر است. به عنوان یک قاعده کلی، برای داده‌های ``bytes``  خام با طول 
+دلخواه از bytes  و برای داده‌های  ``string``  با طول دلخواه (UTF-8) از  ``string`` استفاده کنید. اگر 
+می‌توانید طول را به تعداد مشخصی از بایت محدود کنید، همیشه از یکی از انواع مقدار ``bytes1``  
+تا  ``bytes32`` استفاده کنید زیرا بسیار ارزان‌تر هستند.
+
 
 .. note::
     If you want to access the byte-representation of a string ``s``, use
-    ``bytes(s).length`` / ``bytes(s)[7] = 'x';``. Keep in mind
+    ``bytes(s).length`` / ``bytes(s)[7] = 'x';`` . Keep in mind
     that you are accessing the low-level bytes of the UTF-8 representation,
     and not the individual characters.
+
+    اگر می‌خواهید به نمایش بایت  یک رشته‌ی ``s`` دسترسی پیدا کنید، از  ``bytes(s).length`` / ``bytes(s)[7] = 'x';`` استفاده کنید. بخاطر داشته باشید که شما به بایت‌های سطح پایین، 
+    پیش نمایش UTF-8 و نه به کارکترهای جداگانه دسترسی پیدا می‌کنید.
+
+// @saracodic  Isnt shown correctly in text  
+``bytes(s).length`` / ``bytes(s)[7] = 'x';``
+    
 
 .. index:: ! bytes-concat
 
 .. _bytes-concat:
 
-``bytes.concat`` function
+تابع bytes.concat 
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can concatenate a variable number of ``bytes`` or ``bytes1 ... bytes32`` using ``bytes.concat``.
-The function returns a single ``bytes memory`` array that contains the contents of the arguments without padding.
-If you want to use string parameters or other types, you need to convert them to ``bytes`` or ``bytes1``/.../``bytes32`` first.
+با استفاده از ``bytes.concat``  می‌توانید تعدادی متغیر از ``bytes``  
+یا  ``bytes1 ... bytes32``  را بهم پیوند دهید. این تابع یک تک آرایه ``bytes memory``  را 
+برمی‌گرداند که شامل محتویات آرگومان‌ها بدون padding است. اگر می‌خواهید از پارامترهای رشته‌ای یا انواع 
+دیگر استفاده کنید، ابتدا باید آنها را به  ``bytes`` یا ``bytes1``/.../``bytes32`` تبدیل کنید.
 
 .. code-block:: solidity
 
@@ -188,21 +206,24 @@ If you want to use string parameters or other types, you need to convert them to
         }
     }
 
-If you call ``bytes.concat`` without arguments it will return an empty ``bytes`` array.
+اگر بدون آرگومان  ``bytes.concat``   فراخوانی کنید، آرایه‌ای خالی از ``bytes``  را برمی‌گرداند.
+
+
 
 .. index:: ! array;allocating, new
 
-Allocating Memory Arrays
+تخصیص آرایه های مِمُوری (Allocating Memory Arrays)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Memory arrays with dynamic length can be created using the ``new`` operator.
-As opposed to storage arrays, it is **not** possible to resize memory arrays (e.g.
-the ``.push`` member functions are not available).
-You either have to calculate the required size in advance
-or create a new memory array and copy every element.
+  آرایه‌های مِمُوری با طول پویا را می‌توان با استفاده از عملگر  ``new`` ایجاد کرد. در مقایسه با آرایه‌های 
+  storage، تغییر اندازه آرایه‌های مِمُوری امکان پذیر نیست (به عنوان مثال توابع عضو ``push.``  در دسترس 
+  نیستند). یا باید اندازه مورد نیاز را از قبل محاسبه کنید یا یک آرایه مِمُوری جدید ایجاد کنید و هر عنصر را کپی کنید.
 
-As all variables in Solidity, the elements of newly allocated arrays are always initialized
-with the :ref:`default value<default-value>`.
+
+
+مثل همهِ متغیرها در سالیدیتی، عناصر آرایه‌های تازه تخصیص یافته همیشه با :ref:`مقدار پیش فرض<default-value>` مقداردهی می‌شوند.
+
+
 
 .. code-block:: solidity
 
@@ -221,27 +242,30 @@ with the :ref:`default value<default-value>`.
 
 .. index:: ! array;literals, ! inline;arrays
 
-Array Literals
+آرایه‌ لیترال‌ها 
 ^^^^^^^^^^^^^^
+  آرایه لیترال لیستی جدا شده با کاما از یک یا چند عبارت است که در بِراکت مربعی محصور شده 
+  است  (``[...]``). به عنوان مثال  ``[1, a, f(3)]`` . نوع آرایه به صورت زیر تعیین می‌شود:
 
-An array literal is a comma-separated list of one or more expressions, enclosed
-in square brackets (``[...]``). For example ``[1, a, f(3)]``. The type of the
-array literal is determined as follows:
+// @saracodic  Isnt shown correctly in text 
 
-It is always a statically-sized memory array whose length is the
-number of expressions.
+همیشه یک آرایه مِمُوری با اندازه ایستا است که طول آن تعداد عبارات است.
 
-The base type of the array is the type of the first expression on the list such that all
-other expressions can be implicitly converted to it. It is a type error
-if this is not possible.
 
-It is not enough that there is a type all the elements can be converted to. One of the elements
-has to be of that type.
 
-In the example below, the type of ``[1, 2, 3]`` is
-``uint8[3] memory``, because the type of each of these constants is ``uint8``. If
-you want the result to be a ``uint[3] memory`` type, you need to convert
-the first element to ``uint``.
+نوع پایه‌ی آرایه، نوع اولین عبارت در لیست است به طوری که می‌توان بقیه عبارات را به طور ضمنی به آن تبدیل 
+کرد. اگر این امکان وجود نداشته باشد خطای نوع است.
+
+
+  کافی نیست نوعی وجود داشته باشد که همه عناصر بتوانند به آن تبدیل شوند. یکی از عناصر باید از آن نوع باشد.
+
+
+
+   در مثال زیر، نوع  ``[3, 2, 1]`` ،  ``uint8[3] memory`` می‌باشد، زیرا نوع هر یک از این 
+   ثابت‌ها  ``uint8`` است. اگر می‌خواهید نتیجه از نوع  ``uint8[3] memory`` باشد، باید اولین عنصر را 
+   به  ``uint`` تبدیل کنید.
+
+
 
 .. code-block:: solidity
 
@@ -257,13 +281,13 @@ the first element to ``uint``.
         }
     }
 
-The array literal ``[1, -1]`` is invalid because the type of the first expression
-is ``uint8`` while the type of the second is ``int8`` and they cannot be implicitly
-converted to each other. To make it work, you can use ``[int8(1), -1]``, for example.
+آرایه لیترال  ``[1-, 1]`` نامعتبر است زیرا نوع عبارت اول  ``uint8`` است در حالی که نوع دوم  ``int8`` است 
+و نمی‌توان آنها را به طور ضمنی به یکدیگر تبدیل کرد. برای استفاده از آن، می‌توانید از  ``[int8(1), -1]`` استفاده کنید.
 
-Since fixed-size memory arrays of different type cannot be converted into each other
-(even if the base types can), you always have to specify a common base type explicitly
-if you want to use two-dimensional array literals:
+
+
+   از آنجا که آرایه‌های مِمُوری با اندازه ثابت از انواع مختلف قابل تبدیل به یکدیگر نیستند (حتی اگر انواع پایه بتوانند)، اگر می‌خواهید از لیترال‌های دو بعدی استفاده کنید، باید یک نوع پایه مشترک را به طور صریح مشخص کنید:
+
 
 .. code-block:: solidity
 
@@ -279,8 +303,9 @@ if you want to use two-dimensional array literals:
         }
     }
 
-Fixed size memory arrays cannot be assigned to dynamically-sized
-memory arrays, i.e. the following is not possible:
+آرایه های مِمُوری با اندازه ثابت را نمی‌توان به آرایه‌های مِمُوری با اندازه پویا اختصاص داد، یعنی موارد زیر امکان پذیر نیست:
+
+
 
 .. code-block:: solidity
 
@@ -296,11 +321,11 @@ memory arrays, i.e. the following is not possible:
         }
     }
 
-It is planned to remove this restriction in the future, but it creates some
-complications because of how arrays are passed in the ABI.
+در آینده برنامه ریزی شده‌است که سالیدیتی این محدودیت را برطرف کند، اما به دلیل نحوهِ انتقال آرایه‌ها در ABI، مشکلاتی ایجاد می‌شود.
 
-If you want to initialize dynamically-sized arrays, you have to assign the
-individual elements:
+   اگر می‌خواهید آرایه‌هایی با اندازه پویا را شروع کنید، باید عناصر جداگانه را اختصاص دهید:
+
+
 
 .. code-block:: solidity
 
@@ -320,45 +345,71 @@ individual elements:
 
 .. _array-members:
 
-Array Members
+اعضای آرایه (Array Members) public
 ^^^^^^^^^^^^^
 
 **length**:
+    آرایه‌ها دارای یک عضو  ``length`` هستند که شامل تعداد عناصر آنها است. طول آرایه‌های مِمُوری پس از ایجاد 
+    ثابت است (اما پویا، یعنی می‌تواند به پارامترها در زمان اجرا بستگی داشته باشد).
+
     Arrays have a ``length`` member that contains their number of elements.
     The length of memory arrays is fixed (but dynamic, i.e. it can depend on
     runtime parameters) once they are created.
 **push()**:
+
+    آرایه‌های storage و  bytes پویا (نه  ``string``) دارای یک عضو تابع به نام ``()push`` هستند که 
+    می‌توانید از آن برای افزودن یک عنصر مقداردهی شده صفر در انتهای آرایه استفاده کنید. یک ارجاع به عنصر را 
+    برمی‌گرداند، بنابراین می‌توان از آن مانند ``x.push().t = 2``  یا  ``x.push() = b`` استفاده کرد. 
+
      Dynamic storage arrays and ``bytes`` (not ``string``) have a member function
-     called ``push()`` that you can use to append a zero-initialised element at the end of the array.
+     called ``()push`` that you can use to append a zero-initialised element at the end of the array.
      It returns a reference to the element, so that it can be used like
      ``x.push().t = 2`` or ``x.push() = b``.
+
+
 **push(x)**:
+    
+    آرایه‌های storage و  ``bytes`` پویا (نه  `string``) دارای یک عضو تابع به نام ``push(x)``  هستند که 
+    می‌توانید از آن برای افزودن یک عنصر مشخص در انتهای آرایه استفاده کنید. تابع هیچ چیزی بر نمی‌گرداند.
+
      Dynamic storage arrays and ``bytes`` (not ``string``) have a member function
      called ``push(x)`` that you can use to append a given element at the end of the array.
      The function returns nothing.
 **pop**:
+
+    آرایه‌های storage و  ``bytes`` پویا (نه  ``string``) دارای یک عضو تابع به نام ``pop``   هستند که می‌توانید 
+    برای حذف یک عنصر از انتهای آرایه استفاده کنید. همچنین به طور ضمنی  :ref:`delete<delete>`  را روی عنصر حذف شده فراخوانی می‌کند.
+
      Dynamic storage arrays and ``bytes`` (not ``string``) have a member
      function called ``pop`` that you can use to remove an element from the
      end of the array. This also implicitly calls :ref:`delete<delete>` on the removed element.
 
 .. note::
-    Increasing the length of a storage array by calling ``push()``
+
+    افزایش طول یک آرایه storage با فراخوانی  ``()push`` هزینه گاز ثابت را دارد زیرا مقداردهی اولیه 
+    storage صفر می‌باشد، در حالی که کاهش طول با فراخوانی ``()pop``  هزینه‌ای دارد که به "اندازه" عنصر 
+    حذف شده بستگی دارد. اگر آن عنصر آرایه‌ای باشد، می‌تواند بسیار پرهزینه باشد، زیرا شامل پاک کردن صریح عناصر حذف شده مشابه  با فراخوانی :ref:`delete<delete>`  روی آنها است.
+
+    Increasing the length of a storage array by calling ``()push``
     has constant gas costs because storage is zero-initialised,
-    while decreasing the length by calling ``pop()`` has a
+    while decreasing the length by calling ``()pop`` has a
     cost that depends on the "size" of the element being removed.
     If that element is an array, it can be very costly, because
     it includes explicitly clearing the removed
     elements similar to calling :ref:`delete<delete>` on them.
 
 .. note::
-    To use arrays of arrays in external (instead of public) functions, you need to
-    activate ABI coder v2.
+
+    برای استفاده از آرایه های توابع خارجی (به جای عملکرد public) ، باید ABI coder v2 را فعال کنید.
+
+    
 
 .. note::
-    In EVM versions before Byzantium, it was not possible to access
-    dynamic arrays return from function calls. If you call functions
-    that return dynamic arrays, make sure to use an EVM that is set to
-    Byzantium mode.
+    در نسخه‌های EVM قبل از  Byzantium، دسترسی به آرایه‌های پویا از برگشتیِ توابعِ فراخوانی‌ امکان 
+    پذیر نبود. اگر توابعی را فراخوانی می‌کنید که آرایه‌های پویا را برمی‌گردانند، حتماً از EVMی استفاده کنید که 
+    روی حالت Byzantium تنظیم شده‌است.
+    
+   
 
 .. code-block:: solidity
 
@@ -462,36 +513,44 @@ Array Members
 
 .. _array-slices:
 
-Array Slices
+برش‌های آرایه (Array Slices)
 ------------
 
+// translate id different from the original
+----------
+  برش‌های آرایه نمایی از قسمت پیوسته آرایه است. آنها به صورت  x[end - 1] نوشته می‌شوند، جایی 
+  که  startو  endعباراتی هستند که منجر به نوع uint256 می‌شوند (یا به طور ضمنی قابل تبدیل به آن 
+  هستند). اولین عنصر برش  x[start] و آخرین عنصر  x[end - 1]می‌باشد.
 
 Array slices are a view on a contiguous portion of an array.
 They are written as ``x[start:end]``, where ``start`` and
 ``end`` are expressions resulting in a uint256 type (or
 implicitly convertible to it). The first element of the
 slice is ``x[start]`` and the last element is ``x[end - 1]``.
+-----------
 
-If ``start`` is greater than ``end`` or if ``end`` is greater
-than the length of the array, an exception is thrown.
 
-Both ``start`` and ``end`` are optional: ``start`` defaults
-to ``0`` and ``end`` defaults to the length of the array.
 
-Array slices do not have any members. They are implicitly
-convertible to arrays of their underlying type
-and support index access. Index access is not absolute
-in the underlying array, but relative to the start of
-the slice.
+اگر  ``start`` از  ``end`` بیشتر باشد یا اگر  ``end`` از طول آرایه بیشتر باشد، یک استثنا ایجاد می‌شود.
 
-Array slices do not have a type name which means
-no variable can have an array slices as type,
-they only exist in intermediate expressions.
+
+ ``start`` و  ``end`` هر دو اختیاری هستند:  ``start`` به طور پیشفرض ``0``  و  ``end`` به طور پیش فرض به طول آرایه می‌باشد.
+
+
+برش‌های آرایه هیچ عضوی ندارند. آنها به طور ضمنی قابل تبدیل به آرایه‌هایی از نوع اصلی و دسترسی به index 
+را پشتیبانی می‌کنند. دسترسی index در آرایه اصلی قطعی نیست، اما وابسته به شروع برش است.
+
+
+برش‌های آرایه دارای نام نوع نیستند، به این معنی که هیچ متغیری نمی‌تواند برش‌های آرایه‌ای را به عنوان نوع 
+داشته باشد، آنها فقط در عبارات میانی وجود دارند.
+
+
 
 .. note::
-    As of now, array slices are only implemented for calldata arrays.
+      از هم اکنون، برش‌های آرایه فقط برای آرایه‌های فراخوانی داده پیاده سازی می‌شوند.
 
-Array slices are useful to ABI-decode secondary data passed in function parameters:
+
+برش‌های آرایه برای رمزگشایی با داده‌های ثانویه ABI که در پارامترهای تابع منتقل می‌شوند مفید هستند:
 
 .. code-block:: solidity
 
@@ -526,11 +585,10 @@ Array slices are useful to ABI-decode secondary data passed in function paramete
 
 .. _structs:
 
-Structs
+Struct‌ها
 -------
 
-Solidity provides a way to define new types in the form of structs, which is
-shown in the following example:
+سالیدیتی راهی برای تعریف نوع‌های جدید به صورت Struct فراهم می‌کند، که در مثال زیر نشان داده شده است:
 
 .. code-block:: solidity
 
@@ -589,26 +647,30 @@ shown in the following example:
         }
     }
 
-The contract does not provide the full functionality of a crowdfunding
-contract, but it contains the basic concepts necessary to understand structs.
-Struct types can be used inside mappings and arrays and they can themselves
-contain mappings and arrays.
+این قرارداد عملکرد کامل قرارداد سرمایه گذاری جمعی را فراهم نمی‌کند، اما شامل مفاهیم پایه‌ای لازم برای درک 
+structها است. نوع structها را می‌توان در داخل ن 
+mappingها و آرایه‌ها استفاده کرد و خود آنها می‌توانند شامل 
+mappingها و آرایه‌ها باشند.
 
-It is not possible for a struct to contain a member of its own type,
-although the struct itself can be the value type of a mapping member
-or it can contain a dynamically-sized array of its type.
-This restriction is necessary, as the size of the struct has to be finite.
 
-Note how in all the functions, a struct type is assigned to a local variable
-with data location ``storage``.
-This does not copy the struct but only stores a reference so that assignments to
-members of the local variable actually write to the state.
+ممکن است یک struct  از یک نوع خود عضو داشته باشد، اگرچه struct  می‌تواند مقدار نوع یک عضو از 
+mapping باشد یا می ‌واند شامل یک آرایه به اندازه پویا از نوع خود باشد. این محدودیت لازم است، زیرا اندازه ساختار باید محدود باشد.
 
-Of course, you can also directly access the members of the struct without
-assigning it to a local variable, as in
-``campaigns[campaignID].amount = 0``.
+
+
+توجه داشته باشید که چگونه در همه توابع، یک نوع struct به یک متغیر محلی با  ``storage`` مکان داده 
+اختصاص داده می‌شود. این کار struct را کپی نمی‌کند بلکه فقط یک مرجع را ذخیره می‌کند، در حقیقت تا 
+انتسابات به اعضای متغیر محلی  در حالت  نوشته شود.
+
+
+
+البته می‌توانید بدون اختصاص دادن به متغیر محلی، مستقیماً به اعضای struct دسترسی پیدا کنید، مانند 
+در  ``campaigns[campaignID].amount = 0`` .
+
 
 .. note::
-    Until Solidity 0.7.0, memory-structs containing members of storage-only types (e.g. mappings)
-    were allowed and assignments like ``campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)``
-    in the example above would work and just silently skip those members.
+
+
+     تا سالیدیتی نسخه 0.7.0 ، memory-structs که شامل اعضای نوع‌های storage-only هستند (به 
+    عنوان مثال mappingها)، مجاز بودند و انتساباتی مانند ``campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)`` )  در مثال بالا کار می‌کند و فقط در 
+    silently از آن اعضا صرف نظر می‌کند.
