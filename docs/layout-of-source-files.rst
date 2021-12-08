@@ -1,217 +1,157 @@
 ********************************
-Layout of a Solidity Source File
+چیدمان یک فایل منبع سالیدیتی 
 ********************************
 
-Source files can contain an arbitrary number of
-:ref:`contract definitions<contract_structure>`, import_ directives,
-:ref:`pragma directives<pragma>` and
-:ref:`struct<structs>`, :ref:`enum<enums>`, :ref:`function<functions>`, :ref:`error<errors>`
-and :ref:`constant variable<constants>` definitions.
+فایل‌های منبع  می‌توانند حاوی تعداد دلخواهی از :ref:`تعاریف قرارداد<contract_structure>`  ، دستور‌های ایمپورت ، دستور‌های :ref:`pragma directives<pragma>`  ، :ref:`struct<structs>` ، :ref:`enum<enums>`  ، :ref:`توابع<functions>`  ، :ref:`خطا<errors>`،  تعاریف :ref:`متغیر ثابت<constants>` باشند.
 
 .. index:: ! license, spdx
 
-SPDX License Identifier
+مشخص کننده‌ی لایسنس  SPDX
 =======================
 
-Trust in smart contract can be better established if their source code
-is available. Since making source code available always touches on legal problems
-with regards to copyright, the Solidity compiler encourages the use
-of machine-readable `SPDX license identifiers <https://spdx.org>`_.
-Every source file should start with a comment indicating its license:
+در صورت در دسترس بودن کد منبع ، اعتماد به قرارداد هوشمند می‌تواند بهتر ایجاد شود. از آنجا که در دسترس قرار دادن کد منبع همیشه مشکلات حقوقی مربوط به حق چاپ را تحت تأثیر قرار می دهد، کامپایلر سالیدیتی استفاده از  `مشخص کنندهِ لایسنس SPDX <https://spdx.org>`_  قابلِ خوانده شدن توسطِ ماشین را ترغیب می‌کند. هر فایل منبع باید با یک کامنت که نشان دهد لایسنس آن است شروع شود:
+
 
 ``// SPDX-License-Identifier: MIT``
 
-The compiler does not validate that the license is part of the
-`list allowed by SPDX <https://spdx.org/licenses/>`_, but
-it does include the supplied string in the :ref:`bytecode metadata <metadata>`.
 
-If you do not want to specify a license or if the source code is
-not open-source, please use the special value ``UNLICENSED``.
 
-Supplying this comment of course does not free you from other
-obligations related to licensing like having to mention
-a specific license header in each source file or the
-original copyright holder.
+کامپایلر تأیید نمی‌کند که مجوز بخشی از  `لیستی <https://spdx.org/licenses/>`_   است که توسط SPDX مجاز است، اما رشته ارائه شده در :ref:`فرداداده بایت‌کد<metadata>` را شامل می‌شود. 
 
-The comment is recognized by the compiler anywhere in the file at the
-file level, but it is recommended to put it at the top of the file.
+ اگر نمی‌خواهید مجوزی را تعیین نکنید یا اگر کد منبع، منبع باز نیست؛ لطفاً از مقدار ویژه  ``UNLICENSED``استفاده کنید. 
 
-More information about how to use SPDX license identifiers
-can be found at the `SPDX website <https://spdx.org/ids-how>`_.
+البته ارائه این کامنت شما را از سایر تعهدات مربوط به صدور لایسنس مانند نیاز به ذکر مجوز خاص در هِدر هر فایل منبع یا دارنده اصلی حق چاپ خلاص نمی کند.
+
+کامنت توسط کامپایلر در هر کجای فایل در سطح فایل شناسایی می‌شود، اما توصیه می‌شود آن را در بالای فایل قرار دهید.
+
+اطلاعات بیشتر در مورد نحوه استفاده از مشخص کننده لایسنس SPDX را می‌توانید در  `وب سایت  SPDX <https://spdx.org/ids-how>`_  بیابید.
 
 
 .. index:: ! pragma
 
 .. _pragma:
 
-Pragmas
+پراگماها
 =======
 
-The ``pragma`` keyword is used to enable certain compiler features
-or checks. A pragma directive is always local to a source file, so
-you have to add the pragma to all your files if you want to enable it
-in your whole project. If you :ref:`import<import>` another file, the pragma
-from that file does *not* automatically apply to the importing file.
+
+
+کلمه کلیدی  ``pragma`` یا پراگما برای فعال کردن برخی از ویژگی‌های کامپایلر یا بررسی‌ها استفاده می‌شود. یک دستورالعمل پراگما همیشه محلی برای یک فایل منبع است، بنابراین اگر می‌خواهید آن را در کل پروژه خود فعال کنید، باید پراگما را به تمام فایل‌های خود اضافه کنید. اگر فایل‌ دیگری را  :ref:`ایمپورت<import>`  کنید، پراگمای آن فایل به طور خودکار در فایل وارد شده اعمال نمی‌شود.
 
 .. index:: ! pragma, version
 
 .. _version_pragma:
 
-Version Pragma
+نسخه پراگما
 --------------
 
-Source files can (and should) be annotated with a version pragma to reject
-compilation with future compiler versions that might introduce incompatible
-changes. We try to keep these to an absolute minimum and
-introduce them in a way that changes in semantics also require changes
-in the syntax, but this is not always possible. Because of this, it is always
-a good idea to read through the changelog at least for releases that contain
-breaking changes. These releases always have versions of the form
-``0.x.0`` or ``x.0.0``.
 
-The version pragma is used as follows: ``pragma solidity ^0.5.2;``
+  فایل‌های منبع را می‌توان (و باید) با یک نسخه ، نسخه بندی کرد تا کامپایل با نسخه‌های کامپایلر آتی را رد کند که ممکن است تغییرات ناسازگار را معرفی کند. ما سعی می‌کنیم این موارد را به حداقل برسانیم و آنها را به گونه ای معرفی کنیم که تغییر در سِمَنتیک‌ها  نیاز به تغییرسینتکس  داشته باشد، اما این امر همیشه امکان پذیر نیست. به همین دلیل، همیشه ایده خوبی است که حداقل برای نسخه‌هایی که شامل تغییرات خراب کننده هستند، از تغییرات جدید  استفاده کنید. این نسخه‌ها همیشه نسخه‌هایی از فرم ``x.0.0`` یا ``x.0.0`` دارند.
 
-A source file with the line above does not compile with a compiler earlier than version 0.5.2,
-and it also does not work on a compiler starting from version 0.6.0 (this
-second condition is added by using ``^``). Because
-there will be no breaking changes until version ``0.6.0``, you can
-be sure that your code compiles the way you intended. The exact version of the
-compiler is not fixed, so that bugfix releases are still possible.
 
-It is possible to specify more complex rules for the compiler version,
-these follow the same syntax used by `npm <https://docs.npmjs.com/cli/v6/using-npm/semver>`_.
+نسخه پراگما به شرح زیر استفاده می شود:  ``;pragma solidity ^0.5.2``
+
+یک فایل منبع با خط بالا با یک کامپایلر جدیدتر از نسخه 0.5.2 کامپایل نمی‌شود و همچنین در یک کامپایلر که از نسخه 0.6.0 شروع می‌شود کار نمی‌کند (این شرط دوم با استفاده از  ``^`` اضافه می‌شود). از آنجا که تا قبل از نسخه  ``0.6.0`` هیچ تغییر جدید  ایجاد نخواهد شد، می‌توانید مطمئن باشید که کد شما به همان روشی که شما در نظر داشتید، کامپایل می‌شود. نسخه دقیق کامپایلر ثبت نشده است، بنابراین انتشار  رفع خطا  همچنان امکان پذیر است.
+
+می‌توان قوانین پیچیده‌تری را برای نسخه کامپایلر تعیین کرد، اینها از همان سینتکسی  استفاده می‌کنند که توسط `npm <https://docs.npmjs.com/cli/v6/using-npm/semver>`_  استفاده می‌شود.
 
 .. note::
-  Using the version pragma *does not* change the version of the compiler.
-  It also *does not* enable or disable features of the compiler. It just
-  instructs the compiler to check whether its version matches the one
-  required by the pragma. If it does not match, the compiler issues
-  an error.
+ با استفاده از نسخه pragma نسخه کامپایلر *تغییر نمی‌کند*. همچنین ویژگی‌های کامپایلر را *فعال یا غیرفعال نمی‌کند*. این فقط به کامپایلر دستور می‌دهد که بررسی کند آیا نسخه آن با نسخه مورد نیاز پراگما مطابقت دارد یا خیر. اگر مطابقت نداشته باشد، کامپایلر خطایی را صادر می‌کند.
 
 ABI Coder Pragma
 ----------------
 
-By using ``pragma abicoder v1`` or ``pragma abicoder v2`` you can
-select between the two implementations of the ABI encoder and decoder.
+  با استفاده از  ``pragma abicoder v1``  یا ``pragma abicoder v2``  می‌توانید از بین دو پیاده سازی رمزگذار  و رمزگشای  ABI یکی را انتخاب کنید.
 
-The new ABI coder (v2) is able to encode and decode arbitrarily nested
-arrays and structs. It might produce less optimal code and has not
-received as much testing as the old encoder, but is considered
-non-experimental as of Solidity 0.6.0. You still have to explicitly
-activate it using ``pragma abicoder v2;``. Since it will be
-activated by default starting from Solidity 0.8.0, there is the option to select
-the old coder using ``pragma abicoder v1;``.
+رمزگذار جدید ABI (v2) قادر به رمزگذاری و رمزگشایی آرایه‌ها و structهای دلخواه تو در تو است. ممکن است کد بهینه کمتری تولید کند و به اندازه رمزگذار قدیمی تست نشده باشد، اما از نظر سالیدیتی نسخه 0.6.0 غیر آزمایشی محسوب می‌شود. شما هنوز هم باید با استفاده از  ``;pragma abicoder v2``  آن را صریحاً فعال کنید. در سالیدیتی نسخه 0.8.0 به طور پیش فرض فعال می‌شود، گزینه‌ای برای انتخاب کدگذار قدیمی با استفاده از  ``;pragma abicoder v1`` وجود دارد.
 
-The set of types supported by the new encoder is a strict superset of
-the ones supported by the old one. Contracts that use it can interact with ones
-that do not without limitations. The reverse is possible only as long as the
-non-``abicoder v2`` contract does not try to make calls that would require
-decoding types only supported by the new encoder. The compiler can detect this
-and will issue an error. Simply enabling ``abicoder v2`` for your contract is
-enough to make the error go away.
+مجموعه نوع‌های  پشتیبانی شده توسط رمزگذار جدید یک مجموعه فوق العاده دقیق از نوع‌های پشتیبانی شده توسط رمزگذار قدیمی است. قراردادهایی که از آن استفاده می‌کنند می‌توانند با قراردادهایی که بدون محدودیت نیستند ارتباط برقرار کنند. بازگشت  فقط تا زمانی امکان پذیر است که قرارداد غیر ``abicoder v2``  سعی در فراخوانی‌هایی نداشته باشد که نیاز به انواع رمزگشایی داشته باشند که فقط توسط رمزگذار جدید پشتیبانی می‌شوند. کامپایلر می‌تواند این مورد را تشخیص دهد و خطایی ایجاد کند. فعال کردن ``abicoder v2``  قرارداد برای اینکه خطا برطرف شود، کافی است.
 
 .. note::
-  This pragma applies to all the code defined in the file where it is activated,
-  regardless of where that code ends up eventually. This means that a contract
-  whose source file is selected to compile with ABI coder v1
-  can still contain code that uses the new encoder
-  by inheriting it from another contract. This is allowed if the new types are only
-  used internally and not in external function signatures.
+  این پراگما برای همه کدهای تعریف شده در فایل در جایی که فعال شده‌است اعمال می‌شود، صرف نظر از اینکه سرانجام این کد به کجا ختم می‌شود. این بدان معناست که قراردادی که فایل منبع آن برای کامپایل با کدگذار ABI v1 انتخاب شده‌است، همچنان می‌تواند حاوی کدی باشد که با به ارث بردن رمزگذار جدید از قرارداد دیگر، از رمزگذار جدید استفاده کند. این درصورتی مجاز است که نوع‌های جدید فقط در داخل استفاده شوند و در امضاهای تابع خارجی نباشند.
 
 .. note::
-  Up to Solidity 0.7.4, it was possible to select the ABI coder v2
-  by using ``pragma experimental ABIEncoderV2``, but it was not possible
-  to explicitly select coder v1 because it was the default.
+    تا سالیدیتی نسخه 0.7.4، می‌توان با استفاده از ``pragma experimental ABIEncoderV2`` ، رمزگذار ABI v2 را انتخاب کرد، اما صریحاً رمزگذار v1 را نمی‌توان انتخاب کرد زیرا پیش فرض بود.
+  
 
 .. index:: ! pragma, experimental
 
 .. _experimental_pragma:
 
-Experimental Pragma
+پراگما آزمایشی 
 -------------------
 
-The second pragma is the experimental pragma. It can be used to enable
-features of the compiler or language that are not yet enabled by default.
-The following experimental pragmas are currently supported:
+پراگما دوم ، پراگما آزمایشی است. می‌توانند برای فعال کردن ویژگی‌های کامپایلر یا زبان استفاده شوند که هنوز به طور پیش فرض فعال نشده‌اند. پراگماهای آزمایشی زیر در حال حاضر پشتیبانی می‌شوند:
+
 
 
 ABIEncoderV2
 ~~~~~~~~~~~~
 
-Because the ABI coder v2 is not considered experimental anymore,
-it can be selected via ``pragma abicoder v2`` (please see above)
-since Solidity 0.7.4.
+
+از آنجا که رمزگذار ABI v2 دیگر آزمایشی محسوب نمی‌شود، می‌توان از طریق سالیدیتی نسخه 0.7.4 از طریق  ``pragma abicoder v2`` آن را انتخاب کرد (لطفاً به قسمت بالا مراجعه کنید).
+
+
 
 .. _smt_checker:
 
-SMTChecker
+کنترل کننده SMTC 
 ~~~~~~~~~~
 
-This component has to be enabled when the Solidity compiler is built
-and therefore it is not available in all Solidity binaries.
-The :ref:`build instructions<smt_solvers_build>` explain how to activate this option.
-It is activated for the Ubuntu PPA releases in most versions,
-but not for the Docker images, Windows binaries or the
-statically-built Linux binaries. It can be activated for solc-js via the
-`smtCallback <https://github.com/ethereum/solc-js#example-usage-with-smtsolver-callback>`_ if you have an SMT solver
-installed locally and run solc-js via node (not via the browser).
 
-If you use ``pragma experimental SMTChecker;``, then you get additional
-:ref:`safety warnings<formal_verification>` which are obtained by querying an
-SMT solver.
-The component does not yet support all features of the Solidity language and
-likely outputs many warnings. In case it reports unsupported features, the
-analysis may not be fully sound.
+این مؤلفه  باید در هنگام ساخت کامپایلر سالیدیتی فعال شود و بنابراین در تمام باینری‌های سالیدیتی در دسترس نیست.  :ref:`دستورالعمل‌های نسخه<smt_solvers_build>`  ،  نحوه فعال سازی این گزینه را توضیح می‌دهند. برای نسخه‌های اوبنتو  PPA در اکثر نسخه‌ها فعال شده، اما برای تصویر‌های داکر ، باینری‌های ویندوز  یا باینری‌های لینوکس نسخه ایستا ، فعال نیست. اگر یک حلال کننده  SMT را به صورت محلی نصب کرده باشید و solc-js را از طریق گره (نه از طریق مرورگر) اجرا کنید، می‌تواند از طریق  `smtCallback <https://github.com/ethereum/solc-js#example-usage-with-smtsolver-callback>`_    برای solc-js فعال شود.
+
+اگر  ``;pragma experimental SMTChecker``  استفاده می‌کنید، :ref:`هشدارهای ایمنی<formal_verification>`   بیشتری دریافت می‌کنید که با پرس و جو از یک حل کننده SMT بدست می‌آیند. 
+
+این مولفه هنوز از تمام ویژگی‌های زبان سالیدیتی پشتیبانی نمی‌کند و احتمالاً هشدارهای زیادی را در بر داشته باشد. در صورت گزارش ویژگی‌های پشتیبانی نشده، ممکن است تجزیه و تحلیل کاملاً مناسب نباشد.
 
 .. index:: source file, ! import, module, source unit
 
 .. _import:
 
-Importing other Source Files
+ایمپورت کردن سایر فایل‌های منبع
 ============================
 
-Syntax and Semantics
+   سینتکس و سمنتیک 
 --------------------
 
-Solidity supports import statements to help modularise your code that
-are similar to those available in JavaScript
-(from ES6 on). However, Solidity does not support the concept of
-a `default export <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#Description>`_.
+سالیدیتی برای کمک به ماژولی بودن کد شما که مشابه آنچه در جاوا اسکریپت در دسترس است (از ES6 به بعد)، از دستورات ایمپورت   پشتیبانی می‌کند. با این حال، سالیدیتی مفهوم  `اکسپورت به صورت پیشفرش <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#Description>`_ را پشتیبانی نمی‌کند. 
 
-At a global level, you can use import statements of the following form:
+در سطح جهانی، می‌توانید از دستورات ایمپور  به شکل زیر استفاده کنید:
+
+
 
 .. code-block:: solidity
 
     import "filename";
 
 The ``filename`` part is called an *import path*.
-This statement imports all global symbols from "filename" (and symbols imported there) into the
-current global scope (different than in ES6 but backwards-compatible for Solidity).
-This form is not recommended for use, because it unpredictably pollutes the namespace.
-If you add new top-level items inside "filename", they automatically
-appear in all files that import like this from "filename". It is better to import specific
-symbols explicitly.
 
-The following example creates a new global symbol ``symbolName`` whose members are all
-the global symbols from ``"filename"``:
+این عبارت تمام نمادهای جهانی را از " filename " (و نمادهای وارد شده در آنجا) به دامنه جهانی فعلی ایمپورت می‌کند (متفاوت از ES6 اما برای سازگاری سالیدیتی با گذشته ). این فرم، برای استفاده توصیه نمی‌شود. زیرا به طور غیر قابل پیش بینی فضای نام را آلوده می‌کند. اگر موارد سطح بالای جدید را به داخل "namename" اضافه کنید، به طور خودکار در همه فایل‌هایی که از این "Filename" ایمپورت می‌شوند ظاهر می‌شوند. بهتر است نمادهای مشخص را به طور صریح وارد کنید.
+
+  مثال زیر یک نماد جهانی   ``symbolName`` ایجاد می‌کند که اعضای آن همه نمادهای جهانی از  ``"filename"`` هستند:
+
 
 .. code-block:: solidity
 
     import * as symbolName from "filename";
 
-which results in all global symbols being available in the format ``symbolName.symbol``.
 
-A variant of this syntax that is not part of ES6, but possibly useful is:
+که منجر به در دسترس بودن همه نمادهای جهانی در قالب  ``symbolName.symbol`` می‌شود.
+
+  گونه‌ای از این سینتکس که بخشی از ES6 نیست، اما احتمالاً قابل استفاده باشد:
+
+
 
 .. code-block:: solidity
 
   import "filename" as symbolName;
 
-which is equivalent to ``import * as symbolName from "filename";``.
+که معادل  ``";import * as symbolName from "filename``  است.
 
-If there is a naming collision, you can rename symbols while importing. For example,
-the code below creates new global symbols ``alias`` and ``symbol2`` which reference
-``symbol1`` and ``symbol2`` from inside ``"filename"``, respectively.
+ در صورت تصادم نامگذاری، می‌توانید هنگام ایمپورت کردن، نمادها را تغییر نام دهید. به عنوان مثال، کد زیر نمادهای جهانی جدید  ``alias`` و  ``symbol2`` را ایجاد می‌کند که به ترتیب از داخل  ``"filename"`` به  ``symbol1`` و  ``symbol2`` مراجعه می‌کند.
+
+
 
 .. code-block:: solidity
 
@@ -219,8 +159,10 @@ the code below creates new global symbols ``alias`` and ``symbol2`` which refere
 
 .. index:: virtual filesystem, source unit name, import; path, filesystem path, import callback, Remix IDE
 
-Import Paths
+ایمپورت مسیر‌ها 
 ------------
+
+در موارد فوق،  filename همیشه به عنوان مسیری که با  / به عنوان جدا کننده دایرکتوری و  . به عنوان دایرکتوری فعلی  و  .. به عنوان دایرکتوری والد، رفتار می‌کند. زمانی که    .یا  .. با یک کاراکتر به جز  / دنبال شود، به عنوان پوشه اصلی یا والدین در نظر گرفته نمی‌شود. همه نام مسیرها به عنوان مسیرهای کامل برخورد می‌شوند مگر اینکه با دایرکتوری فعلی   . یا دایرکتوری والدین  .. شروع شوند. 
 
 In order to be able to support reproducible builds on all platforms, the Solidity compiler has to
 abstract away the details of the filesystem where source files are stored.
@@ -248,10 +190,11 @@ compiler see :ref:`Path Resolution <path-resolution>`.
 
 .. index:: ! comment, natspec
 
-Comments
+کامنت‌ها
 ========
 
-Single-line comments (``//``) and multi-line comments (``/*...*/``) are possible.
+کامنت‌های تک خطی (``//``) و کامنت‌های چند خطی  (``/*...*/``)امکان پذیر است.
+
 
 .. code-block:: solidity
 
@@ -263,12 +206,9 @@ Single-line comments (``//``) and multi-line comments (``/*...*/``) are possible
     */
 
 .. note::
-  A single-line comment is terminated by any unicode line terminator
-  (LF, VF, FF, CR, NEL, LS or PS) in UTF-8 encoding. The terminator is still part of
-  the source code after the comment, so if it is not an ASCII symbol
-  (these are NEL, LS and PS), it will lead to a parser error.
+  یک کامنت تک خطی توسط هر پایان دهنده خط unicode (LF ، VF ، FF ، CR ، NEL ، LS یا PS) در رمزگذاری UTF-8 خاتمه می‌یابد. ترمیناتور  بعد از کامنت هنوز بخشی از کد منبع است، بنابراین اگر یک نماد ASCII نباشد (اینها NEL ، LS و PS هستند)، منجر به خطای تجزیه می‌شود.
 
-Additionally, there is another type of comment called a NatSpec comment,
-which is detailed in the :ref:`style guide<style_guide_natspec>`. They are written with a
-triple slash (``///``) or a double asterisk block (``/** ... */``) and
-they should be used directly above function declarations or statements.
+
+علاوه بر این، نوع دیگری از کامنت به نام کامنت NatSpec وجود دارد که در :ref:`راهنمای استایل<style_guide_natspec>`  به تفصیل آورده شده است. آنها با یک اسلش سه گانه  (``///``) یا یک بلوک ستاره دوتایی  (``/** ... */``) نوشته می‌شوند و باید مستقیماً بالاتر از دستورات یا دستورات تابع استفاده شوند.
+
+

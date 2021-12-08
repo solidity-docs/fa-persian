@@ -1,44 +1,33 @@
 ********************
-Micropayment Channel
+کانال پرداخت خرد
 ********************
 
-In this section we will learn how to build an example implementation
-of a payment channel. It uses cryptographic signatures to make
-repeated transfers of Ether between the same parties secure, instantaneous, and
-without transaction fees. For the example, we need to understand how to
-sign and verify signatures, and setup the payment channel.
+در این بخش نحوه ساختن نمونه پیاده سازی کانال پرداخت  را خواهیم آموخت. کانال پرداخت از امضاهای رمزنگاری شده برای انتقال مکرر اتر بین طرف‌های مشابه به صورت ایمن، آنی و بدون کارمزد استفاده می‌کند. برای مثال، باید نحوه امضا و تأیید امضاها و راه اندازی کانال پرداخت را درک کنیم.
 
-Creating and verifying signatures
+ایجاد و تأیید امضا
 =================================
 
-Imagine Alice wants to send some Ether to Bob, i.e.
-Alice is the sender and Bob is the recipient.
+  تصور کنید آلیس می‌خواهد مقداری اتر برای باب ارسال کند، یعنی آلیس فرستنده است و باب گیرنده آن می‌باشد.
 
-Alice only needs to send cryptographically signed messages off-chain
-(e.g. via email) to Bob and it is similar to writing checks.
+آلیس فقط باید پیام های خارج از زنجیرهِ امضا شده با رمزنگاری (مثلاً از طریق ایمیل) را به باب بفرستد و این شبیه چک نوشتن است.
 
-Alice and Bob use signatures to authorise transactions, which is possible with smart contracts on Ethereum.
-Alice will build a simple smart contract that lets her transmit Ether, but instead of calling a function herself
-to initiate a payment, she will let Bob do that, and therefore pay the transaction fee.
+ آلیس و باب برای تأیید تراکنش‌ها از امضاها استفاده می‌کنند که با قراردادهای هوشمند در اتریوم امکان پذیر است. آلیس یک قرارداد هوشمند ساده خواهد ساخت که به او امکان می‌دهد اتر را منتقل کند، اما به جای اینکه خودش یک تابع را برای شروع پرداخت فراخوانی کند، به باب اجازه این کار را می‌دهد و بنابراین هزینه تراکنش را پرداخت می‌کند.
 
-The contract will work as follows:
+قرارداد به شرح زیر کار می‌کند:
 
-    1. Alice deploys the ``ReceiverPays`` contract, attaching enough Ether to cover the payments that will be made.
-    2. Alice authorises a payment by signing a message with her private key.
-    3. Alice sends the cryptographically signed message to Bob. The message does not need to be kept secret
-       (explained later), and the mechanism for sending it does not matter.
-    4. Bob claims his payment by presenting the signed message to the smart contract, it verifies the
-       authenticity of the message and then releases the funds.
+    1.	آلیس قرارداد ``ReceiverPays``  را دیپلوی می‌کند، به اندازه کافی اتر را برای پوشش پرداخت‌هایی که انجام خواهد شد، پیوست می‌کند.
+    2.	آلیس با امضای پیام با کلید خصوصی خود اجازه پرداخت را می‌دهد.
+    3.	آلیس پیام امضا شده با رمزنگاری را برای باب می‌فرستد. نیازی به مخفی نگه داشتن پیام نیست (بعداً توضیح داده خواهد شد) و سازوکار ارسال آن اهمیتی ندارد.
+    4.	باب با ارائه پیام امضا شده به قرارداد هوشمند، پرداخت خود را مدعی می‌شود. قرارداد صحت پیام را تأیید می‌کند و سپس وجوه را آزاد می‌کند.
 
-Creating the signature
+
+ایجاد امضا
 ----------------------
 
-Alice does not need to interact with the Ethereum network
-to sign the transaction, the process is completely offline.
-In this tutorial, we will sign messages in the browser
-using `web3.js <https://github.com/ethereum/web3.js>`_ and
-`MetaMask <https://metamask.io>`_, using the method described in `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_,
-as it provides a number of other security benefits.
+
+آلیس برای امضای تراکنش نیازی به تعامل با شبکه اتریوم ندارد، روند کار کاملا آفلاین است. در این آموزش، ما با استفاده از روش توصیف شده در `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_  پیام‌ها را در مرورگر با استفاده از  `web3.js <https://github.com/ethereum/web3.js>`_  و `MetaMask <https://metamask.io>`_, امضا خواهیم کرد، زیرا تعدادی از مزایای امنیتی دیگر را فراهم می‌کند.
+
+
 
 .. code-block:: javascript
 
@@ -47,48 +36,34 @@ as it provides a number of other security benefits.
     web3.eth.personal.sign(hash, web3.eth.defaultAccount, function () { console.log("Signed"); });
 
 .. note::
-  The ``web3.eth.personal.sign`` prepends the length of the
-  message to the signed data. Since we hash first, the message
-  will always be exactly 32 bytes long, and thus this length
-  prefix is always the same.
 
-What to Sign
+``web3.eth.personal.sign`` طول پیام را به داده‌های امضا شده اضافه می‌کند. از آنجا که ما ابتدا هش می‌کنیم، پیام همیشه دقیقاً 32 بایت خواهد بود و بنابراین این پیشوند طول  همیشه یکسان است.
+  
+
+چه چیزی برای امضا
 ------------
 
-For a contract that fulfils payments, the signed message must include:
 
-    1. The recipient's address.
-    2. The amount to be transferred.
-    3. Protection against replay attacks.
+برای قراردادی که پرداخت‌ها را انجام می‌دهد، پیام امضا شده باید شامل موارد زیر باشد:
 
-A replay attack is when a signed message is reused to claim
-authorization for a second action. To avoid replay attacks
-we use the same technique as in Ethereum transactions themselves,
-a so-called nonce, which is the number of transactions sent by
-an account. The smart contract checks if a nonce is used multiple times.
+        1.	آدرس گیرنده.
+        2.	مبلغی که باید منتقل شود.
+        3.	محافظت در برابر حملات مجدد. 
 
-Another type of replay attack can occur when the owner
-deploys a ``ReceiverPays`` smart contract, makes some
-payments, and then destroys the contract. Later, they decide
-to deploy the ``RecipientPays`` smart contract again, but the
-new contract does not know the nonces used in the previous
-deployment, so the attacker can use the old messages again.
+حمله مجدد زمانی رخ می‌دهد که از پیام امضا شده مجدداً برای درخواست مجوز برای اقدام دیگر استفاده می‌شود. برای جلوگیری از حملات مجدد، ما از همان روش تراکنش اتریوم استفاده می‌کنیم، اصطلاحاً نانس  نامیده می‎شود، یعنی تعداد تراکنش‌های ارسال شده توسط یک حساب می‌باشد. قرارداد هوشمند بررسی می‌کند که آیا یک نانس چندین بار استفاده شده‌است.
 
-Alice can protect against this attack by including the
-contract's address in the message, and only messages containing
-the contract's address itself will be accepted. You can find
-an example of this in the first two lines of the ``claimPayment()``
-function of the full contract at the end of this section.
+نوع دیگر حمله مجدد می‌تواند هنگامی رخ دهد که مالکِ قرارداد هوشمند  ``ReceiverPays`` را دیپلوی  کند،  مقداری پرداخت انجام بدهد و سپس قرارداد را از بین ببرد. بعداً، آنها تصمیم می‌گیرند که قرارداد هوشمند ``ReceiverPays``  را دوباره دیپلوی کنند، اما قرارداد جدید، نانس  استفاده شده در دیپلوی قبلی را نمی‌شناسد، بنابراین مهاجم می‌تواند دوباره از پیام‌های قدیمی استفاده کند.
 
-Packing arguments
+آلیس می‌تواند با درج آدرس قرارداد در پیام در برابر این حمله محافظت کند و فقط پیام‌های حاوی آدرس قرارداد خود پذیرفته می‌شوند. نمونه‌ای از این مورد را می‌توانید در دو خط اول تابع ``()claimPayment``  در قرارداد کامل در انتهای این بخش بیابید.
+
+
+بسته بندی آرگومان‌ها 
 -----------------
 
-Now that we have identified what information to include in the signed message,
-we are ready to put the message together, hash it, and sign it. For simplicity,
-we concatenate the data. The `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
-library provides a function called ``soliditySHA3`` that mimics the behaviour of
-Solidity's ``keccak256`` function applied to arguments encoded using ``abi.encodePacked``.
-Here is a JavaScript function that creates the proper signature for the ``ReceiverPays`` example:
+
+حالا که ما مشخص کرده‌ایم که چه اطلاعاتی را باید در پیام امضا شده قرار دهیم، ما آماده هستیم که پیام را کنار هم قرار دهیم و آن را هش و امضا کنیم.
+برای سادگی، داده‌ها را بهم پیوند می‌دهیم. کتابخانه `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_ تابعی به نام ``soliditySHA3``  را فراهم می‌کند که رفتار ``keccak256``  سالیدیتی را که برای آرگومان‌های رمزگذاری شده با استفاده از  ``abi.encodePacked`` اعمال می‌شود، را تقلید می‌کند. در اینجا یک تابع جاوا اسکریپت وجود دارد که امضای مناسب را برای مثال ``ReceiverPays``  ایجاد می‌کند:
+
 
 .. code-block:: javascript
 
@@ -105,38 +80,25 @@ Here is a JavaScript function that creates the proper signature for the ``Receiv
         web3.eth.personal.sign(hash, web3.eth.defaultAccount, callback);
     }
 
-Recovering the Message Signer in Solidity
+بازیابی امضای پیام در سالیدیتی
 -----------------------------------------
 
-In general, ECDSA signatures consist of two parameters,
-``r`` and ``s``. Signatures in Ethereum include a third
-parameter called ``v``, that you can use to verify which
-account's private key was used to sign the message, and
-the transaction's sender. Solidity provides a built-in
-function :ref:`ecrecover <mathematical-and-cryptographic-functions>` that
-accepts a message along with the ``r``, ``s`` and ``v`` parameters
-and returns the address that was used to sign the message.
 
-Extracting the Signature Parameters
+
+به طور کلی، امضاهای ECDSA از دو پارامتر  ``r`` و  ``s`` تشکیل شده‌است. امضاها در اتریوم شامل یک پارامتر سوم به نام  ``v``  هستند که می‌توانید برای تایید اینکه کدام کلیدخصوصیِ حساب، برای امضای پیام و تراکنش فرستنده بکار رفته‌است، استفاده کنید. سالیدیتی یک تابع داخلی :ref:`ecrecover <mathematical-and-cryptographic-functions>`  را ارائه می‌دهد که با استفاده از پارامترهای  ``r``  ،  ``s``  و  ``v``  یک پیام را می‌پذیرد و آدرسی را که برای امضای پیام استفاده شده بود، برمی‌گرداند.
+
+
+استخراج پارامترهای امضا
 -----------------------------------
 
-Signatures produced by web3.js are the concatenation of ``r``,
-``s`` and ``v``, so the first step is to split these parameters
-apart. You can do this on the client-side, but doing it inside
-the smart contract means you only need to send one signature
-parameter rather than three. Splitting apart a byte array into
-its constituent parts is a mess, so we use
-:doc:`inline assembly <assembly>` to do the job in the ``splitSignature``
-function (the third function in the full contract at the end of this section).
+امضاهای تولید شده توسط web3.js بهم پیوستن  ``r``  ، ``s``  و  ``v``  هستند، بنابراین اولین قدم جدا کردن این پارامترها از یکدیگر است. شما می‌توانید این کار را در سمت کلاینت انجام دهید، اما انجام آن در داخل قرارداد هوشمند به این معنی است که شما فقط باید یک پارامتر امضا را بجای سه پارامتر ارسال کنید. جداسازی آرایه بایت  به قسمت‌های تشکیل دهنده آن یک خرابکاری است، بنابراین ما برای انجام این کار در تابع ``splitSignature``  از :doc:`اسمبلی درون خطی<assembly>`  استفاده می‌کنیم (سومین تابع در قرارداد کامل در انتهای این بخش).
 
-Computing the Message Hash
+محاسبه پیام هش
 --------------------------
 
-The smart contract needs to know exactly what parameters were signed, and so it
-must recreate the message from the parameters and use that for signature verification.
-The functions ``prefixed`` and ``recoverSigner`` do this in the ``claimPayment`` function.
+قرارداد هوشمند باید دقیقاً بداند چه پارامترهایی امضا شده‌اند، بنابراین باید پیام را از طریق پارامترها دوباره ایجاد کند و از آن برای تأیید امضا استفاده کند. توابع ``prefixed``   و  ``recoverSigner`` این کار را در تابع  ``claimPayment`` انجام می‌دهند.
 
-The full contract
+قرارداد کامل
 -----------------
 
 .. code-block:: solidity
@@ -206,71 +168,51 @@ The full contract
     }
 
 
-Writing a Simple Payment Channel
+نوشتن یک کانال پرداخت  ساده
 ================================
 
-Alice now builds a simple but complete implementation of a payment
-channel. Payment channels use cryptographic signatures to make
-repeated transfers of Ether securely, instantaneously, and without transaction fees.
+اکنون آلیس یک پیاده سازی ساده اما کامل از یک کانال پرداخت ایجاد کرده‌است. کانال‌های پرداخت از امضاهای رمزنگاری شده برای انتقال مکرر اتر به صورت ایمن، فوری و تراکنش بدون کارمزد استفاده می‌کنند.
 
-What is a Payment Channel?
+
+کانال پرداخت چیست؟
 --------------------------
 
-Payment channels allow participants to make repeated transfers of Ether
-without using transactions. This means that you can avoid the delays and
-fees associated with transactions. We are going to explore a simple
-unidirectional payment channel between two parties (Alice and Bob). It involves three steps:
 
-    1. Alice funds a smart contract with Ether. This "opens" the payment channel.
-    2. Alice signs messages that specify how much of that Ether is owed to the recipient. This step is repeated for each payment.
-    3. Bob "closes" the payment channel, withdrawing his portion of the Ether and sending the remainder back to the sender.
+کانال‌های پرداخت به شرکت کنندگان این امکان را می‌دهد تا انتقال‌های مکرر اتر را بدون استفاده از تراکنش انجام دهند. این بدان معنی است که شما می‌توانید از تأخیر و هزینه‌های مرتبط با تراکنش‌ها جلوگیری کنید. ما می‌خواهیم یک کانال پرداخت یک طرفه ساده بین دو طرف (آلیس و باب) را بررسی کنیم. شامل سه مرحله است:
+
+
+    1.	آلیس قرارداد هوشمند همراه با اتر را تأمین می‌کند. این کانال پرداخت را "باز" می‌کند.
+    2.	آلیس پیام‌هایی را امضا می‌کند که مشخص می‌کند چه مقدار از آن اتر به گیرنده بدهکار است. این مرحله برای هر پرداخت تکرار می‌شود.
+    3.	باب کانال پرداخت را "می بندد"، سهم خود را از اتر پس می‌گیرد و باقیمانده را به فرستنده ارسال می‌کند.
+
+
 
 .. note::
-  Only steps 1 and 3 require Ethereum transactions, step 2 means that the sender
-  transmits a cryptographically signed message to the recipient via off chain
-  methods (e.g. email). This means only two transactions are required to support
-  any number of transfers.
+  فقط مراحل 1 و 3 به تراکنش‌های اتریوم نیاز دارند، مرحله 2 به این معنی است که فرستنده از طریق روش‌های غیر زنجیره‌ای (به عنوان مثال ایمیل) پیام امضا شده رمزنگاری شده را به گیرنده منتقل می‌کند. این بدان معناست که برای پشتیبانی از هر تعداد تراکنش  فقط دو تراکنش لازم است.
 
-Bob is guaranteed to receive his funds because the smart contract escrows the
-Ether and honours a valid signed message. The smart contract also enforces a
-timeout, so Alice is guaranteed to eventually recover her funds even if the
-recipient refuses to close the channel. It is up to the participants in a payment
-channel to decide how long to keep it open. For a short-lived transaction,
-such as paying an internet café for each minute of network access, the payment
-channel may be kept open for a limited duration. On the other hand, for a
-recurring payment, such as paying an employee an hourly wage, the payment channel
-may be kept open for several months or years.
+تضمین شده که باب وجوه  خود را دریافت می‌کند زیرا قرارداد هوشمند اتر را اسکو  می‌کند (اسکو  به معنی اینکه طرفین معامله بر یک سری شرایط توافق میکنند که اگر این شرایط توسط دو طرفین انجام شوند طرف ثالث مانند قرارداد هوشمند امکان برداشت یا پرداخت وجوه را امکان پذیر میکند.) و قول یک پیام معتبر امضا شده را می‌دهد. قرارداد هوشمند همچنین مهلت زمانی را اعمال می‌کند، بنابراین آلیس تضمین می‌کند که سرانجام وجوه خود را بازیابی می‌کند حتی اگر گیرنده از بستن کانال خودداری کند. شرکت کنندگان در یک کانال پرداخت تصمیم میگیرند که چه مدت آن را باز نگه دارند. برای یک معامله کوتاه مدت، مانند پرداخت کافی نت  به ازای هر دقیقه دسترسی به شبکه، کانال پرداخت ممکن است به مدت محدودی باز نگه داشته شود. از طرف دیگر، برای پرداخت مکرر، مانند پرداخت دستمزد ساعتی به یک کارمند، کانال پرداخت ممکن است برای چندین ماه یا سال باز نگه داشته شود.
 
-Opening the Payment Channel
+باز کردن کانال پرداخت
 ---------------------------
 
-To open the payment channel, Alice deploys the smart contract, attaching
-the Ether to be escrowed and specifying the intended recipient and a
-maximum duration for the channel to exist. This is the function
-``SimplePaymentChannel`` in the contract, at the end of this section.
+برای باز کردن کانال پرداخت، آلیس قرارداد هوشمند را دیپلوی می‌کند، اتر را برای تضمین  ضمیمه می‌کند و دریافت کننده مورد نظر و حداکثر مدت زمان  وجود کانال را مشخص می‌کند. در انتهای این بخش این تابع ``SimplePaymentChannel``  در قرارداد است.
 
-Making Payments
+
+ایجاد پرداخت ها
 ---------------
 
-Alice makes payments by sending signed messages to Bob.
-This step is performed entirely outside of the Ethereum network.
-Messages are cryptographically signed by the sender and then transmitted directly to the recipient.
+   آلیس با ارسال پیام های امضا شده به باب، پرداخت‌ها را انجام می‌دهد. این مرحله کاملاً خارج از شبکه اتریوم انجام می‌شود. پیام‌ها به صورت رمزنگاری شده توسط فرستنده امضا می‌شوند و سپس مستقیماً به گیرنده ارسال می‌شوند. 
 
-Each message includes the following information:
+هر پیام شامل اطلاعات زیر است:
 
-    * The smart contract's address, used to prevent cross-contract replay attacks.
-    * The total amount of Ether that is owed the recipient so far.
+    *	آدرسِ قراردادِ هوشمند استفاده شده برای جلوگیری از حملات مجدد  بین قراردادی.
+    *	مقدارِ کلِ اتری که تاکنون به گیرنده بدهکار است.
 
-A payment channel is closed just once, at the end of a series of transfers.
-Because of this, only one of the messages sent is redeemed. This is why
-each message specifies a cumulative total amount of Ether owed, rather than the
-amount of the individual micropayment. The recipient will naturally choose to
-redeem the most recent message because that is the one with the highest total.
-The nonce per-message is not needed anymore, because the smart contract only
-honours a single message. The address of the smart contract is still used
-to prevent a message intended for one payment channel from being used for a different channel.
+در پایان یک سری انتقال‌ها، فقط یک بار کانال پرداخت بسته می‌شود. به همین دلیل، فقط یکی از پیام‌های ارسالی استفاده می‌شود. به همین دلیل است که هر پیام مجموع مقدار کل اتر بدهکار  را  به جای مقدار جداگانه کانال پرداخت  مشخص می‌کند.گیرنده به طور طبیعی آخرین پیام را بخاطر اینکه بالاترین جمع کل  را دارد، برای بازخرید   انتخاب خواهد کرد. دیگر به نانس  برای هر پیام نیاز نمی‌باشد زیرا قرارداد هوشمند فقط به یک پیام پایبند‌است. برای جلوگیری از استفاده پیامی که در نظر گرفته شده برای یک کانال پرداخت در کانال دیگر، از آدرس قرارداد هوشمند همچنان استفاده می‌شود.
 
-Here is the modified JavaScript code to cryptographically sign a message from the previous section:
+
+
+ در اینجا کد جاوا اسکریپت ویرایش شده برای امضای یک پیام به صورت رمزنگاری از بخش قبلی وجود دارد:
 
 .. code-block:: javascript
 
@@ -298,42 +240,26 @@ Here is the modified JavaScript code to cryptographically sign a message from th
     }
 
 
-Closing the Payment Channel
+بستن کانال پرداخت 
 ---------------------------
 
-When Bob is ready to receive his funds, it is time to
-close the payment channel by calling a ``close`` function on the smart contract.
-Closing the channel pays the recipient the Ether they are owed and
-destroys the contract, sending any remaining Ether back to Alice. To
-close the channel, Bob needs to provide a message signed by Alice.
+   هنگامی که باب آماده دریافت وجوه  خود باشد، وقت آن است که با فراخوانی تابع ``close``  در قرارداد هوشمند کانال پرداخت را ببندید. بستن کانال به گیرنده اتری که بدهکار است را پرداخت می‌کند و قرارداد را از بین می‌برد و اتر باقی مانده را برای آلیس می‌فرستد. برای بستن کانال، باب باید پیامی را امضا کند که توسط آلیس امضا شده باشد.
 
-The smart contract must verify that the message contains a valid signature from the sender.
-The process for doing this verification is the same as the process the recipient uses.
-The Solidity functions ``isValidSignature`` and ``recoverSigner`` work just like their
-JavaScript counterparts in the previous section, with the latter function borrowed from the ``ReceiverPays`` contract.
+ قرارداد هوشمند باید تأیید کند که پیام حاوی یک امضای معتبر از طرف فرستنده است. روند انجام این تأیید همان روندی است که گیرنده از آن استفاده می‌کند. توابع سالیدیتی ``isValidSignature``  و ``recoverSigner``  درست همانند رونوشت‌های جاوا اسکریپت  در بخش قبلی با تابع آخری که از قرارداد ``ReceiverPays``   گرفته شده کار می‌کند.
 
-Only the payment channel recipient can call the ``close`` function,
-who naturally passes the most recent payment message because that message
-carries the highest total owed. If the sender were allowed to call this function,
-they could provide a message with a lower amount and cheat the recipient out of what they are owed.
+فقط گیرنده کانال پرداخت می‌تواند تابع ``close``  را فراخوانی کند، که به طور طبیعی جدیدترین پیام پرداخت را ارسال می‌کند زیرا این پیام بیشترین مجموع بدهی  را دارد. اگر فرستنده اجازه فراخوانی این تابع را داشته باشد، می‌تواند پیامی با مقدار کمتری ارائه دهد و گیرنده را از آنچه طلبکار است، فریب دهد.
 
-The function verifies the signed message matches the given parameters.
-If everything checks out, the recipient is sent their portion of the Ether,
-and the sender is sent the rest via a ``selfdestruct``.
-You can see the ``close`` function in the full contract.
+تابع تأیید می‌کند که پیام امضا شده با پارامترهای داده شده مطابقت دارد. اگر همه چیز بررسی شود، به گیرنده بخشی از اتر ارسال می شود، و بقیه را از طریق  ``selfdestruct`` برای فرستنده ارسال می‌کند. تابع  ``close``  را می‌توانید در قراردادِ کامل مشاهده کنید.
 
-Channel Expiration
+انقضا کانال 
 -------------------
 
-Bob can close the payment channel at any time, but if they fail to do so,
-Alice needs a way to recover her escrowed funds. An *expiration* time was set
-at the time of contract deployment. Once that time is reached, Alice can call
-``claimTimeout`` to recover her funds. You can see the ``claimTimeout`` function in the full contract.
+  باب می‌تواند در هر زمان کانال پرداخت را ببندد، اما اگر آنها موفق به انجام این کار نشوند، آلیس به راهی برای بازیابی وجوه پس انداز شده  خود نیاز دارد. زمان انقضا در زمان استقرار قرارداد تعیین می‌شود. پس از رسیدن به این زمان، آلیس می‌تواند با فراخوانی تابع ``claimTimeout`` وجوه خود پس بگیرد. تابع  ``claimTimeout``  را می‌توانید در قرارداد کامل مشاهده کنید. 
+  بعد از فراخوانی این تابع، باب دیگر نمی‌تواند هیچ اتری دریافت کند، بنابراین مهم است که باب قبل از رسیدن به زمان انقضا، کانال را ببندد.
 
-After this function is called, Bob can no longer receive any Ether,
-so it is important that Bob closes the channel before the expiration is reached.
 
-The full contract
+
+قرارداد کامل
 -----------------
 
 .. code-block:: solidity
@@ -431,30 +357,24 @@ The full contract
 
 
 .. note::
-  The function ``splitSignature`` does not use all security
-  checks. A real implementation should use a more rigorously tested library,
-  such as openzepplin's `version  <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ of this code.
 
-Verifying Payments
+  تابع ``splitSignature`` از همه بررسی‌های امنیتی  استفاده نمی‌کند. برای پیاده سازی واقعی باید از یک کتابخانه تست شده با دقت بیشتری استفاده کرد،  مانند `نسخه  <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_  openzepplin از این کد.
+  
+
+تأیید پرداخت‌ها
 ------------------
 
-Unlike in the previous section, messages in a payment channel aren't
-redeemed right away. The recipient keeps track of the latest message and
-redeems it when it's time to close the payment channel. This means it's
-critical that the recipient perform their own verification of each message.
-Otherwise there is no guarantee that the recipient will be able to get paid
-in the end.
+برخلاف بخش قبلی، پیام‌های موجود در یک کانال پرداخت  بلافاصله استفاده نمی‌شوند. گیرنده آخرین پیام را پیگیری می‌کند و هنگامی که زمان بستن کانال پرداخت باشد،  آن را استفاده می‌کند. این به این معنی است که بسیار مهم می‌باشد که گیرنده تأیید خود را برای هر پیام انجام دهد. در غیر این صورت هیچ تضمینی وجود ندارد که در پایان گیرنده بتواند وجوه را دریافت کند. گیرنده باید هر پیام را با استفاده از روند زیر تأیید کند:
 
-The recipient should verify each message using the following process:
+گیرنده باید هر پیام را با استفاده از روند زیر تأیید کند:
 
-    1. Verify that the contract address in the message matches the payment channel.
-    2. Verify that the new total is the expected amount.
-    3. Verify that the new total does not exceed the amount of Ether escrowed.
-    4. Verify that the signature is valid and comes from the payment channel sender.
+    1. تأیید کند که آدرس قرارداد در پیام با کانال پرداخت مطابقت دارد.
+    2. تأیید کند که کل جدید ، مقدار مورد انتظار است. 
+    3. تأیید کند که کل جدید  از مقدار اتر پس انداز شده  بیشتر نیست.
+    4. تأیید کند که امضا معتبر است و از طرف فرستنده کانال پرداخت می‌باشد.
 
-We'll use the `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_
-library to write this verification. The final step can be done a number of ways,
-and we use JavaScript. The following code borrows the ``constructPaymentMessage`` function from the signing **JavaScript code** above:
+
+برای نوشتن این تأیید از کتابخانه `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_ استفاده خواهیم کرد. مرحله آخر را می‌توان به روش‌های مختلفی انجام داد، و ما از **جاوا اسکریپت** استفاده می‌کنیم. کد زیر تابع ``constructPaymentMessage``  را از امضای کد جاوا اسکریپت در بالا گرفتیم: 
 
 .. code-block:: javascript
 

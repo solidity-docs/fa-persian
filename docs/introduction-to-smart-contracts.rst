@@ -1,18 +1,16 @@
 ###############################
-Introduction to Smart Contracts
+مقدمه‌ای بر قراد‌های هوشمند 
 ###############################
 
 .. _simple-smart-contract:
 
 ***********************
-A Simple Smart Contract
+یک قرارداد هوشمند ساده 
 ***********************
 
-Let us begin with a basic example that sets the value of a variable and exposes
-it for other contracts to access. It is fine if you do not understand
-everything right now, we will go into more detail later.
+بیایید با یک مثال ابتدایی شروع کنیم که مقدار یک متغیر را تعیین می‌کند و آن را در معرض دسترسی سایر قراردادها قرار می‌دهد. اینکه الان شما متوجه چیزی نمی‌شوید طبیعی می‌باشد، بعداً به جزئیات بیشتری خواهیم پرداخت.
 
-Storage Example
+مثال ذخیره سازی
 ===============
 
 .. code-block:: solidity
@@ -32,55 +30,27 @@ Storage Example
         }
     }
 
-The first line tells you that the source code is licensed under the
-GPL version 3.0. Machine-readable license specifiers are important
-in a setting where publishing the source code is the default.
+خط اول به شما می‌گوید کد منبع ، تحت مجوز GPL نسخه 3.0 می‌باشد. در جایی که انتشار کد منبع به صورت پیشفرض  باشد، مشخص کننده‌هایِ مجوز قابلِ خواندن توسطِ ماشین  مهم هستند.
+خط بعدی مشخص می‌کند کد منبع برای سالیدیتی نسخه 0.4.16 یا نسخه جدیدتر زبان نوشته شده است، اما شامل نسخه 0.9.0 نمی‌باشد. بخاطر اینکه قرارداد هوشمند می‌تواند رفتار متفاوتی داشته ‌باشد، به این هدف که اطمینان حاصل شود قرارداد هوشمند نتواند با نسخه جدید کامپایلر، کامپایل شود. :ref:`پراگما <pragma>` (Pragmas) دستورالعمل‌های رایج برای کامپایلرها در مورد نحوه برخورد با کد منبع می‌باشند (به عنوان مثال  `پراگما یکبار  (pragma once) <https://en.wikipedia.org/wiki/Pragma_once>`_ ). 
 
-The next line specifies that the source code is written for
-Solidity version 0.4.16, or a newer version of the language up to, but not including version 0.9.0.
-This is to ensure that the contract is not compilable with a new (breaking) compiler version, where it could behave differently.
-:ref:`Pragmas<pragma>` are common instructions for compilers about how to treat the
-source code (e.g. `pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_).
+قراردادها در سالیدتی به معنای مجموعه‌ای از کد (*توابع* آن‌ها) و داده‌ها (*حالت* آن‌ها) است که در یک آدرس خاص در بلاکچین اتریوم قرار دارند. خط ``;uint storedData``  یک متغیر حالت  به نام ``storedData``  از نوع ``uint``  (عددِ صحیحِ بدونِ علامت  256 بیتی) را مشخص می‌کند. می‌توان آن را به عنوان یک اسلات  در پایگاه داده در نظر بگیرید که می‌توانید با فراخوانی توابع کدی که پایگاه داده را مدیریت می‌کند، آن‌ها را جستوجو کرده و ویرایش کنید. در این مثال، قرارداد توابع  ``set`` و ``get``  را تعریف می‌کند که  برای ویرایش  یا بازیابی  مقدار متغیر استفاده شود.
 
-A contract in the sense of Solidity is a collection of code (its *functions*) and
-data (its *state*) that resides at a specific address on the Ethereum
-blockchain. The line ``uint storedData;`` declares a state variable called ``storedData`` of
-type ``uint`` (*u*\nsigned *int*\eger of *256* bits). You can think of it as a single slot
-in a database that you can query and alter by calling functions of the
-code that manages the database. In this example, the contract defines the
-functions ``set`` and ``get`` that can be used to modify
-or retrieve the value of the variable.
+همانند سایر زبان‌‌های رایج، برای دسترسی به یک متغیر حالت، نیازی به پیشوند ``.this``  ندارید.
+ این قرارداد جدا از اینکه هنوز کار زیادی انجام نداده‌است (به دلیل زیرساخت‌های ساخته شده توسط اتریوم) اجازه می‌دهد هر شخص یک عدد را ذخیره کند، که این عدد توسط هر شخصی در دنیا بدون هیچ روش امکان پذیر برای جلوگیری از انتشار آن قابل دسترس می‌باشد. هر شخصی می‌تواند مجدداً تابع ``set``   را فراخوانی کند و عدد را رونویسی کند، اما عدد در تاریخچه‌ِ بلاکچین هنوز ذخیره بماند. بعداً خواهید دید که چگونه می‌توانید محدودیت‌های دسترسی را اعمال کنید تا فقط شما بتوانید عدد را تغییر دهید. 
 
-To access a member (like a state variable) of the current contract, you do not typically add the ``this.`` prefix,
-you just access it directly via its name.
-Unlike in some other languages, omitting it is not just a matter of style,
-it results in a completely different way to access the member, but more on this later.
-
-This contract does not do much yet apart from (due to the infrastructure
-built by Ethereum) allowing anyone to store a single number that is accessible by
-anyone in the world without a (feasible) way to prevent you from publishing
-this number. Anyone could call ``set`` again with a different value
-and overwrite your number, but the number is still stored in the history
-of the blockchain. Later, you will see how you can impose access restrictions
-so that only you can alter the number.
 
 .. warning::
-    Be careful with using Unicode text, as similar looking (or even identical) characters can
-    have different code points and as such are encoded as a different byte array.
+    در هنگام استفاده از متن Unicode مراقب باشید، زیرا نویسه‌های  مشابه (یا حتی یکسان) می‌توانند دارای نکته‌های کدی  متفاوتی باشند و همینطور به عنوان یک آرایه بایت  متفاوت کدگذاری شوند.
 
 .. note::
-    All identifiers (contract names, function names and variable names) are restricted to
-    the ASCII character set. It is possible to store UTF-8 encoded data in string variables.
+    همه شناسه‌ها  (نام قرارداد، نام تابع و نام متغیر) به مجموعه کاراکترهای ASCII محدود می‌‌شوند. ذخیره داده‌های رمزگذاری شده UTF-8 در متغیرهای رشته‌ای  امکان پذیر است.
 
 .. index:: ! subcurrency
 
-Subcurrency Example
+مثال  ساب کارنسی یا زیر ارز
 ===================
 
-The following contract implements the simplest form of a
-cryptocurrency. The contract allows only its creator to create new coins (different issuance schemes are possible).
-Anyone can send coins to each other without a need for
-registering with a username and password, all you need is an Ethereum keypair.
+قرارداد زیر ساده ترین شکل ارز رمزنگاری شده  را پیاده سازی می‌کند. این قرارداد فقط به سازنده آن اجازه می‌دهد سکه‌ های جدید ایجاد کند (طرح‌های مختلف صدور امکان پذیر است). هر کسی می‌تواند بدون نیاز به ثبت نام با نام کاربری و رمز عبور، سکه برای یکدیگر ارسال کنند، تمام آنچه شما نیاز دارید یک جفت کلید اتریوم است.
 
 .. code-block:: solidity
 
@@ -130,41 +100,27 @@ registering with a username and password, all you need is an Ethereum keypair.
         }
     }
 
-This contract introduces some new concepts, let us go through them one by one.
+این قرارداد مفاهیم جدیدی را معرفی می‌کند، اجازه دهید یکی یکی آنها را مرور کنیم.
 
-The line ``address public minter;`` declares a state variable of type :ref:`address<address>`.
-The ``address`` type is a 160-bit value that does not allow any arithmetic operations.
-It is suitable for storing addresses of contracts, or a hash of the public half
-of a keypair belonging to :ref:`external accounts<accounts>`.
 
-The keyword ``public`` automatically generates a function that allows you to access the current value of the state
-variable from outside of the contract. Without this keyword, other contracts have no way to access the variable.
-The code of the function generated by the compiler is equivalent
-to the following (ignore ``external`` and ``view`` for now):
+
+خط ``;address public minter``  متغیر حالت از نوع  :ref:`address<address>` را مشخص می‌کند. نوع آدرس یک مقدار 160 بیتی است که اجازه هیچ گونه عملیات حسابی را نمی‌دهد. متغییر ``address`` برای ذخیره آدرس‌ قرارداد‌ها یا یک هش از نیمه عمومیِ  یک جفت کلید  متعلق به :ref:`حساب‌های خارجی <accounts>` مناسب است.
+
+کلمه کلیدی ``public`` به طور خودکار تابعی را ایجاد می‌کند که به شما امکان می‌دهد، از خارج از قرارداد به مقدار فعلی متغیر حالت  دسترسی پیدا کنید. بدون این کلمه کلیدی، سایر قراردادها راهی برای دسترسی به متغیر ندارند. کد تابع که توسط کامپایلر تولید می‌شود معادل موارد زیر است (فعلاً از  ``external`` و  ``view`` چشم پوشی کنید):
 
 .. code-block:: solidity
 
     function minter() external view returns (address) { return minter; }
 
-You could add a function like the above yourself, but you would have a function and state variable with the same name.
-You do not need to do this, the compiler figures it out for you.
+می‌توانید توابعی مانند موارد فوق را خود اضافه کنید، اما یک متغیرحالت و تابعی با همان نام خواهید داشت. اما نیازی به این کار نیست، کامپایلر آن را برای شما مشخص می‌کند.
 
 .. index:: mapping
 
-The next line, ``mapping (address => uint) public balances;`` also
-creates a public state variable, but it is a more complex datatype.
-The :ref:`mapping <mapping-types>` type maps addresses to :ref:`unsigned integers <integers>`.
+خط بعدی، ``;mapping (address => uint) public balances`` یک متغیر ِحالتِ عمومی  ایجاد می‌کند، اما یک نوع داده  پیچیده‌تر است. نوع :ref:`mapping <mapping-types>`  آدرس‌ها را به اعداد صحیح بدون علامت  (:ref:`unsigned integers <integers>`) نگاشت  می‌کند.
 
-Mappings can be seen as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_ which are
-virtually initialised such that every possible key exists from the start and is mapped to a
-value whose byte-representation is all zeros. However, it is neither possible to obtain a list of all keys of
-a mapping, nor a list of all values. Record what you
-added to the mapping, or use it in a context where this is not needed. Or
-even better, keep a list, or use a more suitable data type.
+Mapping ‌ها را می‌توان به عنوان `جداول هش  <https://en.wikipedia.org/wiki/Hash_table>`_ مشاهده کرد که عملاً مقداردهی اولیه شده‌اند، به طوری که همه کلیدهای ممکن از همان ابتدا وجود داشته و به مقداری که همهِ نمایشِ بایت  آن‌ها صفر است نگاشت شده باشند. با این حال، نه می‌توان لیستی از تمام کلیدهای Mapping و نه لیستی از تمام مقادیر را بدست آورد. آنچه را که به Mapping اضافه کرده‌اید، ثبت کنید یا از آن در زمینه‌ای که نیازی به آن مقدار نیست استفاده کنید. یا حتی بهتر است که یک لیست نگهدارید یا از نوع داده  مناسب استفاده کنید.
 
-The :ref:`getter function<getter-functions>` created by the ``public`` keyword
-is more complex in the case of a mapping. It looks like the
-following:
+:ref:`تابع getter <getter-functions>`  ایجاد شده توسط کلمه کلیدی ``public``  در Mapping پیچیده‌تر است. به شرح زیر است:
 
 .. code-block:: solidity
 
@@ -172,21 +128,13 @@ following:
         return balances[_account];
     }
 
-You can use this function to query the balance of a single account.
+شما می‌توانید برای جستجوی بالانس  یک حساب از این تابع استفاده کنید.
 
 .. index:: event
 
-The line ``event Sent(address from, address to, uint amount);`` declares
-an :ref:`"event" <events>`, which is emitted in the last line of the function
-``send``. Ethereum clients such as web applications can
-listen for these events emitted on the blockchain without much
-cost. As soon as it is emitted, the listener receives the
-arguments ``from``, ``to`` and ``amount``, which makes it possible to track
-transactions.
+خط ``;event Sent(address from, address to, uint amount)`` یک :ref:`"event" <events>`  را مشخص می‌کند که در آخرین خط با تابع ``send``  منتشر می‌شود. کلاینت اتریوم مانند برنامه‌های کاربردی  وب می‌توانند به این رویداد ها که در بلاکچین منتشر شده‌اند، بدون هزینه زیاد گوش دهند. شنونده به محض انتشار، آرگومان‌های ``from`` ، ``to`` و ``amount`` را دریافت می‌کند، که امکان ردیابی تراکنش‌ها را فراهم می‌کند.
 
-To listen for this event, you could use the following
-JavaScript code, which uses `web3.js <https://github.com/ethereum/web3.js/>`_ to create the ``Coin`` contract object,
-and any user interface calls the automatically generated ``balances`` function from above::
+برای گوش دادن به این event، می‌توانید از کد جاوا اسکریپت زیر استفاده کنید که از `web3.js <https://github.com/ethereum/web3.js/>`_  برای ایجاد شیء قرارداد ``Coin``   استفاده می‌کند و هر رابط کاربری تابع ``balances``   که به صورت خودکار ایجاد شده را از بالا فراخوانی می‌کند::
 
     Coin.Sent().watch({}, '', function(error, result) {
         if (!error) {
@@ -201,14 +149,9 @@ and any user interface calls the automatically generated ``balances`` function f
 
 .. index:: coin
 
-The :ref:`constructor<constructor>` is a special function that is executed during the creation of the contract and
-cannot be called afterwards. In this case, it permanently stores the address of the person creating the
-contract. The ``msg`` variable (together with ``tx`` and ``block``) is a
-:ref:`special global variable <special-variables-functions>` that
-contains properties which allow access to the blockchain. ``msg.sender`` is
-always the address where the current (external) function call came from.
+:ref:`constructor<constructor>`  یک تابع خاص است که در هنگام ایجاد قرارداد اجرا می‌شود و پس از آن نمی‌توان آن را فراخوانی کرد. در این مورد، constructor آدرس شخص ایجاد کننده قرارداد را برای همیشه ذخیره می‌کند. متغیر ``msg``   (همراه با  ``tx`` و  ``block``) یک :ref:`متغیر جهانی خاص  <special-variables-functions>`   که شامل خصوصیاتی می‌باشد و امکان دسترسی به بلاکچین را فراهم می‌کند. ``msg.sender``  همیشه آدرسی است که فراخوانی تابع فعلی (خارجی ) از آن گرفته شده‌است.
 
-The functions that make up the contract, and that users and contracts can call are ``mint`` and ``send``.
+توابعی که قرارداد را تشکیل می‌دهند و کاربران و قراردادها می‌توانند آنها را فراخوانی کنند، ``mint`` و ``send``   هستند.
 
 The ``mint`` function sends an amount of newly created coins to another address. The :ref:`require
 <assert-and-require>` function call defines conditions that reverts all changes if not met. In this
@@ -220,13 +163,9 @@ overflows, i.e., when ``balances[receiver] + amount`` in arbitrary precision ari
 than the maximum value of ``uint`` (``2**256 - 1``). This is also true for the statement
 ``balances[receiver] += amount;`` in the function ``send``.
 
-:ref:`Errors <errors>` allow you to provide more information to the caller about
-why a condition or operation failed. Errors are used together with the
-:ref:`revert statement <revert-statement>`. The revert statement unconditionally
-aborts and reverts all changes similar to the ``require`` function, but it also
-allows you to provide the name of an error and additional data which will be supplied to the caller
-(and eventually to the front-end application or block explorer) so that
-a failure can more easily be debugged or reacted upon.
+
+:ref:`خطاها <errors>`  به شما امکان می‌دهند اطلاعات بیشتری در مورد علت شرایط یا شکست عملیات به فراخوانی کننده  ارائه دهید. خطاها همراه با  :ref:`دستورات revert <revert-statement>`   استفاده می‌شوند. دستورات revert بدون تغییر و بدون قید و شرط، تمام تغییرات مشابه با تابع ``require``  را نابود و برمی‌گردانند ، اما همچنین به شما امکان ارائه نام خطا و داده‌های اضافی را که به فراخوانی کننده (و در نهایت به برنامه سمت کاربر  یا جستوجوگر بلاک ) نشان دهید، را می‌دهند. به طوری که یک شکست  را می‌توان به راحتی عیب یابی  کرد یا به آن واکنش نشان داد.
+
 
 The ``send`` function can be used by anyone (who already
 has some of these coins) to send coins to anyone else. If the sender does not have
@@ -234,334 +173,175 @@ enough coins to send, the ``if`` condition evaluates to true. As a result, the `
 while providing the sender with error details using the ``InsufficientBalance`` error.
 
 .. note::
-    If you use
-    this contract to send coins to an address, you will not see anything when you
-    look at that address on a blockchain explorer, because the record that you sent
-    coins and the changed balances are only stored in the data storage of this
-    particular coin contract. By using events, you can create
-    a "blockchain explorer" that tracks transactions and balances of your new coin,
-    but you have to inspect the coin contract address and not the addresses of the
-    coin owners.
+   اگر از این قرارداد برای ارسال سکه به یک آدرس استفاده کنید، وقتی به آن آدرس در یک مرورگر بلاکچین نگاه کنید، چیزی مشاهده نخواهید کرد. زیرا تاریخچه ارسال سکه و بالانس تغییر یافته و فقط در فضای ذخیره سازی داده  این قراردادِ خاصِ سکه ذخیره می‌شود. با استفاده از رویداد ها، می‌توانید یک "جستجوگر بلاکچینی" ایجاد کنید که تراکنش‌ها و بالانس‌های سکه جدید شما را ردیابی می‌کند، اما باید آدرس قرارداد سکه و نه آدرس صاحبان سکه را بررسی کنید.
 
 .. _blockchain-basics:
 
 *****************
-Blockchain Basics
+مبانی بلاکچین
 *****************
-
-Blockchains as a concept are not too hard to understand for programmers. The reason is that
-most of the complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_,
-`elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_,
-`peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.)
-are just there to provide a certain set of features and promises for the platform. Once you accept these
-features as given, you do not have to worry about the underlying technology - or do you have
-to know how Amazon's AWS works internally in order to use it?
+درک بلاکچین به عنوان یک مفهوم برای برنامه نویسان خیلی دشوار نمی‌باشد. به این دلیل که بیشتر پیچیدگی در مفهوم (استخراج ، `هش کردن <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_ ، `رمزنگاری منحنی بیضوی <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_  ، `شبکه‌های همتا به همتا <https://en.wikipedia.org/wiki/Peer-to-peer>`_  و غیره) می‌باشد که فقط برای ارائه مجموعه خاصی از ویژگی‌ها و وعده‌ها برای پلتفرم می‌باشد. پس از پذیرش این ویژگی‌ها، دیگر لازم نیست نگران فناوری زیر ساخت باشید - یا برای استفاده از آن باید بدانید که AWS آمازون چگونه کار می‌کند؟
 
 .. index:: transaction
 
-Transactions
+تراکنش‌ها 
 ============
 
-A blockchain is a globally shared, transactional database.
-This means that everyone can read entries in the database just by participating in the network.
-If you want to change something in the database, you have to create a so-called transaction
-which has to be accepted by all others.
-The word transaction implies that the change you want to make (assume you want to change
-two values at the same time) is either not done at all or completely applied. Furthermore,
-while your transaction is being applied to the database, no other transaction can alter it.
+بلاکچین یک پایگاه داده تراکنشی  مشترک جهانی  است. این بدان معناست که هر کس فقط با شرکت در شبکه می‌تواند ورودی‌های پایگاه داده را بخواند. اگر می‌خواهید چیزی را در پایگاه داده تغییر دهید، باید به اصطلاح، تراکنش ایجاد کنید، باید توسط دیگران پذیرفته شود. کلمه تراکنش به تغییری که می‌خواهید ایجاد کنید که یا اصلاً انجام نشده یا کاملاً اعمال شده اشاره دارد (فرض کنید می‌خواهید همزمان دو مقدار را تغییر دهید). علاوه بر این، زمانی که تراکنش شما در پایگاه داده اعمال می‌شود، هیچ تراکنش دیگری نمی‌تواند آن را تغییر دهد.
 
-As an example, imagine a table that lists the balances of all accounts in an
-electronic currency. If a transfer from one account to another is requested,
-the transactional nature of the database ensures that if the amount is
-subtracted from one account, it is always added to the other account. If due
-to whatever reason, adding the amount to the target account is not possible,
-the source account is also not modified.
+به عنوان مثال، جدولی را تصور کنید که بالانس تمام حساب‌ها را در یک ارز الکترونیکی  فهرست می‌کند. اگر انتقال از یک حساب به حساب دیگر درخواست شود، ماهیت تراکنشی پایگاه داده تضمین می‌کند که اگر مبلغ از یک حساب کم شود، همیشه به حساب دیگر اضافه می‌شود. اگر به هر دلیلی، افزودن مبلغ به حساب مقصد  امکان پذیر نباشد، حساب مبدأ  نیز ویرایش نمی‌شود.
 
-Furthermore, a transaction is always cryptographically signed by the sender (creator).
-This makes it straightforward to guard access to specific modifications of the
-database. In the example of the electronic currency, a simple check ensures that
-only the person holding the keys to the account can transfer money from it.
+علاوه بر این، یک تراکنش همیشه به صورت رمزنگاری توسط فرستنده (سازنده ) امضا می‌شود. این امر باعث می‌شود محافظت از دسترسی به تغییرات خاص پایگاه داده آسان باشد. در مثال ارز الکترونیکی ، یک بررسی ساده تضمین می‌کند که فقط شخصی که کلیدهای حساب را دارد می‌تواند از آن پول انتقال بدهد.
 
 .. index:: ! block
 
-Blocks
+بلاک‌ها  
 ======
 
-One major obstacle to overcome is what (in Bitcoin terms) is called a "double-spend attack":
-What happens if two transactions exist in the network that both want to empty an account?
-Only one of the transactions can be valid, typically the one that is accepted first.
-The problem is that "first" is not an objective term in a peer-to-peer network.
+یک مانع عمده برای غلبه بر چیزی که (در اصطلاحات بیتکوین) "حمله دو بار خرج کردن  " نامیده می‌شود : اگر دو تراکنش در شبکه وجود داشته باشد که هر دو بخواهند یک حساب را خالی کنند چه اتفاقی می‌افتد؟ فقط یکی از تراکنش‌ها می‌تواند معتبر باشد، به طور معمول تراکنشی که ابتدا پذیرفته می‌شود. مسئله این است که "First" یک اصطلاح  عَملی در یک شبکه همتا به همتا  نیست.
 
-The abstract answer to this is that you do not have to care. A globally accepted order of the transactions
-will be selected for you, solving the conflict. The transactions will be bundled into what is called a "block"
-and then they will be executed and distributed among all participating nodes.
-If two transactions contradict each other, the one that ends up being second will
-be rejected and not become part of the block.
+پاسخ خلاصه این است که شما نیاز ندارید مراقبت باشید. یک ترتیب از تراکنش‌های پذیرفته شده به صورت جهانی برای شما انتخاب می‌شود، که اختلافات را حل می‌کند. تراکنش‌ها به صورت چیزی که "بلاک" نام دارد، بسته و سپس اجرا می‌شوند و در بین گره‌های مشارکت کننده توزیع می‌شوند. اگر دو تراکنش با یکدیگر مغایرت داشته باشند، تراکنشی که در نهایت دوم شود رد می‌شود و بخشی از بلاک نمی‌شود.
 
-These blocks form a linear sequence in time and that is where the word "blockchain"
-derives from. Blocks are added to the chain in rather regular intervals - for
-Ethereum this is roughly every 17 seconds.
+این بلاک‌ها از نظر زمانی یک توالی خطی  را تشکیل می‌دهند و بخاطر همین است که کلمه "بلاکچین" از آن گرفته می‌شود. بلاک‌ها در فواصل نسبتاً منظمی به زنجیره اضافه می‌شوند - برای اتریوم تقریباً هر 17 ثانیه می‌باشد.
 
-As part of the "order selection mechanism" (which is called "mining") it may happen that
-blocks are reverted from time to time, but only at the "tip" of the chain. The more
-blocks are added on top of a particular block, the less likely this block will be reverted. So it might be that your transactions
-are reverted and even removed from the blockchain, but the longer you wait, the less
-likely it will be.
+به عنوان بخشی از "مکانیزم انتخاب ترتیبی  " (که "استخراج " نامیده می‌شود) ممکن است فقط در "نوک " زنجیره، برگرداندن بلاک‌ها هرزگاهی اتفاق بیفتد. هرچه تعداد بلاک‌های اضافه شده در بالای یک بلاکِ خاص بیشتر باشد، احتمال برگردانندن آن بلاک کمتر است. بنابراین ممکن است تراکنش شما برگردانده شود و حتی از بلاکچین حذف شود، اما هرچه بیشتر منتظر بمانید، احتمال آن کمتر است.
 
 .. note::
-    Transactions are not guaranteed to be included in the next block or any specific future block,
-    since it is not up to the submitter of a transaction, but up to the miners to determine in which block the transaction is included.
+    تضمین نمی‌شود که تراکنش در بلاک بعدی یا هر بلاک مشخص خاص در آینده لحاظ شود، زیرا این کار به عهده ارسال کننده نمی‌باشد، بلکه ماینرها باید تعیین کنند که تراکنش در کدام بلاک لحاظ شود. 
 
-    If you want to schedule future calls of your contract, you can use
-    the `alarm clock <https://www.ethereum-alarm-clock.com/>`_ or a similar oracle service.
+    اگر می‌خواهید فراخوانی قراردادتان را در آینده زمان بندی کنید، می توانید از `alarm clock <https://www.ethereum-alarm-clock.com/>`_  یا سرویس اوراکل مشابه استفاده کنید.
+
 
 .. _the-ethereum-virtual-machine:
 
 .. index:: !evm, ! ethereum virtual machine
 
 ****************************
-The Ethereum Virtual Machine
+ماشین مجازی اتریوم 
 ****************************
 
-Overview
+مرور کلی
 ========
 
-The Ethereum Virtual Machine or EVM is the runtime environment
-for smart contracts in Ethereum. It is not only sandboxed but
-actually completely isolated, which means that code running
-inside the EVM has no access to network, filesystem or other processes.
-Smart contracts even have limited access to other smart contracts.
+ماشین مجازی اتریوم  یا EVM محیط زمان اجرای قراردادهای هوشمند در اتریوم می‌باشد. EVM نه تنها یک جعبه است بلکه در واقع کاملاً ایزوله شده است، به این معنی که کدی که در داخل EVM اجرا می شود، به شبکه و فایل سیستم  یا سایر فرآیندها دسترسی ندارد. در قراردادهای هوشمند حتی دسترسی به سایر قراردادهای هوشمند محدود است.
 
 .. index:: ! account, address, storage, balance
 
 .. _accounts:
 
-Accounts
+حساب‌ها
 ========
 
-There are two kinds of accounts in Ethereum which share the same
-address space: **External accounts** that are controlled by
-public-private key pairs (i.e. humans) and **contract accounts** which are
-controlled by the code stored together with the account.
+در اتریوم دو نوع حساب وجود دارد که فضای آدرس یکسانی را به اشتراک می‌گذارند: **حساب های خارجی**  که توسط جفت کلید عمومی-خصوصی  (به عنوان مثال انسان) کنترل می‌شوند و **حساب‌های قراردادی**  که توسط کدی که همراه با حساب ذخیره می‌شود کنترل می‌شوند.
 
-The address of an external account is determined from
-the public key while the address of a contract is
-determined at the time the contract is created
-(it is derived from the creator address and the number
-of transactions sent from that address, the so-called "nonce").
+آدرس یک حساب خارجی  از کلید عمومی مشخص می‌شود در حالی که آدرس قرارداد در زمان ایجاد قرارداد مشخص می‌شود (از آدرس سازنده و تعداد تراکنش‌های ارسال شده از آن آدرس مشتق گرفته شده است، که  به اصطلاح " نانس " نامیده می‌شود).
 
-Regardless of whether or not the account stores code, the two types are
-treated equally by the EVM.
+صرف نظر از اینکه حساب، کد را ذخیره می‌کند یا نه، EVM با این دو نوع حساب به صورت برابر رفتار می‌کند.
 
-Every account has a persistent key-value store mapping 256-bit words to 256-bit
-words called **storage**.
+هر حساب دارای یک حافظه کلید-مقدار  ثابت است که کلمات 256 بیتی را با کلمات 256 بیتی که  **storage** نامیده می‌شود.
 
-Furthermore, every account has a **balance** in
-Ether (in "Wei" to be exact, ``1 ether`` is ``10**18 wei``) which can be modified by sending transactions that
-include Ether.
+علاوه بر این، هر حساب **بالانسی** معادل به اتر دارد (به طور دقیق در wei  ، ``1 ether``  معادل ``10**18 wei``  است) که می‌تواند با ارسال تراکنش‌هایی که شامل اتر هستند، اصلاح شود.
 
 .. index:: ! transaction
 
-Transactions
+تراکنش‌ها 
 ============
 
-A transaction is a message that is sent from one account to another
-account (which might be the same or empty, see below).
-It can include binary data (which is called "payload") and Ether.
+تراکنش پیامی است که از یک حساب به حساب دیگر ارسال می‌شود (که ممکن است یکسان یا خالی باشد، به مطالب زیر مراجعه کنید). تراکنش‌ها می‌تواند شامل داده‌های باینری (که "پیلود " نامیده می‌شود) و اتر باشند.
 
-If the target account contains code, that code is executed and
-the payload is provided as input data.
+اگر حساب مقصد حاوی کد باشد، آن کد اجرا می شود و پیلود به عنوان داده ورودی ارائه می‌شود.
 
-If the target account is not set (the transaction does not have
-a recipient or the recipient is set to ``null``), the transaction
-creates a **new contract**.
-As already mentioned, the address of that contract is not
-the zero address but an address derived from the sender and
-its number of transactions sent (the "nonce"). The payload
-of such a contract creation transaction is taken to be
-EVM bytecode and executed. The output data of this execution is
-permanently stored as the code of the contract.
-This means that in order to create a contract, you do not
-send the actual code of the contract, but in fact code that
-returns that code when executed.
+اگر حساب مقصد  تنظیم نشده باشد ( یعنی تراکنش گیرنده نداشته باشد یا  ``null``تنظیم شده‌ باشد)، تراکنش **قرارداد جدید** ایجاد می‌کند. همانطور که قبلاً ذکر شد، آدرس آن قرارداد آدرس صفر  نمی‌باشد، بلکه آدرسی است که از فرستنده و تعداد تراکنش‌های ارسال شده آن ("نانس") گرفته شده است. پیلود چنین تراکنش ایجاد قرارداد به عنوان بایت کد  EVM در نظر گرفته شده و اجرا می‌شود. داده‌های خروجی این اجرا به عنوان کدِ قرارداد برای همیشه ذخیره می‌شود. این بدان معناست که برای ایجاد قرارداد، شما کد واقعی قرارداد را ارسال نمی‌کنید، بلکه در واقع کدی که هنگام اجرا، آن کد را برمی‌گرداند .
 
 .. note::
-  While a contract is being created, its code is still empty.
-  Because of that, you should not call back into the
-  contract under construction until its constructor has
-  finished executing.
+  هنگامی که یک قرارداد در حال ایجاد باشد، کد آن هنوز خالی است. به همین دلیل، تا زمانی که سازنده آن، اجرای آن را به اتمام نرسانده، نباید مجدداً قرارداد در حال ساخت را فراخونی مجدد کنید.
 
 .. index:: ! gas, ! gas price
 
-Gas
+گاز
 ===
 
-Upon creation, each transaction is charged with a certain amount of **gas**,
-whose purpose is to limit the amount of work that is needed to execute
-the transaction and to pay for this execution at the same time. While the EVM executes the
-transaction, the gas is gradually depleted according to specific rules.
+به محض ایجاد، هر تراکنش با مقدار مشخصی **گاز** شارژ می شود، هدف آن محدود کردن میزان کار مورد نیاز برای انجام تراکنش و پرداخت همزمان هزینه این اجرا است. هنگامی که EVM تراکنش را انجام می‌دهد، گاز طبق قوانین خاص به تدریج خالی می‌شود.
 
-The **gas price** is a value set by the creator of the transaction, who
-has to pay ``gas_price * gas`` up front from the sending account.
-If some gas is left after the execution, it is refunded to the creator in the same way.
+**gas price** مقداری است که توسط سازنده تراکنش تنظیم می‌شود و باید  ``gas_price * gas`` را قبل از حساب ارسالی پرداخت کند. اگر پس از اجرا مقداری گاز باقی مانده باشد، به همان روش به سازنده بازپرداخت می‌شود.
 
-If the gas is used up at any point (i.e. it would be negative),
-an out-of-gas exception is triggered, which reverts all modifications
-made to the state in the current call frame.
+اگر گاز در هر نقطه مصرف شود (یعنی منفی باشد)، یک استثناء اتمام گاز ایجاد می‌شود، که تمام تغییرات و اصلاحات ایجاد شده در حالت  را در این چارچوب فراخوانی فعلی، باز می‌گرداند .
 
 .. index:: ! storage, ! memory, ! stack
 
-Storage, Memory and the Stack
+فضای ذخیره سازی  ، حافظه مِمُوری  و پشته
 =============================
 
-The Ethereum Virtual Machine has three areas where it can store data-
-storage, memory and the stack, which are explained in the following
-paragraphs.
+ماشین مجازی اتریوم دارای سه فضا برای ذخیره سازی داده می‌باشد: فضای ذخیره سازی یا storage، حافظه موقت یا مِمُوری و پشته، که در پاراگراف‌های زیر توضیح داده شده‌اند.
 
-Each account has a data area called **storage**, which is persistent between function calls
-and transactions.
-Storage is a key-value store that maps 256-bit words to 256-bit words.
-It is not possible to enumerate storage from within a contract, it is
-comparatively costly to read, and even more to initialise and modify storage. Because of this cost,
-you should minimize what you store in persistent storage to what the contract needs to run.
-Store data like derived calculations, caching, and aggregates outside of the contract.
-A contract can neither read nor write to any storage apart from its own.
+هر حساب دارای یک فضای داده به نام **storage** می‌باشد، که بین تابع فراخوانی و تراکنش‌ها ثابت است.
 
-The second data area is called **memory**, of which a contract obtains
-a freshly cleared instance for each message call. Memory is linear and can be
-addressed at byte level, but reads are limited to a width of 256 bits, while writes
-can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
-accessing (either reading or writing) a previously untouched memory word (i.e. any offset
-within a word). At the time of expansion, the cost in gas must be paid. Memory is more
-costly the larger it grows (it scales quadratically).
+storage یک حافظه کلید_مقدار  می‌باشد که کلمات 256 بیتی را با کلمات 256 بیتی نگاشت  می‌کند. محاسبه storage از طریق قرارداد امکان پذیر نیست، خواندن آن نسبتاً پر هزینه است و برای مقدار دهی و ویرایش کردن پر هزینه‌تر هم می‌باشد. به دلیل این هزینه‌ها، شما باید آنچه را که در storage ذخیره می‌کنید، به میزانِ نیازِ قرارداد برای انجام این کار به حداقل برسانید. . داده‌هایی مانند محاسبه مشتق، کش کردن  و جمع آوری داده‌‌های خارج از قرارداد، را در آن ذخیره کنید. یک قرارداد نمی‌تواند در هر storage ای به جز storage خودش بنویسد یا بخواند.
 
-The EVM is not a register machine but a stack machine, so all
-computations are performed on a data area called the **stack**. It has a maximum size of
-1024 elements and contains words of 256 bits. Access to the stack is
-limited to the top end in the following way:
-It is possible to copy one of
-the topmost 16 elements to the top of the stack or swap the
-topmost element with one of the 16 elements below it.
-All other operations take the topmost two (or one, or more, depending on
-the operation) elements from the stack and push the result onto the stack.
-Of course it is possible to move stack elements to storage or memory
-in order to get deeper access to the stack,
-but it is not possible to just access arbitrary elements deeper in the stack
-without first removing the top of the stack.
+دومین فضای داده **مِمُوری**  نامیده می‌شود، که هر قرارداد یک نمونهِ پاکِ تازه برای هر فراخونی پیام بدست می‌آورد. مِمُوری خطی است و می‌توان آن را در سطح بایت آدرس دهی کرد، اما خواندن مِمُوری به عرض 256 بیت محدود می‌شود، در هنگام نوشتن می‌تواند 8 بیت یا 256 بیت عرض داشته باشد. هنگام دسترسی (خواندن یا نوشتن) به یک کلمه مِمُوری که قبلا دست نخورده است (یعنی هر آفست  درون یک کلمه)، مِمُوری با یک کلمه (256 بیتی) گسترش می‌یابد. در زمان گسترش، هزینه گاز باید پرداخت شود. حافظه هرچه بزرگتر شود گرانتر است (هزینه گاز به صورت درجه دو اندازه گیری می‌شود).
+
+EVM یک ماشین ثبت نیست بلکه یک ماشین پشته است، بنابراین تمام محاسبات در یک فضای داده به نام **پشته** انجام می‌شود. حداکثر اندازه آن 1024 عنصر است و شامل کلمات 256 بیتی است. دسترسی به پشته به روش "بالا انتها" که در زیر توضیح داده شده‌است، محدود می‌باشد: 
+امکان کپی کردن یکی از 16 عنصر بالاتر در بالای پشته یا تعویض بالاترین عنصر با یکی از 16 عنصر زیر آن وجود دارد. تمام عملیات دیگر دو عنصر بالاتر (یا یک یا بیشتر، بسته به عملیات) را از پشته گرفته و نتیجه را در پشته درج میکنند. مطمئناً امکان دسترسی عناصر پشته به storage یا مِمُوری برای دستیابی عمیق تر به پشته وجود دارد، اما دسترسی به عناصر دلخواه در اعماق پشته بدون برداشتن قسمت بالای پشته امکان پذیر نیست.
+
 
 .. index:: ! instruction
 
-Instruction Set
+مجموعه دستورالعمل‌ها
 ===============
 
-The instruction set of the EVM is kept minimal in order to avoid
-incorrect or inconsistent implementations which could cause consensus problems.
-All instructions operate on the basic data type, 256-bit words or on slices of memory
-(or other byte arrays).
-The usual arithmetic, bit, logical and comparison operations are present.
-Conditional and unconditional jumps are possible. Furthermore,
-contracts can access relevant properties of the current block
-like its number and timestamp.
+بیتی یا برشی از مِمُوری  (یا سایر آرایه‌های بایت ) کار می‌کنند. عملیات حسابی ، بیتی ، منطقی  و مقایسه‌ای   معمول وجود دارد. پرش‌های شرطی و غیر شرطی  امکان پذیر است. علاوه بر این، قراردادها می‌توانند به ویژگی‌های مربوط به بلاک فعلی مانند شماره  و برچسب زمان  آن دسترسی داشته باشند. 
 
-For a complete list, please see the :ref:`list of opcodes <opcodes>` as part of the inline
-assembly documentation.
+برای لیست کامل، لطفاً به :ref:`لیست آپکد <opcodes>`   به عنوان بخشی از مستند اسمبلی داخلی  مراجعه کنید.
+
 
 .. index:: ! message call, function;call
 
-Message Calls
+پیام های فراخوانی 
 =============
 
-Contracts can call other contracts or send Ether to non-contract
-accounts by the means of message calls. Message calls are similar
-to transactions, in that they have a source, a target, data payload,
-Ether, gas and return data. In fact, every transaction consists of
-a top-level message call which in turn can create further message calls.
+قراردادها می‌توانند سایر قراردادها را فراخوانی کنند یا اتر را از طریق پیام‌های فراخوانی به حساب‌های غیر قراردادی بفرستند. پیام‌های فراخوانی مانند تراکنش‌ها هستند، بدین معنی که دارای منبع ، مقصد ، پیلود داده ، اتر ، گاز  و داده‌های برگشتی هستند. در واقع، هر تراکنش از یک پیام فراخوانی سطح بالا  تشکیل شده است که به نوبه خود می‌تواند پیام‌های فراخوانی دیگری ایجاد کند.
 
-A contract can decide how much of its remaining **gas** should be sent
-with the inner message call and how much it wants to retain.
-If an out-of-gas exception happens in the inner call (or any
-other exception), this will be signaled by an error value put onto the stack.
-In this case, only the gas sent together with the call is used up.
-In Solidity, the calling contract causes a manual exception by default in
-such situations, so that exceptions "bubble up" the call stack.
+  یک قرارداد می‌تواند تصمیم بگیرد که چه مقدار از **گاز** باقیمانده آن باید با پیام فراخوانی داخلی ارسال شود و چه مقدار آن را می‌خواهد نگهداری کند. اگر یک استثنای اتمام-گاز  در فراخوانی داخلی (یا هر استثناء دیگر) اتفاق بیفتد، با یک مقدار خطا روی پشته  نشان داده می‌شود. در این حالت، فقط گاز ارسالی همراه با فراخوانی مصرف می‌شود. در سالیدیتی، فراخوانی قرارداد به طور پیش فرض در چنین شرایطی باعث یک استثناء دستی می‌شود، به طوری که استثناء فراخوانی، پشته را به صورت " پنجره نمایش " نمایش می‌دهد.
 
-As already said, the called contract (which can be the same as the caller)
-will receive a freshly cleared instance of memory and has access to the
-call payload - which will be provided in a separate area called the **calldata**.
-After it has finished execution, it can return data which will be stored at
-a location in the caller's memory preallocated by the caller.
-All such calls are fully synchronous.
+همانطور که قبلاً گفته شد، قرارداد فراخوانی شده (که می‌تواند همان فراخوانی کننده باشد) یک مِمُوری تازه پاک شده را دریافت می‌کند و به فراخوانی پیلود  دسترسی دارد- که در یک فضای جداگانه به نام فراخوانی داده یا **calldata** ارائه می‌شود. پس از پایان اجرا، داده‌هایی را که در مکانی از مِمُوری فراخوانی کننده که از قبل توسط فراخوانی کننده اختصاص داده شده‌است و در آن ذخیره خواهند شد، را می‌تواند برگرداند. همه‌ی این تماس‌ها کاملاً همگام هستند.
 
-Calls are **limited** to a depth of 1024, which means that for more complex
-operations, loops should be preferred over recursive calls. Furthermore,
-only 63/64th of the gas can be forwarded in a message call, which causes a
-depth limit of a little less than 1000 in practice.
+فراخوانی‌ها به عمق 1024 **محدود می‌‌شوند**، این بدان معنی است که برای انجام عملیات پیچیده‌تر، حلقه‌ها  بر فراخوانی‌های مکرر باید ترجیح داده شوند. بعلاوه، فقط 63/64امین از گاز می‌تواند در یک پیام فراخوانی فوروارد شود، که در عمل باعث ایجاد عمق کمتر از 1000 می‌شود.
 
 .. index:: delegatecall, callcode, library
 
-Delegatecall / Callcode and Libraries
+Delegatecall / Callcode و کتابخانه ها
 =====================================
 
-There exists a special variant of a message call, named **delegatecall**
-which is identical to a message call apart from the fact that
-the code at the target address is executed in the context of the calling
-contract and ``msg.sender`` and ``msg.value`` do not change their values.
+نوع خاصی از پیام های فراخوانی به نام ** **delegatecall وجود دارد، که همانند یک پیام فراخوانی می‌باشند، جدا از این واقعیت که کد در آدرس مقصد در قرارداد فراخوانی کننده  اجرا می‌شود و ``msg.sender`` و ``msg.value``  مقادیر خود را تغییر نمی‌دهند.
 
-This means that a contract can dynamically load code from a different
-address at runtime. Storage, current address and balance still
-refer to the calling contract, only the code is taken from the called address.
+این بدان معناست که یک قرارداد می‌تواند به صورت پویا در زمان اجرا، کد را از آدرس دیگری بارگیری کند. Storage، آدرس فعلی و بالانس هنوز به قرارداد فراخوانی کننده اشاره دارد و فقط کد از آدرس فراخوانی شده گرفته شده‌است.
 
-This makes it possible to implement the "library" feature in Solidity:
-Reusable library code that can be applied to a contract's storage, e.g. in
-order to implement a complex data structure.
+delegatecall امکان ویژگی "کتابخانه" در سالیدیتی را فراهم می‌کند: کد کتابخانه قابل استفاده مجدد می‌باشد که می‌تواند در storage قرارداد اعمال شود. به عنوان مثال به منظور پیاده سازی یک ساختار داده پیچیده .
 
 .. index:: log
 
-Logs
+گزارش‌ها 
 ====
 
-It is possible to store data in a specially indexed data structure
-that maps all the way up to the block level. This feature called **logs**
-is used by Solidity in order to implement :ref:`events <events>`.
-Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the blockchain.
-Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
-possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole blockchain
-(so-called "light clients") can still find these logs.
-
+  می‌توان داده‌ها را در یک ساختار داده‌ای با نمایه خاص ذخیره کرد که همه راه‌ها تا سطح بلوک را نشان می‌دهد. این ویژگی **لاگ یا گزارش** نامیده شده‌است که توسط سالیدیتی به منظور اجرای :ref:`رویداد‌ها <events>` استفاده می‌شود. قراردادها پس از ایجاد نمی‌توانند به لاگ داده‌ها دسترسی داشته باشند، اما از خارج از بلاکچین می‌توان به صورت کارآمد به آنها دسترسی داشته باشند. از آنجا که بخشی از لاگ داده‌ها در `فیلتر‌های بلوم <https://en.wikipedia.org/wiki/Bloom_filter>`_  ذخیره می‌شوند، جستجوی این داده‌ها به روشی کارآمد و رمزنگاری شده امکان پذیر‌است، بنابراین جفت‌های شبکه‌ای که کل بلاکچین را بارگیری نمی‌کنند (به اصطلاح "کلاینت لایت") هنوز هم می‌توانند این لاگ‌ها را پیدا کنید.
 .. index:: contract creation
 
-Create
+ايجاد كردن
 ======
 
-Contracts can even create other contracts using a special opcode (i.e.
-they do not simply call the zero address as a transaction would). The only difference between
-these **create calls** and normal message calls is that the payload data is
-executed and the result stored as code and the caller / creator
-receives the address of the new contract on the stack.
+قراردادها حتی می‌توانند قراردادهای دیگری را با استفاده از یک آپکد خاص  ایجاد کنند (یعنی آدرس صفر  را به عنوان یک تراکنش به سادگی صدا نمی‌زنند). تنها تفاوت بین **فراخوانی‌های ایجاد**  و پیام‌های فراخوانی عادی  این است که داده‌های پیلود  اجرا می‌شوند و نتیجه به عنوان کد  و فراخوانی کننده ، ذخیره می‌شود. ایجاد کننده، آدرس قرارداد جدید را روی پشته  دریافت می‌کند.
 
 .. index:: selfdestruct, self-destruct, deactivate
 
-Deactivate and Self-destruct
+غیرفعال کردن و خود تخریبی
 ============================
 
-The only way to remove code from the blockchain is when a contract at that
-address performs the ``selfdestruct`` operation. The remaining Ether stored
-at that address is sent to a designated target and then the storage and code
-is removed from the state. Removing the contract in theory sounds like a good
-idea, but it is potentially dangerous, as if someone sends Ether to removed
-contracts, the Ether is forever lost.
+تنها راه حذف کد از بلاکچین زمانی است که قراردادی در آن آدرس عملیات  ``selfdestruct``  را انجام دهد. باقی مانده اتر ذخیره شده در آن آدرس به مقصد تعیین شده ارسال می‌شود و سپس storage و کد از حالت  خارج می‌شود. حذف قرارداد از نظر تئوری یک ایده خوب به نظر می‌رسد، اما به طور بالقوه خطرناک است، زیرا اگر کسی اتر را به قراردادهای حذف شده بفرستد، اتر برای همیشه از بین می‌رود.
 
 .. warning::
-    Even if a contract is removed by ``selfdestruct``, it is still part of the
-    history of the blockchain and probably retained by most Ethereum nodes.
-    So using ``selfdestruct`` is not the same as deleting data from a hard disk.
+   حتی اگر قراردادی با  ``selfdestruct``  حذف شود، هنوز به عنوان بخشی از تاریخچهِ بلاکچین باقی می‌ماند و احتمالاً توسط اکثر گره‌های اتریوم نگهداری شود. بنابراین استفاده از ``selfdestruct``  با حذف داده‌ها از روی هارد دیسک یکسان نیست.
 
 .. note::
-    Even if a contract's code does not contain a call to ``selfdestruct``,
-    it can still perform that operation using ``delegatecall`` or ``callcode``.
+   حتی اگر کد قرارداد فاقد فراخوانی  ``selfdestruct``باشد، باز هم می‌تواند آن عملیات را با استفاده از  ``delegatecall``  یا  ``callcode`` انجام دهد.
 
-If you want to deactivate your contracts, you should instead **disable** them
-by changing some internal state which causes all functions to revert. This
-makes it impossible to use the contract, as it returns Ether immediately.
+اگر می‌خواهید قراردادهای خود را غیرفعال  کنید، در عوض باید آنها را با تغییر حالت داخلی  که باعث برگشت همه توابع می‌شود، **غیرفعال** کنید. این امر استفاده از قرارداد را غیرممکن می‌کند، زیرا بلافاصله اتر را برمی‌گرداند.

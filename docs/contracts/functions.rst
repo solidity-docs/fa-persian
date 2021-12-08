@@ -3,14 +3,14 @@
 .. _functions:
 
 *********
-Functions
+توابع
 *********
 
-Functions can be defined inside and outside of contracts.
+توابع می توانند داخل و خارج قراردادها تعریف شوند.
 
-Functions outside of a contract, also called "free functions", always have implicit ``internal``
-:ref:`visibility<visibility-and-getters>`. Their code is included in all contracts
-that call them, similar to internal library functions.
+توابعی که خارج از یک قرارداد هستند "توابع آزاد" نیر نامیده می شوند، همیشه دارای :ref:`میدان دید<visibility-and-getters>` 
+داخلی ``internal`` مطلق هستند. مثل توابع کتابخانه ای داخلی کد این توابع در قرارداد هایی که آنها را
+فراخوانی می کنند گنجانده می شوند.
 
 .. code-block:: solidity
 
@@ -34,29 +34,29 @@ that call them, similar to internal library functions.
     }
 
 .. note::
-    Functions defined outside a contract are still always executed
-    in the context of a contract. They still have access to the variable ``this``,
-    can call other contracts, send them Ether and destroy the contract that called them,
-    among other things. The main difference to functions defined inside a contract
-    is that free functions do not have direct access to storage variables and functions
-    not in their scope.
+    توابعی که خارج از یک قرارداد تعریف شده اند همیشه در متن قرارداد اجرا می شوند.
+    همچنان آنها به متغیر ``this`` دسترسی دارند، می توانند قراداد های دیگر را فراخوانی کنند، می
+    توانند به قرارداد ها اتر ارسال و قرادادهایی که آنها را فراخوانی می کنند را نابود کنند، در میان
+    چیز های دیگر. تفاوت اصلی بین توابع تعریف شده در داخل یک قرارداد با توابع آزاد این است
+    که توابع آزاد دسترسی مستقیم به متغیر های ذخیره سازی و توابع دیگر ندارند و در میدان دید
+    آنها نیست.
 
 .. _function-parameters-return-variables:
 
-Function Parameters and Return Variables
-========================================
+پارامتر های(مولفه های) توابع و متغیر های بازگشتی
+=================================================
 
-Functions take typed parameters as input and may, unlike in many other
-languages, also return an arbitrary number of values as output.
+توابع پارامتر هایی با نوع مشخص شده به عنوان ورودی دریافت می کنند و شاید برخلاف دیگر
+زبان های برنامه نویسی، همچنین تعداد دلخواهی از مقادیر را به عنوان خروجی برگردانند.
 
-Function Parameters
+پارامتر های تابع 
 -------------------
 
-Function parameters are declared the same way as variables, and the name of
-unused parameters can be omitted.
+پارامتر های تابع به همان روش تعریف متغیر های تعریف می شوند و پارامتر های بلا استفاده را
+نیز می توان حذف کرد.
 
-For example, if you want your contract to accept one kind of external call
-with two integers, you would use something like the following:
+برای مثال، اگر شما می خواهید قرار داد شما یک نوع از فراخوانی
+خارجی را به همراه دو مقدار عددی قبول کند، شما می توانید از چیزی شبیه مثال زیر استفاده کنید:
 
 .. code-block:: solidity
 
@@ -70,28 +70,26 @@ with two integers, you would use something like the following:
         }
     }
 
-Function parameters can be used as any other local variable and they can also be assigned to.
+پارامتر های تابع می توانند به عنوان متغیر های محلی استفاده شده و مقدار دهی شوند.
 
 .. note::
 
-  An :ref:`external function<external-function-calls>` cannot accept a
-  multi-dimensional array as an input
-  parameter. This functionality is possible if you enable the ABI coder v2
-  by adding ``pragma abicoder v2;`` to your source file.
-
-  An :ref:`internal function<external-function-calls>` can accept a
-  multi-dimensional array without enabling the feature.
+  یک :ref:`تابع خارجی<external-function-calls>` نمی تواند یک آرایه چند بعدی را به عنوان یک ورودی قبول کند. این قابلیت
+  زمانی امکانپذیر است که ABI کدر نسخه v2 را توسط  ``pragma abicoder v2;`` به فایل کد
+  منبع خود اضافه کنید.
+  
+  یک :ref:`تابع داخلی<external-function-calls>` می تواند یک آرایه چند بعدی را بدون اضافه کردن این قابلیت به عنوان ورودی
+  قبول کند.
 
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
-Return Variables
-----------------
+متغیر های بازگشتی 
+------------------
 
-Function return variables are declared with the same syntax after the
-``returns`` keyword.
+متغیر های بازگشتی تابع به همان روش نوشتاری بعد از کلمه کلیدی ``returns`` تعریف می شوند.
 
-For example, suppose you want to return two results: the sum and the product of
-two integers passed as function parameters, then you use something like:
+برای مثال، فرض کنید شما می خواهید دو نتیجه را بازگردانید: جمع و ضرب دو مقدار عددی که
+به صورت پارامتر به تابع انتقال یافته اند، پس شما کدی شبیه زیر خواهید داشت:
 
 .. code-block:: solidity
 
@@ -109,16 +107,13 @@ two integers passed as function parameters, then you use something like:
         }
     }
 
-The names of return variables can be omitted.
-Return variables can be used as any other local variable and they
-are initialized with their :ref:`default value <default-value>` and have that
-value until they are (re-)assigned.
+نام متغیر های بازگشتی قابل حذف است. متغیر های بازگشتی می توانند به عنوان متغیر محلی
+استفاده شوند و آنها مقدار دهی اولیه می شوند توسط :ref:`مقدار اولیه پیش فرض <default-value>` شان و دارای
+مقدار هستند تا زمانی که مقدار دهی دوباره شوند.
 
-You can either explicitly assign to return variables and
-then leave the function as above,
-or you can provide return values
-(either a single or :ref:`multiple ones<multi-return>`) directly with the ``return``
-statement:
+شما می توانید مقدار متغیر بازگشتی را واگذار کنید(یعنی فقط متغیر را در بخش returns
+بنویسید) و سپس تابع را همانند بالا رها کنید، یا می توانید مقادیر بازگشتی (یک یا :ref:`چند <multi-return>`) را
+مستقیما با دستور ``return`` فراهم کنید:
 
 .. code-block:: solidity
 
@@ -135,59 +130,58 @@ statement:
         }
     }
 
-If you use an early ``return`` to leave a function that has return variables,
-you must provide return values together with the return statement.
+اگر شما از دستور ``return`` جهت خارج شدن زودرس از تابعی که مقادیری را بازمی گرداند
+استفاده کرده اید، باید به همراه دستور return  مقادیر بازگشتی را نیز فراهم کنید. 
 
 .. note::
-    You cannot return some types from non-internal functions, notably
-    multi-dimensional dynamic arrays and structs. If you enable the
-    ABI coder v2 by adding ``pragma abicoder v2;``
-    to your source file then more types are available, but
-    ``mapping`` types are still limited to inside a single contract and you
-    cannot transfer them.
+    شما نمی توانید بعضی از نوع های متغیر را از توابع غیر-داخلی باز گردانید، بویژه آرایه های
+    چند-بعدی پویا و ساختار های داده ای. اگر شما ABI کدر v2 را توسط  ``;pragma abicoder v2`` 
+    فعال کرده باشید، فایل منبع کد شما نوع های بیشتری را قبول می کند، اما نوع های  ``mapping``
+    هنوز دارای محدودیت هستند و فقط در داخل یک قرارداد استفاده می شوند و قابل انتقال
+    نیستند.
 
 .. _multi-return:
 
-Returning Multiple Values
+بازگرداندن چندین مقادیر 
 -------------------------
 
-When a function has multiple return types, the statement ``return (v0, v1, ..., vn)`` can be used to return multiple values.
-The number of components must be the same as the number of return variables
-and their types have to match, potentially after an :ref:`implicit conversion <types-conversion-elementary-types>`.
+وقتی یک تابعی دارای چندین نوع برای بازگرداندن دارد از بیانیه(دستور) ``return (v0, v1, ..., vn)`` 
+می توان استفاده کرد برای بازگرداندن چندین مقادیر.  تعداد اجزای دستور باید با تعداد و
+نوع بازگشتی متغیر ها تطابق داشته باشد  بویژه پس از تبدیل ضمنی :ref:`implicit conversion <types-conversion-elementary-types>`.
 
 .. _state-mutability:
 
-State Mutability
-================
+نغییر پذیری وضعیت
+==================
 
 .. index:: ! view function, function;view
 
 .. _view-functions:
 
-View Functions
+توابع رویتی
 --------------
 
-Functions can be declared ``view`` in which case they promise not to modify the state.
+توابع می توانند به عنوان رویتی ``view`` تعریف شوند به شرط اینکه قول دهند وضعیت را تغییر ندهند.
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode
-  ``STATICCALL`` is used when ``view`` functions are called, which enforces the state
-  to stay unmodified as part of the EVM execution. For library ``view`` functions
-  ``DELEGATECALL`` is used, because there is no combined ``DELEGATECALL`` and ``STATICCALL``.
-  This means library ``view`` functions do not have run-time checks that prevent state
-  modifications. This should not impact security negatively because library code is
-  usually known at compile-time and the static checker performs compile-time checks.
+  اگر کامپایلر EVM بر روی Byzantium یا جدیدتر(پیش فرض) کد ``STATICCALL`` هنگام
+  فراخوانی تابع ``view`` استفاده می شود که ملزوم می کند وضعیت غیر قابل تغییر در بخش
+  اجرای EVM بماند. برای کتابخانه توابع ``view`` از ``DELEGATECALL`` استفاده می شود، بخاطر
+  اینکه چیزی به عنوان مخلوط ``DELEGATECALL``  و ``STATICCALL`` وجود ندارد. به این معنی
+  است که کتابخانه توابع ``view`` دارای تصدیق حین-اجرا نیستند که از تغییرات وضعیت جلوگیری
+  کنند. این نباید تاثیر منفی امنیتی داشته باشد زیرا کد کتابخانه معمولا شناسایی شده زمان
+  کامپایل و چک کننده ایتا نقش چک کننده کامپایلر را ایفا می کند.
 
-The following statements are considered modifying the state:
+عبارات های به عنوان تغییر دهنده وضعیت شناخته می شوند:
 
-#. Writing to state variables.
-#. :ref:`Emitting events <events>`.
-#. :ref:`Creating other contracts <creating-contracts>`.
-#. Using ``selfdestruct``.
-#. Sending Ether via calls.
-#. Calling any function not marked ``view`` or ``pure``.
-#. Using low-level calls.
-#. Using inline assembly that contains certain opcodes.
+#. نوشتن متغیرهای وضعیت
+#. :ref:`انتشار رخداد <events>`.
+#. :ref:`ایجاد قرارداهای دیگر <creating-contracts>`.
+#. استفاده از ``selfdestruct``.
+#. ارسال اتر توسط فراخوانی.
+#. فراخوانی هر تابعی که از نوع ``view`` یا ``pure`` نباشد.
+#. استفاده از فراخوانی های سطح-پایین.
+#. استفاده از اسمبلی توخط که دارای کد های خاص باشد.
 
 .. code-block:: solidity
 
@@ -201,39 +195,37 @@ The following statements are considered modifying the state:
     }
 
 .. note::
-  ``constant`` on functions used to be an alias to ``view``, but this was dropped in version 0.5.0.
+   ``constant`` در توابع برای اشاره به ``view`` استفاده می شود ، اما این در نسخه 0.5.0 از قلم افتاده است.
 
 .. note::
-  Getter methods are automatically marked ``view``.
+  متد های دریافت کننده بصورت اتوماتیک ``view`` نشان گذاری می شوند.
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``view`` functions.
-  This enabled state modifications in ``view`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``view`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  تا قبل از نسخه 0.5.0 کامپایلر از کد ``STATICCALL`` برای توابع view استفاده نمی کرد.
+  این حالت تبادل نوع نا متعبراوسط توابع ``view`` را فعال می کرد. بویسله استفاده ``STATICCALL``
+  برای توابع ``view`` ز تغییرات وضعیت دز سطح EVM جلوگیری می شود.
 
 .. index:: ! pure function, function;pure
 
 .. _pure-functions:
 
-Pure Functions
+توابع خالص
 --------------
 
-Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
+توابعی خالص ``pure`` نامیده می شوند که قول دهند که از وضعیت نخوانند و تغییرش ندهند.
 
 .. note::
-  If the compiler's EVM target is Byzantium or newer (default) the opcode ``STATICCALL`` is used,
-  which does not guarantee that the state is not read, but at least that it is not modified.
+  اگر کامپایلر EVM بر روی Byzantium یا جدیدتر(پیش فرض) کد ``STATICCALL`` استفاده
+  شود، این تضمین را نمی دهد که وضعیت را نمی خواند، اما حداقل اجاره تغییر وضعیت را نمی
+  دهد.
 
-In addition to the list of state modifying statements explained above, the following are considered reading from the state:
+در ادامه لیست عبارات تغییردهنده وضعیت که در بالا توضیح داده شد، در زیر عباراتی که وضعیت را می خوانند بیان می شود:
 
-#. Reading from state variables.
-#. Accessing ``address(this).balance`` or ``<address>.balance``.
-#. Accessing any of the members of ``block``, ``tx``, ``msg`` (with the exception of ``msg.sig`` and ``msg.data``).
-#. Calling any function not marked ``pure``.
-#. Using inline assembly that contains certain opcodes.
+#. خواندن از متغیرهای وضعیت.
+#. دسترسی به ``address(this).balance`` یا ``<address>.balance``.
+#. دسترسی به هر یک از اعضای ``block``, ``tx``, ``msg`` (به غیر از ``msg.sig`` و ``msg.data``).
+#. فراخوانی هر تابعی که به عنوان ``pure`` نشان گذاری نشده باشد.
+#. استفاده از اسمبلی توخط که دارای کد های خاص باشد.
 
 .. code-block:: solidity
 
@@ -246,96 +238,85 @@ In addition to the list of state modifying statements explained above, the follo
         }
     }
 
-Pure functions are able to use the ``revert()`` and ``require()`` functions to revert
-potential state changes when an :ref:`error occurs <assert-and-require>`.
+توابع خالص قادر به استفاده از توابع ``()revert`` و ``()require`` برای واکشی ظرفیت تغییرات
+وضعیت زمان رخداد خطا هستند.
 
-Reverting a state change is not considered a "state modification", as only changes to the
-state made previously in code that did not have the ``view`` or ``pure`` restriction
-are reverted and that code has the option to catch the ``revert`` and not pass it on.
+واکشی یک تغییر وضعیت به معنای "تغییردادن وضعیت" نیست، زیرا فقط تغییراتی که قبلا در کد
+ایجاد شده بوده که محدودیت ``view``  یا ``pure`` نداشته اند واکشی شده است و این کد روشی
+برای گرفتن واکشی ``revert`` بدون ارسال آن است.
 
-This behaviour is also in line with the ``STATICCALL`` opcode.
+این رفتار همچنین هم سو با کد ``STATICCALL`` است.
 
 .. warning::
-  It is not possible to prevent functions from reading the state at the level
-  of the EVM, it is only possible to prevent them from writing to the state
-  (i.e. only ``view`` can be enforced at the EVM level, ``pure`` can not).
+  این امکان وجود ندارد که از خواندن وضعیت توسط توابع در سطح EVM جلوگیری کرد
+  تنها می توان از نوشتن آنها جلوگیری کرد( مثل توابع ``view`` که می توانند EVM را ملزم کنند اما
+  توابع ``pure`` نمی تواند).
 
 .. note::
-  Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
-  for ``pure`` functions.
-  This enabled state modifications in ``pure`` functions through the use of
-  invalid explicit type conversions.
-  By using  ``STATICCALL`` for ``pure`` functions, modifications to the
-  state are prevented on the level of the EVM.
+  تا قبل از نسخه 0.5.0 کامپایلر از کد ``STATICCALL`` برای توابع ``pure`` استفاده نمی کرد.
+  این حالت تبادل نوع نا متعبراوسط توابع pure را فعال می کرد. بویسله استفاده ``STATICCALL``
+  برای توابع ``pure`` ز تغییرات وضعیت دز سطح EVM جلوگیری می شود.
 
 .. note::
-  Prior to version 0.4.17 the compiler did not enforce that ``pure`` is not reading the state.
-  It is a compile-time type check, which can be circumvented doing invalid explicit conversions
-  between contract types, because the compiler can verify that the type of the contract does
-  not do state-changing operations, but it cannot check that the contract that will be called
-  at runtime is actually of that type.
+  تا قبل از نسخه 0.4.17 کامپایلر توابع خالص ``pure`` را ملزم به نخواندن وضعیت نمی کرد. این
+  یک بررسی زمان- کامپایل است، که می تواند به تبادلات نامعتبر مستقیم بین نوع های قرارداد
+  ها دور بزند، زیرا کامپایلر می تواند نوع قرارداد را تصدیق کند نه عملیات تغییر-وضعیت را، اما
+  آن نمی تواند بررسی کند که قراردادی که فراخوانی خواهد شد در زمان اجرا در واقع در همان
+  نوع است یا خیر.
 
 .. _special-functions:
 
-Special Functions
+توابع خاص
 =================
 
 .. index:: ! receive ether function, function;receive ! receive
 
 .. _receive-ether-function:
 
-Receive Ether Function
+تابع دریافت اتر
 ----------------------
 
-A contract can have at most one ``receive`` function, declared using
-``receive() external payable { ... }``
-(without the ``function`` keyword).
-This function cannot have arguments, cannot return anything and must have
-``external`` visibility and ``payable`` state mutability.
-It can be virtual, can override and can have modifiers.
+هر قرارداد نمی تواند بیش از یک تابع دریافت ``receive`` داشته باشد، با استفاده از 
+``{ ... } receive() external payable`` (بدون کلمه کلیدی ``function`` ) تعریف می شود.
+این تابع نمی تواند ورودی و مقدار بازگشتی داشته باشد، و باید میدان دید ``external``  خارجی و وضعیت ``payable`` تغییرناپذیر داشته باشد.
+می تواند مجازی باشد ، می تواند بازنویسی(override) و تغییر دهنده داشته باشد.
 
-The receive function is executed on a
-call to the contract with empty calldata. This is the function that is executed
-on plain Ether transfers (e.g. via ``.send()`` or ``.transfer()``). If no such
-function exists, but a payable :ref:`fallback function <fallback-function>`
-exists, the fallback function will be called on a plain Ether transfer. If
-neither a receive Ether nor a payable fallback function is present, the
-contract cannot receive Ether through regular transactions and throws an
-exception.
+تابع دریافت زمان فراخوانی می شود که به قرارداد،
+فراخوانی به همراه فراخوانی داده خالی ارسال شود.
+این همان تابعی است که در انتقال های اتر اجرا می شود( مثل ``()send.`` یا ``()transfer.`` ).
+اگر چنین تابعی وجود نداشته باشد، اما یک :ref:`تابع عقبگرد <fallback-function>` قابل پرداخت وجود داشته
+باشد، تابع عقبگرد در انتقال اتر فراخوانی می شود. اگر هر دو تابع وجود نداشته باشد، قرارداد
+قادر به دریافت تراکنسهای اتری به روش های عادی نخواهد بود و خطایی استثنا بروز خواهد داد.
 
-In the worst case, the ``receive`` function can only rely on 2300 gas being
-available (for example when ``send`` or ``transfer`` is used), leaving little
-room to perform other operations except basic logging. The following operations
-will consume more gas than the 2300 gas stipend:
+در بدترین حالت ، تابع ``receive`` تنها می تواند توسط 2300 گاز در دسترس باشد( برای مثال
+زمانی که از ``send`` یا ``transfer`` استفاده شود)، فضای کمی برای انجام عملیات دیگر بجز ورود
+به سیستم باقی می ماند. عملیات زیر گاز بیشتری نسبت به هزینه اولیه 2300 گاز مصرف می
+کنند:
 
-- Writing to storage
-- Creating a contract
-- Calling an external function which consumes a large amount of gas
-- Sending Ether
+- نوشتن در محل ذخیره سازی(storage)
+- ایجاد یک قرارداد
+- فراخوانی یک تابع خارجی که مقدار زیادی گاز مصرف می کند
+- ارسال اتر
 
 .. warning::
-    Contracts that receive Ether directly (without a function call, i.e. using ``send`` or ``transfer``)
-    but do not define a receive Ether function or a payable fallback function
-    throw an exception, sending back the Ether (this was different
-    before Solidity v0.4.0). So if you want your contract to receive Ether,
-    you have to implement a receive Ether function (using payable fallback functions for receiving Ether is
-    not recommended, since it would not fail on interface confusions).
+    قراردادهایی که مستقیما اتر دریافت می کنند (بدون یک فراخوانی تابع، مثل ``send``  یا ``transfer``)
+    اما تابع دریافت اتر ندارند یا یک تابع عقبگرد ندارند یک استثنا از خود بروز می دهند،
+    و اتر ارسالی را باز می گردانند( این روش تا قبل از سالیدیتی نسخه 0.4.0 متفاوت بود).
+    بنابراین اگر می خواهید قرارداد شما اتر دریافت کند ، شما مجبور هستید یک تابع دریافت اتر
+    پیاده سازی کنید. (استفاده از تابع عقبگرد قابل پرداخت برای دریافت اتر پیشنهاد نمی شود، زیرا
+    امکان دارد در تداخلات رابط خطا ندهد).
 
 
 .. warning::
-    A contract without a receive Ether function can receive Ether as a
-    recipient of a *coinbase transaction* (aka *miner block reward*)
-    or as a destination of a ``selfdestruct``.
+    یک قرارداد بدون تابع دریافت اتر می تواند اتر را به عنوان گیرنده یک *تراکنش* *coinbase* ( به عنوان *پاداش* *بلوک* *معدنچی* ) یا به عنوان مقصد ``selfdestruct`` دریافت کند.
 
-    A contract cannot react to such Ether transfers and thus also
-    cannot reject them. This is a design choice of the EVM and
-    Solidity cannot work around it.
+    یک قرارداد نمی تواند به چنین انتقال اتر واکنش نشان دهد و بنابراین نمی تواند آنها را رد کند.
+    این یک انتخاب طراحی EVM است و solidity نمی تواند دور و بر این مسائل کار کند.
 
-    It also means that ``address(this).balance`` can be higher
-    than the sum of some manual accounting implemented in a
-    contract (i.e. having a counter updated in the receive Ether function).
+    همچنین به این معنی است که آدرس ``address(this).balance`` می تواند مجموع برخی از حسابداری
+    دستی اجرا شده در یک قرارداد ( به عنوان مثال بروزرسانی شمارنده در تابع دریافت اتر) باشد.
 
-Below you can see an example of a Sink contract that uses function ``receive``.
+در زیر می توانید نمونهای از یک قرارداد بنام Sink که از تابع گیرنده ``receive`` استفاده می کند را مشاهده کنید.
 
 .. code-block:: solidity
 
@@ -355,48 +336,41 @@ Below you can see an example of a Sink contract that uses function ``receive``.
 
 .. _fallback-function:
 
-Fallback Function
+تابع عقبگرد
 -----------------
 
-A contract can have at most one ``fallback`` function, declared using either ``fallback () external [payable]``
-or ``fallback (bytes calldata _input) external [payable] returns (bytes memory _output)``
-(both without the ``function`` keyword).
-This function must have ``external`` visibility. A fallback function can be virtual, can override
-and can have modifiers.
+یک قرارداد می تواند حداکثر یک تابع ``fallback`` داشته باشد، با ساتفاده از ``fallback () external [payable]`` 
+یا ``fallback (bytes calldata _input) external [payable] returns (bytes memory _output)`` (هر دو بدون استفاده از کلمه کیلیدی ``function`` )
+تعریف می شوند. این تابع باید دارای میدان دید خارجی ``external`` باشد. یک تابع عقبگرد می
+تواند مجازی در بدترباشد ، می تواند بازنویسی یا دارای تغییردهنده باشد.
 
-The fallback function is executed on a call to the contract if none of the other
-functions match the given function signature, or if no data was supplied at
-all and there is no :ref:`receive Ether function <receive-ether-function>`.
-The fallback function always receives data, but in order to also receive Ether
-it must be marked ``payable``.
+تابع عقبگرد هنگام فراخوانی قرارداد اجرا شده و اگر دیگر توابع با امضاء این تابع همخوانی
+نداشته باشد یا اگر داده ای درکل فراهم نشده و یا اگر :ref:`تابع گیرنده اتر <receive-ether-function>` تعریف نشده باشد. تابع
+عقبگرد همیشه داده دریافت می کند ، اما برای دریافت اتر باید بصورت ``payable`` نشان گذاری شده باشد.
 
-If the version with parameters is used, ``_input`` will contain the full data sent to the contract
-(equal to ``msg.data``) and can return data in ``_output``. The returned data will not be
-ABI-encoded. Instead it will be returned without modifications (not even padding).
+اگر نسخه به همراه پارامترها استفاده شده باشد، ``input_`` شامل کل داده ارسالی توسط قرارداد (برابر
+است یا ``msg.data`` ) است و ``output_`` می تواند داده را بازگرداند. داده برگشتی بصورت ABI-
+encoded نخواهد بود. در عوض بدون تغییرات برگشت خواهد شد( حتی بدون لایه بندی).
 
-In the worst case, if a payable fallback function is also used in
-place of a receive function, it can only rely on 2300 gas being
-available (see :ref:`receive Ether function <receive-ether-function>`
-for a brief description of the implications of this).
+در بدترین حالت، اگر یک تابع عقبگرد قابل پرداخت بجای تابع گیرنده مورد استفاده قرار گیرد،
+فقط با توسل به 2300 گاز در دسترس خواهد بود( بخش :ref:`تابع گیرنده اتر <receive-ether-function>` برای توضیحات و
+پیاده سازی این مورد مشاهده کنید)
 
-Like any function, the fallback function can execute complex
-operations as long as there is enough gas passed on to it.
+مثل هر تابعی، تابع عقبگرد می تواند عملیات پیچیده ای را تا زمانی که گاز کافی به آن داده
+شود،  اجرا کند.
 
 .. warning::
-    A ``payable`` fallback function is also executed for
-    plain Ether transfers, if no :ref:`receive Ether function <receive-ether-function>`
-    is present. It is recommended to always define a receive Ether
-    function as well, if you define a payable fallback function
-    to distinguish Ether transfers from interface confusions.
+    اگر :ref:`تابع  دریافت کننده اتر <receive-ether-function>` اتر حاضر نباشد، همچنین برای انتقالات ساده اتر از یک تابع
+    عقبگرد ``payable`` استفاده می شود. همیشه پیشنهاد شده که یک تابع دریافت کننده اتر تعریف
+    شود، اگر شما تابع عقبگرد قابل پرداخت تعریف کرده اید این تابع از تداخلات رابط انتقالات اتر
+    جلوگیری می کند. 
 
 .. note::
-    If you want to decode the input data, you can check the first four bytes
-    for the function selector and then
-    you can use ``abi.decode`` together with the array slice syntax to
-    decode ABI-encoded data:
-    ``(c, d) = abi.decode(_input[4:], (uint256, uint256));``
-    Note that this should only be used as a last resort and
-    proper functions should be used instead.
+    اگر شما می خواهید داده ورودی رمزگشایی(decode) کنید، شما می توانید با بررسی
+    کردن چهار بایت اول از تابع انتخابگر و سپس با استفاده از ``abi.decode`` به همراه تکه ای از
+    آرایه نوشتاری رمزگشایی داده کدشده-ABI استفاده کنید: 
+    ``(c, d) = ;abi.decode(_input[4:], (uint256, uint256))``
+    نکته اینکه این روش باید به عنوان آخرین راه حل مورد استفاده قرار گیرد و  بجای آن باید از توابع مناسب استفاده کرد.
 
 
 .. code-block:: solidity
@@ -468,14 +442,13 @@ operations as long as there is enough gas passed on to it.
 
 .. _overload-function:
 
-Function Overloading
+بارگذاری تابع
 ====================
 
-A contract can have multiple functions of the same name but with different parameter
-types.
-This process is called "overloading" and also applies to inherited functions.
-The following example shows overloading of the function
-``f`` in the scope of contract ``A``.
+یک قرارداد می تواند دارای تعداد متنوعی از توابع بصورت هم نام با پارامتر های دریافتی
+متفاوت باشد. به این روند (بازگذاری/اضافه بار) “overloading” می گویند که همچنین بروی
+توابع وراثتی نیز انجام می شود. مثال زیر بارگذاری تابع ``f`` در محدوده ی قرارداد ``A`` را نشان می
+دهد:
 
 .. code-block:: solidity
 
@@ -493,8 +466,8 @@ The following example shows overloading of the function
         }
     }
 
-Overloaded functions are also present in the external interface. It is an error if two
-externally visible functions differ by their Solidity types but not by their external types.
+توابع بارگذاری شده همچنین در رابط خارجی در دسترس هستند. این منجر به یک خطا می شود
+اگر توابعی قابل دید به صورت خارجی باشند و نوع سالیدیتی آنها با نوع خارجی آنها متفاوت باشد.
 
 .. code-block:: solidity
 
@@ -516,19 +489,19 @@ externally visible functions differ by their Solidity types but not by their ext
     }
 
 
-Both ``f`` function overloads above end up accepting the address type for the ABI although
-they are considered different inside Solidity.
+هر دو تابع ``f`` در بالا بارگذاری شده و برای ABI آدرس پذیری می کنند همچنین در داخل سالیدیتی
+این دو تابع متفاوت در نظر گرفته می شوند.
 
-Overload resolution and Argument matching
+وضوح بارگذاری و تطبیق ورودی ها
 -----------------------------------------
 
-Overloaded functions are selected by matching the function declarations in the current scope
-to the arguments supplied in the function call. Functions are selected as overload candidates
-if all arguments can be implicitly converted to the expected types. If there is not exactly one
-candidate, resolution fails.
+توابع بارگذاری شده توسط تطبیق آنها نسبت به میدان دید تعاریف های از قبل نوشته شده
+ورودی های آنها انتخاب و فراخوانی می شوند. توابع های منتخب اگر تمامی ورودی های آنها
+بتوانند به نوع های تعریف شده تبدیل شوند انتخاب می شود. اگر هیچ تطابقی با تابع منتخب رخ
+ندهد، عمل انتخاب تابع با خطا مواجه می شود.
 
 .. note::
-    Return parameters are not taken into account for overload resolution.
+    در انتخاب تابع بارگذاری شده پارامتر های بازگشتی مد نظر قرار نمی گیرند.
 
 .. code-block:: solidity
 

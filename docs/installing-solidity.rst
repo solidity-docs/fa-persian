@@ -3,49 +3,31 @@
 .. _installing-solidity:
 
 ################################
-Installing the Solidity Compiler
+نصب کامپایلر سالیدیتی
 ################################
 
-Versioning
+نسخه بندی 
 ==========
 
-Solidity versions follow `semantic versioning <https://semver.org>`_ and in addition to
-releases, **nightly development builds** are also made available.  The nightly builds
-are not guaranteed to be working and despite best efforts they might contain undocumented
-and/or broken changes. We recommend using the latest release. Package installers below
-will use the latest release.
+نسخه‌های سالیدیتی از `نسخه بندی سمننتیکی <https://semver.org>`_  پیروی می‌کنند و علاوه بر این نسخه‌ها، **نسخه‌های توسعه شبانه**  نیز در دسترس هستند. کارکردن نسخه‌های نسخه شبانه تضمین نمی‌شود و علی‌رغم همه تلاش‌ها ممکن است تغییرات غیرمستند و یا تغییرات جدید  را شامل شوند. توصیه می‌کنیم از آخرین نسخه استفاده کنید. بسته‌های نصبی زیر از آخرین نسخه استفاده خواهند کرد.
 
-Remix
+ریمیکس
 =====
 
-*We recommend Remix for small contracts and for quickly learning Solidity.*
+*ریمیکس را برای قراردادهای کوچک و برای یادگیری سریع سالیدیتی توصیه می‌کنیم. *
 
-`Access Remix online <https://remix.ethereum.org/>`_, you do not need to install anything.
-If you want to use it without connection to the Internet, go to
-https://github.com/ethereum/remix-live/tree/gh-pages and download the ``.zip`` file as
-explained on that page. Remix is also a convenient option for testing nightly builds
-without installing multiple Solidity versions.
+می‌توانید به صورت آنلاین به `ریمیکس <https://remix.ethereum.org/>`_  دسترسی داشته باشید و نیازی به نصب هیچ چیزی ندارید. اگر می‌خواهید بدون اتصال به اینترنت از آن استفاده کنید، به  https://github.com/ethereum/remix-live/tree/gh-pages مراجعه کنید و فایل  ``zip.``  را همانطور که در آن صفحه توضیح داده شده بارگیری کنید. ریمیکس همچنین یک گزینه مناسب برای تست نسخه شبانه بدون نصب چندین نسخه سالیدیتی است.
 
-Further options on this page detail installing commandline Solidity compiler software
-on your computer. Choose a commandline compiler if you are working on a larger contract
-or if you require more compilation options.
+این صفحه گزینه‌های بیشتر برای نصب نرم افزار کامپایلر سالیدیتی  روی رایانه شما با خط فرمان را توضیح می‌دهد. اگر در حال کار بر روی قرارداد بزرگتر هستید یا به گزینه‌های کامپایل بیشتری نیاز دارید، یک کامپایلر خط فرمان  انتخاب کنید.
 
 .. _solcjs:
 
 npm / Node.js
 =============
 
-Use ``npm`` for a convenient and portable way to install ``solcjs``, a Solidity compiler. The
-`solcjs` program has fewer features than the ways to access the compiler described
-further down this page. The
-:ref:`commandline-compiler` documentation assumes you are using
-the full-featured compiler, ``solc``. The usage of ``solcjs`` is documented inside its own
-`repository <https://github.com/ethereum/solc-js>`_.
+برای نصب راحت و قابل حمل ``solcjs`` یک کامپایلر سالیدیتی، از ``npm``  استفاده کنید. برنامه `solcjs`  دارای ویژگی‌های  کمتری نسبت به راه‌های دسترسی به کامپایلر است که در این صفحه توضیح داده شده است. مستندات  :ref:`commandline-compiler`  فرض می‌کند که از کامپایلر کامل  ``solc`` استفاده می‌کنید. استفاده از  ``solcjs``   در `مخزن <https://github.com/ethereum/solc-js>`_ خود ثبت شده است.
 
-Note: The solc-js project is derived from the C++
-`solc` by using Emscripten which means that both use the same compiler source code.
-`solc-js` can be used in JavaScript projects directly (such as Remix).
-Please refer to the solc-js repository for instructions.
+توجه داشته باشید: پروژه solc-js از C++ `solc` با استفاده از Emscripten مشتق گرفته شده‌است، به این معنی که هر دو از کد منبع کامپایلر یکسانی استفاده می‌کنند. `solc-js`  را می‌توان مستقیماً در پروژه‌های جاوا اسکریپت (مانند ریمیکس) استفاده کرد. لطفاً به مخزن solc-js برای مشاهده دستورات مراجعه کنید.
 
 .. code-block:: bash
 
@@ -53,33 +35,28 @@ Please refer to the solc-js repository for instructions.
 
 .. note::
 
-    The commandline executable is named ``solcjs``.
+  خط فرمان اجرایی  ``solcjs`` نام دارد.
 
-    The commandline options of ``solcjs`` are not compatible with ``solc`` and tools (such as ``geth``)
-    expecting the behaviour of ``solc`` will not work with ``solcjs``.
+ گزینه‌های خط فرمان  ``solcjs`` با  ``solc`` سازگار نیستند و ابزارها (مانند  ``geth``) انتظار دارند رفتار  ``solc`` با  ``solcjs`` کار نکند.
 
-Docker
+داکر
 ======
 
-Docker images of Solidity builds are available using the ``solc`` image from the ``ethereum`` organisation.
-Use the ``stable`` tag for the latest released version, and ``nightly`` for potentially unstable changes in the develop branch.
+تصاویر داکر  از نسخه‌های سالیدیتی با استفاده از تصویر ``solc``   از سازمان ``ethereum``  در دسترس است. از برچسب  ``stable``  برای آخرین نسخه منتشر شده و nightly  برای تغییرات احتمالی ناپایدار در شاخه‌ی نسخه استفاده می‌کند.
 
-The Docker image runs the compiler executable, so you can pass all compiler arguments to it.
-For example, the command below pulls the stable version of the ``solc`` image (if you do not have it already),
-and runs it in a new container, passing the ``--help`` argument.
+تصویر داکر کامپایلر اجرایی را اجرا می‌کند، بنابراین می‌توانید تمام آرگومان‌های کامپایلر را به آن منتقل کنید. به عنوان مثال، دستور زیر نسخه پایدار  تصویر  ``solc`` را دریافت می‌کند (اگر قبلاً آن را ندارید)، و آن را در یک محفظه جدید اجرا می‌کند و آرگومان ``help--`` را عبور می‌دهد.
 
 .. code-block:: bash
 
     docker run ethereum/solc:stable --help
 
-You can also specify release build versions in the tag, for example, for the 0.5.4 release.
+همچنین می‌توانید نسخه‌هایِ توسعهِ منتشر شده را با برچسب مشخص کنید، به عنوان مثال، برای نسخه 0.5.4.
 
 .. code-block:: bash
 
     docker run ethereum/solc:0.5.4 --help
 
-To use the Docker image to compile Solidity files on the host machine mount a
-local folder for input and output, and specify the contract to compile. For example.
+برای استفاده از تصویر داکر برای کامپایل فایل‌های سالیدیتی در دستگاه میزبان، یک پوشه محلی برای ورودی و خروجی نصب کرده و قرارداد کامپایل را مشخص کنید. برای مثال:
 
 .. code-block:: bash
 
@@ -94,14 +71,12 @@ self-contained (i.e. it does not refer to any external files that would have to 
 
     docker run ethereum/solc:stable --standard-json < input.json > output.json
 
-Linux Packages
+بسته‌های لینوکس
 ==============
 
-Binary packages of Solidity are available at
-`solidity/releases <https://github.com/ethereum/solidity/releases>`_.
+بسته‌های باینری سالیدیتی در مخزن گیتهاب  `سالیدیتی/ انتشارات   <https://github.com/ethereum/solidity/releases>`_  موجود است.
 
-We also have PPAs for Ubuntu, you can get the latest stable
-version using the following commands:
+ما همچنین PPAs برای اوبونتو  داریم، می‌توانید آخرین نسخه پایدار  را با استفاده از دستورات زیر دریافت کنید:
 
 .. code-block:: bash
 
@@ -109,7 +84,7 @@ version using the following commands:
     sudo apt-get update
     sudo apt-get install solc
 
-The nightly version can be installed using these commands:
+نسخه شبانه را می‌توان با استفاده از این دستورات زیر نصب کرد:
 
 .. code-block:: bash
 
@@ -118,16 +93,13 @@ The nightly version can be installed using these commands:
     sudo apt-get update
     sudo apt-get install solc
 
-We are also releasing a `snap package <https://snapcraft.io/>`_, which is
-installable in all the `supported Linux distros <https://snapcraft.io/docs/core/install>`_. To
-install the latest stable version of solc:
+ما همچنین یک `بسته اسنپ <https://snapcraft.io/>`_  را منتشر می‌کنیم که در `توزیع‌های پشتیبانی شده لینوکس <https://snapcraft.io/docs/core/install>`_  قابل نصب است. برای نصب آخرین نسخه پایدار solc:
 
 .. code-block:: bash
 
     sudo snap install solc
 
-If you want to help testing the latest development version of Solidity
-with the most recent changes, please use the following:
+اگر می‌خواهید آخرین نسخه توسعه دهنده سالیدیتی را با جدیدترین تغییرات آزمایش کنید، لطفاً از موارد زیر استفاده کنید:
 
 .. code-block:: bash
 
@@ -135,29 +107,24 @@ with the most recent changes, please use the following:
 
 .. note::
 
-    The ``solc`` snap uses strict confinement. This is the most secure mode for snap packages
-    but it comes with limitations, like accessing only the files in your ``/home`` and ``/media`` directories.
-    For more information, go to `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.
+   اسنپ  ``solc`` از سختگیری شدید استفاده می‌کند. این حالت امن‌ترین حالت برای بسته‌های فوری است اما با محدودیت‌هایی همراه است، مثلاً شما فقط به فایل‌های موجود در دایرکتوری‌های ``home/``   و  ``media/``  دسترسی خواهید داشت. برای کسب اطلاعات بیشتر، به `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.  مراجعه کنید.
 
-Arch Linux also has packages, albeit limited to the latest development version:
+آرک لینوکس  همچنین دارای بسته‌هایی است، البته محدود به آخرین نسخه توسعه می‌باشد:
 
 .. code-block:: bash
 
     pacman -S solidity
 
-Gentoo Linux has an `Ethereum overlay <https://overlays.gentoo.org/#ethereum>`_ that contains a Solidity package.
-After the overlay is setup, ``solc`` can be installed in x86_64 architectures by:
+جنتو لینوکس  دارای `همپوشانی اتریوم <https://overlays.gentoo.org/#ethereum>`_   می‌باشد که حاوی بسته سالیدیتی است. پس از راه اندازی این همپوشانی ،   ``solc`` را می‌توان در معماری x86_64 توسط فرمان زیر نصب کرد:
 
 .. code-block:: bash
 
     emerge dev-lang/solidity
 
-macOS Packages
+بسته‌های مک‌او اس
 ==============
 
-We distribute the Solidity compiler through Homebrew
-as a build-from-source version. Pre-built bottles are
-currently not supported.
+ما کامپایلر سالیدیتی را از طریق هوم‌برو  به عنوان نسخهِ ساخته شده از منبع  توزیع می‌کنیم. مخزن‌های از پیش ساخته شده در حال حاضر پشتیبانی نمی‌شوند.
 
 .. code-block:: bash
 
@@ -166,16 +133,13 @@ currently not supported.
     brew tap ethereum/ethereum
     brew install solidity
 
-To install the most recent 0.4.x / 0.5.x version of Solidity you can also use ``brew install solidity@4``
-and ``brew install solidity@5``, respectively.
+برای نصب جدیدترین نسخه سالیدیتی 0.4.x / 0.5.x می‌توانید به ترتیب از ``brew install solidity@4`` و  ``brew install solidity@5``  استفاده کنید.
 
-If you need a specific version of Solidity you can install a
-Homebrew formula directly from Github.
+اگر به نسخه خاصی از سالیدیتی نیاز دارید، می‌توانید فرمول هوم‌برو  را مستقیماً از گیتهاب نصب کنید.
 
-View
-`solidity.rb commits on Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_.
+لینک  `solidity.rb commits on Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_  را مشاهده کنید.
 
-Copy the commit hash of the version you want and check it out on your machine.
+هشِ کامیت‌های  نسخه موردنظر خود را کپی کرده و در دستگاه خود بررسی کنید.
 
 .. code-block:: bash
 
@@ -183,7 +147,7 @@ Copy the commit hash of the version you want and check it out on your machine.
     cd homebrew-ethereum
     git checkout <your-hash-goes-here>
 
-Install it using ``brew``:
+با استفاده از  ``brew`` آن را نصب کنید:
 
 .. code-block:: bash
 
@@ -191,37 +155,22 @@ Install it using ``brew``:
     # eg. Install 0.4.8
     brew install solidity.rb
 
-Static Binaries
+باینری‌های استاتیک
 ===============
 
-We maintain a repository containing static builds of past and current compiler versions for all
-supported platforms at `solc-bin`_. This is also the location where you can find the nightly builds.
+ما یک مخزن  حاوی نسخه‌های استاتیک  از نسخه‌های کامپایلر قبلی و فعلی را برای همه پلتفرم‌های پشتیبانی شده در `solc-bin`_  نگهداری می‌کنیم. این مکان همچنین مکانی است که می‌توانید نسخه‌های شبانه  را در آن پیدا کنید.
 
-The repository is not only a quick and easy way for end users to get binaries ready to be used
-out-of-the-box but it is also meant to be friendly to third-party tools:
+مخزن نه تنها راهی سریع و آسان برای کاربران نهایی است تا باینری‌ها را برای استفاده در خارج از جعبه   آماده کنند، بلکه به معنای مناسب بودن با ابزارهای ثالث است:
 
-- The content is mirrored to https://binaries.soliditylang.org where it can be easily downloaded over
-  HTTPS without any authentication, rate limiting or the need to use git.
-- Content is served with correct `Content-Type` headers and lenient CORS configuration so that it
-  can be directly loaded by tools running in the browser.
-- Binaries do not require installation or unpacking (with the exception of older Windows builds
-  bundled with necessary DLLs).
-- We strive for a high level of backwards-compatibility. Files, once added, are not removed or moved
-  without providing a symlink/redirect at the old location. They are also never modified
-  in place and should always match the original checksum. The only exception would be broken or
-  unusable files with a potential to cause more harm than good if left as is.
-- Files are served over both HTTP and HTTPS. As long as you obtain the file list in a secure way
-  (via git, HTTPS, IPFS or just have it cached locally) and verify hashes of the binaries
-  after downloading them, you do not have to use HTTPS for the binaries themselves.
+- محتوا در https://binaries.soliditylang.org قرارداده شده‌است که در آن می‌توان به راحتی از طریق HTTPS بدون احراز هویت، محدودیت سرعت یا نیاز به استفاده از git بارگیری کرد.
+- محتوا با هدرهای صحیح `نوع محتوا`  و  با پیکربندی CORS ارائه می‌شود تا بتواند مستقیماً توسط ابزارهایی که در مرورگر اجرا می‌شوند بارگیری شود.
+- فایل‌های باینری نیازی به نصب یا باز کردن بسته بندی ندارند (به استثنای نسخه‌های قدیمی ویندوز که همراه با DLLهای ضروری هستند).
+- ما برای سطح بالایی از سازگاری با گذشته  تلاش می‌کنیم. فایل‌ها، پس از اضافه شدن، بدون ارائه پیوند  تغییر مسیر در مکان قدیمی حذف یا منتقل نمی‌شوند. همچنین هرگز در محل خود تغییر داده نمی‌شوند و همیشه باید با چک‌سام  اصلی مطابقت داشته باشند. تنها استثناء‌ می‌تواند فایل‌های شکسته یا غیرقابل استفاده باشد که اگر به همین صورت باقی بمانند، می‌توانند بیشتر از فایده باعث آسیب شوند.
+- •	فایل‌ها از طریق HTTP و HTTPS ارائه می‌شوند. تا زمانیکه لیست فایل‌ها را به صورت ایمن (از طریق git ،HTTPS ، IPFS یا به صورت محلی ذخیره کردید) به دست آوردید. و پس از بارگیری، فایل‌های هش باینری را تأیید کنید. لازم نیست از HTTPS برای خود فایل‌های باینری استفاده کنید.
 
-The same binaries are in most cases available on the `Solidity release page on Github`_. The
-difference is that we do not generally update old releases on the Github release page. This means
-that we do not rename them if the naming convention changes and we do not add builds for platforms
-that were not supported at the time of release. This only happens in ``solc-bin``.
+همین فایل‌های باینری در بیشتر موارد در `Solidity release page on Github`_  در گیت‌هاب موجود است. تفاوت در این است که ما به طور کلی نسخه‌های قدیمی را در صفحه انتشار گیتهاب به روز نمی‌کنیم. این بدان معناست که در صورت تغییر شرایط نامگذاری، نام آن‌ها را تغییر نمی‌دهیم و برای پلتفرم‌هایی که در زمان انتشار پشتیبانی نمی‌شوند، نسخه‌‌هایی اضافه نمی‌کنیم. این امر فقط در  ``solc-bin`` اتفاق می‌افتد.
 
-The ``solc-bin`` repository contains several top-level directories, each representing a single platform.
-Each one contains a ``list.json`` file listing the available binaries. For example in
-``emscripten-wasm32/list.json`` you will find the following information about version 0.7.4:
+مخزن  ``solc-bin`` شامل چندین دایرکتوری سطح بالا است که هر یک نمایانگر یک پلتفرم واحد می‌باشد. هر یک شامل یک فایل  ``list.json``  است که فایل‌های باینری موجود را فهرست می‌کند. برای مثال در  ``emscripten-wasm32/list.json``  اطلاعات زیر را در مورد نسخه 0.7.4 خواهید یافت:
 
 .. code-block:: json
 
@@ -238,55 +187,31 @@ Each one contains a ``list.json`` file listing the available binaries. For examp
       ]
     }
 
-This means that:
+این بدان معناست که:
 
-- You can find the binary in the same directory under the name
-  `solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js <https://github.com/ethereum/solc-bin/blob/gh-pages/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js>`_.
-  Note that the file might be a symlink, and you will need to resolve it yourself if you are not using
-  git to download it or your file system does not support symlinks.
-- The binary is also mirrored at https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js.
-  In this case git is not necessary and symlinks are resolved transparently, either by serving a copy
-  of the file or returning a HTTP redirect.
-- The file is also available on IPFS at `QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS`_.
-- The file might in future be available on Swarm at `16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1`_.
-- You can verify the integrity of the binary by comparing its keccak256 hash to
-  ``0x300330ecd127756b824aa13e843cb1f43c473cb22eaf3750d5fb9c99279af8c3``.  The hash can be computed
-  on the command line using ``keccak256sum`` utility provided by `sha3sum`_ or `keccak256() function
-  from ethereumjs-util`_ in JavaScript.
-- You can also verify the integrity of the binary by comparing its sha256 hash to
-  ``0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2``.
+- شما می‌توانید باینری را در همان فهرست با نام   `solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js <https://github.com/ethereum/solc-bin/blob/gh-pages/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js>`_  پیدا کنید. توجه داشته باشید که فایل ممکن است یک پیوند  باشد و اگر از گیت  برای بارگیری آن استفاده نمی‌کنید یا سیستم فایل شما از پیوند‌ها  پشتیبانی نمی‌کند، باید خودتان آن را حل کنید.
+- باینری نیز در https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js قرار داده شده‌است. در این حالت گیت ضروری نمی‌باشد. و پیوندها، یا با ارائه یک کپی از فایل یا با بازگرداندن یک مسیر HTTP به طور شفاف حل  می‌شوند.
+- فایل همچنین در IPFS در `QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS`_ موجود است.
+- ممکن است فایل در آینده در Swarm با شماره `16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1`_ موجود باشد.
+- با مقایسه هش keccak256 آن با ``0x300330ecd127756b824aa13e843cb1f43c473cb22eaf3750d5fb9c99279af8c3``  می‌توانید صحت باینری را بررسی کنید. هش را می‌توان در خط فرمان با استفاده از ابزار  ``keccak256sum`` محاسبه کرد که توسط تابع `sha3sum`_  یا  `keccak256() function
+  from ethereumjs-util`_ در جاوا اسکریپت ارائه شده‌است.
+
+- همچنین می‌توانید یکپارچگی باینری را با مقایسه هش sha256 آن با ``0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2`` تأیید کنید.
 
 .. warning::
 
-   Due to the strong backwards compatibility requirement the repository contains some legacy elements
-   but you should avoid using them when writing new tools:
+  به دلیل نیاز به سازگاری زیاد، مخزن حاوی برخی از عناصر قدیمی می‌باشد، اما هنگام نوشتن ابزارهای جدید نباید از آنها استفاده کنید:
 
-   - Use ``emscripten-wasm32/`` (with a fallback to ``emscripten-asmjs/``) instead of ``bin/`` if
-     you want the best performance. Until version 0.6.1 we only provided asm.js binaries.
-     Starting with 0.6.2 we switched to `WebAssembly builds`_ with much better performance. We have
-     rebuilt the older versions for wasm but the original asm.js files remain in ``bin/``.
-     The new ones had to be placed in a separate directory to avoid name clashes.
-   - Use ``emscripten-asmjs/`` and ``emscripten-wasm32/`` instead of ``bin/`` and ``wasm/`` directories
-     if you want to be sure whether you are downloading a wasm or an asm.js binary.
-   - Use ``list.json`` instead of ``list.js`` and ``list.txt``. The JSON list format contains all
-     the information from the old ones and more.
-   - Use https://binaries.soliditylang.org instead of https://solc-bin.ethereum.org. To keep things
-     simple we moved almost everything related to the compiler under the new ``soliditylang.org``
-     domain and this applies to ``solc-bin`` too. While the new domain is recommended, the old one
-     is still fully supported and guaranteed to point at the same location.
+   - اگر می‌خواهید بهترین عملکرد را داشته باشید، از ``/emscripten-wasm32``  (با جایگزینی برای  ``/emscripten-asmjs``) به جای  ``/bin``  استفاده کنید. ما تا نسخه 0.6.1 فقط فایل‌های باینری asm.js را ارائه می‌دادیم. با شروع 0.6.2، ما به  `WebAssembly builds`_  به عملکرد بسیار بهتر روی آوردیم. ما نسخه‌های قدیمی تر را برای wasm بازسازی کرده‌ایم اما فایل‌های اصلی asm.js در ``bin/``  باقی می‌مانند. موارد جدید باید در یک فهرست جداگانه قرار داده شوند تا از تصادم نامی جلوگیری شود.
+   - اگر می‌خواهید مطمئن شوید که در حال بارگیری wasm یا باینری asm.js هستید،  از  ``/emscripten-asmjs``  و  ``/emscripten-wasm32``  به جای  ``/bin``  و  ``/wasm``  استفاده کنید.
+   - به جای  ``list.js`` و  ``list.txt`` از ``list.json``  استفاده کنید. فرمت لیست JSON شامل تمام اطلاعات قدیمی و بیشتر است.
+   - به جای  https://binaries.soliditylang.org از  https://solc-bin.ethereum.org استفاده کنید. برای ساده نگه داشتن مسائل، ما تقریباً همه چیز مربوط به کامپایلر را تحت دامنه جدید   ``soliditylang.org`` منتقل کردیم و این امر در مورد ``solc-bin``  نیز صدق می‌کند. با اینکه دامنه جدید توصیه می‌شود، اما دامنه قبلی هنوز کاملاً پشتیبانی می‌شود و تضمین می‌شود که به همان مکان اشاره می‌کند.
 
 .. warning::
 
-    The binaries are also available at https://ethereum.github.io/solc-bin/ but this page
-    stopped being updated just after the release of version 0.7.2, will not receive any new releases
-    or nightly builds for any platform and does not serve the new directory structure, including
-    non-emscripten builds.
-
-    If you are using it, please switch to https://binaries.soliditylang.org, which is a drop-in
-    replacement. This allows us to make changes to the underlying hosting in a transparent way and
-    minimize disruption. Unlike the ``ethereum.github.io`` domain, which we do not have any control
-    over, ``binaries.soliditylang.org`` is guaranteed to work and maintain the same URL structure
-    in the long-term.
+    فایل‌های باینری نیز در https://ethereum.github.io/solc-bin/ در دسترس هستند، اما این صفحه به روز رسانی خود را پس از انتشار نسخه 0.7.2 متوقف کرد، هیچ نسخه جدید یا نسخه شبانه برای هر پلتفرمی دریافت نمی‌کند و ساختار دایرکتوری جدید، از جمله ساختارهای غیر emscripten را ارائه نمی‌دهد.
+    
+    اگر از آن استفاده می‌کنید، لطفاً به  https://binaries.soliditylang.org مراجعه کنید، که یک جایگزینی رها کردن  است. این به ما امکان می‌دهد تا به طور شفاف در میزبانی اصلی تغییراتی ایجاد کرده و اختلال را به حداقل برسانیم. بر خلاف دامنه  ``ethereum.github.io``  ، که ما هیچ کنترلی بر آن نداریم، کار کردن  ``binaries.soliditylang.org``   تضمین می‌شود و در دراز مدت همان URL را حفظ کند.
 
 .. _IPFS: https://ipfs.io
 .. _Swarm: https://swarm-gateways.net/bzz:/swarm.eth
@@ -300,13 +225,13 @@ This means that:
 
 .. _building-from-source:
 
-Building from Source
+نسخه از منبع
 ====================
 
-Prerequisites - All Operating Systems
+پیش نیازهای – همه‌ی سیستم عامل‌ها
 -------------------------------------
 
-The following are dependencies for all builds of Solidity:
+موارد زیر وابستگی‌ها  برای همه نسخه‌های سالیدیتی  می‌باشند:
 
 +-----------------------------------+-------------------------------------------------------+
 | Software                          | Notes                                                 |
@@ -330,11 +255,13 @@ The following are dependencies for all builds of Solidity:
 .. _z3: https://github.com/Z3Prover/z3
 
 .. note::
-    Solidity versions prior to 0.5.10 can fail to correctly link against Boost versions 1.70+.
-    A possible workaround is to temporarily rename ``<Boost install path>/lib/cmake/Boost-1.70.0``
-    prior to running the cmake command to configure solidity.
+    نسخه‌های سالیدیتی قبل از 0.5.10 نمی‌توانند به درستی با نسخه‌های   +Boost 1.70 لینک شوند. یک راه حل ممکن این است که قبل از اجرای دستور cmake برای پیکربندی سالیدیتی، نام  
+    ``Boost install path>/lib/cmake/Boost-1.70.0>`` 
+    را به طور موقت تغییر نام دهید.
 
-    Starting from 0.5.10 linking against Boost 1.70+ should work without manual intervention.
+    با شروع از 0.5.10 لینک کردن برخلاف  +Boost 1.70 باید بدون دخالت دستی کار کند.
+
+
 
 .. note::
     The default build configuration requires a specific Z3 version (the latest one at the time the
@@ -346,41 +273,36 @@ The following are dependencies for all builds of Solidity:
     If you do this, however, please remember to pass the ``--no-smt`` option to ``scripts/tests.sh``
     to skip the SMT tests.
 
-Minimum Compiler Versions
+حداقل نسخه‌های کامپایلر
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following C++ compilers and their minimum versions can build the Solidity codebase:
+کامپایلرهای ++ C زیر و حداقل نسخه‌های آنها می‌توانند پایگاه کد  سالیدیتی را ایجاد کنند:
 
-- `GCC <https://gcc.gnu.org>`_, version 8+
+- `GCC+ <https://gcc.gnu.org>`_,  ، نسخه 8
 - `Clang <https://clang.llvm.org/>`_, version 7+
+
 - `MSVC <https://visualstudio.microsoft.com/vs/>`_, version 2019+
 
-Prerequisites - macOS
+
+پیش نیازها - مک‌او اس 
 ---------------------
 
-For macOS builds, ensure that you have the latest version of
-`Xcode installed <https://developer.apple.com/xcode/download/>`_.
-This contains the `Clang C++ compiler <https://en.wikipedia.org/wiki/Clang>`_, the
-`Xcode IDE <https://en.wikipedia.org/wiki/Xcode>`_ and other Apple development
-tools that are required for building C++ applications on OS X.
-If you are installing Xcode for the first time, or have just installed a new
-version then you will need to agree to the license before you can do
-command-line builds:
+برای نسخه‌های  مک‌او اس، مطمئن شوید که آخرین نسخه `Xcode <https://developer.apple.com/xcode/download/>`_ را نصب کرده‌اید. این شامل کامپایلر `Clang C++ <https://en.wikipedia.org/wiki/Clang>`_  ،  `Xcode IDE <https://en.wikipedia.org/wiki/Xcode>`_  و سایر ابزارهای توسعه اپل می‌باشد که برای ایجاد برنامه‌های ++ C در OS X مورد نیاز است. اگر برای اولین بار Xcode را نصب می‌کنید یا نسخه جدیدی را نصب کرده‌اید، باید قبل از توسعه، با لایسنس موافقت کنید تا بتوانید با خط فرمان، توسعه‌ها را انجام دهید:
+
+
 
 .. code-block:: bash
 
     sudo xcodebuild -license accept
 
-Our OS X build script uses `the Homebrew <https://brew.sh>`_
-package manager for installing external dependencies.
-Here's how to `uninstall Homebrew
-<https://docs.brew.sh/FAQ#how-do-i-uninstall-homebrew>`_,
-if you ever want to start again from scratch.
 
-Prerequisites - Windows
+اسکریپت نسخه OS X ما، از مدیریت بسته `هوم‌برو <https://brew.sh>`_  برای نصب نیازمندیهای خارجی استفاده می‌کند. اگر می‌خواهید دوباره از ابتدا شروع کنید، در اینجا نحوه `حذف نصب هوم‌برو 
+<https://docs.brew.sh/FAQ#how-do-i-uninstall-homebrew>`_ ذکر شده‌است.
+
+پیش نیازها - ویندوز
 -----------------------
 
-You need to install the following dependencies for Windows builds of Solidity:
+شما باید وابستگی‌های زیر را برای نسخه‌های ویندوز برای سالیدیتی نصب کنید:
 
 +-----------------------------------+-------------------------------------------------------+
 | Software                          | Notes                                                 |
@@ -392,80 +314,71 @@ You need to install the following dependencies for Windows builds of Solidity:
 | `Boost`_ (version 1.77+)          | C++ libraries.                                        |
 +-----------------------------------+-------------------------------------------------------+
 
-If you already have one IDE and only need the compiler and libraries,
-you could install Visual Studio 2019 Build Tools.
+اگر از قبل یک ویرایشگر  دارید و فقط به کامپایلر و کتابخانه نیاز دارید، می‌توانید ابزارهای نسخه 2019 ویژوال استودیو  را نصب کنید.
 
-Visual Studio 2019 provides both IDE and necessary compiler and libraries.
-So if you have not got an IDE and prefer to develop Solidity, Visual Studio 2019
-may be a choice for you to get everything setup easily.
+ویژوال استودیو 2019  هم ویرایشگر و هم کامپایلر و کتابخانه‌های لازم را ارائه می‌دهد. بنابراین اگر ویرایشگر ندارید و ترجیح می‌دهید سالیدیتی را توسعه دهید، ویژوال استودیو 2019 ممکن است یک انتخاب برای شما باشد تا همه چیز را به راحتی راه اندازی کنید.
 
-Here is the list of components that should be installed
-in Visual Studio 2019 Build Tools or Visual Studio 2019:
+در اینجا لیستی از اجزایی که باید در ابزارهای نسخه ویژوال استودیو 2019  نصب شود، آورده شده‌است:
 
-* Visual Studio C++ core features
-* VC++ 2019 v141 toolset (x86,x64)
-* Windows Universal CRT SDK
-* Windows 8.1 SDK
-* C++/CLI support
+* ویژگی های اصلی ++Visual Studio C 
+* 	مجموعه ابزارهای VC++   2019 v141 toolset (x86,x64) 
+* 	CRT SDK ویندوز یونیورسال
+* 	SDK ویندوز 8.1
+* 	پشتیبانی از C ++/CLI
 
 .. _Visual Studio 2019: https://www.visualstudio.com/vs/
 .. _Visual Studio 2019 Build Tools: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
-Dependencies Helper Script
+اسکریپت کمکی وابستگی‌ها 
 --------------------------
 
-We have a helper script which you can use to install all required external dependencies
-on macOS, Windows and on numerous Linux distros.
+ما یک اسکریپت کمکی داریم که می‌توانید از آن برای نصب تمام وابستگی‌های خارجی مورد نیاز در مک‌او اس  ، ویندوز و چندین توزیع لینوکس استفاده کنید.
 
 .. code-block:: bash
 
     ./scripts/install_deps.sh
 
-Or, on Windows:
+یا در ویندوز:
 
 .. code-block:: bat
 
     scripts\install_deps.ps1
 
-Note that the latter command will install ``boost`` and ``cmake`` to the ``deps`` subdirectory, while the former command
-will attempt to install the dependencies globally.
 
-Clone the Repository
+توجه داشته باشید که دستور دوم   ``boost`` و   ``cmake`` را در زیر شاخه  ``deps`` نصب می‌کند، در حالی که دستور قبلی سعی می‌کند وابستگی‌ها را به صورت جهانی نصب کند.
+
+
+مخزن را کلون کنید
 --------------------
 
-To clone the source code, execute the following command:
+برای شبیه سازی کد منبع ، دستور زیر را اجرا کنید:
 
 .. code-block:: bash
 
     git clone --recursive https://github.com/ethereum/solidity.git
     cd solidity
 
-If you want to help developing Solidity,
-you should fork Solidity and add your personal fork as a second remote:
+اگر می‌خواهید به نسخه سالیدیتی کمک کنید، باید سالیدیتی را فورک  کنید و فورک شخصی خود را به عنوان ریموت دوم  اضافه کنید: 
 
 .. code-block:: bash
 
     git remote add personal git@github.com:[username]/solidity.git
 
 .. note::
-    This method will result in a prerelease build leading to e.g. a flag
-    being set in each bytecode produced by such a compiler.
-    If you want to re-build a released Solidity compiler, then
-    please use the source tarball on the github release page:
+   این روش منجر به نسخه پیش انتشار  می‌شود که به عنوان مثال یک فَلگ  در هر کد بایتی که توسط چنین کامپایلری تولید می‌شود، تنظیم می‌شود. اگر می‌خواهید کامپایلر سالیدیتی منتشر شده را دوباره توسعه دهید، لطفاً از tarball منبع در صفحه انتشار گیتهاب استفاده کنید:
 
-    https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz
+        https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz
+         (نه "کد منبع" ارائه شده توسط گیتهاب). 
 
-    (not the "Source code" provided by github).
 
-Command-Line Build
+نسخه خط فرمان
 ------------------
 
-**Be sure to install External Dependencies (see above) before build.**
 
-Solidity project uses CMake to configure the build.
-You might want to install `ccache`_ to speed up repeated builds.
-CMake will pick it up automatically.
-Building Solidity is quite similar on Linux, macOS and other Unices:
+**قبل از توسعه حتماً وابستگی‌های خارجی را نصب کنید (به قسمت بالا مراجعه کنید).**
+
+پروژه سالیدیتی از CMake برای پیکربندی نسخه استفاده می‌کند. ممکن است بخواهید ccache را برای سرعت بخشیدن به نسخه‌های مکرر نصب کنید. CMake آن را به طور خودکار انتخاب می‌کند. نسخه سالیدیتی در لینوکس، مک‌او اس  و سایر یونیکس‌ها کاملاً مشابه است: 
+
 
 .. _ccache: https://ccache.dev/
 
@@ -475,7 +388,7 @@ Building Solidity is quite similar on Linux, macOS and other Unices:
     cd build
     cmake .. && make
 
-or even easier on Linux and macOS, you can run:
+یا حتی در لینوکس و مک‌او اس راحت‌تر، می‌توانید اجرا کنید:
 
 .. code-block:: bash
 
@@ -484,9 +397,9 @@ or even easier on Linux and macOS, you can run:
 
 .. warning::
 
-    BSD builds should work, but are untested by the Solidity team.
+    توسعه BSD باید کار کند، اما توسط تیم سالیدیتی آزمایش نشده است.
 
-And for Windows:
+و برای ویندوز:
 
 .. code-block:: bash
 
@@ -494,36 +407,36 @@ And for Windows:
     cd build
     cmake -G "Visual Studio 16 2019" ..
 
-In case you want to use the version of boost installed by ``scripts\install_deps.ps1``, you will
-additionally need to pass ``-DBoost_DIR="deps\boost\lib\cmake\Boost-*"`` and ``-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded``
-as arguments to the call to ``cmake``.
 
-This should result in the creation of **solidity.sln** in that build directory.
-Double-clicking on that file should result in Visual Studio firing up.  We suggest building
-**Release** configuration, but all others work.
 
-Alternatively, you can build for Windows on the command-line, like so:
+در صورت تمایل به استفاده از نسخه boost نصب شده توسط اسکریپت  ``scripts\install_deps.ps1`` ، علاوه بر این باید ``*-DBoost_DIR="deps\boost\lib\cmake\Boost-"`` و  ``-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded``  را به عنوان آرگومان برای فراخوانی ``cmake`` ارسال کنید. 
+
+این عمل باید منجر به ایجاد **solidity.sln** در آن نسخه دایرکتوری ‌شود. دو بار کلیک بر روی آن فایل باعث می‌شود تا ویژوال استودیو روشن شود. ما ساخت پیکربندی **انتشار**  را پیشنهاد می‌کنیم، اما بقیه نیز کار می‌کنند.
+
+از سوی دیگر، می‌توانید برای ویندوز روی خط فرمان  توسعه دهید، مانند این:
 
 .. code-block:: bash
 
     cmake --build . --config Release
 
-CMake Options
+
+گزینه‌های CMake
 =============
 
-If you are interested what CMake options are available run ``cmake .. -LH``.
+
+اگر علاقه دارید که چه گزینه‌های CMake در دسترس هستند، ``cmake .. -LH`` را اجرا کنید.
 
 .. _smt_solvers_build:
 
-SMT Solvers
+حل کننده‌های  SMT
 -----------
-Solidity can be built against SMT solvers and will do so by default if
-they are found in the system. Each solver can be disabled by a `cmake` option.
+سالیدیتی را می‌توان در کنار حل کننده‌های SMT ایجاد کرد و در صورت یافتن آنها در سیستم به طور پیش فرض این کار را انجام می‌دهد. هر حل کننده را می‌توان با گزینه `cmake` غیرفعال کرد.
 
-*Note: In some cases, this can also be a potential workaround for build failures.*
+*توجه: در برخی موارد ، این نیز می تواند یک راه حل احتمالی برای خرابی نسخه باشد.*
 
 
-Inside the build folder you can disable them, since they are enabled by default:
+
+در داخل پوشه build می‌توانید آنها را غیرفعال کنید، زیرا به طور پیش فرض فعال هستند:
 
 .. code-block:: bash
 
@@ -536,39 +449,45 @@ Inside the build folder you can disable them, since they are enabled by default:
     # disables both Z3 and CVC4
     cmake .. -DUSE_CVC4=OFF -DUSE_Z3=OFF
 
-The Version String in Detail
+رشته نسخه  با جزئیات
 ============================
 
-The Solidity version string contains four parts:
+رشته نسخه سالیدیتی شامل چهار قسمت است:
 
-- the version number
-- pre-release tag, usually set to ``develop.YYYY.MM.DD`` or ``nightly.YYYY.MM.DD``
-- commit in the format of ``commit.GITHASH``
-- platform, which has an arbitrary number of items, containing details about the platform and compiler
+- شماره نسخه
 
-If there are local modifications, the commit will be postfixed with ``.mod``.
+- برچسب پیش از انتشار، معمولاً با  ``develop.YYYY.MM.DD`` یا  ``nightly.YYYY.MM.DD`` تنظیم می‌شود.
+- کامیت در قالب  ``commit.GITHASH``
+- پلتفرم، که دارای تعداد دلخواه موارد است، حاوی جزئیات مربوط به پلتفرم و کامپایلر
 
-These parts are combined as required by Semver, where the Solidity pre-release tag equals to the Semver pre-release
-and the Solidity commit and platform combined make up the Semver build metadata.
 
-A release example: ``0.4.8+commit.60cc1668.Emscripten.clang``.
 
-A pre-release example: ``0.4.9-nightly.2017.1.17+commit.6ecb4aa3.Emscripten.clang``
+اگر تغییرات محلی وجود داشته باشد، کامیت‌ها با ``mod.`` پسوند داده می‌شود.
 
-Important Information About Versioning
+این قطعات طبق نیاز Semver ترکیب می‌شوند، جایی که برچسب پیش از انتشار سالیدیتی برابر است با پیش از انتشار Semver و کامیت سالیدیتی و پلتفرم ترکیبی فراداده توسعه Semver را تشکیل می‌دهند.
+
+
+مثال انتشار: ``0.4.8+commit.60cc1668.Emscripten.clang``
+
+یک نمونه پیش از انتشار:  ``0.4.9-nightly.2017.1.17+commit.6ecb4aa3.Emscripten.clang``
+
+
+اطلاعات مهم در مورد نسخه بندی
 ======================================
 
-After a release is made, the patch version level is bumped, because we assume that only
-patch level changes follow. When changes are merged, the version should be bumped according
-to semver and the severity of the change. Finally, a release is always made with the version
-of the current nightly build, but without the ``prerelease`` specifier.
+پس از انتشار، سطح نسخه پَچ   بامپ  ‌شده است، زیرا ما فرض می‌کنیم که فقط تغییرات سطح پَچ دنبال می‌شود. وقتی تغییرات ادغام می‌شوند، نسخه باید با توجه به semver و شدت تغییرات بامپ شود. سرانجام، همیشه نسخه‌ای از نسخه فعلی شبانه منتشر می‌شود، اما بدون تعیین ``prerelease`` .
 
-Example:
+مثال:
 
-0. The 0.4.0 release is made.
-1. The nightly build has a version of 0.4.1 from now on.
-2. Non-breaking changes are introduced --> no change in version.
-3. A breaking change is introduced --> version is bumped to 0.5.0.
-4. The 0.5.0 release is made.
+            1.	نسخه شبانه  از این پس نسخه 0.4.1 دارد.
 
-This behaviour works well with the  :ref:`version pragma <version_pragma>`.
+            2.	تغییرات بدون تغییرات جدید  ارائه می شوند-> بدون تغییر در نسخه.
+
+            3.	یک تغییر جدید  معرفی می‌شود -> نسخه به 0.5.0 افزایش می یابد.
+
+            4.	نسخه 0.5.0 ساخته شده است.
+
+
+این رفتار با :ref:`نسخه پراگما  <version_pragma>`  به خوبی کار می‌کند.
+
+

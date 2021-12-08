@@ -3,26 +3,25 @@
 .. _contract_structure:
 
 ***********************
-Structure of a Contract
+ساختار قرارداد
 ***********************
 
-Contracts in Solidity are similar to classes in object-oriented languages.
-Each contract can contain declarations of :ref:`structure-state-variables`, :ref:`structure-functions`,
-:ref:`structure-function-modifiers`, :ref:`structure-events`, :ref:`structure-errors`, :ref:`structure-struct-types` and :ref:`structure-enum-types`.
-Furthermore, contracts can inherit from other contracts.
+  قراردادهای سالیدیتی مانند کلاس‌های زبان‌های شی‌گرا هستند. هر قرارداد می‌تواند شامل دستورات   :ref:`structure-state-variables`    ، :ref:`structure-functions` ، :ref:`structure-function-modifiers`    ، :ref:`structure-events`   ،  :ref:`structure-errors`    ، :ref:`structure-struct-types`  و :ref:`structure-enum-types`   باشد. علاوه بر این، قراردادها می‌توانند از سایر قراردادها ارث ببرند.
 
-There are also special kinds of contracts called :ref:`libraries<libraries>` and :ref:`interfaces<interfaces>`.
 
-The section about :ref:`contracts<contracts>` contains more details than this section,
-which serves to provide a quick overview.
+  قراردادهای دیگری نیز وجود دارد که :ref:`کتابخانه‌ها<libraries>`   و :ref:`رابط‌ها<interfaces>`  نامیده می‌شوند.
+
+
+
+بخش مربوط به :ref:`قرارداد‌ها<contracts>`   شامل جزئیات بیشتری نسبت به این بخش است که یک مرور سریع رو ارائه می‌دهد.
 
 .. _structure-state-variables:
 
-State Variables
+متغیرهای حالت
 ===============
 
-State variables are variables whose values are permanently stored in contract
-storage.
+  متغیرهای حالت متغیرهایی هستند که مقادیر آنها به طور دائمی در storage  قرارداد ذخیره می‌شود.
+
 
 .. code-block:: solidity
 
@@ -34,18 +33,16 @@ storage.
         // ...
     }
 
-See the :ref:`types` section for valid state variable types and
-:ref:`visibility-and-getters` for possible choices for
-visibility.
+
+برای دیدن انواع متغیرهای حالت معتبر  و :ref:`قابلیت مشاهده  آن‌ها و گیرنده‌ها<visibility-and-getters>`   برای انتخاب‌های احتمالی برای مشاهده انواع متغیرها، به بخش :ref:`types`  مراجعه کنید.
+
 
 .. _structure-functions:
 
-Functions
+توابع
 =========
 
-Functions are the executable units of code. Functions are usually
-defined inside a contract, but they can also be defined outside of
-contracts.
+ توابع، واحد اجرایی کد هستند. توابع معمولاً در داخل قرارداد تعریف می‌شوند، اما در خارج از قراردادها نیز می‌توانند تعریف شوند.
 
 .. code-block:: solidity
 
@@ -63,23 +60,21 @@ contracts.
         return x * 2;
     }
 
-:ref:`function-calls` can happen internally or externally
-and have different levels of :ref:`visibility<visibility-and-getters>`
-towards other contracts. :ref:`Functions<functions>` accept :ref:`parameters and return variables<function-parameters-return-variables>` to pass parameters
-and values between them.
+
+:ref:`فراخوانی توابع<function-calls>`  می‌توانند به صورت داخلی یا خارجی اتفاق بیفتند و دارای :ref:`قابلیت مشاهده<visibility-and-getters>`  مختلفی نسبت به سایر قراردادها هستند.  :ref:`توابع<functions>`  پارامترها را می‌پذیرند و  :ref:`متغیرها را برمی‌گردانند<function-parameters-return-variables>`  تا پارامترها و مقادیر بین آنها منتقل شود.
 
 .. _structure-function-modifiers:
 
-Function Modifiers
+توابع اصلاح کننده 
 ==================
 
-Function modifiers can be used to amend the semantics of functions in a declarative way
-(see :ref:`modifiers` in the contracts section).
 
-Overloading, that is, having the same modifier name with different parameters,
-is not possible.
+از تابع اصلاح کننده‌ها می‌توان برای اصلاح سمنتیک  توابع به روشی اعلانی استفاده کرد (به  :ref:`توابع اصلاح کننده  <modifiers>` در بخش قراردادها مراجعه کنید).
 
-Like functions, modifiers can be :ref:`overridden <modifier-overriding>`.
+
+  اضافه بار ، به این معنا که داشتن نام اصلاح کننده یکسان با پارامترهای مختلف، امکان پذیر نیست. مانند توابع، اصلاح کننده‌ها را می‌توان لغو کرد.
+
+مانند توابع، اصلاح کننده‌ها نیز می‌توانند :ref:`نادیده<modifier-overriding>`  گرفته شوند.
 
 .. code-block:: solidity
 
@@ -104,10 +99,12 @@ Like functions, modifiers can be :ref:`overridden <modifier-overriding>`.
 
 .. _structure-events:
 
-Events
+رویدادها 
 ======
 
-Events are convenience interfaces with the EVM logging facilities.
+
+رویدادها رابط‌های راحتی برای ورود به امکانات EVM هستند.
+
 
 .. code-block:: solidity
 
@@ -123,19 +120,16 @@ Events are convenience interfaces with the EVM logging facilities.
         }
     }
 
-See :ref:`events` in contracts section for information on how events are declared
-and can be used from within a dapp.
+برای اطلاع از چگونگی اعلام رویداد‌ها و استفاده از آنها از طریق dapp، به بخش :ref:`رویدادها<events>` در بخش قراردادها مراجعه کنید.
+
 
 .. _structure-errors:
 
-Errors
+خطاها 
 ======
 
-Errors allow you to define descriptive names and data for failure situations.
-Errors can be used in :ref:`revert statements <revert-statement>`.
-In comparison to string descriptions, errors are much cheaper and allow you
-to encode additional data. You can use NatSpec to describe the error to
-the user.
+خطاها به شما امکان می‌دهند نام‌ها و داده‌های توصیفی را برای شرایط شکست تعریف کنید. از خطاها می‌توان در :ref:`دستورات revert <revert-statement>`  استفاده کرد. در مقایسه با توضیحات رشته ، خطاها بسیار ارزان‌تر هستند و به شما امکان می‌دهند داده‌های اضافی را رمزگذاری کنید. برای توصیف خطا برای کاربر می‌توانید از NatSpec استفاده کنید.
+
 
 .. code-block:: solidity
 
@@ -158,15 +152,17 @@ the user.
         }
     }
 
-See :ref:`errors` in the contracts section for more information.
+
+برای اطلاعات بیشتر به :ref:`خطاها<errors>` و دستورات Revert در قسمت قراردادها مراجعه کنید.
 
 .. _structure-struct-types:
 
-Struct Types
+انواع Struct
 =============
 
-Structs are custom defined types that can group several variables (see
-:ref:`structs` in types section).
+ :ref:`structs` انواع تعریف شده سفارشی هستند که می‌توانند متغیرهای مختلفی را گروه بندی کنند (به بخش Structها در بخش انواع مراجعه کنید).
+
+
 
 .. code-block:: solidity
 
@@ -184,11 +180,11 @@ Structs are custom defined types that can group several variables (see
 
 .. _structure-enum-types:
 
-Enum Types
+انواع Enum
 ==========
 
-Enums can be used to create custom types with a finite set of 'constant values' (see
-:ref:`enums` in types section).
+  از Enums می‌توان برای ایجاد انواع سفارشی با مجموعه محدودی از  "مقادیر ثابت "  استفاده کرد (به قسمت :ref:`enums`  در بخش انواع مراجعه کنید).
+
 
 .. code-block:: solidity
 
