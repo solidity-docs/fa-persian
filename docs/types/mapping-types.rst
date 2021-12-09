@@ -1,44 +1,42 @@
 .. index:: !mapping
 .. _mapping-types:
 
-Mapping Types
+انواع  نگاشت‌ها (Mapping Types)
 =============
 
-Mapping types use the syntax ``mapping(_KeyType => _ValueType)`` and variables
-of mapping type are declared using the syntax ``mapping(_KeyType => _ValueType) _VariableName``.
-The ``_KeyType`` can be any
-built-in value type, ``bytes``, ``string``, or any contract or enum type. Other user-defined
-or complex types, such as mappings, structs or array types are not allowed.
-``_ValueType`` can be any type, including mappings, arrays and structs.
+نوع‌های نگاشت از سینتکس  ``mapping(_KeyType => _ValueType)`` استفاده می‌کنند و 
+متغیرهای نوع نگاشت با استفاده از سینتکس 
+``mapping(_KeyType => _ValueType) _VariableName``  مشخص می‌شوند. ``KeyType_`` می‌تواند هر نوع مقدار داخلی،  ``bytes`` ،  ``string`` یا هر نوع قرارداد یا enum 
+باشد. سایر نوع‌های پیچیده یا تعریف شده توسط کاربر، مانند نگاشت یا (mapping)‌، struct‌ها یا انواع آرایه مجاز نیستند. ``ValueType_``  می‌تواند هر نوعی باشد، از جمله نگاشت‌ها، آرایه‌ها و struct‌ها.
 
-You can think of mappings as `hash tables <https://en.wikipedia.org/wiki/Hash_table>`_, which are virtually initialised
-such that every possible key exists and is mapped to a value whose
-byte-representation is all zeros, a type's :ref:`default value <default-value>`.
-The similarity ends there, the key data is not stored in a
-mapping, only its ``keccak256`` hash is used to look up the value.
 
-Because of this, mappings do not have a length or a concept of a key or
-value being set, and therefore cannot be erased without extra information
-regarding the assigned keys (see :ref:`clearing-mappings`).
+می‌‍‌‌‌‌توانید نگاشت‍‌ها را به صورت  `جداول هش <https://en.wikipedia.org/wiki/Hash_table>`_  در نظر بگیرید که عملاً مقداردهی اولیه می‌شوند به گونه ای که هر 
+کلید ممکن وجود دارد و به مقداری نگاشت می‌شود که پیش نمایش بایت همه‌ی آن صفر می‌باشند، یک نوع :ref:`مقدار پیش فرض<default-value>` . شباهت در اینجا پایان می‌یابد، داده‌های کلیدی در نگاشت ذخیره نمی‌شوند، فقط از هش  ``keccak256`` برای جستجوی مقدار استفاده می‌شود.
 
-Mappings can only have a data location of ``storage`` and thus
-are allowed for state variables, as storage reference types
-in functions, or as parameters for library functions.
-They cannot be used as parameters or return parameters
-of contract functions that are publicly visible.
-These restrictions are also true for arrays and structs that contain mappings.
 
-You can mark state variables of mapping type as ``public`` and Solidity creates a
-:ref:`getter <visibility-and-getters>` for you. The ``_KeyType`` becomes a parameter for the getter.
-If ``_ValueType`` is a value type or a struct, the getter returns ``_ValueType``.
-If ``_ValueType`` is an array or a mapping, the getter has one parameter for
-each ``_KeyType``, recursively.
 
-In the example below, the ``MappingExample`` contract defines a public ``balances``
-mapping, with the key type an ``address``, and a value type a ``uint``, mapping
-an Ethereum address to an unsigned integer value. As ``uint`` is a value type, the getter
-returns a value that matches the type, which you can see in the ``MappingUser``
-contract that returns the value at the specified address.
+به همین دلیل، نگاشت‌ها طول یا مفهومی از کلید یا مقدار تنظیم شده ندارند و بنابراین بدون اطلاعات اضافی در مورد کلیدهای اختصاص داده شده پاک نمی‌شوند (به قسمت :ref:`clearing-mappings` مراجعه کنید).
+
+
+
+نگاشت‌ها فقط می‌توانند یک مکان داده از  ``storage`` را داشته باشند و بنابراین برای متغیرهای حالت، به 
+عنوان نوع‌های مرجع storage  در توابع، یا به عنوان پارامترهای توابع کتابخانه مجاز هستند. آنها نمی‌توانند به 
+عنوان پارامترها یا پارامترهای بازگشتی توابع قرارداد که در معرض دید عموم قرار دارند، مورد استفاده قرار گیرند. 
+این محدودیت‌ها برای آرایه‌ها و struct‌های حاوی نگاشت نیز صادق است.
+
+
+شما می‌توانید متغیرهای حالت از نوع نگاشت را به صورت  ``public`` علامت گذاری کنید و سالیدیتی یک 
+گیرنده (:ref:`getter <visibility-and-getters>`) برای شما ایجاد می‌کند.  ``KeyType_`` به یک پارامتر برای getter  تبدیل می‌شود. 
+اگر  ``ValueType_`` یک مقدار نوع یا یک  struct  باشد، گیتر  ``ValueType_`` را برمی‌گرداند. 
+اگر  ``ValueType_`` یک آرایه یا نگاشت باشد، getter به صورت بازگشتی برای هر  ``KeyType_`` یک 
+پارامتر دارد.
+
+
+در مثال زیر، قرارداد  ``MappingExample`` یک نگاشت از  ``balances`` عمومی را تعریف می‎کند، با نوع 
+کلید یک   ``address`` و یک نوع مقدار یک  ``uint`` ، و یک آدرس اتریوم را به یک مقدار صحیح بدون علامت  
+نگاشت می‌کند. از آنجا که  ``uint`` یک نوع مقدار است، گیرنده مقداری را متناسب با نوع آن برمی‌گرداند که 
+می‌توانید آن را در قرارداد  ``MappingUser`` مشاهده کنید که مقدار را در آدرس مشخص شده برمی‌گرداند.
+
 
 .. code-block:: solidity
 
@@ -61,10 +59,11 @@ contract that returns the value at the specified address.
         }
     }
 
-The example below is a simplified version of an
-`ERC20 token <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol>`_.
-``_allowances`` is an example of a mapping type inside another mapping type.
-The example below uses ``_allowances`` to record the amount someone else is allowed to withdraw from your account.
+
+مثال زیر یک نسخه ساده از توکن `ERC20 token <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol>`_ است.  ``_allowances`` نمونه‌ای از نوع نگاشت در داخل نوع 
+نگاشت دیگر است. مثال زیر از ``_allowances`` برای ثبت مبلغی که شخص دیگری مجاز به برداشت از 
+حساب شما است استفاده می‌کند.
+
 
 .. code-block:: solidity
 
@@ -112,14 +111,14 @@ The example below uses ``_allowances`` to record the amount someone else is allo
 .. index:: !iterable mappings
 .. _iterable-mappings:
 
-Iterable Mappings
+نگاشت های تکرارپذیر 
 -----------------
 
-You cannot iterate over mappings, i.e. you cannot enumerate their keys.
-It is possible, though, to implement a data structure on
-top of them and iterate over that. For example, the code below implements an
-``IterableMapping`` library that the ``User`` contract then adds data too, and
-the ``sum`` function iterates over to sum all the values.
+نمی‌توانید بر روی نگاشت‌ها تکرار کنید، یعنی نمی‌توانید کلیدهای آنها را بشمارید.گرچند امکان اجرای یک 
+ساختار داده در بالای آنها و تکرار آن وجود دارد. به عنوان مثال، کد زیر یک 
+کتابخانه  ``IterableMapping`` را پیاده سازی می‌کند که قرارداد ``User`` سپس داده‌ها را نیز اضافه 
+می‌کند و تابع ``sum`` تکرار می‌شود تا تمام مقادیر را جمع کند.
+
 
 .. code-block:: solidity
     :force:
