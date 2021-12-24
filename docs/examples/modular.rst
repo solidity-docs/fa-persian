@@ -1,21 +1,11 @@
 .. index:: contract;modular, modular contract
 
 *****************
-Modular Contracts
+قراردادهای ماژولی 
 *****************
 
-A modular approach to building your contracts helps you reduce the complexity
-and improve the readability which will help to identify bugs and vulnerabilities
-during development and code review.
-If you specify and control the behaviour or each module in isolation, the
-interactions you have to consider are only those between the module specifications
-and not every other moving part of the contract.
-In the example below, the contract uses the ``move`` method
-of the ``Balances`` :ref:`library <libraries>` to check that balances sent between
-addresses match what you expect. In this way, the ``Balances`` library
-provides an isolated component that properly tracks balances of accounts.
-It is easy to verify that the ``Balances`` library never produces negative balances or overflows
-and the sum of all balances is an invariant across the lifetime of the contract.
+یک رویکرد ماژولی برای ساخت قراردادها، در کاهش پیچیدگی‌ها و بهبود خوانایی، که به شناسایی باگ‌ها و آسیب پذیری‌ها هنگام توسعه و بررسی کد کمک می‌کند. اگر رفتار یا هر ماژول را جداگانه تعیین و کنترل کنید، فعل و انفعالاتی را  باید فقط در روابط بین مشخصات ماژول در نظر بگیرید و نه هر قسمت متحرک دیگر قرارداد. 
+در مثال زیر، قرارداد از روش  ``move``   :ref:`کتابخانه <libraries>`  ``Balances``   برای بررسی اینکه بالانس‌های ارسال شده بین آدرس‌ها با آنچه شما انتظار دارید مطابقت دارد، استفاده می‌کند. به این ترتیب، کتابخانه ``Balances``  یک جز جداگانه است که موجودی حساب‌ها را به درستی ردیابی می‌کند را ارائه می‌دهد. به راحتی می‌توان تأیید کرد که کتابخانه  ``Balances``    هرگز موجودی یا سرریز منفی  تولید نمی‌کند و مجموع کل موجودی در طول مدت قرارداد ثابت نیست.
 
 .. code-block:: solidity
 

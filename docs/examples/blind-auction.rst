@@ -1,26 +1,18 @@
 .. index:: auction;blind, auction;open, blind auction, open auction
 
 *************
-Blind Auction
+مزایده کور
 *************
 
-In this section, we will show how easy it is to create a completely blind
-auction contract on Ethereum.  We will start with an open auction where
-everyone can see the bids that are made and then extend this contract into a
-blind auction where it is not possible to see the actual bid until the bidding
-period ends.
+در این بخش، نشان خواهیم داد که ایجاد یک قرارداد حراجِ کاملا کور  در اتریوم چقدر آسان است. ما با یک مزایده باز  شروع می‌کنیم که در آن همه می‌توانند پیشنهادات  ارائه شده را ببینند و سپس این قرارداد را به حراج کور توسعه می‌دهیم که در آن امکان مشاهده پیشنهاد واقعی تا زمان پایان مناقصه وجود ندارد.
+
 
 .. _simple_auction:
 
-Simple Open Auction
+مزایده باز ساده
 ===================
 
-The general idea of the following simple auction contract is that everyone can
-send their bids during a bidding period. The bids already include sending money
-/ Ether in order to bind the bidders to their bid. If the highest bid is
-raised, the previous highest bidder gets their money back.  After the end of
-the bidding period, the contract has to be called manually for the beneficiary
-to receive their money - contracts cannot activate themselves.
+ایده‌ی کلی قرارداد مزایده ساده  زیر این است که همه می‌توانند پیشنهادات خود را در طول یک دوره مناقصه  ارسال کنند. پیشنهادات در حال حاضر شامل ارسال پول/ اتر  به منظور متصل کردن مناقصه‌گرانِ  مناقصه به پیشنهاد آنها است. اگر بالاترین پیشنهاد  افزایش یابد، مناقصه‌گران قبلی پول خود را پس می‌گیرد. پس از پایان دوره مناقصه، قرارداد باید به صورت دستی فراخوانده شود تا ذینفع پول خود را دریافت کند- قراردادها نمی‌توانند خودشان فعال شوند.
 
 .. code-block:: solidity
 
@@ -161,34 +153,16 @@ to receive their money - contracts cannot activate themselves.
         }
     }
 
-Blind Auction
+مزایده کور
 =============
 
-The previous open auction is extended to a blind auction in the following. The
-advantage of a blind auction is that there is no time pressure towards the end
-of the bidding period. Creating a blind auction on a transparent computing
-platform might sound like a contradiction, but cryptography comes to the
-rescue.
+مزایده باز  قبلی در ادامه به مزایده کور  توسعه یافته‌است. مزیت مزایده کور این است که هیچ گونه فشار زمانی نسبت به پایان دوره مناقصه  وجود ندارد. ایجاد مزایده کور بر روی یک پلتفرم محاسباتی شفاف ممکن است متناقض به نظر برسد، اما رمزنگاری به کمک شما می‌آید.
 
-During the **bidding period**, a bidder does not actually send their bid, but
-only a hashed version of it.  Since it is currently considered practically
-impossible to find two (sufficiently long) values whose hash values are equal,
-the bidder commits to the bid by that.  After the end of the bidding period,
-the bidders have to reveal their bids: They send their values unencrypted and
-the contract checks that the hash value is the same as the one provided during
-the bidding period.
+در طول دوره مناقصه، **یک پیشنهاد دهنده** در واقع پیشنهاد  خود را ارسال نمی‌کند، بلکه فقط یک نسخه هش شده از آن را ارسال می‌کند. از آنجا که در حال حاضر یافتن دو مقدار (به اندازه کافی طولانی) که مقادیر هش آنها برابر باشد، عملاً غیرممکن تلقی می‌شود، مناقصه‌گر  با این کار متعهد به مناقصه می‌شود. پس از پایان دوره مناقصه، مناقصه‌گران باید پیشنهادات خود را آشکار کنند: آنها مقادیر خود را بدون رمزگذاری ارسال می‌کنند و قرارداد بررسی می‌کند که مقدار هش همان مقدار ارائه شده در دوره مناقصه است. 
 
-Another challenge is how to make the auction **binding and blind** at the same
-time: The only way to prevent the bidder from just not sending the money after
-they won the auction is to make them send it together with the bid. Since value
-transfers cannot be blinded in Ethereum, anyone can see the value.
+چالش دیگر این است که چگونه مزایده را به طور همزمان **اجباری و پنهان یا کور** جلوه دهید: تنها راه جلوگیری از ارسال نکردن مبلغ توسط داوطلب پس از برنده شدن در مزایده، ارسال آنها به همراه پیشنهاد است. از آنجا که انتقال مقدار در اتریوم  پنهان یا کور نمی‌شود، هر کسی می‌تواند مقدار را ببیند.
 
-The following contract solves this problem by accepting any value that is
-larger than the highest bid. Since this can of course only be checked during
-the reveal phase, some bids might be **invalid**, and this is on purpose (it
-even provides an explicit flag to place invalid bids with high value
-transfers): Bidders can confuse competition by placing several high or low
-invalid bids.
+ قرارداد زیر با قبول هر مقداری که بزرگتر از بالاترین پیشنهاد  باشد، این مشکل را حل می‌کند. از آنجایی که این فقط در مرحله آشکار شدن قابل بررسی است، ممکن است برخی از پیشنهادات نامعتبر باشند، و این هدفمند است (حتی یک فلَگ  صریح برای قرار دادن پیشنهادات **نامعتبر** با انتقال مقدار بالا ارائه می‌دهد): مناقصه‌گران  با قرار دادن چند پیشنهاد زیاد یا کم اعتبار، می‌توانند رقابت را  مختل کنند.
 
 
 .. code-block:: solidity
