@@ -3,14 +3,16 @@
 .. _errors:
 
 *******************************
-خطاها و عبارت واکشی
+Errors and the Revert Statement
 *******************************
 
-خطاهای سالیدیتی یک روش مناسب و کارآمد برای ارائه توضیحات در مورد عدم موفقیت یک
-عملیات به کار بر ارائه می دهد. آنها می توانند در داخل و خارج از قرارداد( از جمله رابط ها و کتابخانه ها) تعریف شوند.
+Errors in Solidity provide a convenient and gas-efficient way to explain to the
+user why an operation failed. They can be defined inside and outside of contracts (including interfaces and libraries).
 
-آنها باید به همارت :ref:`عبارت revert <revert-statement>` استفاده شوند که باعث می شود همه تغییرات در فراخوانی
-فعلی برگردانده شود داده های خطا به فراخوانی کننده منتقل می شود.
+They have to be used together with the :ref:`revert statement <revert-statement>`
+which causes
+all changes in the current call to be reverted and passes the error data back to the
+caller.
 
 .. code-block:: solidity
 
@@ -37,41 +39,44 @@
         // ...
     }
 
-خطاها غیر قابل بارگزاری یا بازنویسی هستنتد اما قابل وراثت هستند.
-همان خطا می تواند در چند مکان مختلف تعریف شود تا زمانی که در محدوده دید همپوشانی نداشته باشد. نمونه خطاها
-فقط می توانند توسط عبارت ``revert`` تولید شوند.
+Errors cannot be overloaded or overridden but are inherited.
+The same error can be defined in multiple places as long as the scopes are distinct.
+Instances of errors can only be created using ``revert`` statements.
 
-خطا داده را تولید می کند و آن را به همراه عملیات revert به فراخوانی کننده خارج از زنجیره
-یا به گیرنده عبارت :ref:`try/catch statement <try-catch>` بر می گرداند. نکته اینکه یک خطا تنها زمانی گرفته می شود که
-توسط یک فراخوانی خارجی انجام شده باشد، واکشی ها در فراخوانی داخلی  اتفاق می افتد و
-داخل همان تابع غیر قابل گرفتن است.
+The error creates data that is then passed to the caller with the revert operation
+to either return to the off-chain component or catch it in a :ref:`try/catch statement <try-catch>`.
+Note that an error can only be caught when coming from an external call,
+reverts happening in internal calls or inside the same function cannot be caught.
 
-اگر هیچ ورودی فراهم نشود، شما فقط به 4 بایت داده خطا نیاز دارید و شما می توانید از
-:ref:`NatSpec <natspec>` در بالا برای توضیح بیشتر دلایل این خطا، که در زنجیره ذخیره نشده است، استفاده
-کنید.
+If you do not provide any parameters, the error only needs four bytes of
+data and you can use :ref:`NatSpec <natspec>` as above
+to further explain the reasons behind the error, which is not stored on chain.
 This makes this a very cheap and convenient error-reporting feature at the same time.
 
-دقیقتر اینکه، یک نمونه خطا به همان صورت ABI کدکذاری می شود که فراخوانی به یک نابع با
-همان نام و نوع های آن است و سپس به عنوان داده بازگشت ``revert`` در کد باز گردانده می شود. به
-این معناست که داده ها از یک انتخابگر 4 بایتی و سپس داده های کد شده توسط :ref:`ABI-encoded<abi>` تشکیل
-شده اند. انتخابگر شامل 4 بایت اول هش keccak256-hash از نوع خطا است.
+More specifically, an error instance is ABI-encoded in the same way as
+a function call to a function of the same name and types would be
+and then used as the return data in the ``revert`` opcode.
+This means that the data consists of a 4-byte selector followed by :ref:`ABI-encoded<abi>` data.
+The selector consists of the first four bytes of the keccak256-hash of the signature of the error type.
 
 .. note::
-    این امکان وجود دارد که یک قرارداد با خطاهای مختلف به همین نام یا حتی با خطاهایی که
-    در مکان هایی یکسان هستند تعریف شده باشند و توسط فراخوانی کننده قابل تشخیص نباشند،
-    بازگردد. برای خارج ، یعنی ABI ، فقط با نام خطا ارتباط دارد، نه قرارداد و نه فایلی که در آن
-    تعریف شده است.
+    It is possible for a contract to revert
+    with different errors of the same name or even with errors defined in different places
+    that are indistinguishable by the caller. For the outside, i.e. the ABI,
+    only the name of the error is relevant, not the contract or file where it is defined.
 
-عبارت ``;require(condition, "description")`` معادل خواهد بود
-با ``if (!condition) revert Error("description")`` اگر شما بتوانید تعریف کنید 
+The statement ``require(condition, "description");`` would be equivalent to
+``if (!condition) revert Error("description")`` if you could define
 ``error Error(string)``.
-آن ``Error`` یک نوع داخلی است و در کد فراهم شده توسط کاربر قابل تعریف نیست.
+Note, however, that ``Error`` is a built-in type and cannot be defined in user-supplied code.
 
-مشابها، یک خطای ``assert`` یا شرایط مشابه به همراه یک خطایی از نوع داخلی
-``Panic(uint256)`` خواهد بود.
+Similarly, a failing ``assert`` or similar conditions will revert with an error
+of the built-in type ``Panic(uint256)``.
 
 .. note::
-    داده های خطا فقط باید برای نشان دادن خطا مورد استفاده قرار گیرند، نه برای کنترل
-    جریان. دلیل آن این است که داده های بازگشتی از فراخوانی داخلی به صورت پیش فرض از
-    طریق زنجیره فراخوانی های خارجی پخش می شوند. این بدان معناست که یک فراخوانی
-    داخلی می تواند "جعل" کند، داده هایی را که به نظر می رسد از آن قرارداد فراخانی شده است.
+    Error data should only be used to give an indication of failure, but
+    not as a means for control-flow. The reason is that the revert data
+    of inner calls is propagated back through the chain of external calls
+    by default. This means that an inner call
+    can "forge" revert data that looks like it could have come from the
+    contract that called it.

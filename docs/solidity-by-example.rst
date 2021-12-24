@@ -1,5 +1,5 @@
 ###################
-Solidity by Example
+سالیدیتی با مثال
 ###################
 
 .. include:: examples/voting.rst

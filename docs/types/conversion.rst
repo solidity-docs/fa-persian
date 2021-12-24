@@ -2,35 +2,38 @@
 
 .. _types-conversion-elementary-types:
 
-Conversions between Elementary Types
+تبدیل بین نوع‌های اصلی (Conversions between Elementary Types)
 ====================================
 
-Implicit Conversions
+تبدیل‌های ضمنی (Implicit Conversions)
 --------------------
 
-An implicit type conversion is automatically applied by the compiler in some cases
-during assignments, when passing arguments to functions and when applying operators.
-In general, an implicit conversion between value-types is possible if it makes
-sense semantically and no information is lost.
+در برخی موارد هنگام انتساب‌ها، هنگام انتقال آرگومان‌ها به توابع و هنگام اعمال عملگرها، کامپایلر به طور خودکار 
+یک نوع تبدیل ضمنی اعمال می‌کند. به طور کلی، اگر به صورت سمنتیک معنا پیدا کند و هیچ اطلاعاتی از بین 
+نرود، تبدیل ضمنی بین مقدار_نوع‌های مختلف امکان پذیر است.
+
+
+به عنوان مثال،  ``uint8`` به  ``uint16`` و  ``int128`` به  ``int256`` قابل تبدیل است، 
+اما  ``int8`` به  ``uint256`` قابل تبدیل نیست، زیرا  ``uint256`` نمی‌تواند مقادیری مانند  ``1-`` را نگه دارد.
 
 For example, ``uint8`` is convertible to
 ``uint16`` and ``int128`` to ``int256``, but ``int8`` is not convertible to ``uint256``,
 because ``uint256`` cannot hold values such as ``-1``.
 
-If an operator is applied to different types, the compiler tries to implicitly
-convert one of the operands to the type of the other (the same is true for assignments).
-This means that operations are always performed in the type of one of the operands.
+اگر یک عملگر بر روی نوع‌های مختلف اعمال شود، کامپایلر سعی می‌کند به طور ضمنی یکی از عملوندها را به 
+نوع دیگری تبدیل کند (این امر برای انتساب‌ها نیز صادق است). این بدان معناست که عملیات همیشه در نوع یکی از عملوندها انجام می‌شود.
 
-For more details about which implicit conversions are possible,
-please consult the sections about the types themselves.
 
-In the example below, ``y`` and ``z``, the operands of the addition,
-do not have the same type, but ``uint8`` can
-be implicitly converted to ``uint16`` and not vice-versa. Because of that,
-``y`` is converted to the type of ``z`` before the addition is performed
-in the ``uint16`` type. The resulting type of the expression ``y + z`` is ``uint16``.
-Because it is assigned to a variable of type ``uint32`` another implicit conversion
-is performed after the addition.
+برای جزئیات بیشتر در مورد اینکه کدام یک از تغییرات ضمنی امکان پذیر است، لطفاً با بخش‌هایی هر نوع مراجعه کنید.
+
+
+
+در مثال زیر،  ``y`` و  ``z`` ، عملوندهای جمع، یک نوع ندارند، اما  ``uint8`` را می‌توان به طور ضمنی 
+به  ``uint16`` تبدیل کرد و نه بالعکس. به همین دلیل،  ``y`` قبل از اینکه جمع در نوع  ``uint16`` انجام شود، 
+به نوع  ``z`` تبدیل می‌شود.  ``uint16`` نوع حاصل از عبارت  ``y + z`` است. از آنجا که به یک متغیر از نوع 
+``uint32`` اختصاص داده شده است، تبدیل ضمنی دیگر پس از جمع انجام می‌شود.
+
+
 
 .. code-block:: solidity
 
@@ -39,35 +42,35 @@ is performed after the addition.
     uint32 x = y + z;
 
 
-Explicit Conversions
+ تبدیل‌های صریح  (Explicit Conversions)
 --------------------
+  اگر کامپایلر اجازه تبدیل ضمنی را ندهد اما اطمینان دارید که یک تبدیل کار می‌کند، تبدیل صریح نوع گاهی 
+  اوقات امکان پذیر است. این ممکن است منجر به یک رفتار غیر منتظره شود و به شما امکان می‌دهد برخی از 
+  ویژگی‌های امنیتی کامپایلر را دور بزنید، بنابراین مطمئن شوید که نتیجه همان چیزی است که شما می‌خواهید 
+  و انتظار دارید!
 
-If the compiler does not allow implicit conversion but you are confident a conversion will work,
-an explicit type conversion is sometimes possible. This may
-result in unexpected behaviour and allows you to bypass some security
-features of the compiler, so be sure to test that the
-result is what you want and expect!
-
-Take the following example that converts a negative ``int`` to a ``uint``:
+ مثال زیر را در نظر بگیرید که  ``int`` منفی را به  ``uint`` تبدیل می‌کند:
 
 .. code-block:: solidity
 
     int  y = -3;
     uint x = uint(y);
 
-At the end of this code snippet, ``x`` will have the value ``0xfffff..fd`` (64 hex
-characters), which is -3 in the two's complement representation of 256 bits.
+در انتهای این قطعه کد، ``x``  دارای مقدار ``0xfffff..fd``   (64 نویسه hex) است که در نمایش مکمل 256 بیت 3- (منفی سه) است.
 
-If an integer is explicitly converted to a smaller type, higher-order bits are
-cut off:
+
+
+اگر یک عدد صحیح صریح به یک نوع کوچکتر تبدیل شود، بیت‌های مرتبه بالاتر  بریده می‌شوند:
+
+
 
 .. code-block:: solidity
 
     uint32 a = 0x12345678;
     uint16 b = uint16(a); // b will be 0x5678 now
 
-If an integer is explicitly converted to a larger type, it is padded on the left (i.e., at the higher order end).
-The result of the conversion will compare equal to the original integer:
+اگر یک عدد صحیح صریح به یک نوع بزرگتر تبدیل شود، در سمت چپ (یعنی در انتهای مرتبه بالاتر) قرار 
+می‌گیرد. نتیجه تبدیل برابر با عدد صحیح اصلی  خواهد بود:
 
 .. code-block:: solidity
 
@@ -75,18 +78,18 @@ The result of the conversion will compare equal to the original integer:
     uint32 b = uint32(a); // b will be 0x00001234 now
     assert(a == b);
 
-Fixed-size bytes types behave differently during conversions. They can be thought of as
-sequences of individual bytes and converting to a smaller type will cut off the
-sequence:
+نوع‌های بایت‌های با اندازه ثابت  در هنگام تبدیل متفاوت عمل می‌کنند. می‌توان آنها را به عنوان توالی بایت‌های 
+فردی در نظر گرفت و تبدیل به نوع کوچکتر، توالی را قطع می‌کند:
+
 
 .. code-block:: solidity
 
     bytes2 a = 0x1234;
     bytes1 b = bytes1(a); // b will be 0x12
 
-If a fixed-size bytes type is explicitly converted to a larger type, it is padded on
-the right. Accessing the byte at a fixed index will result in the same value before and
-after the conversion (if the index is still in range):
+اگر یک نوع بایت با اندازه ثابت صریحاً به یک نوع بزرگتر تبدیل شود، در سمت راست پر می‌شود. دستیابی به 
+بایت در یک شاخص ثابت منجر به همان مقدار قبل و بعد از تبدیل خواهد شد (اگر شاخص هنوز در محدوده 
+باشد):
 
 .. code-block:: solidity
 
@@ -95,11 +98,12 @@ after the conversion (if the index is still in range):
     assert(a[0] == b[0]);
     assert(a[1] == b[1]);
 
-Since integers and fixed-size byte arrays behave differently when truncating or
-padding, explicit conversions between integers and fixed-size byte arrays are only allowed,
-if both have the same size. If you want to convert between integers and fixed-size byte arrays of
-different size, you have to use intermediate conversions that make the desired truncation and padding
-rules explicit:
+ازآنجایی که آرایه‌های بایت با اندازه ثابت در هنگام کوتاه کردن یا پر کردن رفتار متفاوتی دارند، درصورتی که هر 
+دو از اندازه یکسانی برخوردار باشند، تبدیل صریح بین اعداد صحیح و آرایه‌های بایت با اندازه ثابت مجاز است. اگر 
+می‌خواهید بین اعداد صحیح و آرایه‌های بایت با اندازه ثابت با اندازه‌های مختلف تبدیل کنید، باید از تبدیلات 
+میانی استفاده کنید که قوانین کوتاه کردن و پر کردن مورد نظر را صریح می‌کند:
+
+
 
 .. code-block:: solidity
 
@@ -109,9 +113,10 @@ rules explicit:
     uint8 d = uint8(uint16(a)); // d will be 0x34
     uint8 e = uint8(bytes1(a)); // e will be 0x12
 
-``bytes`` arrays and ``bytes`` calldata slices can be converted explicitly to fixed bytes types (``bytes1``/.../``bytes32``).
-In case the array is longer than the target fixed bytes type, truncation at the end will happen.
-If the array is shorter than the target type, it will be padded with zeros at the end.
+آرایه‌های ``bytes`` و برش‌های ``bytes`` کال‌دیتا را می‌توان به طور صریح به انواع بایت‌های ثابت (``bytes1``/…/``bytes32``) 
+تبدیل کرد. در صورتی که آرایه طولانی تر از نوع بایت‌های ثابت هدف باشد، برش در انتها اتفاق می‌افتد. اگر آرایه کوتاهتر از نوع 
+هدف باشد، در انتها با صفر پر می‌شود.
+
 
 .. code-block:: solidity
 
@@ -132,14 +137,14 @@ If the array is shorter than the target type, it will be padded with zeros at th
 
 .. _types-conversion-literals:
 
-Conversions between Literals and Elementary Types
+تبدیل بین لیترال‌ها و نوع‌های اصلی 
 =================================================
 
-Integer Types
+انواع عدد صحیح  (Integer Types)
 -------------
+لیترال‌های عدد دسیمال و هگزادسیمال را می‌توان به طور ضمنی به هر نوع عددی صحیح که به اندازه کافی بزرگ 
+باشد و بتوان آن را بدون کوتاه سازی نشان داد، تبدیل کرد:
 
-Decimal and hexadecimal number literals can be implicitly converted to any integer type
-that is large enough to represent it without truncation:
 
 .. code-block:: solidity
 
@@ -148,17 +153,20 @@ that is large enough to represent it without truncation:
     uint16 c = 0x123456; // fails, since it would have to truncate to 0x3456
 
 .. note::
-    Prior to version 0.8.0, any decimal or hexadecimal number literals could be explicitly
-    converted to an integer type. From 0.8.0, such explicit conversions are as strict as implicit
-    conversions, i.e., they are only allowed if the literal fits in the resulting range.
 
-Fixed-Size Byte Arrays
+      قبل از نسخه 0.8.0، هر عدد تحت اعشاری یا هگزا دسیمال می‌تواند به ضمنی به یک نوع صحیح تبدیل 
+      شود. از 0.8.0، چنین تبدیل‌های صریح به اندازه تبدیل‌های ضمنی سختگیرانه هستند، یعنی تنها در صورتی 
+      مجاز هستند که کلمه تحت اللفظی در محدوده حاصله مطابقت داشته باشد.
+
+آرایه‌های بایت با اندازه ثابت 
 ----------------------
 
-Decimal number literals cannot be implicitly converted to fixed-size byte arrays. Hexadecimal
-number literals can be, but only if the number of hex digits exactly fits the size of the bytes
-type. As an exception both decimal and hexadecimal literals which have a value of zero can be
-converted to any fixed-size bytes type:
+اعداد اعشاری لیترال را نمی‌توان به صورت ضمنی به آرایه‌های بایت با اندازه ثابت تبدیل کرد. می‌تواند لیترال‌های 
+عددی هگزادسیمال باشد، اما فقط در صورتی که تعداد ارقام هگز دقیقاً متناسب با اندازه نوع بایت  باشد. به عنوان 
+ک استثنا، هر دو لیترال‌های دسیمال و هگزادسیمال که مقدار آنها صفر است، می‌توانند به هر تایپ بایت با اندازه 
+با اندازه ثابت تبدیل شوند:
+
+
 
 .. code-block:: solidity
 
@@ -170,8 +178,8 @@ converted to any fixed-size bytes type:
     bytes4 f = 0; // fine
     bytes4 g = 0x0; // fine
 
-String literals and hex string literals can be implicitly converted to fixed-size byte arrays,
-if their number of characters matches the size of the bytes type:
+اگر تعداد کاراکترهای آنها با اندازه نوع  بایت‌ها مطابقت داشته باشد، می‌توان لیترال‌های رشته‌ای و لیترال‌های 
+رشته‌ای هگزی را به طور ضمنی به آرایه‌های بایت با اندازه ثابت تبدیل کرد:
 
 .. code-block:: solidity
 
@@ -182,12 +190,16 @@ if their number of characters matches the size of the bytes type:
     bytes2 e = "x"; // not allowed
     bytes2 f = "xyz"; // not allowed
 
-Addresses
+آدرس‌ها
 ---------
 
-As described in :ref:`address_literals`, hex literals of the correct size that pass the checksum
-test are of ``address`` type. No other literals can be implicitly converted to the ``address`` type.
+همانطور که در :ref:`آدرس لیترال‌ها<address_literals>` توضیح داده شد، لیترال‌های هگز با اندازه صحیح که از آزمون چک‌سام  عبور 
+می‌کنند از نوع  ``address`` هستند. هیچ لیترال دیگری را نمی‌توان به طور ضمنی به 
+نوع  ``address`` تبدیل کرد.
 
-Explicit conversions from ``bytes20`` or any integer type to ``address`` result in ``address payable``.
 
-An ``address a`` can be converted to ``address payable`` via ``payable(a)``.
+تبدیل صریح از  ``bytes20``  یا هر نوع عدد صحیح به  ``address`` منجر به ``address payable``  می‌شود.
+
+
+``address a``  را می‌توان به ``address payable``  از طریق  ``payable(a)`` تبدیل کرد.
+

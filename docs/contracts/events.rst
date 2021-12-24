@@ -2,41 +2,43 @@
 
 .. _events:
 
-*********
-رویدادها 
-*********
+******
+Events
+******
 
-رویداد های سالیدیتی یک خلاصه ای از عملکرد گزارش گیری EVM ارائه می دهند. برنامه ها می
-توانند ار طریق رابط RPC به این رویداد ها ثبت نام کنند و به رویداد ها گوش دهند.
+Solidity events give an abstraction on top of the EVM's logging functionality.
+Applications can subscribe and listen to these events through the RPC interface of an Ethereum client.
 
-رویدادها اعضای وراثتی قرارداد ها هستند. وقتی آنها را فراخوانی می کنید، آنها باعث می شوند
-که ورودی هایی که در تراکنش ها ذخیره شده اند گزارش شوند – یک ساختار داده ویژه در
-بلاکچین. این گزارش ها با آدرس قرارد داد ها مرتبط هستند، تا زمانی که یک بلوک قابل
-دسترس است ، در بلاکچین گنجانده شده اند(از حالا تا بی نهایت،  ممکن است با آرامش نیز
-تغییر کند)،. گزارش و رویدادهای آن از داخل قرارداد ها (حتی از قراردادهایی که آنها را ایجاد
-کرده اند) قابل دسترس نیست .
+Events are inheritable members of contracts. When you call them, they cause the
+arguments to be stored in the transaction's log - a special data structure
+in the blockchain. These logs are associated with the address of the contract,
+are incorporated into the blockchain, and stay there as long as a block is
+accessible (forever as of now, but this might
+change with Serenity). The Log and its event data is not accessible from within
+contracts (not even from the contract that created them).
 
-یک در خواست Merkle proof  برای گزارش ها امکانپذیر است انجام شود، بنابراین اگر یک
-موجودیت خارجی قراردادی به همراه چنین اثباتی ارائه دهد، می تواند بررسی کند که گزارش
-واقعا در داخل بلاکچین وجود دارد یا نه. شما باید هدر های بلاک را تهیه کنید زیرا فقط آخرین
-256 بلوک هش قابل مشاهده است.
+It is possible to request a Merkle proof for logs, so if
+an external entity supplies a contract with such a proof, it can check
+that the log actually exists inside the blockchain. You have to supply block headers
+because the contract can only see the last 256 block hashes.
 
-شما می توانید خصیصه ``indexed`` تا حداکثر 3 ورودی اضافه کنید که آن را در یک سختار داده
-خاصی بنام "عناوین" :ref:`"topics" <abi_events>` بجای بخش داده ای گزارش قرار می دهد. اگر شما از آرایه های :ref:`reference type
-<reference-types>` 
-استفاده کنید(شامل رشته ای و بایتی) بعنوان ورودی شاخص دار شده، از هش Keccak-256
-به عنوان "عناوین" استفاده و ذخیره می شود، زیرا بخش عناوین تنها می تواند یک کلمه در خود
-جای دهد(32 بایت).
+You can add the attribute ``indexed`` to up to three parameters which adds them
+to a special data structure known as :ref:`"topics" <abi_events>` instead of
+the data part of the log.
+A topic can only hold a single word (32 bytes) so if you use a :ref:`reference type
+<reference-types>` for an indexed argument, the Keccak-256 hash of the value is stored
+as a topic instead.
 
-تمامی پارامترها/ورودی ها بدون خصیصه ``indexed`` در بخش داده گزارش به روش
-:ref:`ABI-encoded <ABI>` کد گذاری می شوند.
+All parameters without the ``indexed`` attribute are :ref:`ABI-encoded <ABI>`
+into the data part of the log.
 
-عناوین شما را قادر می شازند تا بین رویداد ها جستجو کنید، برای مثال زمانی که می خواهید
-یک ترتیب بلوک از رویدادهای خاص را فیلتر کنید. شما همچنین می توانید رویدادها را بر اساس
-آدرس قراردادی که رویداد را منتشر کرده است ، فیلتر کنید.
+Topics allow you to search for events, for example when filtering a sequence of
+blocks for certain events. You can also filter events by the address of the
+contract that emitted the event.
 
-برای مثال ، کد زیر در web3.js از `method <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs>`_ ``subscribe("logs")`` جهت فیلتر گزارش هایی که
-با عنوانی با مقدار آدرس مشخص دارند، استفاده می کند:
+For example, the code below uses the web3.js ``subscribe("logs")``
+`method <https://web3js.readthedocs.io/en/1.0/web3-eth-subscribe.html#subscribe-logs>`_ to filter
+logs that match a topic with a certain address value:
 
 .. code-block:: javascript
 
@@ -56,10 +58,12 @@
     });
 
 
-یکی از عناوین امضای هش رویداد است، مگر شما رویداد را به صورت ``ناشناس`` تعریف کرده
-باشید. این بدان معناست که امکان فیلتر رویدادهایی با نام ناشناس وجود ندارد، شما تنها می
-توانید رویداد ها را توسط آدرس قرارداد فیلتر کنید. مزیت رویداد های نا شناس این است که
-استقرار و فراخوانی آنها ارزان است.
+The hash of the signature of the event is one of the topics, except if you
+declared the event with the ``anonymous`` specifier. This means that it is
+not possible to filter for specific anonymous events by name, you can
+only filter by the contract address. The advantage of anonymous events
+is that they are cheaper to deploy and call. It also allows you to declare
+four indexed arguments rather than three.
 
 .. note::
     Since the transaction log only stores the event data and not the type,
@@ -91,7 +95,7 @@
         }
     }
 
-استفاده در جاوا اسکریپ API  به شکل زیر است:
+The use in the JavaScript API is as follows:
 
 .. code-block:: javascript
 
@@ -116,7 +120,7 @@
             console.log(result);
     });
 
-خروجی بالا شبیه زیر است (کوتاه شده است):
+The output of the above looks like the following (trimmed):
 
 .. code-block:: json
 
@@ -132,9 +136,9 @@
        }
     }
 
-منابع اضافی برای درک رویداد ها 
+Additional Resources for Understanding Events
 ==============================================
 
-- `اسناد جاوا اسکریپت <https://github.com/ethereum/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
-- `نمونه های استفاده از رویدادها <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
-- `چگونگی دسترسی به آنها در جاوا اسکریپت <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_
+- `Javascript documentation <https://github.com/ethereum/web3.js/blob/1.x/docs/web3-eth-contract.rst#events>`_
+- `Example usage of events <https://github.com/ethchange/smart-exchange/blob/master/lib/contracts/SmartExchange.sol>`_
+- `How to access them in js <https://github.com/ethchange/smart-exchange/blob/master/lib/exchange_transactions.js>`_

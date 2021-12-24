@@ -3,20 +3,18 @@
 .. _types:
 
 *****
-Types
+انواع
 *****
 
-Solidity is a statically typed language, which means that the type of each
-variable (state and local) needs to be specified.
-Solidity provides several elementary types which can be combined to form complex types.
+ سالیدیتی یک زبان نوع استاتیک است، به این معنی که نوع هر متغیر (state و local) باید مشخص شود. سالیدیتی چندین نوع اصلی را ارائه می‌دهد که می‌توانند با هم ترکیب شوند و انواع پیچیده‌ای را تشکیل دهند.
 
-In addition, types can interact with each other in expressions containing
-operators. For a quick reference of the various operators, see :ref:`order`.
+ علاوه بر این، انواع می‌توانند در عبارات حاوی عملگر  با یکدیگر تعامل داشته باشند. برای مراجعه سریع به عملگرهای مختلف، به بخش :ref:`ترتیب تقدم عملگرها<order>` مراجعه کنید
 
-The concept of "undefined" or "null" values does not exist in Solidity, but newly
-declared variables always have a :ref:`default value<default-value>` dependent
-on its type. To handle any unexpected values, you should use the :ref:`revert function<assert-and-require>` to revert the whole transaction, or return a
-tuple with a second ``bool`` value denoting success.
+
+مفهوم مقادیر " undefined " یا " “null " در سالیدیتی وجود ندارد، اما متغیرهای تازه اعلام شده همیشه :ref:`یک مقدار پیش فرض<default-value>` وابسته به نوع آنها دارند. برای استفاده از مقادیر غیر منتظره، باید از :ref:`تابع revert<assert-and-require>`  استفاده کنید تا کل تراکنش را برگردانید، یا یک تاپل  را با مقدار ``bool`` دوم  نشان دهید که موفقیت را نشان می‌دهد.
+انواع مقدار 
+
+
 
 .. include:: types/value-types.rst
 

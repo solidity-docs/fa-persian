@@ -596,103 +596,131 @@ Output Description
     }
 
 
-انواع خطا
-~~~~~~~~~
+Error Types
+~~~~~~~~~~~
 
-1. ``JSONError``: جیسون (JSON) ورودی طبق قالبندی مورد نیاز نیست، مثال ورودی، یک شی ای از نوع جیسون (JSON) نیست، زبان استفاده شده پشتیبانی نمی شود، وغیره
-2. ``IOError``:  خطا های مربوط به حین پردازش عملیات ورودی-خروجی  و یا خود ورودی/خروجی، مثل لینک URL ای که توسط سرور DNS غیر قابل ترجمه باشد یا عدم تطابق هش (hash) از طرف منبع فراهم کننده.
-3. ``ParserError``: کد منبع (source code) با قواعد زبان برنامه نویسی تطابق ندارد.
-4. ``DocstringParsingError``:  تگ های NatSpec دربلوک توضیحات توسط کامپایلر یا مفسر خوانده نمی شوند.
-5. ``SyntaxError``:  اشتباه نوشتاری ، مثل استفاده از دستور  ``continue`` خارج از حلقه ``for``
-6. ``DeclarationError``: تداخل در نام های مشخص کننده ، نا معتبر، غیرقابل ترجمه(توسط کامپایلر یا مفسر) مثل ``Identifier not found`` 
-7. ``TypeError``:  خطایی در حالت های متغیرهای سیستم، مثل تبدیل های نا معتبر انواع متغیر، مقدار دهی نا معتبر
-8. ``UnimplementedFeatureError``:  این ویژگی توسط کامپایلر پشتیبانی نمی شود، اما انتظار می رود در نسخه های بعدی پشتیبانی شود.
-9. ``InternalCompilerError``:  خطای داخلی در کامپایلر اتفاق افتاده است – این مسئله باید به عنوان ایراد گزارش داده شود.
-10. ``Exception``: ایراد نا شناخته حین کامپایل کردن - این مسئله باید به عنوان ایراد گزارش داده شود.
-11. ``CompilerError``:  استفاده نامعتبر از پشته(stack) کامپایلر- این مسئله باید به عنوان ایراد گزارش داده شود.
-12. ``FatalError``:  خطای حاد به درستی پردازش نشده است - این مسئله باید به عنوان ایراد گزارش داده شود.
-13. ``Warning``:  یک هشتدار کامپایلر را متوقف نخواهد کرد، اما اگر ممکن باشد باید شناسایی شود.
-14. ``Info``: اطلاعاتی که کامپایلر فکر می کند امکان دارد برای برنامه نویس کاربردی باشد، اما خطرناک نیستند و آدرس دهی به آنها ضروری نیست .
+1. ``JSONError``: JSON input doesn't conform to the required format, e.g. input is not a JSON object, the language is not supported, etc.
+2. ``IOError``: IO and import processing errors, such as unresolvable URL or hash mismatch in supplied sources.
+3. ``ParserError``: Source code doesn't conform to the language rules.
+4. ``DocstringParsingError``: The NatSpec tags in the comment block cannot be parsed.
+5. ``SyntaxError``: Syntactical error, such as ``continue`` is used outside of a ``for`` loop.
+6. ``DeclarationError``: Invalid, unresolvable or clashing identifier names. e.g. ``Identifier not found``
+7. ``TypeError``: Error within the type system, such as invalid type conversions, invalid assignments, etc.
+8. ``UnimplementedFeatureError``: Feature is not supported by the compiler, but is expected to be supported in future versions.
+9. ``InternalCompilerError``: Internal bug triggered in the compiler - this should be reported as an issue.
+10. ``Exception``: Unknown failure during compilation - this should be reported as an issue.
+11. ``CompilerError``: Invalid use of the compiler stack - this should be reported as an issue.
+12. ``FatalError``: Fatal error not processed correctly - this should be reported as an issue.
+13. ``Warning``: A warning, which didn't stop the compilation, but should be addressed if possible.
+14. ``Info``: Information that the compiler thinks the user might find useful, but is not dangerous and does not necessarily need to be addressed.
 
 
 .. _compiler-tools:
 
-ابزارهای کامپایلر
-*****************
+Compiler Tools
+**************
 
-ارتقا– سالیدینی
----------------
+solidity-upgrade
+----------------
 
-``solidity-upgrade`` می تواند کمکتان کند بصورت نیمه-اتوماتیک قراردادهای خود را طبق تغییرات جدید زبان بروز رسانی کنید، در حالی که این روش نمی تواند بعضا تمامی تغییرات مورد نیاز در بروزرسانی های جدید زبان را انجام دهد، فعلا بعضی ها را پشتیبانی می کند، اما در بعضی مواقع انجام تنظیمات دستی و تغییرات تکراری نیاز است.
+``solidity-upgrade`` can help you to semi-automatically upgrade your contracts
+to breaking language changes. While it does not and cannot implement all
+required changes for every breaking release, it still supports the ones, that
+would need plenty of repetitive manual adjustments otherwise.
 
 .. note::
 
-    ``solidity-upgrade``  بیشتر قسمت کار را جلو می برد، اما قرارداد های شما در آینده نیازمند تنظیمات دستی خواهد یود. ما توصیه می کنیم از یک برنامه مدیریت کنترل ورژن برای فایل های خود استفاده کنید. این برنامه برای بازبینی و نهایتا به حالت اول برگرداندن فایها کمک می کند.
+    ``solidity-upgrade`` carries out a large part of the work, but your
+    contracts will most likely need further manual adjustments. We recommend
+    using a version control system for your files. This helps reviewing and
+    eventually rolling back the changes made.
 
 .. warning::
 
-    تصور نشود که ``solidity-upgrade`` کامل و بدون ایراد است ، بنابراین لطفا با احتیاط استفاده کنید.
+    ``solidity-upgrade`` is not considered to be complete or free from bugs, so
+    please use with care.
 
-چطوری کار می کند
-~~~~~~~~~~~~~~~~~
+How it Works
+~~~~~~~~~~~~
 
-شما می توانید یک یا چند فایل کد سالیدیتی را به ``solidity-upgrade [files]`` ارسال کنید. اگر داخل قایل یا فایلها از دستور ``import`` استفاده کرده اید که اشاره به فایل هایی خارج از دایرکتوری ( مسیر / پوشه )  موجود اشاره می کند. شما نیاز دارید دایرکتوری ( مسیر / پوشه ) فایلهای وارد شده دیگر  را با دستور ``allow-paths [directory]--`` ارسال کنید. با ارسال دستور  ``ignore-missing--``  برای  چشم پوشی  از فایهای نا موجود می توانید استفاده کنید.
+You can pass (a) Solidity source file(s) to ``solidity-upgrade [files]``. If
+these make use of ``import`` statement which refer to files outside the
+current source file's directory, you need to specify directories that
+are allowed to read and import files from, by passing
+``--allow-paths [directory]``. You can ignore missing files by passing
+``--ignore-missing``.
 
-``solidity-upgrade``  بر اساس کتابخانه  ``libsolidity`` فایل های کد شما را می تواند بخواند ، کامپایل و آنالیز کند و ممکن است ارتقا رسانی های مناسب را داخل کد های شما پیدا کند.
+``solidity-upgrade`` is based on ``libsolidity`` and can parse, compile and
+analyse your source files, and might find applicable source upgrades in them.
 
-منظور از ارتقای منبع (source) تغییرات کوچک نوشتاری است. این تغییرات در یک کپی از فایلهای داده شده  داخل حافظه انجام می شود. به صورت پیش فرض قایهای داده شده ارتقا و تغییرات داخل آنها ذخیره می شود، اما با ارسال دستور ``dry-run--`` می توانید کل مراحل ارتقا رسانی را بدون ذخیره تغییرات در فایل های داده شده شبیه سازی کنید.
+Source upgrades are considered to be small textual changes to your source code.
+They are applied to an in-memory representation of the source files
+given. The corresponding source file is updated by default, but you can pass
+``--dry-run`` to simulate to whole upgrade process without writing to any file.
 
-مراحل ارتقا دو فاز دارد. در فاز اول فایل های سورس خوانده می شوند که در این مرحله عمل ارتقا ممکن نیست ، خطاهای جمع آوری می شوند و قابل گزارش گیری است در صورتی که از دستور ``verbose--``  استفاده شود. هیچ ارتقایی ممکن نیست در این مرحله.
+The upgrade process itself has two phases. In the first phase source files are
+parsed, and since it is not possible to upgrade source code on that level,
+errors are collected and can be logged by passing ``--verbose``. No source
+upgrades available at this point.
 
-در فاز دوم تمامی منبع ها (sources) کامپایل می شوند و تمامی ماژول های آنالیز ارتقا فعال شده درکنار عمل کامپایل آنها نیز اجرا می شوند. بصورت پیش فرض تمامی ماژول های موجود فعال می شوند.
-لطفا برای کسب اطلاعات بیشتر بخش مربوط به :ref:`ماژول های موجود <upgrade-modules>` را مطالعه کنید.
+In the second phase, all sources are compiled and all activated upgrade analysis
+modules are run alongside compilation. By default, all available modules are
+activated. Please read the documentation on
+:ref:`available modules <upgrade-modules>` for further details.
 
 
-ممکن است نتیجه بعضی خطاها با ارتقا منبع رفع شوند. اگر هیچ خطایی رخ نداد و گزارش داده شد که ارتقا به پایان رسیده است شما موفق شدید.اگر خطاهایی رخ داد و بعضی از ماژول های ارتقا گزارش داده اند که ارتقا با موفقیت به پایان رسیده عمل کامپایل تمامی منبع ها دوباره بر اساس آن ماژول هایی که  گزارش داده اند با موفقیت انجام شده اند از سر گرفته می شود.این مرحله به صورت تکراری طبق ماژول های ارتقایی که اعلام موفقیت آمیز ارتقا را کرده اند انجام می شود. اگر خطاهایی هنوز باقی مانده باشد شما می توانید گزارش آنها را با دستور``verbose--`` بگیرید.
-اگر خطایی رخ نداد قرارد داد های شما بروز هستند و می توانند به آخرین نسخه کامپایلر ، خوانده و کامپایل شوند.
+This can result in compilation errors that may
+be fixed by source upgrades. If no errors occur, no source upgrades are being
+reported and you're done.
+If errors occur and some upgrade module reported a source upgrade, the first
+reported one gets applied and compilation is triggered again for all given
+source files. The previous step is repeated as long as source upgrades are
+reported. If errors still occur, you can log them by passing ``--verbose``.
+If no errors occur, your contracts are up to date and can be compiled with
+the latest version of the compiler.
 
 .. _upgrade-modules:
 
-ماژول های ارتقا موجود
-~~~~~~~~~~~~~~~~~~~~~
+Available Upgrade Modules
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+----------------------------+---------+---------------------------------------------------------+
-|ماژول                       |نسخه     |توضیحات                                                  |
-+============================+=========+=========================================================+
-| ``constructor``            | 0.5.0   | برای تعریف تابع سازنده باید از کلمه کلیدی               |
-|                            |         | ``constructor`` استفاده کنید                            |
-+----------------------------+---------+---------------------------------------------------------+
-| ``visibility``             | 0.5.0   | تعریف صریح تابع اجباری است ،                            |
-|                            |         | بطور پیش فرض برای ``public``.                           |
-+----------------------------+---------+---------------------------------------------------------+
-| ``abstract``               | 0.6.0   | تمامی قابلیت های یک قرار استفاده نخواهد کرد             |
-|                            |         | از کلمه کلیدی ``abstract`` استفاده خواهد شد.            |
-+----------------------------+---------+---------------------------------------------------------+
-| ``virtual``                | 0.6.0   | توابعی که در بیرون پیاده سازی نشده اند نیاز دارن        |
-|                            |         | با رابط ``virtual`` نشانه گذاری شوند.                   |
-+----------------------------+---------+---------------------------------------------------------+
-| ``override``               | 0.6.0   | هنگام بازنویسی تابع از کلمه کلیدی،                      |
-|                            |         | ``override`` باید استفاده شود.                          |
-+----------------------------+---------+---------------------------------------------------------+
-| ``dotsyntax``              | 0.7.0   | حالت نوشتاری زیر منسوخ شده است:                         |
-|                            |         | ``f.gas(...)()``, ``f.value(...)()`` و                  |
-|                            |         | ``(new C).value(...)()``. بجاش به این شکل فراخوانی کنید |
-|                            |         | ``f{gas: ..., value: ...}()`` و                         |
-|                            |         | ``(new C){value: ...}()``.                              |
-+----------------------------+---------+---------------------------------------------------------+
-| ``now``                    | 0.7.0   | کلمه کلیدی ``now`` منسوخ شده و                          |
-|                            |         | بجاش از ``block.timestamp`` استفاده کنید.               |
-+----------------------------+---------+---------------------------------------------------------+
-| ``constructor-visibility`` | 0.7.0   | میدان دید توابع سازنده را پاک می کند.                   |
-|                            |         |                                                         |
-+----------------------------+---------+---------------------------------------------------------+
++----------------------------+---------+--------------------------------------------------+
+| Module                     | Version | Description                                      |
++============================+=========+==================================================+
+| ``constructor``            | 0.5.0   | Constructors must now be defined using the       |
+|                            |         | ``constructor`` keyword.                         |
++----------------------------+---------+--------------------------------------------------+
+| ``visibility``             | 0.5.0   | Explicit function visibility is now mandatory,   |
+|                            |         | defaults to ``public``.                          |
++----------------------------+---------+--------------------------------------------------+
+| ``abstract``               | 0.6.0   | The keyword ``abstract`` has to be used if a     |
+|                            |         | contract does not implement all its functions.   |
++----------------------------+---------+--------------------------------------------------+
+| ``virtual``                | 0.6.0   | Functions without implementation outside an      |
+|                            |         | interface have to be marked ``virtual``.         |
++----------------------------+---------+--------------------------------------------------+
+| ``override``               | 0.6.0   | When overriding a function or modifier, the new  |
+|                            |         | keyword ``override`` must be used.               |
++----------------------------+---------+--------------------------------------------------+
+| ``dotsyntax``              | 0.7.0   | The following syntax is deprecated:              |
+|                            |         | ``f.gas(...)()``, ``f.value(...)()`` and         |
+|                            |         | ``(new C).value(...)()``. Replace these calls by |
+|                            |         | ``f{gas: ..., value: ...}()`` and                |
+|                            |         | ``(new C){value: ...}()``.                       |
++----------------------------+---------+--------------------------------------------------+
+| ``now``                    | 0.7.0   | The ``now`` keyword is deprecated. Use           |
+|                            |         | ``block.timestamp`` instead.                     |
++----------------------------+---------+--------------------------------------------------+
+| ``constructor-visibility`` | 0.7.0   | Removes visibility of constructors.              |
+|                            |         |                                                  |
++----------------------------+---------+--------------------------------------------------+
 
-لطفا نکته های بخش های :doc:`0.5.0 release notes <050-breaking-changes>`,
+Please read :doc:`0.5.0 release notes <050-breaking-changes>`,
 :doc:`0.6.0 release notes <060-breaking-changes>`,
-:doc:`0.7.0 release notes <070-breaking-changes>` و :doc:`0.8.0 release notes <080-breaking-changes>` برای کسب اطلاعات بیشتر مطالعه کنید.
+:doc:`0.7.0 release notes <070-breaking-changes>` and :doc:`0.8.0 release notes <080-breaking-changes>` for further details.
 
-خلاصه
-~~~~~
+Synopsis
+~~~~~~~~
 
 .. code-block:: none
 
@@ -715,17 +743,17 @@ Output Description
 
 
 
-گزارش باگ / درخواستهای ویژگی
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Bug Reports / Feature Requests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-اگر شما باگی پیدا کردید یا در خواست قابلیت(ویژگی) دارید ، لطفا
-`یک درخواست <https://github.com/ethereum/solidity/issues/new/choose>`_ در گیت هاب پر کنید.
+If you found a bug or if you have a feature request, please
+`file an issue <https://github.com/ethereum/solidity/issues/new/choose>`_ on Github.
 
 
-مثال
-~~~~
+Example
+~~~~~~~
 
-فرض کنید شما قرارداد ذیل را در ``Source.sol`` دارید:
+Assume that you have the following contract in ``Source.sol``:
 
 .. code-block:: Solidity
 
@@ -760,24 +788,26 @@ Output Description
 
 
 
-تغییرات مورد نیاز
-^^^^^^^^^^^^^^^^^
+Required Changes
+^^^^^^^^^^^^^^^^
 
-قرارداد فوق از نسخه 0.7.0 به بعد کامپایل نشده است برای بروزرسانی قرارداد با نسخه بروز سالیدیتی، ماژول های ذیل باید اجرا شوند : ``constractor-visibility`` , ``now`` و ``dotsyntax`` 
+The above contract will not compile starting from 0.7.0. To bring the contract up to date with the
+current Solidity version, the following upgrade modules have to be executed:
+``constructor-visibility``, ``now`` and ``dotsyntax``. Please read the documentation on
+:ref:`available modules <upgrade-modules>` for further details.
 
-لطفا برای کسب اطلاعات بیشتر بخش مربوط به :ref:`ماژول های موجود <upgrade-modules>` را مطالعه کنید.
 
+Running the Upgrade
+^^^^^^^^^^^^^^^^^^^
 
-اجرای ارتقا
-^^^^^^^^^^^
-
-پیشنهاد می شود صراحتا با دستور ``modules--``  ماژول های ارتقا را مشخص کنید.
+It is recommended to explicitly specify the upgrade modules by using ``--modules`` argument.
 
 .. code-block:: bash
 
     solidity-upgrade --modules constructor-visibility,now,dotsyntax Source.sol
 
-همان طور که مشاهده می کنید دستور بالا تغییراتی را در زیر اعمال می کند. لطفا با دقت باز بینی کنید ( pragma بصورت دستی بروز رسانی خواهد شد)
+The command above applies all changes as shown below. Please review them carefully (the pragmas will
+have to be updated manually.)
 
 .. code-block:: Solidity
 

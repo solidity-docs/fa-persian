@@ -3,30 +3,29 @@
 .. _constants:
 
 **************************************
- متغیر های وضعیت ثابت و تغییر ناپذیر
+Constant and Immutable State Variables
 **************************************
 
+State variables can be declared as ``constant`` or ``immutable``.
+In both cases, the variables cannot be modified after the contract has been constructed.
+For ``constant`` variables, the value has to be fixed at compile-time, while
+for ``immutable``, it can still be assigned at construction time.
 
-متغیر های وضعیت می توانند به عنوان ثابت ``constant`` یا تغییرناپذیر ``immutable`` تعریف شوند. در هر دو حالت ، متغیر
-ها بعد از ساخته شدن قرارداد غیر قابل دستکاری هستند. برای متغیر های ثابت  ``constant`` ، مقدار دهی
-باید زمان کامپایل انجام شده باشد ، در صورتی که برای متغیر های تغییر ناپذیر ``immutable`` حین ساخته
-شدن قرارداد می توان مقدار دهی کرد.
+It is also possible to define ``constant`` variables at the file level.
 
-همچنین ممکن است متغیر های ثابت ``constant`` در سطح فایل تعریف شوند.
+The compiler does not reserve a storage slot for these variables, and every occurrence is
+replaced by the respective value.
 
-کامپایلر برای این نوع متغیر ها، شکاف(slot) ذخیره سازی رزرو نمی کند و هر مورد با مقدار
-مربوطه خود جایگزین می شود.
+Compared to regular state variables, the gas costs of constant and immutable variables
+are much lower. For a constant variable, the expression assigned to it is copied to
+all the places where it is accessed and also re-evaluated each time. This allows for local
+optimizations. Immutable variables are evaluated once at construction time and their value
+is copied to all the places in the code where they are accessed. For these values,
+32 bytes are reserved, even if they would fit in fewer bytes. Due to this, constant values
+can sometimes be cheaper than immutable values.
 
-در مقایسه با متغیر های وضعیت معمولی ، هزینه های گاز(gas) متغیر های ثابت و تغییرناپذیر
-خیلی خیلی پایینتر است. برای یک متغیر ثابت عبارتی که به آن اختصاص داده شده است(مقدار
-دهی شده است) در همه جاهایی که به آن دسترسی وجود دارد کپی شده و همچنین در هر بار
-بازبینی می شود. این بهینه سازی محلی را ممکن می کند. متغیر های تغییر ناپذیر یک بار هنگام
-ساخت بررسی می شوند و مقدار آنها در هر جایی که دسترسی به آن وجود دارد کپی می شود.
-برای این نوع مقادیر، 32 بایت رزرو شده است حتی اگر این مقادیر در بایت کمتری هم جا
-شوند. بنابراین ، مقادیر ثابت گاها ارزانتر از مقادیر تغییرناپذیر هستند.
-
-تمامی نوع های متغیر فعلا برای ثابت و تغییر ناپذیر پیاشده سازی نشده اند . فقط نوع :ref:`strings <strings>`
-(فقط برای ثابت) و نوعهای مقداری :ref:`value types <value-types>`. 
+Not all types for constants and immutables are implemented at this time. The only supported types are
+:ref:`strings <strings>` (only for constants) and :ref:`value types <value-types>`.
 
 .. code-block:: solidity
 
@@ -54,32 +53,38 @@
     }
 
 
-ثابت 
+Constant
 ========
 
-برای متغیر های ثابت ``constant`` ، در زمان کامپایل مقدار باید ثابت باشد و در جایی که متغیر تعریف می
-شود مقدار دهی می شود. هر عبارتی که به ذخیره سازی، داده های بلاکچین(مثل زمان بلوک ``block.timestamp`` ، 
-آدرس(این[بلوک] ``address(this).balance`` ) میزان حساب ``address(this).balance`` یا شماره بوک ``block.number`` ) یا اجراییه های داده ای( ``msg.value`` یا
-``()gasleft``) یا فراخوانی قراردادهای خارجی ممنوع است. عباراتی که ممکن است در تخصیص
-حافظه اثر جانبی داشته باشند مجاز هستند، اما آنهایی که ممکن است بر سایر اجزای حافظه
-تاثیر جانبی داشته باشند، مجاز نیستند. توابع داخلی ``keccak256`` ، ``sha256`` ، ``ripemd160`` ، 
-``ecrecover`` ، ``addmod`` و ``mulmod`` مجاز هستند ( حتی به همراه عبارت ``keccak256`` ، می
-توان قراردادهای خارجی نیز فراخوانی کرد).
+For ``constant`` variables, the value has to be a constant at compile time and it has to be
+assigned where the variable is declared. Any expression
+that accesses storage, blockchain data (e.g. ``block.timestamp``, ``address(this).balance`` or
+``block.number``) or
+execution data (``msg.value`` or ``gasleft()``) or makes calls to external contracts is disallowed. Expressions
+that might have a side-effect on memory allocation are allowed, but those that
+might have a side-effect on other memory objects are not. The built-in functions
+``keccak256``, ``sha256``, ``ripemd160``, ``ecrecover``, ``addmod`` and ``mulmod``
+are allowed (even though, with the exception of ``keccak256``, they do call external contracts).
 
-دلیل اجازه به تخصیص عوارض جانبی بر روی حافظه برای امکانسازی ساخت اشایه پیچیده مثل
-جدول-جستجو است. این ویژگی هنوز به طور کامل قابل استفاده نیست.
+The reason behind allowing side-effects on the memory allocator is that it
+should be possible to construct complex objects like e.g. lookup-tables.
+This feature is not yet fully usable.
 
-تغییر ناپذیر
-=============
+Immutable
+=========
 
-متغیر های تعریف شده به عنوان تغییرناپذیر ``immutable`` محدودیت کمتری نسبت به متغیر های ثابت ``constant`` دارند :
-به متغیر های تغییر ناپذیر می توان یک مقدار دلخواه در سازنده قرارداد یا در زمان تعریف آنها
-اختصاص داد. انها نمی توانند در زمان ساخت خوانده شوند و فقط یک بار مقدار دهی می شوند.
+Variables declared as ``immutable`` are a bit less restricted than those
+declared as ``constant``: Immutable variables can be assigned an arbitrary
+value in the constructor of the contract or at the point of their declaration.
+They can be assigned only once and can, from that point on, be read even during
+construction time.
 
-کد ساخت قرارداد که توسط کامپایلر تولید می شود قبل از بازگشت کد حین اجرایی قرارداد
-تمامی مراجعی که به متغیر تغییر ناپذیر اشاره می کند را مقداردهی خواهد کرد. این زمانی
-اهمیت دارد که می خواهید کد تولید شده توسط کامپایلر را با کد در حال حاضر ذخیره شده در
-بلاکچین مقایسه کنید.
+The contract creation code generated by the compiler will modify the
+contract's runtime code before it is returned by replacing all references
+to immutables by the values assigned to the them. This is important if
+you are comparing the
+runtime code generated by the compiler with the one actually stored in the
+blockchain.
 
 .. note::
   Immutables that are assigned at their declaration are only considered

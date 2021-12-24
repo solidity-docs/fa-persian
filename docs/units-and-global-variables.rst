@@ -1,13 +1,14 @@
 **************************************
-Units and Globally Available Variables
+واحدها و متغیرهای موجود در سطح جهانی
 **************************************
 
 .. index:: wei, finney, szabo, gwei, ether
 
-Ether Units
+واحدهای اتر
 ===========
 
-A literal number can take a suffix of ``wei``, ``gwei`` or ``ether`` to specify a subdenomination of Ether, where Ether numbers without a postfix are assumed to be Wei.
+یک عدد لیترال می‌تواند از پسوند  ``wei`` ، ``gwei`` یا  ``ether`` برای تعیین زیر-واحد  اتر استفاده کند، هنگامی 
+که اعداد اتر بدون پسوند باشند،`Wei فرض می‌شوند.
 
 .. code-block:: solidity
     :force:
@@ -16,19 +17,21 @@ A literal number can take a suffix of ``wei``, ``gwei`` or ``ether`` to specify 
     assert(1 gwei == 1e9);
     assert(1 ether == 1e18);
 
-The only effect of the subdenomination suffix is a multiplication by a power of ten.
+تنها تأثیر پسوند زیر-واحد عبارت است از ضرب در توان ده.
+
 
 .. note::
-    The denominations ``finney`` and ``szabo`` have been removed in version 0.7.0.
+
+    واحدهای ``finney`` و  ``szabo`` در نسخه 0.7.0 حذف شده اند.
 
 .. index:: time, seconds, minutes, hours, days, weeks, years
 
-Time Units
+واحد‌های زمان (Time Units)
 ==========
 
-Suffixes like ``seconds``, ``minutes``, ``hours``, ``days`` and ``weeks``
-after literal numbers can be used to specify units of time where seconds are the base
-unit and units are considered naively in the following way:
+پسوندهایی مانند  ``seconds`` ،  ``minutes``،  ``hours`` ،  ``days`` و  ``weeks`` پس از اعداد تحت اللفظی 
+می‌توانند برای تعیین واحدهای زمانی که ثانیه واحد اصلی است و واحدها به صورت ساده لوحانه در نظر گرفته 
+می شوند، استفاده شوند:
 
 * ``1 == 1 seconds``
 * ``1 minutes == 60 seconds``
@@ -36,17 +39,19 @@ unit and units are considered naively in the following way:
 * ``1 days == 24 hours``
 * ``1 weeks == 7 days``
 
-Take care if you perform calendar calculations using these units, because
-not every year equals 365 days and not even every day has 24 hours
-because of `leap seconds <https://en.wikipedia.org/wiki/Leap_second>`_.
-Due to the fact that leap seconds cannot be predicted, an exact calendar
-library has to be updated by an external oracle.
+اگر محاسبات تقویم را با استفاده از این واحدها انجام می‌دهید، مراقب باشید، زیرا هر سال معادل 365 روز نیست 
+و حتی هر روز به دلیل `ثانیه‌های کبیسه <https://en.wikipedia.org/wiki/Leap_second>`_  24 ساعت نیست. با توجه به اینکه ثانیه‌های کبیسه را نمی‌توان پیش 
+بینی کرد، یک کتابخانه تقویم دقیق باید توسط یک اوراکل خارجی بِروز شود. 
+
 
 .. note::
-    The suffix ``years`` has been removed in version 0.5.0 due to the reasons above.
 
-These suffixes cannot be applied to variables. For example, if you want to
-interpret a function parameter in days, you can in the following way:
+    پسوند  ``years`` به دلایل بالا در نسخه 0.5.0 حذف شده است.
+
+   
+این پسوندها را نمی‌توان روی متغیرها اعمال کرد. به عنوان مثال، اگر می‌خواهید پارامتر تابع را در روز تفسیر  
+کنید، می‌توانید به روش زیر عمل کنید:
+
 
 .. code-block:: solidity
 
@@ -58,320 +63,448 @@ interpret a function parameter in days, you can in the following way:
 
 .. _special-variables-functions:
 
-Special Variables and Functions
+متغیرها و توابع ویژه (Special Variables and Functions)
 ===============================
 
-There are special variables and functions which always exist in the global
-namespace and are mainly used to provide information about the blockchain
-or are general-use utility functions.
+متغیرها و توابع خاصی وجود دارند که همیشه در فضای نام جهانی  وجود دارند و عمدتاً برای ارائه اطلاعات در 
+مورد بلاکچین یا توابع کاربردی عمومی استفاده می‌شوند.
+
 
 .. index:: abi, block, coinbase, difficulty, encode, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
 
 
-Block and Transaction Properties
+بلاک و ویژگی‌های تراکنش
 --------------------------------
 
-- ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block when ``blocknumber`` is one of the 256 most recent blocks; otherwise returns zero
-- ``block.basefee`` (``uint``): current block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
-- ``block.chainid`` (``uint``): current chain id
-- ``block.coinbase`` (``address payable``): current block miner's address
-- ``block.difficulty`` (``uint``): current block difficulty
-- ``block.gaslimit`` (``uint``): current block gaslimit
-- ``block.number`` (``uint``): current block number
-- ``block.timestamp`` (``uint``): current block timestamp as seconds since unix epoch
-- ``gasleft() returns (uint256)``: remaining gas
-- ``msg.data`` (``bytes calldata``): complete calldata
-- ``msg.sender`` (``address``): sender of the message (current call)
-- ``msg.sig`` (``bytes4``): first four bytes of the calldata (i.e. function identifier)
-- ``msg.value`` (``uint``): number of wei sent with the message
-- ``tx.gasprice`` (``uint``): gas price of the transaction
-- ``tx.origin`` (``address``): sender of the transaction (full call chain)
+-	``blockhash(uint blockNumber) returns (bytes32)``  : هش بلاک داده شده زمانی که ``blocknumber`` یکی از 256 بلاک اخیر باشد. در غیر این صورت صفر را برمی گرداند.
+-   ``block.basefee`` (``uint``): بِیس فی بلاک فعلی ( `EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ و `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
+-	``block.chainid (uint)`` :  آی دی (id) زنجیره فعلی
+-	``block.coinbase (address payable)`` : آدرس فعلی استخراج کننده بلاک
+-	``block.difficulty (uint)`` : سختی بلاک فعلی
+-	``block.gaslimit (uint)``:   گَس لیمیت (gaslimit) بلاک فعلی  
+-	``block.number (uint)`` : شماره بلاک فعلی
+-	``block.timestamp (uint)`` : تایم استمپ (timestamp) بلاک فعلی به عنوان ثانیه از دوران یونیکس
+-	``gasleft() returns (uint256)`` : گَس باقی مانده
+-	``msg.data (bytes calldata)`` : کالدیتا (calldata)  کامل
+-	``msg.sender (address)`` : فرستنده پیام (فراخوانی فعلی)
+-	``msg.sig (bytes4)`` : چهار بایت اول calldata  ( مانند تابع identifier )
+-	``msg.value (uint)`` : تعداد wei ارسال شده با پیام
+-	``tx.gasprice (uint)`` : قیمت گَس  تراکنش
+-	``tx.origin (address)`` : فرستنده تراکنش (فراخوانی کامل زنجیره)
+
 
 .. note::
+
+    مقادیر همه اعضای  ``msg`` ، از جمله ``msg.sender``  و  ``msg.value`` می‌تواند برای هر فراخوانی تابع 
+    خارجی تغییر کند. این شامل تماس با توابع کتابخانه است.
+
     The values of all members of ``msg``, including ``msg.sender`` and
     ``msg.value`` can change for every **external** function call.
     This includes calls to library functions.
 
 .. note::
+
     When contracts are evaluated off-chain rather than in context of a transaction included in a
     block, you should not assume that ``block.*`` and ``tx.*`` refer to values from any specific
     block or transaction. These values are provided by the EVM implementation that executes the
     contract and can be arbitrary.
 
 .. note::
-    Do not rely on ``block.timestamp`` or ``blockhash`` as a source of randomness,
-    unless you know what you are doing.
 
-    Both the timestamp and the block hash can be influenced by miners to some degree.
-    Bad actors in the mining community can for example run a casino payout function on a chosen hash
-    and just retry a different hash if they did not receive any money.
+       به  ``block.timestamp`` یا  ``blockhash`` به عنوان منبع تصادفی اعتماد نکنید، مگر اینکه بدانید در حال انجام چه کاری هستید. 
 
-    The current block timestamp must be strictly larger than the timestamp of the last block,
-    but the only guarantee is that it will be somewhere between the timestamps of two
-    consecutive blocks in the canonical chain.
+    timestamp و   block hash تا حدی می‌توانند تحت تأثیر ماینرها قرار بگیرند. به عنوان مثال بازیگران 
+    بد در جامعه ماینینگ می‌توانند تابع payout  کازینو را روی یک هش انتخاب شده اجرا کرده و در صورت 
+    عدم دریافت پول، یک هش متفاوت را دوباره امتحان کنند.
 
-.. note::
-    The block hashes are not available for all blocks for scalability reasons.
-    You can only access the hashes of the most recent 256 blocks, all other
-    values will be zero.
+    زمانبندی بلاک فعلی باید بسیار بزرگتر از زمانبندی آخرین بلاک باشد، اما تنها تضمین در جایی است که بین 
+    زمانبندی دو بلاک متوالی در زنجیره متعارف  قرار گیرد.
+
 
 .. note::
-    The function ``blockhash`` was previously known as ``block.blockhash``, which was deprecated in
-    version 0.4.22 and removed in version 0.5.0.
+
+    هش بلاک به دلایل مقیاس پذیری برای همه بلاک‌ها در دسترس نیست. فقط می‌توانید به هش‌های 256 
+    بلاک جدید دسترسی پیدا کنید، همه مقادیر دیگر صفر خواهند بود.
+
+
 
 .. note::
-    The function ``gasleft`` was previously known as ``msg.gas``, which was deprecated in
-    version 0.4.21 and removed in version 0.5.0.
 
+    تابع  ``blockhash`` قبلاً به عنوان  ``block.blockhash`` شناخته میشد، که در نسخه 0.4.22 
+    منسوخ شده بود و در نسخه 0.5.0 حذف شد.
+
+ 
 .. note::
-    In version 0.7.0, the alias ``now`` (for ``block.timestamp``) was removed.
+
+    تابع  ``gasleft`` قبلاً به عنوان  ``msg.gas`` شناخته میشد، که در نسخه 0.4.21 منسوخ شده بود و در 
+    نسخه 0.5.0 حذف شده بود.
+
+ 
+.. note::
+
+    در نسخه 0.7.0 ، نام مستعار  ``now`` (برای  ``block.timestamp`` ) حذف شد.
+
 
 .. index:: abi, encoding, packed
 
-ABI Encoding and Decoding Functions
+توابع رمزگذاری و رمزگشایی ABI :
 -----------------------------------
 
-- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: ABI-decodes the given data, while the types are given in parentheses as second argument. Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
-- ``abi.encode(...) returns (bytes memory)``: ABI-encodes the given arguments
-- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of the given arguments. Note that packed encoding can be ambiguous!
-- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
-- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)```
+// saracodic comment آ for be sorted in text
+
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)`` : آABI داده‌های داده شده را رمزگشایی میکند، در حالی که انواع  آن در پرانتز به عنوان آرگومان دوم آورده شده است. مثال:
+ ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)`` : آ ABI-encodes آرگومان‌های داده شده
+- ``abi.encodePacked(...) returns (bytes memory)`` :  آ :ref:`packed encoding <abi_packed_mode>` آرگومان‌های داده شده را انجام می‌دهد. توجه داشته باشید که رمزگذاری بسته بندی شده می‌تواند مبهم باشد !
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)`` : آBI-encodes آرگومان‌های داده شده را از دوم شروع می‌کند و انتخاب کننده چهار بایت داده شده را اضافه می‌کند.
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)`` : معادل با  ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)`` است.
 
 .. note::
-    These encoding functions can be used to craft data for external function calls without actually
-    calling an external function. Furthermore, ``keccak256(abi.encodePacked(a, b))`` is a way
-    to compute the hash of structured data (although be aware that it is possible to
-    craft a "hash collision" using different function parameter types).
 
-See the documentation about the :ref:`ABI <ABI>` and the
-:ref:`tightly packed encoding <abi_packed_mode>` for details about the encoding.
+    از این توابع رمزگذاری می‌توان برای ایجاد داده برای فراخوانی توابع خارجی بدون فراخوانی یک تابع خارجی 
+    استفاده کرد. علاوه بر این، ``keccak256(abi.encodePacked(a, b))``  روشی برای محاسبه 
+    هش داده‌های ساختار یافته است (اگرچه توجه داشته باشید که امکان ایجاد "تصادم هش " با استفاده از انواع 
+    مختلف پارامترهای تابع وجود دارد).
+
+    
+برای اطلاع از جزئیات مربوط به رمزگذاری، مستند مربوط به :ref:`ABI <ABI>` و  :ref:`tightly packed encoding <abi_packed_mode>`  مراجعه کنید.
+
+
 
 .. index:: bytes members
 
-Members of bytes
+اعضای بایت(Members of bytes)
 ----------------
 
-- ``bytes.concat(...) returns (bytes memory)``: :ref:`Concatenates variable number of bytes and bytes1, ..., bytes32 arguments to one byte array<bytes-concat>`
+- ``bytes.concat(...) returns (bytes memory)`` : :ref:`تعداد متغیر bytes و bytes1 ،… ، bytes32 آرگومان را به یک آرایه بایت متصل می‌کند<bytes-concat>`
+
 
 .. index:: assert, revert, require
 
-Error Handling
+مدیریت خطا (Error Handling)
 --------------
 
-See the dedicated section on :ref:`assert and require<assert-and-require>` for
-more details on error handling and when to use which function.
+برای جزئیات بیشتر در مورد مدیریت خطا و زمان استفاده از کدام تابع، به بخش اختصاصی :ref:`assert and require<assert-and-require>` مراجعه کنید.
+
+
+
 
 ``assert(bool condition)``
-    causes a Panic error and thus state change reversion if the condition is not met - to be used for internal errors.
+
+    در صورت برآورده نشدن شرایط برای استفاده از خطاهای داخلی، باعث ایجاد خطای Panic و در نتیجه برگشت تغییر حالت می‌شود.
+
+  
 
 ``require(bool condition)``
-    reverts if the condition is not met - to be used for errors in inputs or external components.
+
+     اگر شرایط برآورده نشود revert  می‌شود- برای خطاهای ورودی یا کامپوننت‌ های خارجی استفاده می‌شود.
+
+
 
 ``require(bool condition, string memory message)``
-    reverts if the condition is not met - to be used for errors in inputs or external components. Also provides an error message.
 
+    اگر شرط برآورده نشود برمی‌گردد - برای خطاهای ورودی یا کامپوننت‌های خارجی استفاده می‌شود. همچنین یک پیام خطا ارائه می‌دهد.
+
+ 
 ``revert()``
-    abort execution and revert state changes
+
+    اجرا را لغو کرده و تغییرات حالت را برگرداند.
+
 
 ``revert(string memory reason)``
-    abort execution and revert state changes, providing an explanatory string
+
+    اجرا را لغو کرده و تغییرات حالت را برمیگرداند، یک رشته  توضیحی ارائه دهید.
+
 
 .. index:: keccak256, ripemd160, sha256, ecrecover, addmod, mulmod, cryptography,
 
 .. _mathematical-and-cryptographic-functions:
 
-Mathematical and Cryptographic Functions
+توابع ریاضی و رمزنگاری
 ----------------------------------------
 
+// comment saracodic  ``(x + y) % k`` 
+
 ``addmod(uint x, uint y, uint k) returns (uint)``
-    compute ``(x + y) % k`` where the addition is performed with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
+    محاسبه  ``(x + y) % k`` که در آن ضرب با دقت دلخواه انجام می‌شود و در  ``2**256`` جمع نمی‌شود. 
+    اثبات کنید  که   ``k != 0`` از نسخه 0.5.0 شروع می‌شود.
 
 ``mulmod(uint x, uint y, uint k) returns (uint)``
+
+
     compute ``(x * y) % k`` where the multiplication is performed with arbitrary precision and does not wrap around at ``2**256``. Assert that ``k != 0`` starting from version 0.5.0.
 
 ``keccak256(bytes memory) returns (bytes32)``
-    compute the Keccak-256 hash of the input
+
+    هش Keccak-256 ورودی را محاسبه می‌کند.
+
 
 .. note::
 
-    There used to be an alias for ``keccak256`` called ``sha3``, which was removed in version 0.5.0.
+    قبلاً نام مستعار ``keccak256`` با نام ``sha3`` وجود داشت که در نسخه 0.5.0 حذف شد.
+
+
 
 ``sha256(bytes memory) returns (bytes32)``
-    compute the SHA-256 hash of the input
+
+    هش SHA-256 ورودی را محاسبه کنید
+
+    
 
 ``ripemd160(bytes memory) returns (bytes20)``
-    compute RIPEMD-160 hash of the input
+
+    هش RIPEMD-160 ورودی را محاسبه کنید
+    
 
 ``ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)``
-    recover the address associated with the public key from elliptic curve signature or return zero on error.
-    The function parameters correspond to ECDSA values of the signature:
 
-    * ``r`` = first 32 bytes of signature
-    * ``s`` = second 32 bytes of signature
-    * ``v`` = final 1 byte of signature
+    آدرس مربوط به کلید عمومی را از امضای منحنی بیضوی  بازیابی کنید یا خطا را صفر کنید. پارامترهای تابع با مقادیر ECDSA امضا مطابقت دارد:
 
-    ``ecrecover`` returns an ``address``, and not an ``address payable``. See :ref:`address payable<address>` for
-    conversion, in case you need to transfer funds to the recovered address.
+ 
+    * ``r``  = اولین 32 بایت  امضا 
+    * ``s``  = دوم 32 بایت امضا
+    * ``v``  =  یک بایت (1 byte) نهایی امضا
 
-    For further details, read `example usage <https://ethereum.stackexchange.com/questions/1777/workflow-on-signing-a-string-with-private-key-followed-by-signature-verificatio>`_.
+
+    ``ecrecover``  یک  ``address`` را برمی‌گرداند و یک   ``address payable`` نیست. در صورت نیاز 
+    به انتقال وجه به آدرس بازیابی شده،  :ref:`address payable<address>` برای تبدیل را ببینید.
+ 
+
+   
+       برای جزئیات بیشتر، `example usage <https://ethereum.stackexchange.com/questions/1777/workflow-on-signing-a-string-with-private-key-followed-by-signature-verificatio>`_ را مطالعه کنید.
+
 
 .. warning::
 
-    If you use ``ecrecover``, be aware that a valid signature can be turned into a different valid signature without
-    requiring knowledge of the corresponding private key. In the Homestead hard fork, this issue was fixed
-    for _transaction_ signatures (see `EIP-2 <https://eips.ethereum.org/EIPS/eip-2#specification>`_), but
-    the ecrecover function remained unchanged.
+    اگر از    ``ecrecover`` استفاده می‌کنید، توجه داشته باشید که بدون نیاز به آگاهی از کلید خصوصی مربوطه، 
+    می‌توانید یک امضای معتبر را به امضای معتبر دیگری تبدیل کنید. در هارد فورک Homestead، این مسئله 
+    برای امضای _transaction_ ثابت شد ( `EIP-2 <https://eips.ethereum.org/EIPS/eip-2#specification>`_ را مشاهده کنید )، اما تابع ecrecover بدون تغییر باقی ماند.
+    این معمولاً مشکلی ایجاد نمی‌کند مگر اینکه شما نیاز به امضا برای منحصر به فرد بودن یا استفاده از آنها برای 
 
-    This is usually not a problem unless you require signatures to be unique or
-    use them to identify items. OpenZeppelin have a `ECDSA helper library <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ that you can use as a wrapper for ``ecrecover`` without this issue.
+    شناسایی آیتم‌ها داشته باشید. OpenZeppelin `دارای یک کتابخانه کمکی ECDSA <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ است که می‌توانید 
+    بدون این مشکل به عنوان یک  wrapper برای   ``ecrecover`` از آن استفاده کنید.
+    
 
 .. note::
 
-    When running ``sha256``, ``ripemd160`` or ``ecrecover`` on a *private blockchain*, you might encounter Out-of-Gas. This is because these functions are implemented as "precompiled contracts" and only really exist after they receive the first message (although their contract code is hardcoded). Messages to non-existing contracts are more expensive and thus the execution might run into an Out-of-Gas error. A workaround for this problem is to first send Wei (1 for example) to each of the contracts before you use them in your actual contracts. This is not an issue on the main or test net.
+    هنگام اجرای  ``sha256`` ،  ``ripemd160`` یا  ``ecrecover`` در *بلاکچین خصوصی* ، ممکن است با Out-of-Gas روبرو شوید. 
+    این به این دلیل است که این توابع به عنوان "قراردادهای از پیش تدوین شده" اجرا می‌شوند و تنها پس از دریافت اولین پیام (اگرچه کد قرارداد آنها دارای hardcoded است) واقعاً وجود دارند. 
+    پیام به قراردادهای غیر موجود  گرانتر است و بنابراین ممکن است اجرا با خطای Out-of-Gas مواجه شود. 
+    یک راه حل برای این مشکل این است که قبل از استفاده از Wei  (به عنوان مثال 1) به هر یک از قراردادها، 
+    آنها را در قراردادهای واقعی خود بفرستید. این مسئله در شبکه اصلی یا آزمایشی نیست.
 
 .. index:: balance, codehash, send, transfer, call, callcode, delegatecall, staticcall
 
 .. _address_related:
 
-Members of Address Types
+اعضای انواع آدرس Members of Address Types
 ------------------------
 
+//saracodic swapping text
+
 ``<address>.balance`` (``uint256``)
-    balance of the :ref:`address` in Wei
+
+    بالانس :ref:`آدرس<address>` در Wei
+
+
+    
 
 ``<address>.code`` (``bytes memory``)
-    code at the :ref:`address` (can be empty)
+
+    کد در :ref:`آدرس<address>` (می‌تواند خالی باشد)
+
+ 
 
 ``<address>.codehash`` (``bytes32``)
+
+    هش کد  :ref:`آدرس<address>`
+
     the codehash of the :ref:`address`
 
 ``<address payable>.transfer(uint256 amount)``
-    send given amount of Wei to :ref:`address`, reverts on failure, forwards 2300 gas stipend, not adjustable
+
+    ارسال مقدار داده شده از Wei به :ref:`آدرس<address>` ، در صورت شکست  بازگردانده می‌شود، ارسال کارمزد  2300  گَس، غیر قابل قابل تنظیم 
+
+
 
 ``<address payable>.send(uint256 amount) returns (bool)``
-    send given amount of Wei to :ref:`address`, returns ``false`` on failure, forwards 2300 gas stipend, not adjustable
+
+    ارسال مقدار داده شده Wei به :ref:`آدرس<address>` ، در صورت خرابی  ``false`` برمیگرداند، ارسال کارمزد 2300  گَس، غیر قابل تنظیم 
+
 
 ``<address>.call(bytes memory) returns (bool, bytes memory)``
-    issue low-level ``CALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    
+    صدور  ``CALL`` سطح پایین با پیلود  داده شده، شرایط موفقیت را برمی‌گرداند و داده‌ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم 
 
+ 
 ``<address>.delegatecall(bytes memory) returns (bool, bytes memory)``
-    issue low-level ``DELEGATECALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+   
+   صدور ``DELEGATECALL`` سطح پایین  با پیلود داده شده، شرط موفقیت را برمی‌گرداند و داده ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم 
 
+ 
 ``<address>.staticcall(bytes memory) returns (bool, bytes memory)``
-    issue low-level ``STATICCALL`` with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    
+    صدور سطح پایین  ``STATICCALL`` با میزان پیلود داده شده، شرط موفقیت را برمی‌گرداند و داده‌ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم 
 
-For more information, see the section on :ref:`address`.
 
-.. warning::
-    You should avoid using ``.call()`` whenever possible when executing another contract function as it bypasses type checking,
-    function existence check, and argument packing.
+برای اطلاعات بیشتر به بخش :ref:`آدرس<address>` مراجعه کنید.
 
 .. warning::
-    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
-    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
-    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
-    Use a pattern where the recipient withdraws the money.
+
+    هنگام اجرای تابع قرارداد دیگر، تا جایی که ممکن است از استفاده از  ``()call.`` خودداری کنید زیرا مانع 
+    از بررسی نوع، بررسی وجود تابع و بسته بندی  آرگومان می‌شود.
 
 .. warning::
-    Due to the fact that the EVM considers a call to a non-existing contract to always succeed,
-    Solidity includes an extra check using the ``extcodesize`` opcode when performing external calls.
-    This ensures that the contract that is about to be called either actually exists (it contains code)
-    or an exception is raised.
+
+    برخی از خطرات استفاده از  ``send`` وجود دارد: اگر عمق فراخوانی پشته 1024 باشد، انتقال با شکست مواجه 
+    می‌شود (این امر همیشه می‌تواند توسط تماس گیرنده اجبار شود) و همچنین در صورت تمام شدن گَس گیرنده 
+    با شکست مواجه می‌شود. بنابراین، برای انجام انتقال ایمن اتر، همیشه مقدار بازگشتی  ``send`` را بررسی کنید، 
+    یا حتی بهتر است از  ``transfer`` استفاده کنید: از الگویی استفاده کنید که گیرنده پول را برداشت می‌کند.
+
+   
+
+.. warning::
+
+    با توجه به این واقعیت که EVM فراخوانی یک قرارداد غیر موجود را همیشه موفق می‌داند، سالیدیتی شامل 
+    یک بررسی اضافی با استفاده از آپکد  ``extcodesize`` هنگام انجام فراخوانی‌های خارجی است. این تضمین 
+    می‌کند که قراردادی که قرار است نامیده شود یا واقعاً وجود دارد (حاوی کد است) یا یک استثناء  مطرح 
+    می‌شود.
+
+   
+
+//saracodic swapping text
+
+    فراخوانی‌های سطح پایین که بیشتر از آدرسها استفاده می‌کنند تا موارد قرارداد   
+    (i.e. ``.call()``, ``.delegatecall()``, ``.staticcall()``, ``.send()`` and ``.transfer()``)
+    شامل این بررسی نمی‌شوند، که از نظر گَس آنها را ارزان تر می‌کند اما از ایمنی کمتری برخوردار هستند.
 
     The low-level calls which operate on addresses rather than contract instances (i.e. ``.call()``,
     ``.delegatecall()``, ``.staticcall()``, ``.send()`` and ``.transfer()``) **do not** include this
     check, which makes them cheaper in terms of gas but also less safe.
 
 .. note::
-   Prior to version 0.5.0, Solidity allowed address members to be accessed by a contract instance, for example ``this.balance``.
-   This is now forbidden and an explicit conversion to address must be done: ``address(this).balance``.
+
+   قبل از نسخه 0.5.0، سالیدیتی به اعضای  آدرس اجازه می‌داد تا با یک مورد قرارداد، به عنوان 
+    مثال  ``this.balance`` ، دسترسی داشته باشند. این در حال حاضر ممنوع است و تبدیل صریح  به آدرس 
+    باید انجام شود:  ``address(this).balance`` .
+
+   
+.. note::
+
+    اگر به متغیرهای حالت از طریق "delegatecall" سطح پایین دسترسی پیدا کنید، طرح storage دو 
+    قرارداد باید همسو باشد تا قرارداد فراخوانی شده به درستی به نام متغیرهای storage قرارداد فراخوانی شده 
+    دسترسی پیدا کند. البته اگر اشاره‌گرهای  storage به عنوان آرگومان‌های تابع مانند کتابخانه‌های سطح بالا 
+    ارسال شوند، اینطور نیست.
+
+  // saracodic comment: swapping text
 
 .. note::
-   If state variables are accessed via a low-level delegatecall, the storage layout of the two contracts
-   must align in order for the called contract to correctly access the storage variables of the calling contract by name.
-   This is of course not the case if storage pointers are passed as function arguments as in the case for
-   the high-level libraries.
 
-.. note::
+    قبل از نسخه 0.5.0 ،   ``call.``  ،    ``delegatecall.``  و   ``staticcall.``  فقط وضعیت موفقیت  را برمی‌گرداند و نه داده‌های بازگشتی.
+
     Prior to version 0.5.0, ``.call``, ``.delegatecall`` and ``.staticcall`` only returned the
     success condition and not the return data.
 
 .. note::
-    Prior to version 0.5.0, there was a member called ``callcode`` with similar but slightly different
-    semantics than ``delegatecall``.
+
+    قبل از نسخه 0.5.0، یکی از اعضا به نام  ``callcode`` با معنایی مشابه اما کمی متفاوت از  ``delegatecall`` وجود داشت.
+
+  
 
 
 .. index:: this, selfdestruct
 
-Contract Related
+مربوط به قرارداد (Contract Related)
 ----------------
 
-``this`` (current contract's type)
-    the current contract, explicitly convertible to :ref:`address`
+``this`` (نوع قرارداد فعلی)
+
+    قرارداد فعلی، به صراحت قابل تبدیل به :ref:`آدرس<address>` است
+
 
 ``selfdestruct(address payable recipient)``
-    Destroy the current contract, sending its funds to the given :ref:`address`
-    and end execution.
-    Note that ``selfdestruct`` has some peculiarities inherited from the EVM:
 
-    - the receiving contract's receive function is not executed.
-    - the contract is only really destroyed at the end of the transaction and ``revert`` s might "undo" the destruction.
+    قرارداد فعلی را از بین ببرید، وجوه آن را به :ref:`آدرس<address>`  داده شده ارسال کرده و اجرا را پایان دهید. توجه داشته باشید 
+    که  ``selfdestruct`` برخی از ویژگی‌های به ارث برده شده از EVM را دارد:
 
 
 
+    -	تابع دریافت قراردادِ دریافت کننده اجرا نمی‌شود.
+    -	قرارداد واقعاً در پایان تراکنش از بین می‌رود و ``revert``  ممکن است تخریب را "undo" کند.
 
-Furthermore, all functions of the current contract are callable directly including the current function.
+
+
+علاوه بر این، تمام توابع قرارداد فعلی مستقیماً از جمله تابع فعلی قابل فراخوانی هستند.
+
+
 
 .. note::
-    Prior to version 0.5.0, there was a function called ``suicide`` with the same
-    semantics as ``selfdestruct``.
 
+    قبل از نسخه 0.5.0 ، تابعی به نام  ``suicide`` با معنایی  مشابه  ``selfdestruct`` وجود داشت.
+    
+  
 .. index:: type, creationCode, runtimeCode
 
 .. _meta-type:
 
-Type Information
+اطلاعات نوع (Type Information)
 ----------------
 
-The expression ``type(X)`` can be used to retrieve information about the type
-``X``. Currently, there is limited support for this feature (``X`` can be either
-a contract or an integer type) but it might be expanded in the future.
+از عبارت  ``type(X)`` می‌توان برای بازیابی اطلاعات مربوط به ``type X`` استفاده کرد. در حال حاضر، پشتیبانی 
+محدودی برای این ویژگی وجود دارد ( ``X``  می‌تواند یک قرارداد یا یک نوع صحیح باشد) اما ممکن است در آینده 
+گسترش یابد.
 
-The following properties are available for a contract type ``C``:
+
+
+ویژگیهای زیر برای قرارداد نوع  ``C`` موجود است:
+
 
 ``type(C).name``
-    The name of the contract.
+
+    نام قرارداد.
+
+
 
 ``type(C).creationCode``
-    Memory byte array that contains the creation bytecode of the contract.
-    This can be used in inline assembly to build custom creation routines,
-    especially by using the ``create2`` opcode.
-    This property can **not** be accessed in the contract itself or any
-    derived contract. It causes the bytecode to be included in the bytecode
-    of the call site and thus circular references like that are not possible.
+
+    آرایه بایت مِمٌوری که شامل بایت کد ایجاد قرارداد می‌باشد. این را می‌توان در اسمبلی داخلی برای ایجاد روال‌های 
+    build custom، به ویژه با استفاده از آپکد ``create2``  استفاده کرد. این ویژگی در خود قرارداد یا هر 
+    قرارداد مشتق شده قابل دسترسی نیست. این باعث می‌شود که بایت‌کد در بایت‌کد سایت فراخوانی قرار گیرد و 
+    بنابراین رفرنس‌های circular  مانند آن امکان پذیر نیستند.
+
+ 
 
 ``type(C).runtimeCode``
-    Memory byte array that contains the runtime bytecode of the contract.
-    This is the code that is usually deployed by the constructor of ``C``.
-    If ``C`` has a constructor that uses inline assembly, this might be
-    different from the actually deployed bytecode. Also note that libraries
-    modify their runtime bytecode at time of deployment to guard against
-    regular calls.
-    The same restrictions as with ``.creationCode`` also apply for this
-    property.
 
-In addition to the properties above, the following properties are available
-for an interface type ``I``:
+    آرایه بایت مِمُوری که شامل بایت کد زمان اجرای قرارداد است. این کدی است که معمولاً توسط کانستراکتور   ``C`` . 
+    دیپلوی می‌شود. اگر  ``C`` دارای کانستراکتوری باشد که از اسمبلی درون خطی استفاده می‌کند، ممکن است با 
+    بایت‌کد دیپلوی شده متفاوت باشد. همچنین توجه داشته باشید که کتابخانه‌ها برای محافظت در برابر فراخوانی‌های 
+    منظم، بایت‌کد زمان اجرا خود را در زمان دیپلوی تغییر می‌دهند. محدودیت‌های مشابه ``creationCode.``  
+    نیز برای این ویژگی اعمال می‌شود.
+ 
+
+علاوه بر ویژگی‌های بالا، ویژگی‌های زیر برای اینترفیس تایپ   ``I``  موجود است:
+
+
 
 ``type(I).interfaceId``:
-    A ``bytes4`` value containing the `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_
-    interface identifier of the given interface ``I``. This identifier is defined as the ``XOR`` of all
-    function selectors defined within the interface itself - excluding all inherited functions.
 
-The following properties are available for an integer type ``T``:
+    مقدار ``bytes4``  حاوی مشخص کننده   اینترفیس `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_ اینترفیس ``I`` داده شده‌است. این مشخص 
+    کننده به عنوان ``XOR``  ، همه انتخاب کننده‌های  تابع تعریف شده در داخل اینترفیس تعریف می‌شود - بدون 
+    حذف همه توابع به ارث برد شده.
+
+
+خواص زیر برای یک عدد صحیح تایپ  ``T`` موجود است:
+
 
 ``type(T).min``
-    The smallest value representable by type ``T``.
+
+    کوچکترین مقدار با تایپ  ``T`` قابل نمایش است.
+
+
 
 ``type(T).max``
-    The largest value representable by type ``T``.
+
+    بزرگترین مقدار با تایپ  ``T`` قابل نمایش است.
+
+    

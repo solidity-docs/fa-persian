@@ -1,44 +1,41 @@
 .. index:: assignment, ! delete, lvalue
 
-Operators Involving LValues
+اپراتورهای شامل  LValues
 ===========================
+اگر  ``a`` یک LValue باشد (به عنوان مثال یک متغیر یا چیزی که می‌توان به آن اختصاص داد)، عملگرهای زیر به صورت مختصر در دسترس هستند:
 
-If ``a`` is an LValue (i.e. a variable or something that can be assigned to), the
-following operators are available as shorthands:
+``a += e``  معادل  ``a = a + e`` است. عملگرها  ``=-`` ، ``=*`` ، ``=/`` ، ``%=`` ، ``=|`` ، ``=&``  و ``=^``  بر این 
+اساس تعریف می‌شوند.  ``++a`` و  ``--a`` معادل  ``a += 1`` / ``a -= 1``  هستند اما این عبارت هنوز مقدار 
+قبلی  ``a`` را دارد. در مقابل ،  ``a--`` و  ``a++`` تأثیر یکسانی در  ``a`` دارند اما مقدار را پس از تغییر برمی‌گردانند.
 
-``a += e`` is equivalent to ``a = a + e``. The operators ``-=``, ``*=``, ``/=``, ``%=``,
-``|=``, ``&=``, ``^=``, ``<<=`` and ``>>=`` are defined accordingly. ``a++`` and ``a--`` are equivalent
-to ``a += 1`` / ``a -= 1`` but the expression itself still has the previous value
-of ``a``. In contrast, ``--a`` and ``++a`` have the same effect on ``a`` but
-return the value after the change.
 
 .. _delete:
 
-delete
+حذف 
 ------
 
-``delete a`` assigns the initial value for the type to ``a``. I.e. for integers it is
-equivalent to ``a = 0``, but it can also be used on arrays, where it assigns a dynamic
-array of length zero or a static array of the same length with all elements set to their
-initial value. ``delete a[x]`` deletes the item at index ``x`` of the array and leaves
-all other elements and the length of the array untouched. This especially means that it leaves
-a gap in the array. If you plan to remove items, a :ref:`mapping <mapping-types>` is probably a better choice.
+``delete a`` یک مقدار اولیه را برای نوع، به  ``a`` اختصاص می‌دهد. یعنی برای اعداد صحیح معادل  ``a = 0``
+است، اما همچنین می‌تواند در آرایه ها مورد استفاده قرار گیرد، جایی که یک آرایه پویا از طول صفر یا یک آرایه 
+ایستا با همان طول را با تمام عناصر تنظیم شده روی مقدار اولیه خود اختصاص 
+می‌دهد.  ``delete a[x]`` مورد را در شاخص  ``x`` آرایه حذف می‌کند و سایر عناصر و طول آرایه را دست 
+نخورده باقی می‌گذارد. این کار به طور ویژه به این معنی است که در آرایه شکاف ایجاد می‌کند. اگر قصد حذف 
+موارد را دارید، :ref:`mapping <mapping-types>` احتمالاً انتخاب بهتری است.
 
-For structs, it assigns a struct with all members reset. In other words,
-the value of ``a`` after ``delete a`` is the same as if ``a`` would be declared
-without assignment, with the following caveat:
+برای structها، یک struct را با تنظیم مجدد همه اعضا اختصاص می‌دهد. به عبارت دیگر، مقدار ``a``  پس از 
+``delete a``  همانی است که اگر ``a``  بدون انتساب اعلام شود، با توجه به هشدار زیر:
 
-``delete`` has no effect on mappings (as the keys of mappings may be arbitrary and
-are generally unknown). So if you delete a struct, it will reset all members that
-are not mappings and also recurse into the members unless they are mappings.
-However, individual keys and what they map to can be deleted: If ``a`` is a
-mapping, then ``delete a[x]`` will delete the value stored at ``x``.
 
-It is important to note that ``delete a`` really behaves like an
-assignment to ``a``, i.e. it stores a new object in ``a``.
-This distinction is visible when ``a`` is reference variable: It
-will only reset ``a`` itself, not the
-value it referred to previously.
+``delete``  تأثیری در نگاشت ندارد (زیرا ممکن است کلیدهای نگاشت دلخواه باشند و به طور کلی ناشناخته باشند). 
+بنابراین اگر یک struct را حذف کنید، همه اعضا را که نگاشت نباشند مجدد تنظیم می‌کند و همچنین 
+به عضوها بازگشت می‌یابد مگر اینکه آنها نگاشت باشند. با این حال، کلیدهای جداگانه و به آنچه نگاشت می‌شوند 
+می‌توانند حذف شوند: اگر ``a``  نگاشت باشد، سپس  ``delete a[x]`` مقدار ذخیره شده در  ``x`` را حذف خواهد کرد.
+
+
+توجه به این نکته مهم است که ``delete a``  واقعاً مانند انتساب به ``a``  رفتار می‌کند، یعنی یک شی جدید 
+را در  ``a``  ذخیره می‌کند. این تمایز زمانی قابل مشاهده‌است که ``a``  متغیر مرجع باشد: فقط یک  aرا خود 
+مجدد تنظیم می‌کند نه مقداری که قبلاً به آن اشاره کرده بود.
+
+
 
 .. code-block:: solidity
 
