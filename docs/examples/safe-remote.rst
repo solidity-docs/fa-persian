@@ -1,26 +1,14 @@
 .. index:: purchase, remote purchase, escrow
 
 ********************
-Safe Remote Purchase
+خرید امن از راه دور
 ********************
 
-Purchasing goods remotely currently requires multiple parties that need to trust each other.
-The simplest configuration involves a seller and a buyer. The buyer would like to receive
-an item from the seller and the seller would like to get money (or an equivalent)
-in return. The problematic part is the shipment here: There is no way to determine for
-sure that the item arrived at the buyer.
+خرید کالا از راه دور در حال حاضر نیاز به چندین طرف دارد که باید به یکدیگر اعتماد کنند. ساده ترین پیکربندی شامل یک فروشنده و یک خریدار است. خریدار مایل است کالایی را از فروشنده دریافت کند و فروشنده مایل است در ازای آن پول (یا معادل آن) دریافت کند. قسمت مشکل ساز محموله در اینجا است: هیچ راهی برای تعیین اطمینان از رسیدن کالا به خریدار وجود ندارد.
 
-There are multiple ways to solve this problem, but all fall short in one or the other way.
-In the following example, both parties have to put twice the value of the item into the
-contract as escrow. As soon as this happened, the money will stay locked inside
-the contract until the buyer confirms that they received the item. After that,
-the buyer is returned the value (half of their deposit) and the seller gets three
-times the value (their deposit plus the value). The idea behind
-this is that both parties have an incentive to resolve the situation or otherwise
-their money is locked forever.
+روش‌های مختلفی برای حل این مشکل وجود دارد، اما همه آنها در مقابل یک یا بقیه راه‌ها کم می‌آورند. در مثال زیر، هر دو طرف باید مقدار دو برابر یک قلم کالا را به عنوان ضمانت  در قرارداد قرار دهند. به محض اینکه این اتفاق افتاد، پول در قرارداد قفل شده  خواهد ماند تا زمانی که خریدار تأیید کند که کالا را دریافت کرده‌است. پس از آن، مقدار (نیمی از سپرده خود) به خریدار بازگردانده می‌شود و فروشنده سه برابر مقدار (سپرده خود به علاوه مقدار) دریافت می‌کند. ایده پشت این امر این است که هر دو طرف انگیزه‌ای برای حل اوضاع دارند یا در غیر این صورت پول آنها برای همیشه قفل شده خواهد ماند.
 
-This contract of course does not solve the problem, but gives an overview of how
-you can use state machine-like constructs inside a contract.
+البته این قرارداد مشکلی را حل نمی‌کند‌، اما یک نمای کلی از چگونگی استفاده از ساختار ماشین حالت مانند  در داخل قرارداد ارائه می‌دهد.
 
 
 .. code-block:: solidity
