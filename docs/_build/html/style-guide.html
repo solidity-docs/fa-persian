@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style Guide &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Common Patterns" href="common-patterns.html" />
+    <link rel="prev" title="Yul" href="yul.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-layout">Code Layout</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#indentation">Indentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabs-or-spaces">Tabs or Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blank-lines">Blank Lines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maximum-line-length">Maximum Line Length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-file-encoding">Source File Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#order-of-functions">Order of Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#whitespace-in-expressions">Whitespace in Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#control-structures">Control Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-declaration">Function Declaration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mappings">Mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variable-declarations">Variable Declarations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-recommendations">Other Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#order-of-layout">Order of Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#naming-styles">Naming Styles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#names-to-avoid">Names to Avoid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contract-and-library-names">Contract and Library Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#struct-names">Struct Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-names">Event Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-names">Function Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-argument-names">Function Argument Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-and-state-variable-names">Local and State Variable Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifier-names">Modifier Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avoiding-naming-collisions">Avoiding Naming Collisions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#natspec">NatSpec</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Style Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/style-guide.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="style-guide">
+<span id="index-0"></span><h1>Style Guide<a class="headerlink" href="#style-guide" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This guide is intended to provide coding conventions for writing solidity code.
+This guide should be thought of as an evolving document that will change over
+time as useful conventions are found and old conventions are rendered obsolete.</p>
+<p>Many projects will implement their own style guides.  In the event of
+conflicts, project specific style guides take precedence.</p>
+<p>The structure and many of the recommendations within this style guide were
+taken from python's
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">pep8 style guide</a>.</p>
+<p>The goal of this guide is <em>not</em> to be the right way or the best way to write
+solidity code.  The goal of this guide is <em>consistency</em>.  A quote from python's
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds">pep8</a>
+captures this concept well.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>A style guide is about consistency. Consistency with this style guide is important. Consistency within a project is more important. Consistency within one module or function is most important.</p>
+<p>But most importantly: <strong>know when to be inconsistent</strong> -- sometimes the style guide just doesn't apply. When in doubt, use your best judgement. Look at other examples and decide what looks best. And don't hesitate to ask!</p>
+</div>
+</section>
+<section id="code-layout">
+<h2>Code Layout<a class="headerlink" href="#code-layout" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Use 4 spaces per indentation level.</p>
+</section>
+<section id="tabs-or-spaces">
+<h3>Tabs or Spaces<a class="headerlink" href="#tabs-or-spaces" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Spaces are the preferred indentation method.</p>
+<p>Mixing tabs and spaces should be avoided.</p>
+</section>
+<section id="blank-lines">
+<h3>Blank Lines<a class="headerlink" href="#blank-lines" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Surround top level declarations in solidity source with two blank lines.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQSB7CiAgICAvLyAuLi4KfQoKCmNvbnRyYWN0IEIgewogICAgLy8gLi4uCn0KCgpjb250cmFjdCBDIHsKICAgIC8vIC4uLgp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQSB7CiAgICAvLyAuLi4KfQpjb250cmFjdCBCIHsKICAgIC8vIC4uLgp9Cgpjb250cmFjdCBDIHsKICAgIC8vIC4uLgp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Within a contract surround function declarations with a single blank line.</p>
+<p>Blank lines may be omitted between groups of related one-liners (such as stub functions for an abstract contract)</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC42LjAgPDAuOS4wOwoKYWJzdHJhY3QgY29udHJhY3QgQSB7CiAgICBmdW5jdGlvbiBzcGFtKCkgcHVibGljIHZpcnR1YWwgcHVyZTsKICAgIGZ1bmN0aW9uIGhhbSgpIHB1YmxpYyB2aXJ0dWFsIHB1cmU7Cn0KCgpjb250cmFjdCBCIGlzIEEgewogICAgZnVuY3Rpb24gc3BhbSgpIHB1YmxpYyBwdXJlIG92ZXJyaWRlIHsKICAgICAgICAvLyAuLi4KICAgIH0KCiAgICBmdW5jdGlvbiBoYW0oKSBwdWJsaWMgcHVyZSBvdmVycmlkZSB7CiAgICAgICAgLy8gLi4uCiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.6.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+abstract<span class="w"> </span><span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>virtual<span class="w"> </span>pure<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">ham</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>virtual<span class="w"> </span>pure<span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>A<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span>override<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">ham</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span>override<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC42LjAgPDAuOS4wOwoKYWJzdHJhY3QgY29udHJhY3QgQSB7CiAgICBmdW5jdGlvbiBzcGFtKCkgdmlydHVhbCBwdXJlIHB1YmxpYzsKICAgIGZ1bmN0aW9uIGhhbSgpIHB1YmxpYyB2aXJ0dWFsIHB1cmU7Cn0KCgpjb250cmFjdCBCIGlzIEEgewogICAgZnVuY3Rpb24gc3BhbSgpIHB1YmxpYyBwdXJlIG92ZXJyaWRlIHsKICAgICAgICAvLyAuLi4KICAgIH0KICAgIGZ1bmN0aW9uIGhhbSgpIHB1YmxpYyBwdXJlIG92ZXJyaWRlIHsKICAgICAgICAvLyAuLi4KICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.6.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+abstract<span class="w"> </span><span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">()</span><span class="w"> </span>virtual<span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">ham</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>virtual<span class="w"> </span>pure<span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>A<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span>override<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">ham</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span>override<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="maximum-line-length">
+<span id="id1"></span><h3>Maximum Line Length<a class="headerlink" href="#maximum-line-length" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Keeping lines under the <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#maximum-line-length">PEP 8 recommendation</a> to a maximum of 79 (or 99)
+characters helps readers easily parse the code.</p>
+<p>Wrapped lines should conform to the following guidelines.</p>
+<ol class="arabic simple">
+<li><p>The first argument should not be attached to the opening parenthesis.</p></li>
+<li><p>One, and only one, indent should be used.</p></li>
+<li><p>Each argument should fall on its own line.</p></li>
+<li><p>The terminating element, <code class="code docutils literal notranslate"><span class="pre">);</span></code>, should be placed on the final line by itself.</p></li>
+</ol>
+<p>Function Calls</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dGhpc0Z1bmN0aW9uQ2FsbElzUmVhbGx5TG9uZygKICAgIGxvbmdBcmd1bWVudDEsCiAgICBsb25nQXJndW1lbnQyLAogICAgbG9uZ0FyZ3VtZW50MwopOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>thisFunctionCallIsReallyLong<span class="p">(</span><span class="w"></span>
+<span class="w">    </span>longArgument1<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument2<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument3<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dGhpc0Z1bmN0aW9uQ2FsbElzUmVhbGx5TG9uZyhsb25nQXJndW1lbnQxLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBsb25nQXJndW1lbnQyLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBsb25nQXJndW1lbnQzCik7Cgp0aGlzRnVuY3Rpb25DYWxsSXNSZWFsbHlMb25nKGxvbmdBcmd1bWVudDEsCiAgICBsb25nQXJndW1lbnQyLAogICAgbG9uZ0FyZ3VtZW50MwopOwoKdGhpc0Z1bmN0aW9uQ2FsbElzUmVhbGx5TG9uZygKICAgIGxvbmdBcmd1bWVudDEsIGxvbmdBcmd1bWVudDIsCiAgICBsb25nQXJndW1lbnQzCik7Cgp0aGlzRnVuY3Rpb25DYWxsSXNSZWFsbHlMb25nKApsb25nQXJndW1lbnQxLApsb25nQXJndW1lbnQyLApsb25nQXJndW1lbnQzCik7Cgp0aGlzRnVuY3Rpb25DYWxsSXNSZWFsbHlMb25nKAogICAgbG9uZ0FyZ3VtZW50MSwKICAgIGxvbmdBcmd1bWVudDIsCiAgICBsb25nQXJndW1lbnQzKTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>thisFunctionCallIsReallyLong<span class="p">(</span>longArgument1<span class="p">,</span><span class="w"></span>
+<span class="w">                              </span>longArgument2<span class="p">,</span><span class="w"></span>
+<span class="w">                              </span>longArgument3<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+thisFunctionCallIsReallyLong<span class="p">(</span>longArgument1<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument2<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument3<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+thisFunctionCallIsReallyLong<span class="p">(</span><span class="w"></span>
+<span class="w">    </span>longArgument1<span class="p">,</span><span class="w"> </span>longArgument2<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument3<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+thisFunctionCallIsReallyLong<span class="p">(</span><span class="w"></span>
+longArgument1<span class="p">,</span><span class="w"></span>
+longArgument2<span class="p">,</span><span class="w"></span>
+longArgument3<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+thisFunctionCallIsReallyLong<span class="p">(</span><span class="w"></span>
+<span class="w">    </span>longArgument1<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument2<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>longArgument3<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Assignment Statements</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dGhpc0lzQUxvbmdOZXN0ZWRNYXBwaW5nW2JlaW5nXVtzZXRdW3RvX3NvbWVfdmFsdWVdID0gc29tZUZ1bmN0aW9uKAogICAgYXJndW1lbnQxLAogICAgYXJndW1lbnQyLAogICAgYXJndW1lbnQzLAogICAgYXJndW1lbnQ0Cik7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>thisIsALongNestedMapping<span class="p">[</span>being<span class="p">][</span>set<span class="p">][</span>to_some_value<span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>someFunction<span class="p">(</span><span class="w"></span>
+<span class="w">    </span>argument1<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>argument2<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>argument3<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>argument4<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dGhpc0lzQUxvbmdOZXN0ZWRNYXBwaW5nW2JlaW5nXVtzZXRdW3RvX3NvbWVfdmFsdWVdID0gc29tZUZ1bmN0aW9uKGFyZ3VtZW50MSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFyZ3VtZW50MiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFyZ3VtZW50MywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFyZ3VtZW50NCk7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>thisIsALongNestedMapping<span class="p">[</span>being<span class="p">][</span>set<span class="p">][</span>to_some_value<span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>someFunction<span class="p">(</span>argument1<span class="p">,</span><span class="w"></span>
+<span class="w">                                                                   </span>argument2<span class="p">,</span><span class="w"></span>
+<span class="w">                                                                   </span>argument3<span class="p">,</span><span class="w"></span>
+<span class="w">                                                                   </span>argument4<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Event Definitions and Event Emitters</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZXZlbnQgTG9uZ0FuZExvdHNPZkFyZ3MoCiAgICBhZGRyZXNzIHNlbmRlciwKICAgIGFkZHJlc3MgcmVjaXBpZW50LAogICAgdWludDI1NiBwdWJsaWNLZXksCiAgICB1aW50MjU2IGFtb3VudCwKICAgIGJ5dGVzMzJbXSBvcHRpb25zCik7CgpMb25nQW5kTG90c09mQXJncygKICAgIHNlbmRlciwKICAgIHJlY2lwaWVudCwKICAgIHB1YmxpY0tleSwKICAgIGFtb3VudCwKICAgIG9wdGlvbnMKKTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">event</span><span class="w"> </span><span class="nv">LongAndLotsOfArgs</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">sender</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">recipient</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">publicKey</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bytes32</span><span class="p">[]</span><span class="w"> </span>options<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+
+LongAndLotsOfArgs<span class="p">(</span><span class="w"></span>
+<span class="w">    </span>sender<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>recipient<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>publicKey<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>amount<span class="p">,</span><span class="w"></span>
+<span class="w">    </span>options<span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZXZlbnQgTG9uZ0FuZExvdHNPZkFyZ3MoYWRkcmVzcyBzZW5kZXIsCiAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgcmVjaXBpZW50LAogICAgICAgICAgICAgICAgICAgICAgICB1aW50MjU2IHB1YmxpY0tleSwKICAgICAgICAgICAgICAgICAgICAgICAgdWludDI1NiBhbW91bnQsCiAgICAgICAgICAgICAgICAgICAgICAgIGJ5dGVzMzJbXSBvcHRpb25zKTsKCkxvbmdBbmRMb3RzT2ZBcmdzKHNlbmRlciwKICAgICAgICAgICAgICAgICAgcmVjaXBpZW50LAogICAgICAgICAgICAgICAgICBwdWJsaWNLZXksCiAgICAgICAgICAgICAgICAgIGFtb3VudCwKICAgICAgICAgICAgICAgICAgb3B0aW9ucyk7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">event</span><span class="w"> </span><span class="nv">LongAndLotsOfArgs</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">sender</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">recipient</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">publicKey</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"></span>
+<span class="w">                        </span><span class="kt">bytes32</span><span class="p">[]</span><span class="w"> </span>options<span class="p">);</span><span class="w"></span>
+
+LongAndLotsOfArgs<span class="p">(</span>sender<span class="p">,</span><span class="w"></span>
+<span class="w">                  </span>recipient<span class="p">,</span><span class="w"></span>
+<span class="w">                  </span>publicKey<span class="p">,</span><span class="w"></span>
+<span class="w">                  </span>amount<span class="p">,</span><span class="w"></span>
+<span class="w">                  </span>options<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="source-file-encoding">
+<h3>Source File Encoding<a class="headerlink" href="#source-file-encoding" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>UTF-8 or ASCII encoding is preferred.</p>
+</section>
+<section id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Import statements should always be placed at the top of the file.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKaW1wb3J0ICIuL093bmVkLnNvbCI7Cgpjb250cmFjdCBBIHsKICAgIC8vIC4uLgp9Cgpjb250cmFjdCBCIGlzIE93bmVkIHsKICAgIC8vIC4uLgp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./Owned.sol&quot;</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>Owned<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQSB7CiAgICAvLyAuLi4KfQoKCmltcG9ydCAiLi9Pd25lZC5zb2wiOwoKCmNvbnRyYWN0IEIgaXMgT3duZWQgewogICAgLy8gLi4uCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./Owned.sol&quot;</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>Owned<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="order-of-functions">
+<h3>Order of Functions<a class="headerlink" href="#order-of-functions" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier.</p>
+<p>Functions should be grouped according to their visibility and ordered:</p>
+<ul class="simple">
+<li><p>constructor</p></li>
+<li><p>receive function (if exists)</p></li>
+<li><p>fallback function (if exists)</p></li>
+<li><p>external</p></li>
+<li><p>public</p></li>
+<li><p>internal</p></li>
+<li><p>private</p></li>
+</ul>
+<p>Within a grouping, place the <code class="docutils literal notranslate"><span class="pre">view</span></code> and <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions last.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBBIHsKICAgIGNvbnN0cnVjdG9yKCkgewogICAgICAgIC8vIC4uLgogICAgfQoKICAgIHJlY2VpdmUoKSBleHRlcm5hbCBwYXlhYmxlIHsKICAgICAgICAvLyAuLi4KICAgIH0KCiAgICBmYWxsYmFjaygpIGV4dGVybmFsIHsKICAgICAgICAvLyAuLi4KICAgIH0KCiAgICAvLyBFeHRlcm5hbCBmdW5jdGlvbnMKICAgIC8vIC4uLgoKICAgIC8vIEV4dGVybmFsIGZ1bmN0aW9ucyB0aGF0IGFyZSB2aWV3CiAgICAvLyAuLi4KCiAgICAvLyBFeHRlcm5hbCBmdW5jdGlvbnMgdGhhdCBhcmUgcHVyZQogICAgLy8gLi4uCgogICAgLy8gUHVibGljIGZ1bmN0aW9ucwogICAgLy8gLi4uCgogICAgLy8gSW50ZXJuYWwgZnVuY3Rpb25zCiAgICAvLyAuLi4KCiAgICAvLyBQcml2YXRlIGZ1bmN0aW9ucwogICAgLy8gLi4uCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span>receive<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span>fallback<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// External functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// External functions that are view</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// External functions that are pure</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// Public functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// Internal functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// Private functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBBIHsKCiAgICAvLyBFeHRlcm5hbCBmdW5jdGlvbnMKICAgIC8vIC4uLgoKICAgIGZhbGxiYWNrKCkgZXh0ZXJuYWwgewogICAgICAgIC8vIC4uLgogICAgfQogICAgcmVjZWl2ZSgpIGV4dGVybmFsIHBheWFibGUgewogICAgICAgIC8vIC4uLgogICAgfQoKICAgIC8vIFByaXZhdGUgZnVuY3Rpb25zCiAgICAvLyAuLi4KCiAgICAvLyBQdWJsaWMgZnVuY3Rpb25zCiAgICAvLyAuLi4KCiAgICBjb25zdHJ1Y3RvcigpIHsKICAgICAgICAvLyAuLi4KICAgIH0KCiAgICAvLyBJbnRlcm5hbCBmdW5jdGlvbnMKICAgIC8vIC4uLgp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// External functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span>fallback<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span>receive<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Private functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// Public functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Internal functions</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="whitespace-in-expressions">
+<h3>Whitespace in Expressions<a class="headerlink" href="#whitespace-in-expressions" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Avoid extraneous whitespace in the following  situations:</p>
+<p>Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=c3BhbShoYW1bMV0sIENvaW4oe25hbWU6ICJoYW0ifSkpOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>spam<span class="p">(</span>ham<span class="p">[</span><span class="m m-Decimal">1</span><span class="p">],</span><span class="w"> </span>Coin<span class="p">({</span>name<span class="p">:</span><span class="w"> </span><span class="s2">&quot;ham&quot;</span><span class="p">}));</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=c3BhbSggaGFtWyAxIF0sIENvaW4oIHsgbmFtZTogImhhbSIgfSApICk7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>spam<span class="p">(</span><span class="w"> </span>ham<span class="p">[</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="w"> </span><span class="p">],</span><span class="w"> </span>Coin<span class="p">(</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>name<span class="p">:</span><span class="w"> </span><span class="s2">&quot;ham&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Exception:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gc2luZ2xlTGluZSgpIHB1YmxpYyB7IHNwYW0oKTsgfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">singleLine</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>spam<span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Immediately before a comma, semicolon:</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gc3BhbSh1aW50IGksIENvaW4gY29pbikgcHVibGljOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span>Coin<span class="w"> </span>coin<span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gc3BhbSh1aW50IGkgLCBDb2luIGNvaW4pIHB1YmxpYyA7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">spam</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="p">,</span><span class="w"> </span>Coin<span class="w"> </span>coin<span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>More than one space around an assignment or other operator to align with another:</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eCA9IDE7CnkgPSAyOwpsb25nX3ZhcmlhYmxlID0gMzs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+y<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+long_variable<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eCAgICAgICAgICAgICA9IDE7CnkgICAgICAgICAgICAgPSAyOwpsb25nX3ZhcmlhYmxlID0gMzs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+y<span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+long_variable<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Don't include a whitespace in the receive and fallback functions:</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=cmVjZWl2ZSgpIGV4dGVybmFsIHBheWFibGUgewogICAgLi4uCn0KCmZhbGxiYWNrKCkgZXh0ZXJuYWwgewogICAgLi4uCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>receive<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+fallback<span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=cmVjZWl2ZSAoKSBleHRlcm5hbCBwYXlhYmxlIHsKICAgIC4uLgp9CgpmYWxsYmFjayAoKSBleHRlcm5hbCB7CiAgICAuLi4KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>receive<span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+fallback<span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="control-structures">
+<h3>Control Structures<a class="headerlink" href="#control-structures" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The braces denoting the body of a contract, library, functions and structs
+should:</p>
+<ul class="simple">
+<li><p>open on the same line as the declaration</p></li>
+<li><p>close on their own line at the same indentation level as the beginning of the
+declaration.</p></li>
+<li><p>The opening brace should be preceded by a single space.</p></li>
+</ul>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQ29pbiB7CiAgICBzdHJ1Y3QgQmFuayB7CiAgICAgICAgYWRkcmVzcyBvd25lcjsKICAgICAgICB1aW50IGJhbGFuY2U7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Coin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Bank</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">balance</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQ29pbgp7CiAgICBzdHJ1Y3QgQmFuayB7CiAgICAgICAgYWRkcmVzcyBvd25lcjsKICAgICAgICB1aW50IGJhbGFuY2U7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Coin</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Bank</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">balance</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The same recommendations apply to the control structures <code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">else</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">for</span></code>.</p>
+<p>Additionally there should be a single space between the control structures
+<code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code>, and <code class="docutils literal notranslate"><span class="pre">for</span></code> and the parenthetic block representing the
+conditional, as well as a single space between the conditional parenthetic
+block and the opening brace.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKC4uLikgewogICAgLi4uCn0KCmZvciAoLi4uKSB7CiAgICAuLi4KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">for</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKC4uLikKewogICAgLi4uCn0KCndoaWxlKC4uLil7Cn0KCmZvciAoLi4uKSB7CiAgICAuLi47fQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(...)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">while</span><span class="p">(...){</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">for</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...;}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For control structures whose body contains a single statement, omitting the
+braces is ok <em>if</em> the statement is contained on a single line.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKHggPCAxMCkKICAgIHggKz0gMTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKHggPCAxMCkKICAgIHNvbWVBcnJheS5wdXNoKENvaW4oewogICAgICAgIG5hbWU6ICdzcGFtJywKICAgICAgICB2YWx1ZTogNDIKICAgIH0pKTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>someArray<span class="p">.</span>push<span class="p">(</span>Coin<span class="p">({</span><span class="w"></span>
+<span class="w">        </span>name<span class="p">:</span><span class="w"> </span><span class="s1">&#39;spam&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span>value<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">42</span><span class="w"></span>
+<span class="w">    </span><span class="p">}));</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">if</span></code> blocks which have an <code class="docutils literal notranslate"><span class="pre">else</span></code> or <code class="docutils literal notranslate"><span class="pre">else</span> <span class="pre">if</span></code> clause, the <code class="docutils literal notranslate"><span class="pre">else</span></code> should be
+placed on the same line as the <code class="docutils literal notranslate"><span class="pre">if</span></code>'s closing brace. This is an exception compared
+to the rules of other block-like structures.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKHggPCAzKSB7CiAgICB4ICs9IDE7Cn0gZWxzZSBpZiAoeCA+IDcpIHsKICAgIHggLT0gMTsKfSBlbHNlIHsKICAgIHggPSA1Owp9CgoKaWYgKHggPCAzKQogICAgeCArPSAxOwplbHNlCiAgICB4IC09IDE7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="kt">else</span><span class="w"> </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m m-Decimal">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="kt">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">5</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">else</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aWYgKHggPCAzKSB7CiAgICB4ICs9IDE7Cn0KZWxzZSB7CiAgICB4IC09IDE7Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>x<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kt">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>x<span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="function-declaration">
+<h3>Function Declaration<a class="headerlink" href="#function-declaration" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>For short function declarations, it is recommended for the opening brace of the
+function body to be kept on the same line as the function declaration.</p>
+<p>The closing brace should be at the same indentation level as the function
+declaration.</p>
+<p>The opening brace should be preceded by a single space.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gaW5jcmVtZW50KHVpbnQgeCkgcHVibGljIHB1cmUgcmV0dXJucyAodWludCkgewogICAgcmV0dXJuIHggKyAxOwp9CgpmdW5jdGlvbiBpbmNyZW1lbnQodWludCB4KSBwdWJsaWMgcHVyZSBvbmx5T3duZXIgcmV0dXJucyAodWludCkgewogICAgcmV0dXJuIHggKyAxOwp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span>onlyOwner<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gaW5jcmVtZW50KHVpbnQgeCkgcHVibGljIHB1cmUgcmV0dXJucyAodWludCkKewogICAgcmV0dXJuIHggKyAxOwp9CgpmdW5jdGlvbiBpbmNyZW1lbnQodWludCB4KSBwdWJsaWMgcHVyZSByZXR1cm5zICh1aW50KXsKICAgIHJldHVybiB4ICsgMTsKfQoKZnVuY3Rpb24gaW5jcmVtZW50KHVpbnQgeCkgcHVibGljIHB1cmUgcmV0dXJucyAodWludCkgewogICAgcmV0dXJuIHggKyAxOwogICAgfQoKZnVuY3Rpb24gaW5jcmVtZW50KHVpbnQgeCkgcHVibGljIHB1cmUgcmV0dXJucyAodWludCkgewogICAgcmV0dXJuIHggKyAxO30="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">increment</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The modifier order for a function should be:</p>
+<ol class="arabic simple">
+<li><p>Visibility</p></li>
+<li><p>Mutability</p></li>
+<li><p>Virtual</p></li>
+<li><p>Override</p></li>
+<li><p>Custom modifiers</p></li>
+</ol>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gYmFsYW5jZSh1aW50IGZyb20pIHB1YmxpYyB2aWV3IG92ZXJyaWRlIHJldHVybnMgKHVpbnQpICB7CiAgICByZXR1cm4gYmFsYW5jZU9mW2Zyb21dOwp9CgpmdW5jdGlvbiBzaHV0ZG93bigpIHB1YmxpYyBvbmx5T3duZXIgewogICAgc2VsZmRlc3RydWN0KG93bmVyKTsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">balance</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">from</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span>override<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>balanceOf<span class="p">[</span>from<span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">shutdown</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>selfdestruct<span class="p">(</span>owner<span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gYmFsYW5jZSh1aW50IGZyb20pIHB1YmxpYyBvdmVycmlkZSB2aWV3IHJldHVybnMgKHVpbnQpICB7CiAgICByZXR1cm4gYmFsYW5jZU9mW2Zyb21dOwp9CgpmdW5jdGlvbiBzaHV0ZG93bigpIG9ubHlPd25lciBwdWJsaWMgewogICAgc2VsZmRlc3RydWN0KG93bmVyKTsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">balance</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">from</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>override<span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>balanceOf<span class="p">[</span>from<span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">shutdown</span><span class="p">()</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>selfdestruct<span class="p">(</span>owner<span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For long function declarations, it is recommended to drop each argument onto
+it's own line at the same indentation level as the function body.  The closing
+parenthesis and opening bracket should be placed on their own line as well at
+the same indentation level as the function declaration.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uSGFzTG90c09mQXJndW1lbnRzKAogICAgYWRkcmVzcyBhLAogICAgYWRkcmVzcyBiLAogICAgYWRkcmVzcyBjLAogICAgYWRkcmVzcyBkLAogICAgYWRkcmVzcyBlLAogICAgYWRkcmVzcyBmCikKICAgIHB1YmxpYwp7CiAgICBkb1NvbWV0aGluZygpOwp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">e</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">f</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uSGFzTG90c09mQXJndW1lbnRzKGFkZHJlc3MgYSwgYWRkcmVzcyBiLCBhZGRyZXNzIGMsCiAgICBhZGRyZXNzIGQsIGFkZHJlc3MgZSwgYWRkcmVzcyBmKSBwdWJsaWMgewogICAgZG9Tb21ldGhpbmcoKTsKfQoKZnVuY3Rpb24gdGhpc0Z1bmN0aW9uSGFzTG90c09mQXJndW1lbnRzKGFkZHJlc3MgYSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgYiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgYywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgZCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgZSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFkZHJlc3MgZikgcHVibGljIHsKICAgIGRvU29tZXRoaW5nKCk7Cn0KCmZ1bmN0aW9uIHRoaXNGdW5jdGlvbkhhc0xvdHNPZkFyZ3VtZW50cygKICAgIGFkZHJlc3MgYSwKICAgIGFkZHJlc3MgYiwKICAgIGFkZHJlc3MgYywKICAgIGFkZHJlc3MgZCwKICAgIGFkZHJlc3MgZSwKICAgIGFkZHJlc3MgZikgcHVibGljIHsKICAgIGRvU29tZXRoaW5nKCk7Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">e</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">f</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">e</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="kt">address</span><span class="w"> </span><span class="nv">f</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionHasLotsOfArguments</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">e</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">f</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>If a long function declaration has modifiers, then each modifier should be
+dropped to its own line.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uTmFtZUlzUmVhbGx5TG9uZyhhZGRyZXNzIHgsIGFkZHJlc3MgeSwgYWRkcmVzcyB6KQogICAgcHVibGljCiAgICBvbmx5T3duZXIKICAgIHByaWNlZAogICAgcmV0dXJucyAoYWRkcmVzcykKewogICAgZG9Tb21ldGhpbmcoKTsKfQoKZnVuY3Rpb24gdGhpc0Z1bmN0aW9uTmFtZUlzUmVhbGx5TG9uZygKICAgIGFkZHJlc3MgeCwKICAgIGFkZHJlc3MgeSwKICAgIGFkZHJlc3MgeiwKKQogICAgcHVibGljCiAgICBvbmx5T3duZXIKICAgIHByaWNlZAogICAgcmV0dXJucyAoYWRkcmVzcykKewogICAgZG9Tb21ldGhpbmcoKTsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">y</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">z</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="w">    </span>onlyOwner<span class="w"></span>
+<span class="w">    </span>priced<span class="w"></span>
+<span class="w">    </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">y</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">z</span><span class="p">,</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="w">    </span>onlyOwner<span class="w"></span>
+<span class="w">    </span>priced<span class="w"></span>
+<span class="w">    </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uTmFtZUlzUmVhbGx5TG9uZyhhZGRyZXNzIHgsIGFkZHJlc3MgeSwgYWRkcmVzcyB6KQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHB1YmxpYwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG9ubHlPd25lcgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHByaWNlZAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybnMgKGFkZHJlc3MpIHsKICAgIGRvU29tZXRoaW5nKCk7Cn0KCmZ1bmN0aW9uIHRoaXNGdW5jdGlvbk5hbWVJc1JlYWxseUxvbmcoYWRkcmVzcyB4LCBhZGRyZXNzIHksIGFkZHJlc3MgeikKICAgIHB1YmxpYyBvbmx5T3duZXIgcHJpY2VkIHJldHVybnMgKGFkZHJlc3MpCnsKICAgIGRvU29tZXRoaW5nKCk7Cn0KCmZ1bmN0aW9uIHRoaXNGdW5jdGlvbk5hbWVJc1JlYWxseUxvbmcoYWRkcmVzcyB4LCBhZGRyZXNzIHksIGFkZHJlc3MgeikKICAgIHB1YmxpYwogICAgb25seU93bmVyCiAgICBwcmljZWQKICAgIHJldHVybnMgKGFkZHJlc3MpIHsKICAgIGRvU29tZXRoaW5nKCk7Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">y</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">z</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                      </span><span class="kt">public</span><span class="w"></span>
+<span class="w">                                      </span>onlyOwner<span class="w"></span>
+<span class="w">                                      </span>priced<span class="w"></span>
+<span class="w">                                      </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">y</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">z</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"> </span>onlyOwner<span class="w"> </span>priced<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">y</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">z</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="w">    </span>onlyOwner<span class="w"></span>
+<span class="w">    </span>priced<span class="w"></span>
+<span class="w">    </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the <a class="reference internal" href="#maximum-line-length"><span class="std std-ref">Maximum Line Length</span></a> section.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uTmFtZUlzUmVhbGx5TG9uZygKICAgIGFkZHJlc3MgYSwKICAgIGFkZHJlc3MgYiwKICAgIGFkZHJlc3MgYwopCiAgICBwdWJsaWMKICAgIHJldHVybnMgKAogICAgICAgIGFkZHJlc3Mgc29tZUFkZHJlc3NOYW1lLAogICAgICAgIHVpbnQyNTYgTG9uZ0FyZ3VtZW50LAogICAgICAgIHVpbnQyNTYgQXJndW1lbnQKICAgICkKewogICAgZG9Tb21ldGhpbmcoKQoKICAgIHJldHVybiAoCiAgICAgICAgdmVyeUxvbmdSZXR1cm5BcmcxLAogICAgICAgIHZlcnlMb25nUmV0dXJuQXJnMiwKICAgICAgICB2ZXJ5TG9uZ1JldHVybkFyZzMKICAgICk7Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="w">    </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">someAddressName</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">LongArgument</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">Argument</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span>veryLongReturnArg1<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>veryLongReturnArg2<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>veryLongReturnArg3<span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gdGhpc0Z1bmN0aW9uTmFtZUlzUmVhbGx5TG9uZygKICAgIGFkZHJlc3MgYSwKICAgIGFkZHJlc3MgYiwKICAgIGFkZHJlc3MgYwopCiAgICBwdWJsaWMKICAgIHJldHVybnMgKGFkZHJlc3Mgc29tZUFkZHJlc3NOYW1lLAogICAgICAgICAgICAgdWludDI1NiBMb25nQXJndW1lbnQsCiAgICAgICAgICAgICB1aW50MjU2IEFyZ3VtZW50KQp7CiAgICBkb1NvbWV0aGluZygpCgogICAgcmV0dXJuICh2ZXJ5TG9uZ1JldHVybkFyZzEsCiAgICAgICAgICAgIHZlcnlMb25nUmV0dXJuQXJnMSwKICAgICAgICAgICAgdmVyeUxvbmdSZXR1cm5BcmcxKTsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">thisFunctionNameIsReallyLong</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">b</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">c</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kt">public</span><span class="w"></span>
+<span class="w">    </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">someAddressName</span><span class="p">,</span><span class="w"></span>
+<span class="w">             </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">LongArgument</span><span class="p">,</span><span class="w"></span>
+<span class="w">             </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">Argument</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span>doSomething<span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span>veryLongReturnArg1<span class="p">,</span><span class="w"></span>
+<span class="w">            </span>veryLongReturnArg1<span class="p">,</span><span class="w"></span>
+<span class="w">            </span>veryLongReturnArg1<span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For constructor functions on inherited contracts whose bases require arguments,
+it is recommended to drop the base constructors onto new lines in the same
+manner as modifiers if the function declaration is long or hard to read.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwovLyBCYXNlIGNvbnRyYWN0cyBqdXN0IHRvIG1ha2UgdGhpcyBjb21waWxlCmNvbnRyYWN0IEIgewogICAgY29uc3RydWN0b3IodWludCkgewogICAgfQp9CmNvbnRyYWN0IEMgewogICAgY29uc3RydWN0b3IodWludCwgdWludCkgewogICAgfQp9CmNvbnRyYWN0IEQgewogICAgY29uc3RydWN0b3IodWludCkgewogICAgfQp9Cgpjb250cmFjdCBBIGlzIEIsIEMsIEQgewogICAgdWludCB4OwoKICAgIGNvbnN0cnVjdG9yKHVpbnQgcGFyYW0xLCB1aW50IHBhcmFtMiwgdWludCBwYXJhbTMsIHVpbnQgcGFyYW00LCB1aW50IHBhcmFtNSkKICAgICAgICBCKHBhcmFtMSkKICAgICAgICBDKHBhcmFtMiwgcGFyYW0zKQogICAgICAgIEQocGFyYW00KQogICAgewogICAgICAgIC8vIGRvIHNvbWV0aGluZyB3aXRoIHBhcmFtNQogICAgICAgIHggPSBwYXJhbTU7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// Base contracts just to make this compile</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">D</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>B<span class="p">,</span><span class="w"> </span>C<span class="p">,</span><span class="w"> </span>D<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">param1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param2</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param3</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param4</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param5</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span>B<span class="p">(</span>param1<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>C<span class="p">(</span>param2<span class="p">,</span><span class="w"> </span>param3<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>D<span class="p">(</span>param4<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// do something with param5</span>
+<span class="w">        </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span>param5<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwoKLy8gQmFzZSBjb250cmFjdHMganVzdCB0byBtYWtlIHRoaXMgY29tcGlsZQpjb250cmFjdCBCIHsKICAgIGNvbnN0cnVjdG9yKHVpbnQpIHsKICAgIH0KfQoKCmNvbnRyYWN0IEMgewogICAgY29uc3RydWN0b3IodWludCwgdWludCkgewogICAgfQp9CgoKY29udHJhY3QgRCB7CiAgICBjb25zdHJ1Y3Rvcih1aW50KSB7CiAgICB9Cn0KCgpjb250cmFjdCBBIGlzIEIsIEMsIEQgewogICAgdWludCB4OwoKICAgIGNvbnN0cnVjdG9yKHVpbnQgcGFyYW0xLCB1aW50IHBhcmFtMiwgdWludCBwYXJhbTMsIHVpbnQgcGFyYW00LCB1aW50IHBhcmFtNSkKICAgIEIocGFyYW0xKQogICAgQyhwYXJhbTIsIHBhcmFtMykKICAgIEQocGFyYW00KSB7CiAgICAgICAgeCA9IHBhcmFtNTsKICAgIH0KfQoKCmNvbnRyYWN0IFggaXMgQiwgQywgRCB7CiAgICB1aW50IHg7CgogICAgY29uc3RydWN0b3IodWludCBwYXJhbTEsIHVpbnQgcGFyYW0yLCB1aW50IHBhcmFtMywgdWludCBwYXJhbTQsIHVpbnQgcGFyYW01KQogICAgICAgIEIocGFyYW0xKQogICAgICAgIEMocGFyYW0yLCBwYXJhbTMpCiAgICAgICAgRChwYXJhbTQpIHsKICAgICAgICAgICAgeCA9IHBhcmFtNTsKICAgICAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// Base contracts just to make this compile</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">B</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">D</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">A</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>B<span class="p">,</span><span class="w"> </span>C<span class="p">,</span><span class="w"> </span>D<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">param1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param2</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param3</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param4</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param5</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>B<span class="p">(</span>param1<span class="p">)</span><span class="w"></span>
+<span class="w">    </span>C<span class="p">(</span>param2<span class="p">,</span><span class="w"> </span>param3<span class="p">)</span><span class="w"></span>
+<span class="w">    </span>D<span class="p">(</span>param4<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span>param5<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">X</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>B<span class="p">,</span><span class="w"> </span>C<span class="p">,</span><span class="w"> </span>D<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">param1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param2</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param3</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param4</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">param5</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span>B<span class="p">(</span>param1<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>C<span class="p">(</span>param2<span class="p">,</span><span class="w"> </span>param3<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>D<span class="p">(</span>param4<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span>param5<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>When declaring short functions with a single statement, it is permissible to do it on a single line.</p>
+<p>Permissible:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gc2hvcnRGdW5jdGlvbigpIHB1YmxpYyB7IGRvU29tZXRoaW5nKCk7IH0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">shortFunction</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>doSomething<span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>These guidelines for function declarations are intended to improve readability.
+Authors should use their best judgement as this guide does not try to cover all
+possible permutations for function declarations.</p>
+</section>
+<section id="mappings">
+<h3>Mappings<a class="headerlink" href="#mappings" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>In variable declarations, do not separate the keyword <code class="docutils literal notranslate"><span class="pre">mapping</span></code> from its
+type by a space. Do not separate any nested <code class="docutils literal notranslate"><span class="pre">mapping</span></code> keyword from its type by
+whitespace.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=bWFwcGluZyh1aW50ID0+IHVpbnQpIG1hcDsKbWFwcGluZyhhZGRyZXNzID0+IGJvb2wpIHJlZ2lzdGVyZWRBZGRyZXNzZXM7Cm1hcHBpbmcodWludCA9PiBtYXBwaW5nKGJvb2wgPT4gRGF0YVtdKSkgcHVibGljIGRhdGE7Cm1hcHBpbmcodWludCA9PiBtYXBwaW5nKHVpbnQgPT4gcykpIGRhdGE7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>map<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span>registeredAddresses<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>Data<span class="p">[]))</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>data<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>s<span class="p">))</span><span class="w"> </span>data<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=bWFwcGluZyAodWludCA9PiB1aW50KSBtYXA7Cm1hcHBpbmcoIGFkZHJlc3MgPT4gYm9vbCApIHJlZ2lzdGVyZWRBZGRyZXNzZXM7Cm1hcHBpbmcgKHVpbnQgPT4gbWFwcGluZyAoYm9vbCA9PiBEYXRhW10pKSBwdWJsaWMgZGF0YTsKbWFwcGluZyh1aW50ID0+IG1hcHBpbmcgKHVpbnQgPT4gcykpIGRhdGE7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>map<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="p">(</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">)</span><span class="w"> </span>registeredAddresses<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>Data<span class="p">[]))</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>data<span class="p">;</span><span class="w"></span>
+<span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>s<span class="p">))</span><span class="w"> </span>data<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="variable-declarations">
+<h3>Variable Declarations<a class="headerlink" href="#variable-declarations" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Declarations of array variables should not have a space between the type and
+the brackets.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dWludFtdIHg7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dWludCBbXSB4Ow=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="other-recommendations">
+<h3>Other Recommendations<a class="headerlink" href="#other-recommendations" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>Strings should be quoted with double-quotes instead of single-quotes.</p></li>
+</ul>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=c3RyID0gImZvbyI7CnN0ciA9ICJIYW1sZXQgc2F5cywgJ1RvIGJlIG9yIG5vdCB0byBiZS4uLiciOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>str<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">;</span><span class="w"></span>
+str<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Hamlet says, &#39;To be or not to be...&#39;&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=c3RyID0gJ2Jhcic7CnN0ciA9ICciQmUgeW91cnNlbGY7IGV2ZXJ5b25lIGVsc2UgaXMgYWxyZWFkeSB0YWtlbi4iIC1Pc2NhciBXaWxkZSc7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>str<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;bar&#39;</span><span class="p">;</span><span class="w"></span>
+str<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&quot;Be yourself; everyone else is already taken.&quot; -Oscar Wilde&#39;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Surround operators with a single space on either side.</p></li>
+</ul>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eCA9IDM7CnggPSAxMDAgLyAxMDsKeCArPSAzICsgNDsKeCB8PSB5ICYmIHo7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">4</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="err">|</span><span class="o">=</span><span class="w"> </span>y<span class="w"> </span><span class="err">&amp;&amp;</span><span class="w"> </span>z<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eD0zOwp4ID0gMTAwLzEwOwp4ICs9IDMrNDsKeCB8PSB5JiZ6Ow=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="o">=</span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">100</span><span class="o">/</span><span class="m m-Decimal">10</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="o">+</span><span class="m m-Decimal">4</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="err">|</span><span class="o">=</span><span class="w"> </span>y<span class="err">&amp;&amp;</span>z<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Operators with a higher priority than others can exclude surrounding
+whitespace in order to denote precedence.  This is meant to allow for
+improved readability for complex statement. You should always use the same
+amount of whitespace on either side of an operator:</p></li>
+</ul>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eCA9IDIqKjMgKyA1Owp4ID0gMip5ICsgMyp6Owp4ID0gKGErYikgKiAoYS1iKTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="o">**</span><span class="m m-Decimal">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">5</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="o">*</span>y<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="o">*</span>z<span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>a<span class="o">+</span>b<span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span>a<span class="o">-</span>b<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=eCA9IDIqKiAzICsgNTsKeCA9IHkrejsKeCArPTE7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="o">**</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">5</span><span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">=</span><span class="w"> </span>y<span class="o">+</span>z<span class="p">;</span><span class="w"></span>
+x<span class="w"> </span><span class="o">+=</span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="order-of-layout">
+<h2>Order of Layout<a class="headerlink" href="#order-of-layout" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Layout contract elements in the following order:</p>
+<ol class="arabic simple">
+<li><p>Pragma statements</p></li>
+<li><p>Import statements</p></li>
+<li><p>Interfaces</p></li>
+<li><p>Libraries</p></li>
+<li><p>Contracts</p></li>
+</ol>
+<p>Inside each contract, library or interface, use the following order:</p>
+<ol class="arabic simple">
+<li><p>Type declarations</p></li>
+<li><p>State variables</p></li>
+<li><p>Events</p></li>
+<li><p>Functions</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>It might be clearer to declare types close to their use in events or state
+variables.</p>
+</div>
+</section>
+<section id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Naming conventions are powerful when adopted and used broadly.  The use of
+different conventions can convey significant <em>meta</em> information that would
+otherwise not be immediately available.</p>
+<p>The naming recommendations given here are intended to improve the readability,
+and thus they are not rules, but rather guidelines to try and help convey the
+most information through the names of things.</p>
+<p>Lastly, consistency within a codebase should always supersede any conventions
+outlined in this document.</p>
+<section id="naming-styles">
+<h3>Naming Styles<a class="headerlink" href="#naming-styles" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>To avoid confusion, the following names will be used to refer to different
+naming styles.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> (single lowercase letter)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">B</span></code> (single uppercase letter)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lowercase</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lower_case_with_underscores</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UPPERCASE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UPPER_CASE_WITH_UNDERSCORES</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CapitalizedWords</span></code> (or CapWords)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mixedCase</span></code> (differs from CapitalizedWords by initial lowercase character!)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Capitalized_Words_With_Underscores</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>When using initialisms in CapWords, capitalize all the letters of the initialisms. Thus HTTPServerError is better than HttpServerError. When using initialisms in mixedCase, capitalize all the letters of the initialisms, except keep the first one lower case if it is the beginning of the name. Thus xmlHTTPRequest is better than XMLHTTPRequest.</p>
+</div>
+</section>
+<section id="names-to-avoid">
+<h3>Names to Avoid<a class="headerlink" href="#names-to-avoid" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">l</span></code> - Lowercase letter el</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">O</span></code> - Uppercase letter oh</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">I</span></code> - Uppercase letter eye</p></li>
+</ul>
+<p>Never use any of these for single letter variable names.  They are often
+indistinguishable from the numerals one and zero.</p>
+</section>
+<section id="contract-and-library-names">
+<h3>Contract and Library Names<a class="headerlink" href="#contract-and-library-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>Contracts and libraries should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">SimpleToken</span></code>, <code class="docutils literal notranslate"><span class="pre">SmartBank</span></code>, <code class="docutils literal notranslate"><span class="pre">CertificateHashRepository</span></code>, <code class="docutils literal notranslate"><span class="pre">Player</span></code>, <code class="docutils literal notranslate"><span class="pre">Congress</span></code>, <code class="docutils literal notranslate"><span class="pre">Owned</span></code>.</p></li>
+<li><p>Contract and library names should also match their filenames.</p></li>
+<li><p>If a contract file includes multiple contracts and/or libraries, then the filename should match the <em>core contract</em>. This is not recommended however if it can be avoided.</p></li>
+</ul>
+<p>As shown in the example below, if the contract name is <code class="docutils literal notranslate"><span class="pre">Congress</span></code> and the library name is <code class="docutils literal notranslate"><span class="pre">Owned</span></code>, then their associated filenames should be <code class="docutils literal notranslate"><span class="pre">Congress.sol</span></code> and <code class="docutils literal notranslate"><span class="pre">Owned.sol</span></code>.</p>
+<p>Yes:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwoKLy8gT3duZWQuc29sCmNvbnRyYWN0IE93bmVkIHsKICAgIGFkZHJlc3MgcHVibGljIG93bmVyOwoKICAgIGNvbnN0cnVjdG9yKCkgewogICAgICAgIG93bmVyID0gbXNnLnNlbmRlcjsKICAgIH0KCiAgICBtb2RpZmllciBvbmx5T3duZXIgewogICAgICAgIHJlcXVpcmUobXNnLnNlbmRlciA9PSBvd25lcik7CiAgICAgICAgXzsKICAgIH0KCiAgICBmdW5jdGlvbiB0cmFuc2Zlck93bmVyc2hpcChhZGRyZXNzIG5ld093bmVyKSBwdWJsaWMgb25seU93bmVyIHsKICAgICAgICBvd25lciA9IG5ld093bmVyOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// Owned.sol</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">Owned</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">owner</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>owner<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transferOwnership</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">newOwner</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span>newOwner<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>and in <code class="docutils literal notranslate"><span class="pre">Congress.sol</span></code>:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKaW1wb3J0ICIuL093bmVkLnNvbCI7CgoKY29udHJhY3QgQ29uZ3Jlc3MgaXMgT3duZWQsIFRva2VuUmVjaXBpZW50IHsKICAgIC8vLi4uCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./Owned.sol&quot;</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Congress</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>Owned<span class="p">,</span><span class="w"> </span>TokenRecipient<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>No:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwoKLy8gb3duZWQuc29sCmNvbnRyYWN0IG93bmVkIHsKICAgIGFkZHJlc3MgcHVibGljIG93bmVyOwoKICAgIGNvbnN0cnVjdG9yKCkgewogICAgICAgIG93bmVyID0gbXNnLnNlbmRlcjsKICAgIH0KCiAgICBtb2RpZmllciBvbmx5T3duZXIgewogICAgICAgIHJlcXVpcmUobXNnLnNlbmRlciA9PSBvd25lcik7CiAgICAgICAgXzsKICAgIH0KCiAgICBmdW5jdGlvbiB0cmFuc2Zlck93bmVyc2hpcChhZGRyZXNzIG5ld093bmVyKSBwdWJsaWMgb25seU93bmVyIHsKICAgICAgICBvd25lciA9IG5ld093bmVyOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// owned.sol</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">owned</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">owner</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>owner<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transferOwnership</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">newOwner</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>onlyOwner<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span>newOwner<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>and in <code class="docutils literal notranslate"><span class="pre">Congress.sol</span></code>:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjcuMDsKCgppbXBvcnQgIi4vb3duZWQuc29sIjsKCgpjb250cmFjdCBDb25ncmVzcyBpcyBvd25lZCwgdG9rZW5SZWNpcGllbnQgewogICAgLy8uLi4KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.7.0</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./owned.sol&quot;</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Congress</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>owned<span class="p">,</span><span class="w"> </span>tokenRecipient<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">//...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="struct-names">
+<h3>Struct Names<a class="headerlink" href="#struct-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Structs should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">MyCoin</span></code>, <code class="docutils literal notranslate"><span class="pre">Position</span></code>, <code class="docutils literal notranslate"><span class="pre">PositionXY</span></code>.</p>
+</section>
+<section id="event-names">
+<h3>Event Names<a class="headerlink" href="#event-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Events should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">Deposit</span></code>, <code class="docutils literal notranslate"><span class="pre">Transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">Approval</span></code>, <code class="docutils literal notranslate"><span class="pre">BeforeTransfer</span></code>, <code class="docutils literal notranslate"><span class="pre">AfterTransfer</span></code>.</p>
+</section>
+<section id="function-names">
+<h3>Function Names<a class="headerlink" href="#function-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Functions should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">getBalance</span></code>, <code class="docutils literal notranslate"><span class="pre">transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">verifyOwner</span></code>, <code class="docutils literal notranslate"><span class="pre">addMember</span></code>, <code class="docutils literal notranslate"><span class="pre">changeOwner</span></code>.</p>
+</section>
+<section id="function-argument-names">
+<h3>Function Argument Names<a class="headerlink" href="#function-argument-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Function arguments should use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">initialSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">account</span></code>, <code class="docutils literal notranslate"><span class="pre">recipientAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">senderAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">newOwner</span></code>.</p>
+<p>When writing library functions that operate on a custom struct, the struct
+should be the first argument and should always be named <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</section>
+<section id="local-and-state-variable-names">
+<h3>Local and State Variable Names<a class="headerlink" href="#local-and-state-variable-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">totalSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">remainingSupply</span></code>, <code class="docutils literal notranslate"><span class="pre">balancesOf</span></code>, <code class="docutils literal notranslate"><span class="pre">creatorAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">isPreSale</span></code>, <code class="docutils literal notranslate"><span class="pre">tokenExchangeRate</span></code>.</p>
+</section>
+<section id="constants">
+<h3>Constants<a class="headerlink" href="#constants" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Constants should be named with all capital letters with underscores separating
+words. Examples: <code class="docutils literal notranslate"><span class="pre">MAX_BLOCKS</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">TOKEN_TICKER</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTRACT_VERSION</span></code>.</p>
+</section>
+<section id="modifier-names">
+<h3>Modifier Names<a class="headerlink" href="#modifier-names" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Use mixedCase. Examples: <code class="docutils literal notranslate"><span class="pre">onlyBy</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyAfter</span></code>, <code class="docutils literal notranslate"><span class="pre">onlyDuringThePreSale</span></code>.</p>
+</section>
+<section id="enums">
+<h3>Enums<a class="headerlink" href="#enums" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: <code class="docutils literal notranslate"><span class="pre">TokenGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">Frame</span></code>, <code class="docutils literal notranslate"><span class="pre">HashStyle</span></code>, <code class="docutils literal notranslate"><span class="pre">CharacterLocation</span></code>.</p>
+</section>
+<section id="avoiding-naming-collisions">
+<h3>Avoiding Naming Collisions<a class="headerlink" href="#avoiding-naming-collisions" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">single_trailing_underscore_</span></code></p></li>
+</ul>
+<p>This convention is suggested when the desired name collides with that of a
+built-in or otherwise reserved name.</p>
+</section>
+</section>
+<section id="natspec">
+<span id="style-guide-natspec"></span><h2>NatSpec<a class="headerlink" href="#natspec" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Solidity contracts can also contain NatSpec comments. They are written with a
+triple slash (<code class="docutils literal notranslate"><span class="pre">///</span></code>) or a double asterisk block (<code class="docutils literal notranslate"><span class="pre">/**</span> <span class="pre">...</span> <span class="pre">*/</span></code>) and
+they should be used directly above function declarations or statements.</p>
+<p>For example, the contract from <a class="reference internal" href="introduction-to-smart-contracts.html#simple-smart-contract"><span class="std std-ref">a simple smart contract</span></a> with the comments
+added looks like the one below:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjE2IDwwLjkuMDsKCi8vLyBAYXV0aG9yIFRoZSBTb2xpZGl0eSBUZWFtCi8vLyBAdGl0bGUgQSBzaW1wbGUgc3RvcmFnZSBleGFtcGxlCmNvbnRyYWN0IFNpbXBsZVN0b3JhZ2UgewogICAgdWludCBzdG9yZWREYXRhOwoKICAgIC8vLyBTdG9yZSBgeGAuCiAgICAvLy8gQHBhcmFtIHggdGhlIG5ldyB2YWx1ZSB0byBzdG9yZQogICAgLy8vIEBkZXYgc3RvcmVzIHRoZSBudW1iZXIgaW4gdGhlIHN0YXRlIHZhcmlhYmxlIGBzdG9yZWREYXRhYAogICAgZnVuY3Rpb24gc2V0KHVpbnQgeCkgcHVibGljIHsKICAgICAgICBzdG9yZWREYXRhID0geDsKICAgIH0KCiAgICAvLy8gUmV0dXJuIHRoZSBzdG9yZWQgdmFsdWUuCiAgICAvLy8gQGRldiByZXRyaWV2ZXMgdGhlIHZhbHVlIG9mIHRoZSBzdGF0ZSB2YXJpYWJsZSBgc3RvcmVkRGF0YWAKICAgIC8vLyBAcmV0dXJuIHRoZSBzdG9yZWQgdmFsdWUKICAgIGZ1bmN0aW9uIGdldCgpIHB1YmxpYyB2aWV3IHJldHVybnMgKHVpbnQpIHsKICAgICAgICByZXR1cm4gc3RvcmVkRGF0YTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.16</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">/// @author The Solidity Team</span>
+<span class="c1">/// @title A simple storage example</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleStorage</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">storedData</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Store `x`.</span>
+<span class="w">    </span><span class="c1">/// @param x the new value to store</span>
+<span class="w">    </span><span class="c1">/// @dev stores the number in the state variable `storedData`</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">set</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>storedData<span class="w"> </span><span class="o">=</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Return the stored value.</span>
+<span class="w">    </span><span class="c1">/// @dev retrieves the value of the state variable `storedData`</span>
+<span class="w">    </span><span class="c1">/// @return the stored value</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">get</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>storedData<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>It is recommended that Solidity contracts are fully annotated using <a class="reference internal" href="natspec-format.html#natspec"><span class="std std-ref">NatSpec</span></a> for all public interfaces (everything in the ABI).</p>
+<p>Please see the section about <a class="reference internal" href="natspec-format.html#natspec"><span class="std std-ref">NatSpec</span></a> for a detailed explanation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yul.html" class="btn btn-neutral float-left" title="Yul" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="common-patterns.html" class="btn btn-neutral float-right" title="Common Patterns" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

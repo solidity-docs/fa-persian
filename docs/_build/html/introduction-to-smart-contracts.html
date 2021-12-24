@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مقدمه‌ای بر قراد‌های هوشمند &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="نصب کامپایلر سالیدیتی" href="installing-solidity.html" />
+    <link rel="prev" title="سالیدیتی" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">مقدمه‌ای بر قراد‌های هوشمند</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simple-smart-contract">یک قرارداد هوشمند ساده</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">مثال ذخیره سازی</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-0">مثال  ساب کارنسی یا زیر ارز</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#blockchain-basics">مبانی بلاکچین</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#index-4">تراکنش‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-5">بلاک‌ها</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-6">ماشین مجازی اتریوم</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">مرور کلی</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accounts">حساب‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-8">تراکنش‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-9">گَس</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-10">فضای ذخیره سازی  ، حافظه مِمُوری  و پشته</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-11">مجموعه دستورالعمل‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-12">پیام های فراخوانی</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delegatecall-callcode">Delegatecall / Callcode و کتابخانه ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-14">گزارش‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-15">ايجاد كردن</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-16">غیرفعال کردن و خود تخریبی</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">عبارات و ساختارهای کنترلی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">قراردادها</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>مقدمه‌ای بر قراد‌های هوشمند</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction-to-smart-contracts.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>مقدمه‌ای بر قراد‌های هوشمند<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="simple-smart-contract">
+<span id="id2"></span><h2>یک قرارداد هوشمند ساده<a class="headerlink" href="#simple-smart-contract" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>بیایید با یک مثال ابتدایی شروع کنیم که مقدار یک متغیر را تعیین می‌کند و آن را در معرض دسترسی سایر قراردادها قرار می‌دهد. اینکه الان شما متوجه چیزی نمی‌شوید طبیعی می‌باشد، بعداً به جزئیات بیشتری خواهیم پرداخت.</p>
+<section id="id3">
+<h3>مثال ذخیره سازی<a class="headerlink" href="#id3" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjE2IDwwLjkuMDsKCmNvbnRyYWN0IFNpbXBsZVN0b3JhZ2UgewogICAgdWludCBzdG9yZWREYXRhOwoKICAgIGZ1bmN0aW9uIHNldCh1aW50IHgpIHB1YmxpYyB7CiAgICAgICAgc3RvcmVkRGF0YSA9IHg7CiAgICB9CgogICAgZnVuY3Rpb24gZ2V0KCkgcHVibGljIHZpZXcgcmV0dXJucyAodWludCkgewogICAgICAgIHJldHVybiBzdG9yZWREYXRhOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.16</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleStorage</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">storedData</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">set</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>storedData<span class="w"> </span><span class="o">=</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">get</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>storedData<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>خط اول به شما می‌گوید کد منبع ، تحت مجوز GPL نسخه 3.0 می‌باشد. در جایی که انتشار کد منبع به صورت پیشفرض  باشد، مشخص کننده‌هایِ مجوز قابلِ خواندن توسطِ ماشین  مهم هستند.
+خط بعدی مشخص می‌کند کد منبع برای سالیدیتی نسخه 0.4.16 یا نسخه جدیدتر زبان نوشته شده است، اما شامل نسخه 0.9.0 نمی‌باشد. بخاطر اینکه قرارداد هوشمند می‌تواند رفتار متفاوتی داشته ‌باشد، به این هدف که اطمینان حاصل شود قرارداد هوشمند نتواند با نسخه جدید کامپایلر، کامپایل شود. <a class="reference internal" href="layout-of-source-files.html#pragma"><span class="std std-ref">پراگما</span></a> (Pragmas) دستورالعمل‌های رایج برای کامپایلرها در مورد نحوه برخورد با کد منبع می‌باشند (به عنوان مثال  <a class="reference external" href="https://en.wikipedia.org/wiki/Pragma_once">پراگما یکبار  (pragma once)</a> ).</p>
+<p>قراردادها در سالیدتی به معنای مجموعه‌ای از کد (<em>توابع</em> آن‌ها) و داده‌ها (<em>حالت</em> آن‌ها) است که در یک آدرس خاص در بلاکچین اتریوم قرار دارند. خط <code class="docutils literal notranslate"><span class="pre">;uint</span> <span class="pre">storedData</span></code>  یک متغیر حالت  به نام <code class="docutils literal notranslate"><span class="pre">storedData</span></code>  از نوع <code class="docutils literal notranslate"><span class="pre">uint</span></code>  (عددِ صحیحِ بدونِ علامت  256 بیتی) را مشخص می‌کند. می‌توان آن را به عنوان یک اسلات  در پایگاه داده در نظر بگیرید که می‌توانید با فراخوانی توابع کدی که پایگاه داده را مدیریت می‌کند، آن‌ها را جستوجو کرده و ویرایش کنید. در این مثال، قرارداد توابع  <code class="docutils literal notranslate"><span class="pre">set</span></code> و <code class="docutils literal notranslate"><span class="pre">get</span></code>  را تعریف می‌کند که  برای ویرایش  یا بازیابی  مقدار متغیر استفاده شود.</p>
+<dl class="simple">
+<dt>همانند سایر زبان‌‌های رایج، برای دسترسی به یک متغیر حالت، نیازی به پیشوند <code class="docutils literal notranslate"><span class="pre">.this</span></code>  ندارید.</dt><dd><p>این قرارداد جدا از اینکه هنوز کار زیادی انجام نداده‌است (به دلیل زیرساخت‌های ساخته شده توسط اتریوم) اجازه می‌دهد هر شخص یک عدد را ذخیره کند، که این عدد توسط هر شخصی در دنیا بدون هیچ روش امکان پذیر برای جلوگیری از انتشار آن قابل دسترس می‌باشد. هر شخصی می‌تواند مجدداً تابع <code class="docutils literal notranslate"><span class="pre">set</span></code>   را فراخوانی کند و عدد را رونویسی کند، اما عدد در تاریخچه‌ِ بلاکچین هنوز ذخیره بماند. بعداً خواهید دید که چگونه می‌توانید محدودیت‌های دسترسی را اعمال کنید تا فقط شما بتوانید عدد را تغییر دهید.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>در هنگام استفاده از متن Unicode مراقب باشید، زیرا نویسه‌های  مشابه (یا حتی یکسان) می‌توانند دارای نکته‌های کدی  متفاوتی باشند و همینطور به عنوان یک آرایه بایت  متفاوت کدگذاری شوند.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>همه شناسه‌ها  (نام قرارداد، نام تابع و نام متغیر) به مجموعه کاراکترهای ASCII محدود می‌‌شوند. ذخیره داده‌های رمزگذاری شده UTF-8 در متغیرهای رشته‌ای  امکان پذیر است.</p>
+</div>
+</section>
+<section id="index-0">
+<span id="id4"></span><h3>مثال  ساب کارنسی یا زیر ارز<a class="headerlink" href="#index-0" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>قرارداد زیر ساده ترین شکل ارز رمزنگاری شده  را پیاده سازی می‌کند. این قرارداد فقط به سازنده آن اجازه می‌دهد سکه‌ های جدید ایجاد کند (طرح‌های مختلف صدور امکان پذیر است). هر کسی می‌تواند بدون نیاز به ثبت نام با نام کاربری و رمز عبور، سکه برای یکدیگر ارسال کنند، تمام آنچه شما نیاز دارید یک جفت کلید اتریوم است.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IENvaW4gewogICAgLy8gVGhlIGtleXdvcmQgInB1YmxpYyIgbWFrZXMgdmFyaWFibGVzCiAgICAvLyBhY2Nlc3NpYmxlIGZyb20gb3RoZXIgY29udHJhY3RzCiAgICBhZGRyZXNzIHB1YmxpYyBtaW50ZXI7CiAgICBtYXBwaW5nIChhZGRyZXNzID0+IHVpbnQpIHB1YmxpYyBiYWxhbmNlczsKCiAgICAvLyBFdmVudHMgYWxsb3cgY2xpZW50cyB0byByZWFjdCB0byBzcGVjaWZpYwogICAgLy8gY29udHJhY3QgY2hhbmdlcyB5b3UgZGVjbGFyZQogICAgZXZlbnQgU2VudChhZGRyZXNzIGZyb20sIGFkZHJlc3MgdG8sIHVpbnQgYW1vdW50KTsKCiAgICAvLyBDb25zdHJ1Y3RvciBjb2RlIGlzIG9ubHkgcnVuIHdoZW4gdGhlIGNvbnRyYWN0CiAgICAvLyBpcyBjcmVhdGVkCiAgICBjb25zdHJ1Y3RvcigpIHsKICAgICAgICBtaW50ZXIgPSBtc2cuc2VuZGVyOwogICAgfQoKICAgIC8vIFNlbmRzIGFuIGFtb3VudCBvZiBuZXdseSBjcmVhdGVkIGNvaW5zIHRvIGFuIGFkZHJlc3MKICAgIC8vIENhbiBvbmx5IGJlIGNhbGxlZCBieSB0aGUgY29udHJhY3QgY3JlYXRvcgogICAgZnVuY3Rpb24gbWludChhZGRyZXNzIHJlY2VpdmVyLCB1aW50IGFtb3VudCkgcHVibGljIHsKICAgICAgICByZXF1aXJlKG1zZy5zZW5kZXIgPT0gbWludGVyKTsKICAgICAgICBiYWxhbmNlc1tyZWNlaXZlcl0gKz0gYW1vdW50OwogICAgfQoKICAgIC8vIEVycm9ycyBhbGxvdyB5b3UgdG8gcHJvdmlkZSBpbmZvcm1hdGlvbiBhYm91dAogICAgLy8gd2h5IGFuIG9wZXJhdGlvbiBmYWlsZWQuIFRoZXkgYXJlIHJldHVybmVkCiAgICAvLyB0byB0aGUgY2FsbGVyIG9mIHRoZSBmdW5jdGlvbi4KICAgIGVycm9yIEluc3VmZmljaWVudEJhbGFuY2UodWludCByZXF1ZXN0ZWQsIHVpbnQgYXZhaWxhYmxlKTsKCiAgICAvLyBTZW5kcyBhbiBhbW91bnQgb2YgZXhpc3RpbmcgY29pbnMKICAgIC8vIGZyb20gYW55IGNhbGxlciB0byBhbiBhZGRyZXNzCiAgICBmdW5jdGlvbiBzZW5kKGFkZHJlc3MgcmVjZWl2ZXIsIHVpbnQgYW1vdW50KSBwdWJsaWMgewogICAgICAgIGlmIChhbW91bnQgPiBiYWxhbmNlc1ttc2cuc2VuZGVyXSkKICAgICAgICAgICAgcmV2ZXJ0IEluc3VmZmljaWVudEJhbGFuY2UoewogICAgICAgICAgICAgICAgcmVxdWVzdGVkOiBhbW91bnQsCiAgICAgICAgICAgICAgICBhdmFpbGFibGU6IGJhbGFuY2VzW21zZy5zZW5kZXJdCiAgICAgICAgICAgIH0pOwoKICAgICAgICBiYWxhbmNlc1ttc2cuc2VuZGVyXSAtPSBhbW91bnQ7CiAgICAgICAgYmFsYW5jZXNbcmVjZWl2ZXJdICs9IGFtb3VudDsKICAgICAgICBlbWl0IFNlbnQobXNnLnNlbmRlciwgcmVjZWl2ZXIsIGFtb3VudCk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Coin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// The keyword &quot;public&quot; makes variables</span>
+<span class="w">    </span><span class="c1">// accessible from other contracts</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">minter</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>balances<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Events allow clients to react to specific</span>
+<span class="w">    </span><span class="c1">// contract changes you declare</span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Sent</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">from</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Constructor code is only run when the contract</span>
+<span class="w">    </span><span class="c1">// is created</span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>minter<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Sends an amount of newly created coins to an address</span>
+<span class="w">    </span><span class="c1">// Can only be called by the contract creator</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">mint</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>minter<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span>receiver<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Errors allow you to provide information about</span>
+<span class="w">    </span><span class="c1">// why an operation failed. They are returned</span>
+<span class="w">    </span><span class="c1">// to the caller of the function.</span>
+<span class="w">    </span>error<span class="w"> </span>InsufficientBalance<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">requested</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">available</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Sends an amount of existing coins</span>
+<span class="w">    </span><span class="c1">// from any caller to an address</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">send</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>amount<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">])</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>InsufficientBalance<span class="p">({</span><span class="w"></span>
+<span class="w">                </span>requested<span class="p">:</span><span class="w"> </span>amount<span class="p">,</span><span class="w"></span>
+<span class="w">                </span>available<span class="p">:</span><span class="w"> </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"></span>
+<span class="w">            </span><span class="p">});</span><span class="w"></span>
+
+<span class="w">        </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span>receiver<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>Sent<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>این قرارداد مفاهیم جدیدی را معرفی می‌کند، اجازه دهید یکی یکی آنها را مرور کنیم.</p>
+<p>خط <code class="docutils literal notranslate"><span class="pre">;address</span> <span class="pre">public</span> <span class="pre">minter</span></code>  متغیر حالت از نوع  <a class="reference internal" href="types.html#address"><span class="std std-ref">address</span></a> را مشخص می‌کند. نوع آدرس یک مقدار 160 بیتی است که اجازه هیچ گونه عملیات حسابی را نمی‌دهد. متغییر <code class="docutils literal notranslate"><span class="pre">address</span></code> برای ذخیره آدرس‌ قرارداد‌ها یا یک هش از نیمه عمومیِ  یک جفت کلید  متعلق به <a class="reference internal" href="#accounts"><span class="std std-ref">حساب‌های خارجی</span></a> مناسب است.</p>
+<p>کلمه کلیدی <code class="docutils literal notranslate"><span class="pre">public</span></code> به طور خودکار تابعی را ایجاد می‌کند که به شما امکان می‌دهد، از خارج از قرارداد به مقدار فعلی متغیر حالت  دسترسی پیدا کنید. بدون این کلمه کلیدی، سایر قراردادها راهی برای دسترسی به متغیر ندارند. کد تابع که توسط کامپایلر تولید می‌شود معادل موارد زیر است (فعلاً از  <code class="docutils literal notranslate"><span class="pre">external</span></code> و  <code class="docutils literal notranslate"><span class="pre">view</span></code> چشم پوشی کنید):</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gbWludGVyKCkgZXh0ZXJuYWwgdmlldyByZXR1cm5zIChhZGRyZXNzKSB7IHJldHVybiBtaW50ZXI7IH0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">minter</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">return</span><span class="w"> </span>minter<span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>می‌توانید توابعی مانند موارد فوق را خود اضافه کنید، اما یک متغیرحالت و تابعی با همان نام خواهید داشت. اما نیازی به این کار نیست، کامپایلر آن را برای شما مشخص می‌کند.</p>
+<p id="index-1">خط بعدی، <code class="docutils literal notranslate"><span class="pre">;mapping</span> <span class="pre">(address</span> <span class="pre">=&gt;</span> <span class="pre">uint)</span> <span class="pre">public</span> <span class="pre">balances</span></code> یک متغیر ِحالتِ عمومی  ایجاد می‌کند، اما یک نوع داده  پیچیده‌تر است. نوع <a class="reference internal" href="types.html#mapping-types"><span class="std std-ref">mapping</span></a>  آدرس‌ها را به اعداد صحیح بدون علامت  (<a class="reference internal" href="types.html#integers"><span class="std std-ref">unsigned integers</span></a>) نگاشت  می‌کند.</p>
+<p>Mapping ‌ها را می‌توان به عنوان <a class="reference external" href="https://en.wikipedia.org/wiki/Hash_table">جداول هش</a> مشاهده کرد که عملاً مقداردهی اولیه شده‌اند، به طوری که همه کلیدهای ممکن از همان ابتدا وجود داشته و به مقداری که همهِ نمایشِ بایت  آن‌ها صفر است نگاشت شده باشند. با این حال، نه می‌توان لیستی از تمام کلیدهای Mapping و نه لیستی از تمام مقادیر را بدست آورد. آنچه را که به Mapping اضافه کرده‌اید، ثبت کنید یا از آن در زمینه‌ای که نیازی به آن مقدار نیست استفاده کنید. یا حتی بهتر است که یک لیست نگهدارید یا از نوع داده  مناسب استفاده کنید.</p>
+<p><a class="reference internal" href="contracts.html#getter-functions"><span class="std std-ref">تابع getter</span></a>  ایجاد شده توسط کلمه کلیدی <code class="docutils literal notranslate"><span class="pre">public</span></code>  در Mapping پیچیده‌تر است. به شرح زیر است:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gYmFsYW5jZXMoYWRkcmVzcyBfYWNjb3VudCkgZXh0ZXJuYWwgdmlldyByZXR1cm5zICh1aW50KSB7CiAgICByZXR1cm4gYmFsYW5jZXNbX2FjY291bnRdOwp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">balances</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_account</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>balances<span class="p">[</span>_account<span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>شما می‌توانید برای جستجوی بالانس  یک حساب از این تابع استفاده کنید.</p>
+<p id="index-2">خط <code class="docutils literal notranslate"><span class="pre">;event</span> <span class="pre">Sent(address</span> <span class="pre">from,</span> <span class="pre">address</span> <span class="pre">to,</span> <span class="pre">uint</span> <span class="pre">amount)</span></code> یک <a class="reference internal" href="contracts.html#events"><span class="std std-ref">&quot;event&quot;</span></a>  را مشخص می‌کند که در آخرین خط با تابع <code class="docutils literal notranslate"><span class="pre">send</span></code>  منتشر می‌شود. کلاینت اتریوم مانند برنامه‌های کاربردی  وب می‌توانند به این رویداد ها که در بلاکچین منتشر شده‌اند، بدون هزینه زیاد گوش دهند. شنونده به محض انتشار، آرگومان‌های <code class="docutils literal notranslate"><span class="pre">from</span></code> ، <code class="docutils literal notranslate"><span class="pre">to</span></code> و <code class="docutils literal notranslate"><span class="pre">amount</span></code> را دریافت می‌کند، که امکان ردیابی تراکنش‌ها را فراهم می‌کند.</p>
+<p>برای گوش دادن به این event، می‌توانید از کد جاوا اسکریپت زیر استفاده کنید که از <a class="reference external" href="https://github.com/ethereum/web3.js/">web3.js</a>  برای ایجاد شیء قرارداد <code class="docutils literal notranslate"><span class="pre">Coin</span></code>   استفاده می‌کند و هر رابط کاربری تابع <code class="docutils literal notranslate"><span class="pre">balances</span></code>   که به صورت خودکار ایجاد شده را از بالا فراخوانی می‌کند:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Q29pbi5TZW50KCkud2F0Y2goe30sICcnLCBmdW5jdGlvbihlcnJvciwgcmVzdWx0KSB7CiAgICBpZiAoIWVycm9yKSB7CiAgICAgICAgY29uc29sZS5sb2coIkNvaW4gdHJhbnNmZXI6ICIgKyByZXN1bHQuYXJncy5hbW91bnQgKwogICAgICAgICAgICAiIGNvaW5zIHdlcmUgc2VudCBmcm9tICIgKyByZXN1bHQuYXJncy5mcm9tICsKICAgICAgICAgICAgIiB0byAiICsgcmVzdWx0LmFyZ3MudG8gKyAiLiIpOwogICAgICAgIGNvbnNvbGUubG9nKCJCYWxhbmNlcyBub3c6XG4iICsKICAgICAgICAgICAgIlNlbmRlcjogIiArIENvaW4uYmFsYW5jZXMuY2FsbChyZXN1bHQuYXJncy5mcm9tKSArCiAgICAgICAgICAgICJSZWNlaXZlcjogIiArIENvaW4uYmFsYW5jZXMuY2FsbChyZXN1bHQuYXJncy50bykpOwogICAgfQp9KQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="n">Coin</span><span class="p">.</span><span class="n">Sent</span><span class="p">().</span><span class="n">watch</span><span class="p">({},</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;Coin transfer: &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">amount</span> <span class="o">+</span>
+            <span class="s">&quot; coins were sent from &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="k">from</span> <span class="o">+</span>
+            <span class="s">&quot; to &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">to</span> <span class="o">+</span> <span class="s">&quot;.&quot;</span><span class="p">);</span>
+        <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;Balances now:</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span>
+            <span class="s">&quot;Sender: &quot;</span> <span class="o">+</span> <span class="n">Coin</span><span class="p">.</span><span class="n">balances</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="k">from</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s">&quot;Receiver: &quot;</span> <span class="o">+</span> <span class="n">Coin</span><span class="p">.</span><span class="n">balances</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">to</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p id="index-3"><a class="reference internal" href="contracts.html#constructor"><span class="std std-ref">constructor</span></a>  یک تابع خاص است که در هنگام ایجاد قرارداد اجرا می‌شود و پس از آن نمی‌توان آن را فراخوانی کرد. در این مورد، constructor آدرس شخص ایجاد کننده قرارداد را برای همیشه ذخیره می‌کند. متغیر <code class="docutils literal notranslate"><span class="pre">msg</span></code>   (همراه با  <code class="docutils literal notranslate"><span class="pre">tx</span></code> و  <code class="docutils literal notranslate"><span class="pre">block</span></code>) یک <a class="reference internal" href="units-and-global-variables.html#special-variables-functions"><span class="std std-ref">متغیر جهانی خاص</span></a>   که شامل خصوصیاتی می‌باشد و امکان دسترسی به بلاکچین را فراهم می‌کند. <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>  همیشه آدرسی است که فراخوانی تابع فعلی (خارجی ) از آن گرفته شده‌است.</p>
+<p>توابعی که قرارداد را تشکیل می‌دهند و کاربران و قراردادها می‌توانند آنها را فراخوانی کنند، <code class="docutils literal notranslate"><span class="pre">mint</span></code> و <code class="docutils literal notranslate"><span class="pre">send</span></code>   هستند.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mint</span></code> function sends an amount of newly created coins to another address. The <a class="reference internal" href="control-structures.html#assert-and-require"><span class="std std-ref">require</span></a> function call defines conditions that reverts all changes if not met. In this
+example, <code class="docutils literal notranslate"><span class="pre">require(msg.sender</span> <span class="pre">==</span> <span class="pre">minter);</span></code> ensures that only the creator of the contract can call
+<code class="docutils literal notranslate"><span class="pre">mint</span></code>. In general, the creator can mint as many tokens as they like, but at some point, this will
+lead to a phenomenon called &quot;overflow&quot;. Note that because of the default <a class="reference internal" href="control-structures.html#unchecked"><span class="std std-ref">Checked arithmetic</span></a>, the transaction would revert if the expression <code class="docutils literal notranslate"><span class="pre">balances[receiver]</span> <span class="pre">+=</span> <span class="pre">amount;</span></code>
+overflows, i.e., when <code class="docutils literal notranslate"><span class="pre">balances[receiver]</span> <span class="pre">+</span> <span class="pre">amount</span></code> in arbitrary precision arithmetic is larger
+than the maximum value of <code class="docutils literal notranslate"><span class="pre">uint</span></code> (<code class="docutils literal notranslate"><span class="pre">2**256</span> <span class="pre">-</span> <span class="pre">1</span></code>). This is also true for the statement
+<code class="docutils literal notranslate"><span class="pre">balances[receiver]</span> <span class="pre">+=</span> <span class="pre">amount;</span></code> in the function <code class="docutils literal notranslate"><span class="pre">send</span></code>.</p>
+<p><a class="reference internal" href="contracts.html#errors"><span class="std std-ref">خطاها</span></a>  به شما امکان می‌دهند اطلاعات بیشتری در مورد علت شرایط یا شکست عملیات به فراخوانی کننده  ارائه دهید. خطاها همراه با  <a class="reference internal" href="control-structures.html#revert-statement"><span class="std std-ref">دستورات revert</span></a>   استفاده می‌شوند. دستورات revert بدون تغییر و بدون قید و شرط، تمام تغییرات مشابه با تابع <code class="docutils literal notranslate"><span class="pre">require</span></code>  را نابود و برمی‌گردانند ، اما همچنین به شما امکان ارائه نام خطا و داده‌های اضافی را که به فراخوانی کننده (و در نهایت به برنامه سمت کاربر  یا جستوجوگر بلاک ) نشان دهید، را می‌دهند. به طوری که یک شکست  را می‌توان به راحتی عیب یابی  کرد یا به آن واکنش نشان داد.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">send</span></code> function can be used by anyone (who already
+has some of these coins) to send coins to anyone else. If the sender does not have
+enough coins to send, the <code class="docutils literal notranslate"><span class="pre">if</span></code> condition evaluates to true. As a result, the <code class="docutils literal notranslate"><span class="pre">revert</span></code> will cause the operation to fail
+while providing the sender with error details using the <code class="docutils literal notranslate"><span class="pre">InsufficientBalance</span></code> error.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اگر از این قرارداد برای ارسال سکه به یک آدرس استفاده کنید، وقتی به آن آدرس در یک مرورگر بلاکچین نگاه کنید، چیزی مشاهده نخواهید کرد. زیرا تاریخچه ارسال سکه و بالانس تغییر یافته و فقط در فضای ذخیره سازی داده  این قراردادِ خاصِ سکه ذخیره می‌شود. با استفاده از رویداد ها، می‌توانید یک &quot;جستجوگر بلاکچینی&quot; ایجاد کنید که تراکنش‌ها و بالانس‌های سکه جدید شما را ردیابی می‌کند، اما باید آدرس قرارداد سکه و نه آدرس صاحبان سکه را بررسی کنید.</p>
+</div>
+</section>
+</section>
+<section id="blockchain-basics">
+<span id="id6"></span><h2>مبانی بلاکچین<a class="headerlink" href="#blockchain-basics" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>درک بلاکچین به عنوان یک مفهوم برای برنامه نویسان خیلی دشوار نمی‌باشد. به این دلیل که بیشتر پیچیدگی در مفهوم (استخراج ، <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">هش کردن</a> ، <a class="reference external" href="https://en.wikipedia.org/wiki/Elliptic_curve_cryptography">رمزنگاری منحنی بیضوی</a>  ، <a class="reference external" href="https://en.wikipedia.org/wiki/Peer-to-peer">شبکه‌های همتا به همتا</a>  و غیره) می‌باشد که فقط برای ارائه مجموعه خاصی از ویژگی‌ها و وعده‌ها برای پلتفرم می‌باشد. پس از پذیرش این ویژگی‌ها، دیگر لازم نیست نگران فناوری زیر ساخت باشید - یا برای استفاده از آن باید بدانید که AWS آمازون چگونه کار می‌کند؟</p>
+<section id="index-4">
+<span id="id10"></span><h3>تراکنش‌ها<a class="headerlink" href="#index-4" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>بلاکچین یک پایگاه داده تراکنشی  مشترک جهانی  است. این بدان معناست که هر کس فقط با شرکت در شبکه می‌تواند ورودی‌های پایگاه داده را بخواند. اگر می‌خواهید چیزی را در پایگاه داده تغییر دهید، باید به اصطلاح، تراکنش ایجاد کنید، باید توسط دیگران پذیرفته شود. کلمه تراکنش به تغییری که می‌خواهید ایجاد کنید که یا اصلاً انجام نشده یا کاملاً اعمال شده اشاره دارد (فرض کنید می‌خواهید همزمان دو مقدار را تغییر دهید). علاوه بر این، زمانی که تراکنش شما در پایگاه داده اعمال می‌شود، هیچ تراکنش دیگری نمی‌تواند آن را تغییر دهد.</p>
+<p>به عنوان مثال، جدولی را تصور کنید که بالانس تمام حساب‌ها را در یک ارز الکترونیکی  فهرست می‌کند. اگر انتقال از یک حساب به حساب دیگر درخواست شود، ماهیت تراکنشی پایگاه داده تضمین می‌کند که اگر مبلغ از یک حساب کم شود، همیشه به حساب دیگر اضافه می‌شود. اگر به هر دلیلی، افزودن مبلغ به حساب مقصد  امکان پذیر نباشد، حساب مبدأ  نیز ویرایش نمی‌شود.</p>
+<p>علاوه بر این، یک تراکنش همیشه به صورت رمزنگاری توسط فرستنده (سازنده ) امضا می‌شود. این امر باعث می‌شود محافظت از دسترسی به تغییرات خاص پایگاه داده آسان باشد. در مثال ارز الکترونیکی ، یک بررسی ساده تضمین می‌کند که فقط شخصی که کلیدهای حساب را دارد می‌تواند از آن پول انتقال بدهد.</p>
+</section>
+<section id="index-5">
+<span id="id11"></span><h3>بلاک‌ها<a class="headerlink" href="#index-5" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>یک مانع عمده برای غلبه بر چیزی که (در اصطلاحات بیتکوین) &quot;حمله دو بار خرج کردن  &quot; نامیده می‌شود : اگر دو تراکنش در شبکه وجود داشته باشد که هر دو بخواهند یک حساب را خالی کنند چه اتفاقی می‌افتد؟ فقط یکی از تراکنش‌ها می‌تواند معتبر باشد، به طور معمول تراکنشی که ابتدا پذیرفته می‌شود. مسئله این است که &quot;First&quot; یک اصطلاح  عَملی در یک شبکه همتا به همتا  نیست.</p>
+<p>پاسخ خلاصه این است که شما نیاز ندارید مراقبت باشید. یک ترتیب از تراکنش‌های پذیرفته شده به صورت جهانی برای شما انتخاب می‌شود، که اختلافات را حل می‌کند. تراکنش‌ها به صورت چیزی که &quot;بلاک&quot; نام دارد، بسته و سپس اجرا می‌شوند و در بین گره‌های مشارکت کننده توزیع می‌شوند. اگر دو تراکنش با یکدیگر مغایرت داشته باشند، تراکنشی که در نهایت دوم شود رد می‌شود و بخشی از بلاک نمی‌شود.</p>
+<p>این بلاک‌ها از نظر زمانی یک توالی خطی  را تشکیل می‌دهند و بخاطر همین است که کلمه &quot;بلاکچین&quot; از آن گرفته می‌شود. بلاک‌ها در فواصل نسبتاً منظمی به زنجیره اضافه می‌شوند - برای اتریوم تقریباً هر 17 ثانیه می‌باشد.</p>
+<p>به عنوان بخشی از &quot;مکانیزم انتخاب ترتیبی  &quot; (که &quot;استخراج &quot; نامیده می‌شود) ممکن است فقط در &quot;نوک &quot; زنجیره، برگرداندن بلاک‌ها هرزگاهی اتفاق بیفتد. هرچه تعداد بلاک‌های اضافه شده در بالای یک بلاکِ خاص بیشتر باشد، احتمال برگردانندن آن بلاک کمتر است. بنابراین ممکن است تراکنش شما برگردانده شود و حتی از بلاکچین حذف شود، اما هرچه بیشتر منتظر بمانید، احتمال آن کمتر است.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تضمین نمی‌شود که تراکنش در بلاک بعدی یا هر بلاک مشخص خاص در آینده لحاظ شود، زیرا این کار به عهده ارسال کننده نمی‌باشد، بلکه ماینرها باید تعیین کنند که تراکنش در کدام بلاک لحاظ شود.</p>
+<p>اگر می‌خواهید فراخوانی قراردادتان را در آینده زمان بندی کنید، می توانید از <a class="reference external" href="https://www.ethereum-alarm-clock.com/">alarm clock</a>  یا سرویس اوراکل مشابه استفاده کنید.</p>
+</div>
+<span class="target" id="the-ethereum-virtual-machine"></span></section>
+</section>
+<section id="index-6">
+<span id="id12"></span><h2>ماشین مجازی اتریوم<a class="headerlink" href="#index-6" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="id13">
+<h3>مرور کلی<a class="headerlink" href="#id13" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>ماشین مجازی اتریوم  یا EVM محیط زمان اجرای قراردادهای هوشمند در اتریوم می‌باشد. EVM نه تنها یک جعبه است بلکه در واقع کاملاً ایزوله شده است، به این معنی که کدی که در داخل EVM اجرا می شود، به شبکه و فایل سیستم  یا سایر فرآیندها دسترسی ندارد. در قراردادهای هوشمند حتی دسترسی به سایر قراردادهای هوشمند محدود است.</p>
+</section>
+<section id="accounts">
+<span id="index-7"></span><span id="id14"></span><h3>حساب‌ها<a class="headerlink" href="#accounts" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>در اتریوم دو نوع حساب وجود دارد که فضای آدرس یکسانی را به اشتراک می‌گذارند: <strong>حساب های خارجی</strong>  که توسط جفت کلید عمومی-خصوصی  (به عنوان مثال انسان) کنترل می‌شوند و <strong>حساب‌های قراردادی</strong>  که توسط کدی که همراه با حساب ذخیره می‌شود کنترل می‌شوند.</p>
+<p>آدرس یک حساب خارجی  از کلید عمومی مشخص می‌شود در حالی که آدرس قرارداد در زمان ایجاد قرارداد مشخص می‌شود (از آدرس سازنده و تعداد تراکنش‌های ارسال شده از آن آدرس مشتق گرفته شده است، که  به اصطلاح &quot; نانس &quot; نامیده می‌شود).</p>
+<p>صرف نظر از اینکه حساب، کد را ذخیره می‌کند یا نه، EVM با این دو نوع حساب به صورت برابر رفتار می‌کند.</p>
+<p>هر حساب دارای یک حافظه کلید-مقدار  ثابت است که کلمات 256 بیتی را با کلمات 256 بیتی که  <strong>storage</strong> نامیده می‌شود.</p>
+<p>علاوه بر این، هر حساب <strong>بالانسی</strong> معادل به اتر دارد (به طور دقیق در wei  ، <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">ether</span></code>  معادل <code class="docutils literal notranslate"><span class="pre">10**18</span> <span class="pre">wei</span></code>  است) که می‌تواند با ارسال تراکنش‌هایی که شامل اتر هستند، اصلاح شود.</p>
+</section>
+<section id="index-8">
+<span id="id15"></span><h3>تراکنش‌ها<a class="headerlink" href="#index-8" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>تراکنش پیامی است که از یک حساب به حساب دیگر ارسال می‌شود (که ممکن است یکسان یا خالی باشد، به مطالب زیر مراجعه کنید). تراکنش‌ها می‌تواند شامل داده‌های باینری (که &quot;پیلود &quot; نامیده می‌شود) و اتر باشند.</p>
+<p>اگر حساب مقصد حاوی کد باشد، آن کد اجرا می شود و پیلود به عنوان داده ورودی ارائه می‌شود.</p>
+<p>اگر حساب مقصد  تنظیم نشده باشد ( یعنی تراکنش گیرنده نداشته باشد یا  <a href="#id16"><span class="problematic" id="id17">``</span></a>null``تنظیم شده‌ باشد)، تراکنش <strong>قرارداد جدید</strong> ایجاد می‌کند. همانطور که قبلاً ذکر شد، آدرس آن قرارداد آدرس صفر  نمی‌باشد، بلکه آدرسی است که از فرستنده و تعداد تراکنش‌های ارسال شده آن (&quot;نانس&quot;) گرفته شده است. پیلود چنین تراکنش ایجاد قرارداد به عنوان بایت کد  EVM در نظر گرفته شده و اجرا می‌شود. داده‌های خروجی این اجرا به عنوان کدِ قرارداد برای همیشه ذخیره می‌شود. این بدان معناست که برای ایجاد قرارداد، شما کد واقعی قرارداد را ارسال نمی‌کنید، بلکه در واقع کدی که هنگام اجرا، آن کد را برمی‌گرداند .</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>هنگامی که یک قرارداد در حال ایجاد باشد، کد آن هنوز خالی است. به همین دلیل، تا زمانی که سازنده آن، اجرای آن را به اتمام نرسانده، نباید مجدداً قرارداد در حال ساخت را فراخونی مجدد کنید.</p>
+</div>
+</section>
+<section id="index-9">
+<span id="id18"></span><h3>گَس<a class="headerlink" href="#index-9" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>به محض ایجاد، هر تراکنش با مقدار مشخصی <strong>گَس</strong> شارژ می شود، هدف آن محدود کردن میزان کار مورد نیاز برای انجام تراکنش و پرداخت همزمان هزینه این اجرا است. هنگامی که EVM تراکنش را انجام می‌دهد، گَس طبق قوانین خاص به تدریج خالی می‌شود.</p>
+<p><strong>gas price</strong> مقداری است که توسط سازنده تراکنش تنظیم می‌شود و باید  <code class="docutils literal notranslate"><span class="pre">gas_price</span> <span class="pre">*</span> <span class="pre">gas</span></code> را قبل از حساب ارسالی پرداخت کند. اگر پس از اجرا مقداری گَس باقی مانده باشد، به همان روش به سازنده بازپرداخت می‌شود.</p>
+<p>اگر گَس در هر نقطه مصرف شود (یعنی منفی باشد)، یک استثناء اتمام گَس ایجاد می‌شود، که تمام تغییرات و اصلاحات ایجاد شده در حالت  را در این چارچوب فراخوانی فعلی، باز می‌گرداند .</p>
+</section>
+<section id="index-10">
+<span id="id19"></span><h3>فضای ذخیره سازی  ، حافظه مِمُوری  و پشته<a class="headerlink" href="#index-10" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>ماشین مجازی اتریوم دارای سه فضا برای ذخیره سازی داده می‌باشد: فضای ذخیره سازی یا storage، حافظه موقت یا مِمُوری و پشته، که در پاراگراف‌های زیر توضیح داده شده‌اند.</p>
+<p>هر حساب دارای یک فضای داده به نام <strong>storage</strong> می‌باشد، که بین تابع فراخوانی و تراکنش‌ها ثابت است.</p>
+<p>storage یک حافظه کلید_مقدار  می‌باشد که کلمات 256 بیتی را با کلمات 256 بیتی نگاشت  می‌کند. محاسبه storage از طریق قرارداد امکان پذیر نیست، خواندن آن نسبتاً پر هزینه است و برای مقدار دهی و ویرایش کردن پر هزینه‌تر هم می‌باشد. به دلیل این هزینه‌ها، شما باید آنچه را که در storage ذخیره می‌کنید، به میزانِ نیازِ قرارداد برای انجام این کار به حداقل برسانید. . داده‌هایی مانند محاسبه مشتق، کش کردن  و جمع آوری داده‌‌های خارج از قرارداد، را در آن ذخیره کنید. یک قرارداد نمی‌تواند در هر storage ای به جز storage خودش بنویسد یا بخواند.</p>
+<p>دومین فضای داده <strong>مِمُوری</strong>  نامیده می‌شود، که هر قرارداد یک نمونهِ پاکِ تازه برای هر فراخونی پیام بدست می‌آورد. مِمُوری خطی است و می‌توان آن را در سطح بایت آدرس دهی کرد، اما خواندن مِمُوری به عرض 256 بیت محدود می‌شود، در هنگام نوشتن می‌تواند 8 بیت یا 256 بیت عرض داشته باشد. هنگام دسترسی (خواندن یا نوشتن) به یک کلمه مِمُوری که قبلا دست نخورده است (یعنی هر آفست  درون یک کلمه)، مِمُوری با یک کلمه (256 بیتی) گسترش می‌یابد. در زمان گسترش، هزینه گَس باید پرداخت شود. حافظه هرچه بزرگتر شود گرانتر است (هزینه گَس به صورت درجه دو اندازه گیری می‌شود).</p>
+<p>EVM یک ماشین ثبت نیست بلکه یک ماشین پشته است، بنابراین تمام محاسبات در یک فضای داده به نام <strong>پشته</strong> انجام می‌شود. حداکثر اندازه آن 1024 عنصر است و شامل کلمات 256 بیتی است. دسترسی به پشته به روش &quot;بالا انتها&quot; که در زیر توضیح داده شده‌است، محدود می‌باشد:
+امکان کپی کردن یکی از 16 عنصر بالاتر در بالای پشته یا تعویض بالاترین عنصر با یکی از 16 عنصر زیر آن وجود دارد. تمام عملیات دیگر دو عنصر بالاتر (یا یک یا بیشتر، بسته به عملیات) را از پشته گرفته و نتیجه را در پشته درج میکنند. مطمئناً امکان دسترسی عناصر پشته به storage یا مِمُوری برای دستیابی عمیق تر به پشته وجود دارد، اما دسترسی به عناصر دلخواه در اعماق پشته بدون برداشتن قسمت بالای پشته امکان پذیر نیست.</p>
+</section>
+<section id="index-11">
+<span id="id20"></span><h3>مجموعه دستورالعمل‌ها<a class="headerlink" href="#index-11" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>بیتی یا برشی از مِمُوری  (یا سایر آرایه‌های بایت ) کار می‌کنند. عملیات حسابی ، بیتی ، منطقی  و مقایسه‌ای   معمول وجود دارد. پرش‌های شرطی و غیر شرطی  امکان پذیر است. علاوه بر این، قراردادها می‌توانند به ویژگی‌های مربوط به بلاک فعلی مانند شماره  و برچسب زمان  آن دسترسی داشته باشند.</p>
+<p>برای لیست کامل، لطفاً به <a class="reference internal" href="yul.html#opcodes"><span class="std std-ref">لیست آپکد</span></a>   به عنوان بخشی از مستند اسمبلی داخلی  مراجعه کنید.</p>
+</section>
+<section id="index-12">
+<span id="id21"></span><h3>پیام های فراخوانی<a class="headerlink" href="#index-12" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>قراردادها می‌توانند سایر قراردادها را فراخوانی کنند یا اتر را از طریق پیام‌های فراخوانی به حساب‌های غیر قراردادی بفرستند. پیام‌های فراخوانی مانند تراکنش‌ها هستند، بدین معنی که دارای منبع ، مقصد ، پیلود داده ، اتر ، گَس  و داده‌های برگشتی هستند. در واقع، هر تراکنش از یک پیام فراخوانی سطح بالا  تشکیل شده است که به نوبه خود می‌تواند پیام‌های فراخوانی دیگری ایجاد کند.</p>
+<blockquote>
+<div><p>یک قرارداد می‌تواند تصمیم بگیرد که چه مقدار از <strong>گَس</strong> باقیمانده آن باید با پیام فراخوانی داخلی ارسال شود و چه مقدار آن را می‌خواهد نگهداری کند. اگر یک استثنای اتمام-گَس  در فراخوانی داخلی (یا هر استثناء دیگر) اتفاق بیفتد، با یک مقدار خطا روی پشته  نشان داده می‌شود. در این حالت، فقط گَس ارسالی همراه با فراخوانی مصرف می‌شود. در سالیدیتی، فراخوانی قرارداد به طور پیش فرض در چنین شرایطی باعث یک استثناء دستی می‌شود، به طوری که استثناء فراخوانی، پشته را به صورت &quot; پنجره نمایش &quot; نمایش می‌دهد.</p>
+</div></blockquote>
+<p>همانطور که قبلاً گفته شد، قرارداد فراخوانی شده (که می‌تواند همان فراخوانی کننده باشد) یک مِمُوری تازه پاک شده را دریافت می‌کند و به فراخوانی پیلود  دسترسی دارد- که در یک فضای جداگانه به نام فراخوانی داده یا <strong>calldata</strong> ارائه می‌شود. پس از پایان اجرا، داده‌هایی را که در مکانی از مِمُوری فراخوانی کننده که از قبل توسط فراخوانی کننده اختصاص داده شده‌است و در آن ذخیره خواهند شد، را می‌تواند برگرداند. همه‌ی این تماس‌ها کاملاً همگام هستند.</p>
+<p>فراخوانی‌ها به عمق 1024 <strong>محدود می‌‌شوند</strong>، این بدان معنی است که برای انجام عملیات پیچیده‌تر، حلقه‌ها  بر فراخوانی‌های مکرر باید ترجیح داده شوند. بعلاوه، فقط 63/64امین از گَس می‌تواند در یک پیام فراخوانی فوروارد شود، که در عمل باعث ایجاد عمق کمتر از 1000 می‌شود.</p>
+</section>
+<section id="delegatecall-callcode">
+<span id="index-13"></span><h3>Delegatecall / Callcode و کتابخانه ها<a class="headerlink" href="#delegatecall-callcode" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>نوع خاصی از پیام های فراخوانی به نام ** <a href="#id22"><span class="problematic" id="id23">**</span></a>delegatecall وجود دارد، که همانند یک پیام فراخوانی می‌باشند، جدا از این واقعیت که کد در آدرس مقصد در قرارداد فراخوانی کننده  اجرا می‌شود و <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> و <code class="docutils literal notranslate"><span class="pre">msg.value</span></code>  مقادیر خود را تغییر نمی‌دهند.</p>
+<p>این بدان معناست که یک قرارداد می‌تواند به صورت پویا در زمان اجرا، کد را از آدرس دیگری بارگیری کند. Storage، آدرس فعلی و بالانس هنوز به قرارداد فراخوانی کننده اشاره دارد و فقط کد از آدرس فراخوانی شده گرفته شده‌است.</p>
+<p>delegatecall امکان ویژگی &quot;کتابخانه&quot; در سالیدیتی را فراهم می‌کند: کد کتابخانه قابل استفاده مجدد می‌باشد که می‌تواند در storage قرارداد اعمال شود. به عنوان مثال به منظور پیاده سازی یک ساختار داده پیچیده .</p>
+</section>
+<section id="index-14">
+<span id="id24"></span><h3>گزارش‌ها<a class="headerlink" href="#index-14" title="پیوند ثابت به این سر مقاله"></a></h3>
+<blockquote>
+<div><p>می‌توان داده‌ها را در یک ساختار داده‌ای با نمایه خاص ذخیره کرد که همه راه‌ها تا سطح بلاک را نشان می‌دهد. این ویژگی <strong>لاگ یا گزارش</strong> نامیده شده‌است که توسط سالیدیتی به منظور اجرای <a class="reference internal" href="contracts.html#events"><span class="std std-ref">رویداد‌ها</span></a> استفاده می‌شود. قراردادها پس از ایجاد نمی‌توانند به لاگ داده‌ها دسترسی داشته باشند، اما از خارج از بلاکچین می‌توان به صورت کارآمد به آنها دسترسی داشته باشند. از آنجا که بخشی از لاگ داده‌ها در <a class="reference external" href="https://en.wikipedia.org/wiki/Bloom_filter">فیلتر‌های بلوم</a>  ذخیره می‌شوند، جستجوی این داده‌ها به روشی کارآمد و رمزنگاری شده امکان پذیر‌است، بنابراین جفت‌های شبکه‌ای که کل بلاکچین را بارگیری نمی‌کنند (به اصطلاح &quot;کلاینت لایت&quot;) هنوز هم می‌توانند این لاگ‌ها را پیدا کنید.</p>
+</div></blockquote>
+</section>
+<section id="index-15">
+<span id="id26"></span><h3>ايجاد كردن<a class="headerlink" href="#index-15" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>قراردادها حتی می‌توانند قراردادهای دیگری را با استفاده از یک آپکد خاص  ایجاد کنند (یعنی آدرس صفر  را به عنوان یک تراکنش به سادگی صدا نمی‌زنند). تنها تفاوت بین <strong>فراخوانی‌های ایجاد</strong>  و پیام‌های فراخوانی عادی  این است که داده‌های پیلود  اجرا می‌شوند و نتیجه به عنوان کد  و فراخوانی کننده ، ذخیره می‌شود. ایجاد کننده، آدرس قرارداد جدید را روی پشته  دریافت می‌کند.</p>
+</section>
+<section id="index-16">
+<span id="id27"></span><h3>غیرفعال کردن و خود تخریبی<a class="headerlink" href="#index-16" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>تنها راه حذف کد از بلاکچین زمانی است که قراردادی در آن آدرس عملیات  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>  را انجام دهد. باقی مانده اتر ذخیره شده در آن آدرس به مقصد تعیین شده ارسال می‌شود و سپس storage و کد از حالت  خارج می‌شود. حذف قرارداد از نظر تئوری یک ایده خوب به نظر می‌رسد، اما به طور بالقوه خطرناک است، زیرا اگر کسی اتر را به قراردادهای حذف شده بفرستد، اتر برای همیشه از بین می‌رود.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>حتی اگر قراردادی با  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>  حذف شود، هنوز به عنوان بخشی از تاریخچهِ بلاکچین باقی می‌ماند و احتمالاً توسط اکثر گره‌های اتریوم نگهداری شود. بنابراین استفاده از <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>  با حذف داده‌ها از روی هارد دیسک یکسان نیست.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>حتی اگر کد قرارداد فاقد فراخوانی  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> باشد، باز هم می‌تواند آن عملیات را با استفاده از  <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code>  یا  <code class="docutils literal notranslate"><span class="pre">callcode</span></code> انجام دهد.</p>
+</div>
+<p>اگر می‌خواهید قراردادهای خود را غیرفعال  کنید، در عوض باید آنها را با تغییر حالت داخلی  که باعث برگشت همه توابع می‌شود، <strong>غیرفعال</strong> کنید. این امر استفاده از قرارداد را غیرممکن می‌کند، زیرا بلافاصله اتر را برمی‌گرداند.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="سالیدیتی" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="installing-solidity.html" class="btn btn-neutral float-right" title="نصب کامپایلر سالیدیتی" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

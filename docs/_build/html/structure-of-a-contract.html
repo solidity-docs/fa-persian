@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ساختار قرارداد &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="انواع" href="types.html" />
+    <link rel="prev" title="چیدمان یک فایل منبع سالیدیتی" href="layout-of-source-files.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ساختار قرارداد</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structure-state-variables">متغیرهای حالت</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure-functions">توابع</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure-function-modifiers">توابع اصلاح کننده</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure-events">رویدادها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure-errors">خطاها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#struct">انواع Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enum">انواع Enum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>ساختار قرارداد</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/structure-of-a-contract.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contract-structure">
+<span id="index-0"></span><span id="id1"></span><h1>ساختار قرارداد<a class="headerlink" href="#contract-structure" title="پیوند ثابت به این سر مقاله"></a></h1>
+<blockquote>
+<div><p>قراردادهای سالیدیتی مانند کلاس‌های زبان‌های شی‌گرا هستند. هر قرارداد می‌تواند شامل دستورات   <a class="reference internal" href="#structure-state-variables"><span class="std std-ref">متغیرهای حالت</span></a>    ، <a class="reference internal" href="#structure-functions"><span class="std std-ref">توابع</span></a> ، <a class="reference internal" href="#structure-function-modifiers"><span class="std std-ref">توابع اصلاح کننده</span></a>    ، <a class="reference internal" href="#structure-events"><span class="std std-ref">رویدادها</span></a>   ،  <a class="reference internal" href="#structure-errors"><span class="std std-ref">خطاها</span></a>    ، <a class="reference internal" href="#structure-struct-types"><span class="std std-ref">انواع Struct</span></a>  و <a class="reference internal" href="#structure-enum-types"><span class="std std-ref">انواع Enum</span></a>   باشد. علاوه بر این، قراردادها می‌توانند از سایر قراردادها ارث ببرند.</p>
+<p>قراردادهای دیگری نیز وجود دارد که <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">کتابخانه‌ها</span></a>   و <a class="reference internal" href="contracts.html#interfaces"><span class="std std-ref">رابط‌ها</span></a>  نامیده می‌شوند.</p>
+</div></blockquote>
+<p>بخش مربوط به <a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">قرارداد‌ها</span></a>   شامل جزئیات بیشتری نسبت به این بخش است که یک مرور سریع رو ارائه می‌دهد.</p>
+<section id="structure-state-variables">
+<span id="id2"></span><h2>متغیرهای حالت<a class="headerlink" href="#structure-state-variables" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><p>متغیرهای حالت متغیرهایی هستند که مقادیر آنها به طور دائمی در storage  قرارداد ذخیره می‌شود.</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgU2ltcGxlU3RvcmFnZSB7CiAgICB1aW50IHN0b3JlZERhdGE7IC8vIFN0YXRlIHZhcmlhYmxlCiAgICAvLyAuLi4KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleStorage</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">storedData</span><span class="p">;</span><span class="w"> </span><span class="c1">// State variable</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>برای دیدن انواع متغیرهای حالت معتبر  و <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">قابلیت مشاهده  آن‌ها و گیرنده‌ها</span></a>   برای انتخاب‌های احتمالی برای مشاهده انواع متغیرها، به بخش <a class="reference internal" href="types.html#types"><span class="std std-ref">انواع</span></a>  مراجعه کنید.</p>
+</section>
+<section id="structure-functions">
+<span id="id3"></span><h2>توابع<a class="headerlink" href="#structure-functions" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><p>توابع، واحد اجرایی کد هستند. توابع معمولاً در داخل قرارداد تعریف می‌شوند، اما در خارج از قراردادها نیز می‌توانند تعریف شوند.</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjEgPDAuOS4wOwoKY29udHJhY3QgU2ltcGxlQXVjdGlvbiB7CiAgICBmdW5jdGlvbiBiaWQoKSBwdWJsaWMgcGF5YWJsZSB7IC8vIEZ1bmN0aW9uCiAgICAgICAgLy8gLi4uCiAgICB9Cn0KCi8vIEhlbHBlciBmdW5jdGlvbiBkZWZpbmVkIG91dHNpZGUgb2YgYSBjb250cmFjdApmdW5jdGlvbiBoZWxwZXIodWludCB4KSBwdXJlIHJldHVybnMgKHVpbnQpIHsKICAgIHJldHVybiB4ICogMjsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.1</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleAuction</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bid</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Function</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// Helper function defined outside of a contract</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">helper</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span>x<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="control-structures.html#function-calls"><span class="std std-ref">فراخوانی توابع</span></a>  می‌توانند به صورت داخلی یا خارجی اتفاق بیفتند و دارای <a class="reference internal" href="contracts.html#visibility-and-getters"><span class="std std-ref">قابلیت مشاهده</span></a>  مختلفی نسبت به سایر قراردادها هستند.  <a class="reference internal" href="contracts.html#functions"><span class="std std-ref">توابع</span></a>  پارامترها را می‌پذیرند و  <a class="reference internal" href="contracts.html#function-parameters-return-variables"><span class="std std-ref">متغیرها را برمی‌گردانند</span></a>  تا پارامترها و مقادیر بین آنها منتقل شود.</p>
+</section>
+<section id="structure-function-modifiers">
+<span id="id4"></span><h2>توابع اصلاح کننده<a class="headerlink" href="#structure-function-modifiers" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>از تابع اصلاح کننده‌ها می‌توان برای اصلاح سمنتیک  توابع به روشی اعلانی استفاده کرد (به  <a class="reference internal" href="contracts.html#modifiers"><span class="std std-ref">توابع اصلاح کننده</span></a> در بخش قراردادها مراجعه کنید).</p>
+<blockquote>
+<div><p>اضافه بار ، به این معنا که داشتن نام اصلاح کننده یکسان با پارامترهای مختلف، امکان پذیر نیست. مانند توابع، اصلاح کننده‌ها را می‌توان لغو کرد.</p>
+</div></blockquote>
+<p>مانند توابع، اصلاح کننده‌ها نیز می‌توانند <a class="reference internal" href="contracts.html#modifier-overriding"><span class="std std-ref">نادیده</span></a>  گرفته شوند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjkuMDsKCmNvbnRyYWN0IFB1cmNoYXNlIHsKICAgIGFkZHJlc3MgcHVibGljIHNlbGxlcjsKCiAgICBtb2RpZmllciBvbmx5U2VsbGVyKCkgeyAvLyBNb2RpZmllcgogICAgICAgIHJlcXVpcmUoCiAgICAgICAgICAgIG1zZy5zZW5kZXIgPT0gc2VsbGVyLAogICAgICAgICAgICAiT25seSBzZWxsZXIgY2FuIGNhbGwgdGhpcy4iCiAgICAgICAgKTsKICAgICAgICBfOwogICAgfQoKICAgIGZ1bmN0aW9uIGFib3J0KCkgcHVibGljIHZpZXcgb25seVNlbGxlciB7IC8vIE1vZGlmaWVyIHVzYWdlCiAgICAgICAgLy8gLi4uCiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.22</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Purchase</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">seller</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlySeller<span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Modifier</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>seller<span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;Only seller can call this.&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">abort</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"> </span>onlySeller<span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Modifier usage</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="structure-events">
+<span id="id5"></span><h2>رویدادها<a class="headerlink" href="#structure-events" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>رویدادها رابط‌های راحتی برای ورود به امکانات EVM هستند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjIxIDwwLjkuMDsKCmNvbnRyYWN0IFNpbXBsZUF1Y3Rpb24gewogICAgZXZlbnQgSGlnaGVzdEJpZEluY3JlYXNlZChhZGRyZXNzIGJpZGRlciwgdWludCBhbW91bnQpOyAvLyBFdmVudAoKICAgIGZ1bmN0aW9uIGJpZCgpIHB1YmxpYyBwYXlhYmxlIHsKICAgICAgICAvLyAuLi4KICAgICAgICBlbWl0IEhpZ2hlc3RCaWRJbmNyZWFzZWQobXNnLnNlbmRlciwgbXNnLnZhbHVlKTsgLy8gVHJpZ2dlcmluZyBldmVudAogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.21</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleAuction</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">HighestBidIncreased</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">bidder</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"> </span><span class="c1">// Event</span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bid</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">        </span>emit<span class="w"> </span>HighestBidIncreased<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span><span class="k">msg.value</span><span class="p">);</span><span class="w"> </span><span class="c1">// Triggering event</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>برای اطلاع از چگونگی اعلام رویداد‌ها و استفاده از آنها از طریق dapp، به بخش <a class="reference internal" href="contracts.html#events"><span class="std std-ref">رویدادها</span></a> در بخش قراردادها مراجعه کنید.</p>
+</section>
+<section id="structure-errors">
+<span id="id6"></span><h2>خطاها<a class="headerlink" href="#structure-errors" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>خطاها به شما امکان می‌دهند نام‌ها و داده‌های توصیفی را برای شرایط شکست تعریف کنید. از خطاها می‌توان در <a class="reference internal" href="control-structures.html#revert-statement"><span class="std std-ref">دستورات revert</span></a>  استفاده کرد. در مقایسه با توضیحات رشته ، خطاها بسیار ارزان‌تر هستند و به شما امکان می‌دهند داده‌های اضافی را رمزگذاری کنید. برای توصیف خطا برای کاربر می‌توانید از NatSpec استفاده کنید.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCi8vLyBOb3QgZW5vdWdoIGZ1bmRzIGZvciB0cmFuc2Zlci4gUmVxdWVzdGVkIGByZXF1ZXN0ZWRgLAovLy8gYnV0IG9ubHkgYGF2YWlsYWJsZWAgYXZhaWxhYmxlLgplcnJvciBOb3RFbm91Z2hGdW5kcyh1aW50IHJlcXVlc3RlZCwgdWludCBhdmFpbGFibGUpOwoKY29udHJhY3QgVG9rZW4gewogICAgbWFwcGluZyhhZGRyZXNzID0+IHVpbnQpIGJhbGFuY2VzOwogICAgZnVuY3Rpb24gdHJhbnNmZXIoYWRkcmVzcyB0bywgdWludCBhbW91bnQpIHB1YmxpYyB7CiAgICAgICAgdWludCBiYWxhbmNlID0gYmFsYW5jZXNbbXNnLnNlbmRlcl07CiAgICAgICAgaWYgKGJhbGFuY2UgPCBhbW91bnQpCiAgICAgICAgICAgIHJldmVydCBOb3RFbm91Z2hGdW5kcyhhbW91bnQsIGJhbGFuY2UpOwogICAgICAgIGJhbGFuY2VzW21zZy5zZW5kZXJdIC09IGFtb3VudDsKICAgICAgICBiYWxhbmNlc1t0b10gKz0gYW1vdW50OwogICAgICAgIC8vIC4uLgogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">/// Not enough funds for transfer. Requested `requested`,</span>
+<span class="c1">/// but only `available` available.</span>
+error<span class="w"> </span>NotEnoughFunds<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">requested</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">available</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Token</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>balances<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transfer</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">balance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>balance<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>amount<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>NotEnoughFunds<span class="p">(</span>amount<span class="p">,</span><span class="w"> </span>balance<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span>to<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>برای اطلاعات بیشتر به <a class="reference internal" href="contracts.html#errors"><span class="std std-ref">خطاها</span></a> و دستورات Revert در قسمت قراردادها مراجعه کنید.</p>
+</section>
+<section id="struct">
+<span id="structure-struct-types"></span><h2>انواع Struct<a class="headerlink" href="#struct" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><p><a class="reference internal" href="types.html#structs"><span class="std std-ref">Structs</span></a> انواع تعریف شده سفارشی هستند که می‌توانند متغیرهای مختلفی را گروه بندی کنند (به بخش Structها در بخش انواع مراجعه کنید).</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQmFsbG90IHsKICAgIHN0cnVjdCBWb3RlciB7IC8vIFN0cnVjdAogICAgICAgIHVpbnQgd2VpZ2h0OwogICAgICAgIGJvb2wgdm90ZWQ7CiAgICAgICAgYWRkcmVzcyBkZWxlZ2F0ZTsKICAgICAgICB1aW50IHZvdGU7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Ballot</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Voter</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Struct</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">weight</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nv">voted</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">delegate</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">vote</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="enum">
+<span id="structure-enum-types"></span><h2>انواع Enum<a class="headerlink" href="#enum" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><p>از Enums می‌توان برای ایجاد انواع سفارشی با مجموعه محدودی از  &quot;مقادیر ثابت &quot;  استفاده کرد (به قسمت <a class="reference internal" href="types.html#enums"><span class="std std-ref">Enums</span></a>  در بخش انواع مراجعه کنید).</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgUHVyY2hhc2UgewogICAgZW51bSBTdGF0ZSB7IENyZWF0ZWQsIExvY2tlZCwgSW5hY3RpdmUgfSAvLyBFbnVtCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Purchase</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">enum</span><span class="w"> </span><span class="nv">State</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>Created<span class="p">,</span><span class="w"> </span>Locked<span class="p">,</span><span class="w"> </span>Inactive<span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// Enum</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="layout-of-source-files.html" class="btn btn-neutral float-left" title="چیدمان یک فایل منبع سالیدیتی" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="types.html" class="btn btn-neutral float-right" title="انواع" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

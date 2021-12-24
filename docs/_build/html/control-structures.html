@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عبارات و ساختارهای کنترلی &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Contracts" href="contracts.html" />
+    <link rel="prev" title="واحدها و متغیرهای موجود در سطح جهانی" href="units-and-global-variables.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">عبارات و ساختارهای کنترلی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#control-structures">ساختارهای کنترلی (Control Structures)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-calls">فراخوانی‌های تابع</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#internal-function-calls">فراخوانی تابع داخلی (Internal Function Calls)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-function-calls">فراخوانی تابع خارجی (External Function Calls)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">فراخوان‌های نامگذاری شده و پارامترهای تابع ناشناس</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">نام پارامترهای تابع حذف شده</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#new">ایجاد قراردادها از طریق قرارداد  <code class="docutils literal notranslate"><span class="pre">new</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#salted-create2">قرارداد ایجاد Salted / create2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">ترتیب ارزیابی عبارات</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assignment">تخصیص (Assignment)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#index-5">تخریب Assignment ها و برگرداندن چندین مقدار</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">عوارض آرایه‌ها و ساختارها</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scoping-and-declarations">محدوده سازی و اعلامیه‌ها  (Scoping and Declarations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checked-unchecked">محاسبه Checked  یا  Unchecked</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">مدیریت خطا: ادعا ، درخواست، بازگشت و اکسپشن‌ها (Exceptions)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#panic-assert-require">Panic از طریق  <code class="docutils literal notranslate"><span class="pre">assert</span></code> و خطا از طریق <code class="docutils literal notranslate"><span class="pre">require</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#revert"><code class="docutils literal notranslate"><span class="pre">revert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#try-catch"><code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">catch</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>عبارات و ساختارهای کنترلی</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/control-structures.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>عبارات و ساختارهای کنترلی<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<span class="target" id="index-0"></span><section id="control-structures">
+<span id="index-1"></span><h2>ساختارهای کنترلی (Control Structures)<a class="headerlink" href="#control-structures" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>بیشتر ساختارهای کنترلی که از زبان‌های آکولادی  شناخته شده‌اند در سالیدیتی موجود می‌باشند:</p>
+<p>ساختارهایی که وجود دارند: <code class="docutils literal notranslate"><span class="pre">if</span></code> ، <code class="docutils literal notranslate"><span class="pre">else</span></code> ، <code class="docutils literal notranslate"><span class="pre">while</span></code> ، <code class="docutils literal notranslate"><span class="pre">do</span></code> ، <code class="docutils literal notranslate"><span class="pre">for</span></code> ، <code class="docutils literal notranslate"><span class="pre">break</span></code> ، <code class="docutils literal notranslate"><span class="pre">continue</span></code> ، <code class="docutils literal notranslate"><span class="pre">return</span></code> ، با سمنتیک  متداول شناخته شده در C یا JavaScript..</p>
+<p>سالیدیتی همچنین از مدیریت اکستنشن  در قالب دستور  <code class="docutils literal notranslate"><span class="pre">try</span></code> / <code class="docutils literal notranslate"><span class="pre">catch</span></code> پشتیبانی می‌کند، اما فقط برای
+<a class="reference internal" href="#external-function-calls"><span class="std std-ref">فراخوانی تابع خارجی</span></a> و فراخوانی ایجاد قرارداد. خطاها را می‌توان با استفاده از دستور <a class="reference internal" href="#revert-statement"><span class="std std-ref">revert statement</span></a> ایجاد کرد.</p>
+<p>پرانتز  را نمی‌توان برای شرطی‌ها حذف کرد‌، اما آکولادها  را می‌توان در اطراف بادی‌های تک دستوری  حذف کرد.</p>
+<p>توجه داشته باشید که هیچ تبدیل تایپی از تایپ غیر بولی به تایپ بولی همانطور که در C و جاوا اسکریپت وجود
+دارند در سالیدیتی وجود ندارد، بنابراین <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(1)</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>  در سالیدیتی معتبر <em>نیست</em>.</p>
+</section>
+<section id="function-calls">
+<span id="index-2"></span><span id="id2"></span><h2>فراخوانی‌های تابع<a class="headerlink" href="#function-calls" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="internal-function-calls">
+<span id="id3"></span><h3>فراخوانی تابع داخلی (Internal Function Calls)<a class="headerlink" href="#internal-function-calls" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>توابع قرارداد فعلی را می‌توان مستقیماً (&quot;داخلی &quot;) و همچنین به صورت بازگشتی نامید، همانطور که در این مثال بی معنی نشان داده شده است:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjkuMDsKCi8vIFRoaXMgd2lsbCByZXBvcnQgYSB3YXJuaW5nCmNvbnRyYWN0IEMgewogICAgZnVuY3Rpb24gZyh1aW50IGEpIHB1YmxpYyBwdXJlIHJldHVybnMgKHVpbnQgcmV0KSB7IHJldHVybiBhICsgZigpOyB9CiAgICBmdW5jdGlvbiBmKCkgaW50ZXJuYWwgcHVyZSByZXR1cm5zICh1aW50IHJldCkgeyByZXR1cm4gZyg3KSArIGYoKTsgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.22</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// This will report a warning</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">return</span><span class="w"> </span>a<span class="w"> </span><span class="o">+</span><span class="w"> </span>f<span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">return</span><span class="w"> </span>g<span class="p">(</span><span class="m m-Decimal">7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>f<span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>این فراخوانی‌های تابع به jumpهای ساده در داخل EVM ترجمه می‌شود. این امر باعث می‌شود که مِمُوری
+فعلی پاک نشود، یعنی ارسال رفرنس‌های مِمُوری به توابع داخلی که بسیار کارآمد هستند. فقط توابع یک
+instance  قرارداد می‌توانند به صورت داخلی فراخوانی شوند.</p>
+<p>شما همچنان باید از بازگشت بیش از حد اجتناب کنید، زیرا هر فراخوانی تابع داخلی حداقل از یک اسلات  پشته
+استفاده می‌کند و فقط 1024 اسلات در دسترس است.</p>
+</section>
+<section id="external-function-calls">
+<span id="id4"></span><h3>فراخوانی تابع خارجی (External Function Calls)<a class="headerlink" href="#external-function-calls" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>توابع را می توان با استفاده از نمادگذاری   <code class="docutils literal notranslate"><span class="pre">;this.g(8)</span></code> و  <code class="docutils literal notranslate"><span class="pre">;c.g(2)</span></code> نیز فراخوانی کرد. که در
+آن <code class="docutils literal notranslate"><span class="pre">c</span></code> یک قرارداد  instance  و <code class="docutils literal notranslate"><span class="pre">g</span></code> تابعی است که متعلق به  <code class="docutils literal notranslate"><span class="pre">c</span></code> است. فراخوانی تابع <code class="docutils literal notranslate"><span class="pre">g</span></code> با استفاده از
+message call و نه مستقیماً از طریق jump ها، از هر دو طرف منجر به فراخوانی آن به صورت &quot; externally&quot; می‌شود.
+لطفاً توجه داشته باشید که فراخوانی‌های تابع روی  <code class="docutils literal notranslate"><span class="pre">this</span></code> را نمی توان در کانستراکتور (constructor) استفاده کرد، زیرا قرارداد فعلی هنوز ایجاد نشده است.</p>
+<p>توابع سایر قراردادها باید خارجی نامیده شود. برای یک فراخوانی خارجی، همه آرگومان‌های تابع باید در مِمُوری
+کپی شوند.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>فراخوانی تابع از یک قرارداد به قرارداد دیگر تراکنش خود را ایجاد نمی‌کند، بلکه یک مسیج کال به عنوان
+بخشی از کل تراکنش است.</p>
+</div>
+<p>هنگام فراخوانی توابع سایر قراردادها، می توانید مقدار Wei یا گاز ارسال شده با فراخوانی آپشن‌های
+خاص   <code class="docutils literal notranslate"><span class="pre">{value:</span> <span class="pre">10,</span> <span class="pre">gas:</span> <span class="pre">10000}</span></code> تعیین کنید. توجه داشته باشید که تعیین مقادیر گاز به طور
+واضح توصیه نمی‌شود، زیرا هزینه گازهای آپکد در آینده می‌تواند تغییر کند. هر Wei که به قرارداد ارسال
+می‌کنید به کل موجودی آن قرارداد اضافه می‌شود:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC42LjIgPDAuOS4wOwoKY29udHJhY3QgSW5mb0ZlZWQgewogICAgZnVuY3Rpb24gaW5mbygpIHB1YmxpYyBwYXlhYmxlIHJldHVybnMgKHVpbnQgcmV0KSB7IHJldHVybiA0MjsgfQp9Cgpjb250cmFjdCBDb25zdW1lciB7CiAgICBJbmZvRmVlZCBmZWVkOwogICAgZnVuY3Rpb24gc2V0RmVlZChJbmZvRmVlZCBhZGRyKSBwdWJsaWMgeyBmZWVkID0gYWRkcjsgfQogICAgZnVuY3Rpb24gY2FsbEZlZWQoKSBwdWJsaWMgeyBmZWVkLmluZm97dmFsdWU6IDEwLCBnYXM6IDgwMH0oKTsgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.6.2</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">InfoFeed</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">info</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">return</span><span class="w"> </span><span class="m m-Decimal">42</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Consumer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>InfoFeed<span class="w"> </span>feed<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">setFeed</span><span class="p">(</span>InfoFeed<span class="w"> </span>addr<span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>feed<span class="w"> </span><span class="o">=</span><span class="w"> </span>addr<span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">callFeed</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>feed<span class="p">.</span>info<span class="p">{</span>value<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="p">,</span><span class="w"> </span>gas<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">800</span><span class="p">}();</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>شما باید از اصلاح کننده   <code class="docutils literal notranslate"><span class="pre">payable</span></code> با تابع  <code class="docutils literal notranslate"><span class="pre">info</span></code> استفاده کنید زیرا در غیر این صورت،
+آپشن  <code class="docutils literal notranslate"><span class="pre">value</span></code> در دسترس نخواهد بود.</p>
+<p>مراقب باشید <code class="docutils literal notranslate"><span class="pre">feed.info{value:</span> <span class="pre">10,</span> <span class="pre">gas:</span> <span class="pre">800}</span></code>  فقط  <code class="docutils literal notranslate"><span class="pre">value</span></code> و مقدار  <code class="docutils literal notranslate"><span class="pre">gas</span></code> ارسال
+شده با فراخوانی تابع را به صورت محلی تعیین کند و پرانتز در انتها فراخوانی واقعی  را انجام دهد.
+بنابراین  <code class="docutils literal notranslate"><span class="pre">feed.info{value:</span> <span class="pre">10,</span> <span class="pre">gas:</span> <span class="pre">800}</span></code>   تابع را فراخوانی نمی‌کند و تنظیمات <code class="docutils literal notranslate"><span class="pre">value</span></code> و <code class="docutils literal notranslate"><span class="pre">gas</span></code> از بین
+می‌رود، فقط  <code class="docutils literal notranslate"><span class="pre">()feed.info{value:</span> <span class="pre">10,</span> <span class="pre">gas:</span> <span class="pre">800}</span></code> فراخوانی تابع را انجام می‌دهد.</p>
+<p>با توجه به این واقعیت که EVM فراخوانی با یک قرارداد غیر موجود را همیشه موفق می‌داند، سالیدیتی از
+آپکد  <code class="docutils literal notranslate"><span class="pre">extcodesize</span></code> استفاده می‌کند تا بررسی کند که قراردادی که قرار است فراخوانی شود واقعاً وجود
+دارد (حاوی کد است) و در صورت عدم وجود اکستنشن  ایجاد می‌کند. توجه داشته باشید که این بررسی در مورد
+<a class="reference internal" href="units-and-global-variables.html#address-related"><span class="std std-ref">فراخوانی‌های سطح پایین</span></a> که به جای قرارداد instances روی آدرس‌ها کار می‌کنند، انجام نمی‌شود.</p>
+<p>اگر قرارداد فراخوانی شده خودش یک اکستنشن ایجاد کند یا گاز تمام شود، توابع فراخوانی باعث ایجاد اکستنشن می‌شوند.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>هرگونه تعامل با قرارداد دیگر خطر بالقوه‌ای را تحمیل می‌کند، به ویژه اگر سورس کد قرارداد از قبل مشخص
+نباشد. قرارداد فعلی کنترل را به قرارداد فراخوانی شده می‌سپارد و ممکن است تقریباً هر کاری را انجام دهد.
+حتی اگر قرارداد فراخوانی شده از قرارداد والد شناخته شده ارث بری کند، قرارداد وارث باید فقط دارای
+اینترفیس صحیح باشد. پیاده سازی قرارداد، بدین ترتیب، می‌تواند کاملاً دلخواه باشد و در نتیجه، خطری ایجاد
+کند. علاوه بر این، آماده باشید در صورتی که قبل از بازگشت اولین فراخوانی، قراردادهای دیگر سیستم شما را
+فراخواند یا حتی به قرارداد  بازگردد. این بدان معناست که قرارداد فراخوانی شده می‌تواند متغیرهای حالت
+قرارداد فراخوانی را از طریق توابع خود تغییر دهد. توابع خود را به گونه ای بنویسید که برای مثال، فراخوانی
+به توابع خارجی پس از هرگونه تغییر در متغیرهای حالت در قرارداد شما اتفاق بیفتد تا قرارداد شما در برابر
+سوء استفاده مجدد آسیب پذیر نباشد.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبل از  سالیدیتی 0.6.2 ، روش توصیه شده برای تعیین مقدار و گاز استفاده
+از  <code class="docutils literal notranslate"><span class="pre">()f.value(x).gas(g)</span></code> بود. این در سالیدیتی 0.6.2 منسوخ شد و دیگر از سالیدیتی 0.7.0 دیگر امکان پذیر نیست.</p>
+</div>
+</section>
+<section id="id5">
+<h3>فراخوان‌های نامگذاری شده و پارامترهای تابع ناشناس<a class="headerlink" href="#id5" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>آرگومان‌های فراخوانی تابع را می‌توان با نام، به هر ترتیب، در صورتی که در <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">}</span></code>  محصور شده باشد، ارائه دهید،
+همانطور که در مثال زیر مشاهده می‌شود. لیست آرگومان باید توسط نام با پارامترهای اعلان تابع منطبق شود،
+اما می‌تواند به ترتیب دلخواه باشد.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjAgPDAuOS4wOwoKY29udHJhY3QgQyB7CiAgICBtYXBwaW5nKHVpbnQgPT4gdWludCkgZGF0YTsKCiAgICBmdW5jdGlvbiBmKCkgcHVibGljIHsKICAgICAgICBzZXQoe3ZhbHVlOiAyLCBrZXk6IDN9KTsKICAgIH0KCiAgICBmdW5jdGlvbiBzZXQodWludCBrZXksIHVpbnQgdmFsdWUpIHB1YmxpYyB7CiAgICAgICAgZGF0YVtrZXldID0gdmFsdWU7CiAgICB9Cgp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>data<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>set<span class="p">({</span>value<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">,</span><span class="w"> </span>key<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">set</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">key</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">value</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>data<span class="p">[</span>key<span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>value<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>نام پارامترهای تابع حذف شده<a class="headerlink" href="#id6" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>نام پارامترهای استفاده نشده (به ویژه پارامترهای برگشتی) را می توان حذف کرد. این پارامترها هنوز روی پشته
+وجود دارند، اما قابل دسترسی نیستند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjkuMDsKCmNvbnRyYWN0IEMgewogICAgLy8gb21pdHRlZCBuYW1lIGZvciBwYXJhbWV0ZXIKICAgIGZ1bmN0aW9uIGZ1bmModWludCBrLCB1aW50KSBwdWJsaWMgcHVyZSByZXR1cm5zKHVpbnQpIHsKICAgICAgICByZXR1cm4gazsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.22</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// omitted name for parameter</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">func</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>k<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="new">
+<span id="creating-contracts"></span><span id="index-3"></span><h2>ایجاد قراردادها از طریق قرارداد  <code class="docutils literal notranslate"><span class="pre">new</span></code><a class="headerlink" href="#new" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>یک قرارداد می‌تواند قراردادهای دیگری با استفاده از کلمه کلیدی  <code class="docutils literal notranslate"><span class="pre">new</span></code> ایجاد کند. کد کامل قرارداد ایجاد شده
+باید هنگام تنظیم قرارداد ایجاد شده مشخص شود، بنابراین وابستگی‌های ایجاد بازگشتی  امکان پذیر نیستند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBEIHsKICAgIHVpbnQgcHVibGljIHg7CiAgICBjb25zdHJ1Y3Rvcih1aW50IGEpIHBheWFibGUgewogICAgICAgIHggPSBhOwogICAgfQp9Cgpjb250cmFjdCBDIHsKICAgIEQgZCA9IG5ldyBEKDQpOyAvLyB3aWxsIGJlIGV4ZWN1dGVkIGFzIHBhcnQgb2YgQydzIGNvbnN0cnVjdG9yCgogICAgZnVuY3Rpb24gY3JlYXRlRCh1aW50IGFyZykgcHVibGljIHsKICAgICAgICBEIG5ld0QgPSBuZXcgRChhcmcpOwogICAgICAgIG5ld0QueCgpOwogICAgfQoKICAgIGZ1bmN0aW9uIGNyZWF0ZUFuZEVuZG93RCh1aW50IGFyZywgdWludCBhbW91bnQpIHB1YmxpYyBwYXlhYmxlIHsKICAgICAgICAvLyBTZW5kIGV0aGVyIGFsb25nIHdpdGggdGhlIGNyZWF0aW9uCiAgICAgICAgRCBuZXdEID0gbmV3IER7dmFsdWU6IGFtb3VudH0oYXJnKTsKICAgICAgICBuZXdELngoKTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">D</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">)</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span>a<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>D<span class="w"> </span>d<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span>D<span class="p">(</span><span class="m m-Decimal">4</span><span class="p">);</span><span class="w"> </span><span class="c1">// will be executed as part of C&#39;s constructor</span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">createD</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">arg</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>D<span class="w"> </span>newD<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span>D<span class="p">(</span>arg<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>newD<span class="p">.</span>x<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">createAndEndowD</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">arg</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Send ether along with the creation</span>
+<span class="w">        </span>D<span class="w"> </span>newD<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span>D<span class="p">{</span>value<span class="p">:</span><span class="w"> </span>amount<span class="p">}(</span>arg<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>newD<span class="p">.</span>x<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>همانطور که در مثال مشاهده می‌شود، امکان ارسال اتر در هنگام ایجاد یک
+instance از  <code class="docutils literal notranslate"><span class="pre">D</span></code> با استفاده از گزینه  <code class="docutils literal notranslate"><span class="pre">value</span></code> وجود دارد، اما امکان محدود کردن مقدار گاز وجود ندارد. اگر
+ایجاد شکست خورد (به دلیل out-of-stack ، عدم وجود بالانس کافی یا مشکلات دیگر)، یک اکستنشن
+اعمال می‌شود.</p>
+<section id="salted-create2">
+<h3>قرارداد ایجاد Salted / create2<a class="headerlink" href="#salted-create2" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>هنگام ایجاد یک قرارداد، آدرس قرارداد از آدرس قرارداد ایجاد کننده محاسبه می‌شود و یک شمارنده که با ایجاد
+هر قرارداد افزایش می‌یابد.</p>
+<p>اگر گزینه  <code class="docutils literal notranslate"><span class="pre">salt</span></code>  (مقدار bytes32) را مشخص کنید، در ایجاد قرارداد از مکانیزمی متفاوت برای ارائه آدرس
+قرارداد جدید استفاده می‌شود:</p>
+<p>آدرس را از آدرس قرارداد ایجاد کننده، مقدار  salt داده شده، بایت‌کد ایجاد (creation) قرارداد ایجاد شده
+و آرگومان‌های کانستراکتور (constructor) را محاسبه می‌کند.</p>
+<p>به طور خاص، شمارنده (&quot;nonce&quot;) استفاده نمی‌شود. این امر باعث ایجاد انعطاف پذیری بیشتری در ایجاد
+قراردادها می شود: شما می‌توانید آدرس قرارداد جدید را قبل از ایجاد آن بدست آورید. علاوه بر این، در صورتی
+که قراردادهای ایجاد کننده در meantime قراردادهای دیگری ایجاد کنند، می‌توانید به این آدرس نیز اعتماد
+کنید.</p>
+<p>مورد اصلی استفاده در اینجا قراردادهایی است که به عنوان قاضی  برای تراکنش‌های خارج از زنجیره عمل
+می‌کنند، که فقط در صورت بروز اختلاف باید ایجاد شود.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBEIHsKICAgIHVpbnQgcHVibGljIHg7CiAgICBjb25zdHJ1Y3Rvcih1aW50IGEpIHsKICAgICAgICB4ID0gYTsKICAgIH0KfQoKY29udHJhY3QgQyB7CiAgICBmdW5jdGlvbiBjcmVhdGVEU2FsdGVkKGJ5dGVzMzIgc2FsdCwgdWludCBhcmcpIHB1YmxpYyB7CiAgICAgICAgLy8gVGhpcyBjb21wbGljYXRlZCBleHByZXNzaW9uIGp1c3QgdGVsbHMgeW91IGhvdyB0aGUgYWRkcmVzcwogICAgICAgIC8vIGNhbiBiZSBwcmUtY29tcHV0ZWQuIEl0IGlzIGp1c3QgdGhlcmUgZm9yIGlsbHVzdHJhdGlvbi4KICAgICAgICAvLyBZb3UgYWN0dWFsbHkgb25seSBuZWVkIGBgbmV3IER7c2FsdDogc2FsdH0oYXJnKWBgLgogICAgICAgIGFkZHJlc3MgcHJlZGljdGVkQWRkcmVzcyA9IGFkZHJlc3ModWludDE2MCh1aW50KGtlY2NhazI1NihhYmkuZW5jb2RlUGFja2VkKAogICAgICAgICAgICBieXRlczEoMHhmZiksCiAgICAgICAgICAgIGFkZHJlc3ModGhpcyksCiAgICAgICAgICAgIHNhbHQsCiAgICAgICAgICAgIGtlY2NhazI1NihhYmkuZW5jb2RlUGFja2VkKAogICAgICAgICAgICAgICAgdHlwZShEKS5jcmVhdGlvbkNvZGUsCiAgICAgICAgICAgICAgICBhcmcKICAgICAgICAgICAgKSkKICAgICAgICApKSkpKTsKCiAgICAgICAgRCBkID0gbmV3IER7c2FsdDogc2FsdH0oYXJnKTsKICAgICAgICByZXF1aXJlKGFkZHJlc3MoZCkgPT0gcHJlZGljdGVkQWRkcmVzcyk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">D</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span>a<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">createDSalted</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">salt</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">arg</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// This complicated expression just tells you how the address</span>
+<span class="w">        </span><span class="c1">// can be pre-computed. It is just there for illustration.</span>
+<span class="w">        </span><span class="c1">// You actually only need ``new D{salt: salt}(arg)``.</span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">predictedAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">address</span><span class="p">(</span><span class="kt">uint160</span><span class="p">(</span><span class="kt">uint</span><span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="w"></span>
+<span class="w">            </span>bytes1<span class="p">(</span><span class="mh">0xff</span><span class="p">),</span><span class="w"></span>
+<span class="w">            </span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">),</span><span class="w"></span>
+<span class="w">            </span>salt<span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="w"></span>
+<span class="w">                </span>type<span class="p">(</span>D<span class="p">).</span>creationCode<span class="p">,</span><span class="w"></span>
+<span class="w">                </span>arg<span class="w"></span>
+<span class="w">            </span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="p">)))));</span><span class="w"></span>
+
+<span class="w">        </span>D<span class="w"> </span>d<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">new</span><span class="w"> </span>D<span class="p">{</span>salt<span class="p">:</span><span class="w"> </span>salt<span class="p">}(</span>arg<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="kt">address</span><span class="p">(</span>d<span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>predictedAddress<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>یک سری ویژگی‌های مربوط به  salted creationوجود دارد. پس از از بین رفتن، می‌توان یک قرارداد را
+در همان آدرس دوباره ایجاد کرد. با این وجود، آن قرارداد تازه ایجاد شده ممکن است دارای بایت‌کد دیپلوی
+شده متفاوتی باشد، حتی اگر بایت‌کد ایجاد شده یکسان بوده‌ (که الزامی است زیرا در غیر این صورت آدرس
+تغییر می‌کند). به این دلیل است که کامپایلر می‌تواند وضعیت خارجی را که ممکن است بین دو creations
+تغییر کرده باشد، جستجو کند و قبل از ذخیره آن را در بایت‌کد دیپلوی شده ادغام کند.</p>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>ترتیب ارزیابی عبارات<a class="headerlink" href="#id7" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>ترتیب ارزیابی عبارات مشخص نشده‌است (به طور رسمی، ترتیب ارزیابی فرزندان یک گره  در درخت عبارت
+مشخص نشده است، اما آنها البته قبل از خود گره ارزیابی می‌شوند). فقط تضمین می‌شود که دستورات به ترتیب
+اجرا شوند و اتصال کوتاه  برای عبارات بولی انجام شود.</p>
+</section>
+<section id="assignment">
+<span id="index-4"></span><h2>تخصیص (Assignment)<a class="headerlink" href="#assignment" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="index-5">
+<span id="id8"></span><h3>تخریب Assignment ها و برگرداندن چندین مقدار<a class="headerlink" href="#index-5" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>سالیدیتی به صورت داخلی به تایپ‌های تاپل  اجازه می‌دهد، مانند لیستی از اشیاء از تایپ‌های مختلف که تعداد
+آنها در زمان کامپایل ثابت است. از این تاپل‌ها می‌توان برای برگرداندن چندین مقدار به طور همزمان استفاده
+کرد. سپس این متغیرها را می‌توان به متغیرهای اعلام شده جدید یا به متغیرهای از قبل موجود (یا به طور کلی
+) اختصاص داد.</p>
+<p>تاپل‌ها در سالیدیتی تایپ‌های مناسبی نیستند، آنها فقط می‌توانند برای تشکیل گروه بندی سینتکس  عبارات
+استفاده شوند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwoKY29udHJhY3QgQyB7CiAgICB1aW50IGluZGV4OwoKICAgIGZ1bmN0aW9uIGYoKSBwdWJsaWMgcHVyZSByZXR1cm5zICh1aW50LCBib29sLCB1aW50KSB7CiAgICAgICAgcmV0dXJuICg3LCB0cnVlLCAyKTsKICAgIH0KCiAgICBmdW5jdGlvbiBnKCkgcHVibGljIHsKICAgICAgICAvLyBWYXJpYWJsZXMgZGVjbGFyZWQgd2l0aCB0eXBlIGFuZCBhc3NpZ25lZCBmcm9tIHRoZSByZXR1cm5lZCB0dXBsZSwKICAgICAgICAvLyBub3QgYWxsIGVsZW1lbnRzIGhhdmUgdG8gYmUgc3BlY2lmaWVkIChidXQgdGhlIG51bWJlciBtdXN0IG1hdGNoKS4KICAgICAgICAodWludCB4LCAsIHVpbnQgeSkgPSBmKCk7CiAgICAgICAgLy8gQ29tbW9uIHRyaWNrIHRvIHN3YXAgdmFsdWVzIC0tIGRvZXMgbm90IHdvcmsgZm9yIG5vbi12YWx1ZSBzdG9yYWdlIHR5cGVzLgogICAgICAgICh4LCB5KSA9ICh5LCB4KTsKICAgICAgICAvLyBDb21wb25lbnRzIGNhbiBiZSBsZWZ0IG91dCAoYWxzbyBmb3IgdmFyaWFibGUgZGVjbGFyYXRpb25zKS4KICAgICAgICAoaW5kZXgsICwgKSA9IGYoKTsgLy8gU2V0cyB0aGUgaW5kZXggdG8gNwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">index</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span><span class="m m-Decimal">7</span><span class="p">,</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Variables declared with type and assigned from the returned tuple,</span>
+<span class="w">        </span><span class="c1">// not all elements have to be specified (but the number must match).</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>f<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Common trick to swap values -- does not work for non-value storage types.</span>
+<span class="w">        </span><span class="p">(</span>x<span class="p">,</span><span class="w"> </span>y<span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>y<span class="p">,</span><span class="w"> </span>x<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Components can be left out (also for variable declarations).</span>
+<span class="w">        </span><span class="p">(</span>index<span class="p">,</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>f<span class="p">();</span><span class="w"> </span><span class="c1">// Sets the index to 7</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>نمی‌توان اعلان‌های متغیر و assignmentهای بدون اعلان را مخلوط کر ، یعنی موارد زیر معتبر
+نیست:  <code class="docutils literal notranslate"><span class="pre">;</span> <span class="pre">(1,</span> <span class="pre">2)=</span> <span class="pre">(x,</span> <span class="pre">uint</span> <span class="pre">y)</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تا قبل از نسخه 0.5.0 امکان تعیین تعداد زیادی از اندازه‌های کوچکتر وجود داشت، چه در سمت چپ و چه
+در سمت راست (که همیشه خالی بود). این در حال حاضر ممنوع است، بنابراین هر دو طرف باید تعداد
+کامپوننت‌های یکسانی داشته باشند.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>هنگام اختصاص دادن چند متغیر به طور همزمان هنگامی که انواع مرجع درگیر هستند، مراقب باشید، زیرا
+ممکن است منجر به رفتار کپی غیر منتظره شود.</p>
+</div>
+</section>
+<section id="id9">
+<h3>عوارض آرایه‌ها و ساختارها<a class="headerlink" href="#id9" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>سمنتیک assignment ها برای تایپ‎‌های non-value مانند آرایه‌ها و ساختارها، از جمله  <code class="docutils literal notranslate"><span class="pre">bytes</span></code>
+و  <code class="docutils literal notranslate"><span class="pre">string</span></code>  پیچیده تر است، برای اطلاعات بیشتر به قسمت  <a class="reference internal" href="types.html#data-location-assignment"><span class="std std-ref">Data location و assignment behaviour</span></a>
+مراجعه کنید.</p>
+<p>در مثال زیر فراخوانی  <code class="docutils literal notranslate"><span class="pre">g(x)</span></code> هیچ تاثیری بر روی  <code class="docutils literal notranslate"><span class="pre">x</span></code> ندارد زیرا یک کپی مستقل از مقدار storage در
+مِمُوری ایجاد می‌کند. با این حال،  <code class="docutils literal notranslate"><span class="pre">h(x)</span></code> با موفقیت  <code class="docutils literal notranslate"><span class="pre">x</span></code> را تغییر می‌دهد زیرا فقط یک رفرنس منتقل می‌شود
+و نه یک کپی.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjIyIDwwLjkuMDsKCmNvbnRyYWN0IEMgewogICAgdWludFsyMF0geDsKCiAgICBmdW5jdGlvbiBmKCkgcHVibGljIHsKICAgICAgICBnKHgpOwogICAgICAgIGgoeCk7CiAgICB9CgogICAgZnVuY3Rpb24gZyh1aW50WzIwXSBtZW1vcnkgeSkgaW50ZXJuYWwgcHVyZSB7CiAgICAgICAgeVsyXSA9IDM7CiAgICB9CgogICAgZnVuY3Rpb24gaCh1aW50WzIwXSBzdG9yYWdlIHkpIGludGVybmFsIHsKICAgICAgICB5WzNdID0gNDsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.22</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="p">[</span><span class="m m-Decimal">20</span><span class="p">]</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>g<span class="p">(</span>x<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>h<span class="p">(</span>x<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">(</span><span class="kt">uint</span><span class="p">[</span><span class="m m-Decimal">20</span><span class="p">]</span><span class="w"> </span><span class="kt">memory</span><span class="w"> </span>y<span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span>pure<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>y<span class="p">[</span><span class="m m-Decimal">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">h</span><span class="p">(</span><span class="kt">uint</span><span class="p">[</span><span class="m m-Decimal">20</span><span class="p">]</span><span class="w"> </span>storage<span class="w"> </span>y<span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>y<span class="p">[</span><span class="m m-Decimal">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="scoping-and-declarations">
+<span id="default-value"></span><span id="index-6"></span><h2>محدوده سازی و اعلامیه‌ها  (Scoping and Declarations)<a class="headerlink" href="#scoping-and-declarations" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>متغیری که اعلام می‌شود دارای مقدار پیش فرض اولیه است که نمایش بایت آن همه صفر است. &quot;مقادیر پیش
+فرض&quot; متغیرها  نوعی &quot;حالت صفر&quot; هر تایپ است. به عنوان مثال، مقدار پیش فرض  <code class="docutils literal notranslate"><span class="pre">bool</span></code> ،  <code class="docutils literal notranslate"><span class="pre">false</span></code> است.
+مقدار پیش فرض برای انواع  <code class="docutils literal notranslate"><span class="pre">uint</span></code> یا  <code class="docutils literal notranslate"><span class="pre">int</span></code> ،  <code class="docutils literal notranslate"><span class="pre">0</span></code> است. برای آرایه‌ها با اندازه استاتیک و <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>
+تا  <code class="docutils literal notranslate"><span class="pre">bytes32</span></code> ، هر عنصر جداگانه با مقدار پیش فرض مربوط به نوع خود مقداردهی می‌شود. برای آرایه‌ها با
+اندازه داینامیک، <code class="docutils literal notranslate"><span class="pre">bytes</span></code>  و  <code class="docutils literal notranslate"><span class="pre">string</span></code> ، مقدار پیش فرض یک آرایه یا رشته خالی است. برای نوع  <code class="docutils literal notranslate"><span class="pre">enum</span></code> ،
+مقدار پیش فرض اولین عضو آن است.</p>
+<p>محدوده سازی در سالیدیتی از قوانین گسترده محدوده C99 (و بسیاری از زبان‌های دیگر) پیروی می‌کند:
+متغیرها از نقطه بعد از اعلام آنها تا پایان کوچکترین بلوک  <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">}</span></code> که حاوی اعلان است قابل مشاهده هستند. به
+عنوان یک استثنا از این قاعده، متغیرهای اعلام شده در قسمت مقداردهی اولیه حلقه for فقط تا انتهای حلقه
+for قابل مشاهده هستند.</p>
+<p>متغیرهایی مانند پارامترها (پارامترهای تابع، پارامترهای modifier، پارامترهای catch، ...) در داخل بلوک کد
+زیر قابل مشاهده هستند - بدنه تابع/ modifier برای پارامتر تابع و modifier و بلوک catch برای پارامتر catch.</p>
+<p>متغیرها و سایر موارد اعلام شده در خارج از یک بلوک کد، به عنوان مثال توابع، قراردادها، تایپ‌های تعریف شده
+توسط کاربر و غیره، حتی قبل از اعلام شدن قابل مشاهده هستند. این بدان معناست که می‌توانید متغیرهای
+حالت را قبل از اعلان استفاده کرده و توابع را به صورت بازگشتی فراخوانی کنید.</p>
+<p>در نتیجه، مثال‌های زیر بدون هشدار کامپایل می‌شوند، زیرا این دو متغیر دارای نام یکسانی هستند اما محدوده‌های جدا از هم ندارند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwpjb250cmFjdCBDIHsKICAgIGZ1bmN0aW9uIG1pbmltYWxTY29waW5nKCkgcHVyZSBwdWJsaWMgewogICAgICAgIHsKICAgICAgICAgICAgdWludCBzYW1lOwogICAgICAgICAgICBzYW1lID0gMTsKICAgICAgICB9CgogICAgICAgIHsKICAgICAgICAgICAgdWludCBzYW1lOwogICAgICAgICAgICBzYW1lID0gMzsKICAgICAgICB9CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">minimalScoping</span><span class="p">()</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kt">uint</span><span class="w"> </span><span class="nv">same</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span>same<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kt">uint</span><span class="w"> </span><span class="nv">same</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span>same<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">3</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>به عنوان یک مثال ویژه از قوانین محدوده C99 ، توجه داشته باشید که در ادامه، اولین تخصیص به  <code class="docutils literal notranslate"><span class="pre">x</span></code> در واقع
+متغیر بیرونی را تعیین می‌کند نه داخلی را. در هر صورت، هشدار در مورد پنهان بودن متغیر خارجی دریافت
+خواهید کرد.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwovLyBUaGlzIHdpbGwgcmVwb3J0IGEgd2FybmluZwpjb250cmFjdCBDIHsKICAgIGZ1bmN0aW9uIGYoKSBwdXJlIHB1YmxpYyByZXR1cm5zICh1aW50KSB7CiAgICAgICAgdWludCB4ID0gMTsKICAgICAgICB7CiAgICAgICAgICAgIHggPSAyOyAvLyB0aGlzIHdpbGwgYXNzaWduIHRvIHRoZSBvdXRlciB2YXJpYWJsZQogICAgICAgICAgICB1aW50IHg7CiAgICAgICAgfQogICAgICAgIHJldHVybiB4OyAvLyB4IGhhcyB2YWx1ZSAyCiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// This will report a warning</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// this will assign to the outer variable</span>
+<span class="w">            </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>x<span class="p">;</span><span class="w"> </span><span class="c1">// x has value 2</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>قبل از نسخه سالیدیتی 0.5.0 از قوانین محدوده سازی جاوا اسکریپت پیروی می‌کرد، یعنی متغیری که در هر
+نقطه از یک تابع اعلام می‌شود، برای کل تابع، صرف نظر از جایی که اعلام شده است، محدوده دارد. مثال زیر
+قطعه کد  را نشان می‌دهد که برای کامپایل استفاده می‌شود اما منجر به خطایی می‌شود که از نسخه 0.5.0
+شروع می‌شود.</p>
+</div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwovLyBUaGlzIHdpbGwgbm90IGNvbXBpbGUKY29udHJhY3QgQyB7CiAgICBmdW5jdGlvbiBmKCkgcHVyZSBwdWJsaWMgcmV0dXJucyAodWludCkgewogICAgICAgIHggPSAyOwogICAgICAgIHVpbnQgeDsKICAgICAgICByZXR1cm4geDsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// This will not compile</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">()</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>x<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>x<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="checked-unchecked">
+<span id="unchecked"></span><span id="index-7"></span><h2>محاسبه Checked  یا  Unchecked<a class="headerlink" href="#checked-unchecked" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>overflow  یا  underflow وضعیتی است که در آن مقدار حاصله از یک عملیات حسابی، هنگامی که بر
+روی یک اینتیجر  نامحدود اجرا می‌شود، از محدوده نتیجه تایپ خارج می‌شود.</p>
+<p>قبل از سالیدیتی 0.8.0 ، عملیات حسابی همیشه در صورت overflow  یا  underflow شدن منجر به
+استفاده گسترده از کتابخانه هایی می‌شود که چک‌های اضافی  را ایجاد می‌کنند.</p>
+<p>از سالیدیتی 0.8.0، همه عملیات حسابی به طور پیش فرض روی overflow و underflow برمی‌گردند،
+بنابراین استفاده از این کتابخانه‌ها غیر ضروری می‌شود.</p>
+<p>برای به دست آوردن رفتار قبلی، می‌توان از یک بلوک  <code class="docutils literal notranslate"><span class="pre">unchecked</span></code> استفاده کرد:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguMDsKY29udHJhY3QgQyB7CiAgICBmdW5jdGlvbiBmKHVpbnQgYSwgdWludCBiKSBwdXJlIHB1YmxpYyByZXR1cm5zICh1aW50KSB7CiAgICAgICAgLy8gVGhpcyBzdWJ0cmFjdGlvbiB3aWxsIHdyYXAgb24gdW5kZXJmbG93LgogICAgICAgIHVuY2hlY2tlZCB7IHJldHVybiBhIC0gYjsgfQogICAgfQogICAgZnVuY3Rpb24gZyh1aW50IGEsIHVpbnQgYikgcHVyZSBwdWJsaWMgcmV0dXJucyAodWludCkgewogICAgICAgIC8vIFRoaXMgc3VidHJhY3Rpb24gd2lsbCByZXZlcnQgb24gdW5kZXJmbG93LgogICAgICAgIHJldHVybiBhIC0gYjsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">C</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// This subtraction will wrap on underflow.</span>
+<span class="w">        </span>unchecked<span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">return</span><span class="w"> </span>a<span class="w"> </span><span class="o">-</span><span class="w"> </span>b<span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// This subtraction will revert on underflow.</span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>a<span class="w"> </span><span class="o">-</span><span class="w"> </span>b<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>فراخوانی  <code class="docutils literal notranslate"><span class="pre">f(2,</span> <span class="pre">3)</span></code> ،  <code class="docutils literal notranslate"><span class="pre">2**256-1</span></code>  خواهد برگردان، در حالی  که  <code class="docutils literal notranslate"><span class="pre">g(2,</span> <span class="pre">3)</span></code>  باعث اعلان  ناموفق خواهد شد.</p>
+<p>بلوک  <code class="docutils literal notranslate"><span class="pre">unchecked</span></code> می‌تواند در همه جا در داخل یک بلوک استفاده شود، اما نه به عنوان جایگزینی برای یک بلوک. همچنین نمی‌تواند تو در تو باشد.</p>
+<p>این تنظیمات فقط برای دستوراتی که از لحاظ سمنتیکی در داخل بلوک قرار دارند تأثیر می‌گذارد. توابع
+فراخوانی شده از داخل یک بلوک  <code class="docutils literal notranslate"><span class="pre">unchecked</span></code> ویژگی را به ارث نمی برند.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>برای جلوگیری از ابهام، نمی‌توانید از  <code class="docutils literal notranslate"><span class="pre">;_</span></code> داخل یک بلوک  <code class="docutils literal notranslate"><span class="pre">unchecked</span></code> استفاده کنید.</p>
+</div>
+<p>عملگرهای زیر اعلان ناموفق در overflow  یا  underflow را ایجاد می‌کنند و در صورت استفاده در یک
+بلوک unchecke بدون خطا بسته بندی  می‌شوند:</p>
+<p><code class="docutils literal notranslate"><span class="pre">++</span></code> ، <code class="docutils literal notranslate"><span class="pre">--</span></code> ، <code class="docutils literal notranslate"><span class="pre">+</span></code> ،<code class="docutils literal notranslate"><span class="pre">-</span></code> binary <code class="docutils literal notranslate"><span class="pre">-</span></code> ، unary  ، <code class="docutils literal notranslate"><span class="pre">*</span></code> ، <code class="docutils literal notranslate"><span class="pre">/</span></code> ، <code class="docutils literal notranslate"><span class="pre">%</span></code> ، <code class="docutils literal notranslate"><span class="pre">**</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">=+</span></code> ، <code class="docutils literal notranslate"><span class="pre">=-</span></code> ، <code class="docutils literal notranslate"><span class="pre">=*</span></code> ، <code class="docutils literal notranslate"><span class="pre">=/</span></code> ، <code class="docutils literal notranslate"><span class="pre">=%</span></code></p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>با استفاده از بلوک  unchecked نمی‌توان بررسی تقسیم بر صفر یا باقیمانده بر صفر را غیرفعال کرد.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>عملگرهای بیتی چک های سرریز یا سرریز را انجام نمی دهند. این امر به ویژه در هنگام استفاده از شیفت های
+بیتی ( <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> , <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> , <code class="docutils literal notranslate"><span class="pre">=&lt;&lt;</span></code> , <code class="docutils literal notranslate"><span class="pre">=&gt;&gt;</span></code> ) به جای تقسیم عدد صحیح و ضرب در توان 2 قابل مشاهده است. به عنوان
+مثال <code class="docutils literal notranslate"><span class="pre">type(uint256).max</span> <span class="pre">&lt;&lt;</span> <span class="pre">3</span></code>  باز نمی گردد حتی
+اگر  <code class="docutils literal notranslate"><span class="pre">type(uint256).max</span> <span class="pre">*</span> <span class="pre">8</span></code> باشد.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>عبارت دوم در  <code class="docutils literal notranslate"><span class="pre">;int</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">type(int).min;</span> <span class="pre">-x</span></code> منجر به overflow می‌شود زیرا محدوده
+منفی می‌تواند یک مقدار بیشتر از محدوده مثبت را در خود نگه دارد.</p>
+</div>
+<p>تبدیل‌های تایپ صریح  همیشه کوتاه می‌شوند و هرگز باعث ایجاد اعلان ناموفق با اکسپشنی  از تبدیل اینتیجر
+به تایپ  enum نمی‌شوند.</p>
+</section>
+<section id="exceptions">
+<span id="assert-and-require"></span><span id="index-8"></span><h2>مدیریت خطا: ادعا ، درخواست، بازگشت و اکسپشن‌ها (Exceptions)<a class="headerlink" href="#exceptions" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>سالیدیتی از اکسپشن برگرداندن حالت  برای مدیریت خطاها استفاده می‌کند. چنین اکسپشنی همه تغییرات
+ایجاد شده در وضعیت را در فراخوانی فعلی(و همه فراخوانی‌های فرعی آن) لغو می‌کند و خطایی را برای فراخوانی
+کننده نشان می‌دهد.</p>
+<p>وقتی اکسپشنی در یک فراخوانی فرعی اتفاق می‌افتد، آنها به طور خودکار &quot;نمایش داده می‎شوند &quot; (به عنوان
+مثال، اکسپشن‌های دوباره بازیابی می‌شوند) مگر اینکه در دستور  <code class="docutils literal notranslate"><span class="pre">try/catch</span></code> گیر کرده باشند. اکسپشن
+این قاعده عبارتند از  <code class="docutils literal notranslate"><span class="pre">send</span></code> و توابع سطح پایین <code class="docutils literal notranslate"><span class="pre">call</span></code> ، <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> و <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> : آنها
+در صورت اکسپشن به جای &quot;نمایش اکسپشن&quot; به عنوان اولین مقدار بازگشتی،  <code class="docutils literal notranslate"><span class="pre">false</span></code> را برمی‌گردانند.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>توابع سطح پایین <code class="docutils literal notranslate"><span class="pre">call</span></code> ، <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> و <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> به عنوان بخشی از طراحی EVM به
+عنوان اولین مقدار بازگشتی خود در صورتی که اکانت فراخوانی شده وجود نداشته باشد، <code class="docutils literal notranslate"><span class="pre">true</span></code> را
+برمیگردانند. در صورت نیاز قبل از فراخوانی باید وجود اکانت را بررسی کنید.</p>
+</div>
+<p>اکسپشن می‌توانند شامل داده‌های خطا باشند که در قالب <a class="reference internal" href="contracts.html#errors"><span class="std std-ref">error instances</span></a>  به فراخوانی کننده برگردانده
+می‌شوند. خطاهای داخلی  <code class="docutils literal notranslate"><span class="pre">Error(string)</span></code> و  <code class="docutils literal notranslate"><span class="pre">Panic(uint256)</span></code> توسط توابع خاصی استفاده
+می شود ، همانطور که در زیر توضیح داده شده است.  <code class="docutils literal notranslate"><span class="pre">Error</span></code> برای شرایط خطای &quot;معمولی&quot; استفاده می شود
+در حالی که  <code class="docutils literal notranslate"><span class="pre">Panic</span></code> برای خطاهایی استفاده می شود که نباید در کد عاری از اشکال وجود داشته باشد.</p>
+<section id="panic-assert-require">
+<h3>Panic از طریق  <code class="docutils literal notranslate"><span class="pre">assert</span></code> و خطا از طریق <code class="docutils literal notranslate"><span class="pre">require</span></code><a class="headerlink" href="#panic-assert-require" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>توابع راحت <code class="docutils literal notranslate"><span class="pre">assert</span></code>  و <code class="docutils literal notranslate"><span class="pre">require</span></code>  را می‎توان برای بررسی شرایط و حذف اکسپشن در صورت برآورده نشدن شرایط استفاده کرد.</p>
+<p>تابع assert  خطایی از نوع  <code class="docutils literal notranslate"><span class="pre">Panic(uint256)</span></code> ایجاد می‌کند. همان خطا توسط کامپایلر در شرایط خاصی ایجاد می‌شود که در زیر ذکر شده است.</p>
+<p>Assert فقط باید برای آزمایش خطاهای داخلی و بررسی تغییرات متغیر استفاده شود. کد در حال کار مناسب،
+هرگز نباید Panic ایجاد کند، حتی در ورودی خارجی نامعتبر. اگر این اتفاق بیفتد، در قرارداد شما اشکالی وجود
+دارد که باید آن را برطرف کنید. ابزارهای آنالیز زبان می‌توانند قرارداد شما را برای شناسایی شرایط و فراخوانی‌های
+تابع که باعث Panic می‌شود، ارزیابی کنند.</p>
+<p>یک اکسپشن Panic در شرایط زیر ایجاد می‌شود. کد خطای ارائه شده با داده‌های خطا نشان دهنده نوعی Panic است.</p>
+<ol class="arabic simple">
+<li><p>0x00: برای کامپایلر عمومیِ panic های درج شده استفاده می‌شود.</p></li>
+<li><p>0x01: اگر <code class="docutils literal notranslate"><span class="pre">assert</span></code>  را با آرگومانی که false ارزیابی می‌کند فراخوانی کنید.</p></li>
+<li><p>0x11: اگر یک عملیات حسابی منجر به underflow  یا  overflow خارج از یک بلوک <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}unchecked</span></code>   شود.</p></li>
+<li><p>0x12 ؛ اگر مقدار را تقسیم یا باقیمانده بر صفر کنید (برای مثال <code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">/</span> <span class="pre">0</span></code> یا <code class="docutils literal notranslate"><span class="pre">23</span> <span class="pre">%</span> <span class="pre">0</span></code>).</p></li>
+<li><p>0x21: اگر مقدار خیلی بزرگ یا منفی را به تایپ enum تبدیل کنید.</p></li>
+<li><p>0x22: اگر به آرایه بایت storage که به نادرستی کدگذاری شده است دسترسی داشته باشید.</p></li>
+<li><p>0x31: اگر  <code class="docutils literal notranslate"><span class="pre">()pop.</span></code> را در یک آرایه خالی فراخوانی کنید.</p></li>
+<li><p>0x32: اگر به یک آرایه،  <code class="docutils literal notranslate"><span class="pre">bytesN</span></code> یا یک برش آرایه در نمای خارج از محدوده یا منفی دسترسی داشته باشید (یعنی  <code class="docutils literal notranslate"><span class="pre">x[i]</span></code> جایی که <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">&gt;=</span> <span class="pre">x.length</span>&#160; <span class="pre">یا</span>&#160; <span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> ).</p></li>
+<li><p>0x41: اگر مقدار زیادی مِمُوری اختصاص دهید یا یک آرایه بسیار بزرگ ایجاد کنید.</p></li>
+<li><p>0x51: در صورت فراخوانی متغییر zero-initialized از تایپ تابع داخلی.</p></li>
+</ol>
+<p>تابع  <code class="docutils literal notranslate"><span class="pre">require</span></code> یا خطایی بدون هیچ گونه داده یا خطایی از نوع <code class="docutils literal notranslate"><span class="pre">Error(string)</span></code> ایجاد می‌کند. باید
+برای اطمینان از شرایط معتبری که تا زمان اجرا قابل تشخیص نیستند مورد استفاده قرار گیرد. این شامل شرایط
+ورودی‌ها یا بازگشت مقادیر از فراخوانی‌ها به قراردادهای خارجی است.</p>
+<p>// &#64;saracodic cst
+s</p>
+<blockquote>
+<div><p>در حال حاضر امکان استفاده از خطاهای سفارشی در ترکیب با  <code class="docutils literal notranslate"><span class="pre">require</span></code> وجود ندارد. لطفا از بجای آن
+از  <code class="docutils literal notranslate"><span class="pre">;if(!condition)</span> <span class="pre">revert</span> <span class="pre">CustomError()</span></code> استفاده کنید.</p>
+<p>It is currently not possible to use custom errors in combination
+with <code class="docutils literal notranslate"><span class="pre">require</span></code>. Please use <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(!condition)</span> <span class="pre">revert</span> <span class="pre">CustomError();</span></code> instead.</p>
+</div></blockquote>
+<p>یک اکسپشن <code class="docutils literal notranslate"><span class="pre">Error(string)</span></code>  (یا یک اکسپشن بدون داده) توسط کامپایلر در شرایط زیر ایجاد می‌شود:</p>
+<ol class="arabic simple">
+<li><p>فراخوانی  <code class="docutils literal notranslate"><span class="pre">require(x)</span></code>  در جایی که <code class="docutils literal notranslate"><span class="pre">x</span></code>  به صورت  <code class="docutils literal notranslate"><span class="pre">false</span></code> ارزیابی شود.</p></li>
+<li><p>اگر از  <code class="docutils literal notranslate"><span class="pre">()revert</span></code> یا  <code class="docutils literal notranslate"><span class="pre">revert(&quot;description&quot;)</span></code> استفاده کنید.</p></li>
+<li><p>اگر یک تابع فراخوانی خارجی اجرا کنید که قراردادی را که فاقد کد است را هدف قرار می‌دهد.</p></li>
+<li><p>اگر قرارداد شما اتر را از طریق یک تابع public بدون اصلاح کننده   <code class="docutils literal notranslate"><span class="pre">payable</span></code>  (شامل کنستراکتور و تابع fallback) دریافت ‌کند.</p></li>
+<li><p>اگر قرارداد شما اتر را از طریق یک تابع گیرنده  publicدریافت کند.</p></li>
+</ol>
+<p>در موارد زیر، داده‌ خطا  از فراخوانی خارجی (در صورت ارائه) ارسال می‌شوند. این بدان معناست که می‌تواند باعث <cite>Error</cite> یا  <cite>Panic</cite> شود (یا هر چیز دیگری که داده شد):</p>
+<ol class="arabic simple">
+<li><p>اگر  <code class="docutils literal notranslate"><span class="pre">()transfer.</span></code> با شکست مواجه شود.</p></li>
+<li><p>اگر یک تابع را از طریق یک message call فراخوانی می‌کنید اما به درستی به پایان نمی‌رسد (یعنی گاز آن تمام می‌شود، هیچ تابع matching ندارد یا خود یک اکسپشن ایجاد نمی‌کند)، مگر در مواردی که یک عملیات سطح پایین  <code class="docutils literal notranslate"><span class="pre">call</span></code> ، <code class="docutils literal notranslate"><span class="pre">send</span></code> ، <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> ، <code class="docutils literal notranslate"><span class="pre">callcode</span></code> یا  <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> استفاده شود عملیات سطح پایین هرگز اکسپشن ایجاد نمی‌کند، اما با بازگشت  <code class="docutils literal notranslate"><span class="pre">false</span></code>  نشان دهنده شکست است.</p></li>
+<li><p>اگر قراردادی با استفاده از کلمه کلیدی  <code class="docutils literal notranslate"><span class="pre">new</span></code> ایجاد ‌کنید  <a class="reference internal" href="#creating-contracts"><span class="std std-ref">اما ایجاد قرارداد به درستی به پایان نرسد</span></a>.</p></li>
+</ol>
+<p>به صورت اختیاری می‌توانید یک رشته پیام برای  <code class="docutils literal notranslate"><span class="pre">require</span></code> ارائه دهید، اما نه برای  <code class="docutils literal notranslate"><span class="pre">assert</span></code> .</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اگر آرگومان رشته‌ای  <code class="docutils literal notranslate"><span class="pre">requir</span></code> را ارائه ندهید، با خطای داده خالی، حتی نه شامل انتخاب کننده خطا، باز میگردد.</p>
+<p>If you do not provide a string argument to <code class="docutils literal notranslate"><span class="pre">require</span></code>, it will revert
+with empty error data, not even including the error selector.</p>
+</div>
+<p>مثال زیر نشان می‌دهد که چگونه می‌توانید از   <code class="docutils literal notranslate"><span class="pre">require</span></code> برای بررسی شرایط ورودی‌ها و  <code class="docutils literal notranslate"><span class="pre">assert</span></code> برای بررسی خطای داخلی استفاده کنید.</p>
+<p>The following example shows how you can use <code class="docutils literal notranslate"><span class="pre">require</span></code> to check conditions on inputs
+and <code class="docutils literal notranslate"><span class="pre">assert</span></code> for internal error checking.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwoKY29udHJhY3QgU2hhcmVyIHsKICAgIGZ1bmN0aW9uIHNlbmRIYWxmKGFkZHJlc3MgcGF5YWJsZSBhZGRyKSBwdWJsaWMgcGF5YWJsZSByZXR1cm5zICh1aW50IGJhbGFuY2UpIHsKICAgICAgICByZXF1aXJlKG1zZy52YWx1ZSAlIDIgPT0gMCwgIkV2ZW4gdmFsdWUgcmVxdWlyZWQuIik7CiAgICAgICAgdWludCBiYWxhbmNlQmVmb3JlVHJhbnNmZXIgPSBhZGRyZXNzKHRoaXMpLmJhbGFuY2U7CiAgICAgICAgYWRkci50cmFuc2Zlcihtc2cudmFsdWUgLyAyKTsKICAgICAgICAvLyBTaW5jZSB0cmFuc2ZlciB0aHJvd3MgYW4gZXhjZXB0aW9uIG9uIGZhaWx1cmUgYW5kCiAgICAgICAgLy8gY2Fubm90IGNhbGwgYmFjayBoZXJlLCB0aGVyZSBzaG91bGQgYmUgbm8gd2F5IGZvciB1cyB0bwogICAgICAgIC8vIHN0aWxsIGhhdmUgaGFsZiBvZiB0aGUgbW9uZXkuCiAgICAgICAgYXNzZXJ0KGFkZHJlc3ModGhpcykuYmFsYW5jZSA9PSBiYWxhbmNlQmVmb3JlVHJhbnNmZXIgLSBtc2cudmFsdWUgLyAyKTsKICAgICAgICByZXR1cm4gYWRkcmVzcyh0aGlzKS5iYWxhbmNlOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Sharer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">sendHalf</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span>addr<span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">balance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="err">%</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Even value required.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">balanceBeforeTransfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">).</span>balance<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>addr<span class="p">.</span>transfer<span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Since transfer throws an exception on failure and</span>
+<span class="w">        </span><span class="c1">// cannot call back here, there should be no way for us to</span>
+<span class="w">        </span><span class="c1">// still have half of the money.</span>
+<span class="w">        </span>assert<span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">).</span>balance<span class="w"> </span><span class="o">==</span><span class="w"> </span>balanceBeforeTransfer<span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="k">msg.value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">).</span>balance<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>به طور داخلی، سالیدیتی یک عملیات بازگشت را انجام می‌دهد (دستور  <code class="docutils literal notranslate"><span class="pre">0xfd</span></code>). این امر باعث می‌شود EVM
+تمام تغییرات ایجاد شده در حالت را برگرداند. دلیل بازگشت این است که هیچ راه مطمئنی برای ادامه اجرا وجود
+ندارد، زیرا اثر مورد انتظار رخ نداده است. از آنجا که ما می‌خواهیم atomicity  تراکنش‌ها را حفظ کنیم، مطمئن
+ترین اقدام این است که همه تغییرات را برگردانیم و کل تراکنش (یا حداقل فراخوانی) را بدون تأثیر انجام دهیم.</p>
+<p>در هر دو حالت، فراخوانی کننده می‌تواند با استفاده از <code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">catch</span></code> واکنش نشان دهد، اما تغییرات در
+فراخوانی گیرنده همیشه برمی‌گردد.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اکسپشن Panic برای استفاده از آپکد  <code class="docutils literal notranslate"><span class="pre">invalid</span></code> قبل از سالیدیتی 0.8.0، که تمام گاز موجود در
+فراخوانی را مصرف می‌کرد، استفاده میشد. اکسپشن‌ها <code class="docutils literal notranslate"><span class="pre">require</span></code> تا قبل از انتشار متروپلیس  برای مصرف
+تمام گاز استفاده میشد.</p>
+</div>
+</section>
+<section id="revert">
+<span id="revert-statement"></span><h3><code class="docutils literal notranslate"><span class="pre">revert</span></code><a class="headerlink" href="#revert" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>revert مستقیم را می‌توان با استفاده از دستور  <code class="docutils literal notranslate"><span class="pre">revert</span></code> و تابع  <code class="docutils literal notranslate"><span class="pre">revert</span></code> فعال کرد.</p>
+<p>دستور  <code class="docutils literal notranslate"><span class="pre">revert</span></code> یک خطای سفارشی را به عنوان آرگومان مستقیم و بدون پرانتز می‌گیرد:</p>
+<blockquote>
+<div><p>;revert CustomError(arg1, arg2)</p>
+</div></blockquote>
+<p>به دلایل سازگاری backards ، تابع  <code class="docutils literal notranslate"><span class="pre">()revert</span></code> نیز وجود دارد که از پرانتز استفاده می‌کند و یک رشته را می‌پذیرد:</p>
+<blockquote>
+<div><p>;revert()
+;revert(&quot;description&quot;)</p>
+</div></blockquote>
+<p>داده‌های خطا به فراخوانی کننده گیرنده منتقل می‌شود و در آنجا قابل مشاهده است. استفاده از <code class="docutils literal notranslate"><span class="pre">()revert</span></code>
+باعث می‌شود بدون هیچ گونه داده خطایی یک بازگشت وجود داشته باشد در حالی
+که  <code class="docutils literal notranslate"><span class="pre">revert(&quot;description&quot;)</span></code> خطای  <code class="docutils literal notranslate"><span class="pre">Error(string)</span></code> ایجاد می‌کند.</p>
+<p>معمولاً استفاده از خطای instance سفارشی بسیار ارزانتر از توصیف رشته است، زیرا می‌توانید از نام خطا برای
+توصیف آن استفاده کنید، که فقط در چهار بایت کدگذاری شده است. توضیحات طولانی‌تری را می‍توان از طریق
+NatSpec ارائه کرد که هیچ هزینه‌ای را متحمل نمی‌شود.</p>
+<p>مثال زیر نحوه استفاده از یک رشته خطا و یک نمونه خطای سفارشی را همراه با  <code class="docutils literal notranslate"><span class="pre">revert</span></code> و معادل  <code class="docutils literal notranslate"><span class="pre">require</span></code> نشان می‌دهد:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IFZlbmRpbmdNYWNoaW5lIHsKICAgIGFkZHJlc3Mgb3duZXI7CiAgICBlcnJvciBVbmF1dGhvcml6ZWQoKTsKICAgIGZ1bmN0aW9uIGJ1eSh1aW50IGFtb3VudCkgcHVibGljIHBheWFibGUgewogICAgICAgIGlmIChhbW91bnQgPiBtc2cudmFsdWUgLyAyIGV0aGVyKQogICAgICAgICAgICByZXZlcnQoIk5vdCBlbm91Z2ggRXRoZXIgcHJvdmlkZWQuIik7CiAgICAgICAgLy8gQWx0ZXJuYXRpdmUgd2F5IHRvIGRvIGl0OgogICAgICAgIHJlcXVpcmUoCiAgICAgICAgICAgIGFtb3VudCA8PSBtc2cudmFsdWUgLyAyIGV0aGVyLAogICAgICAgICAgICAiTm90IGVub3VnaCBFdGhlciBwcm92aWRlZC4iCiAgICAgICAgKTsKICAgICAgICAvLyBQZXJmb3JtIHRoZSBwdXJjaGFzZS4KICAgIH0KICAgIGZ1bmN0aW9uIHdpdGhkcmF3KCkgcHVibGljIHsKICAgICAgICBpZiAobXNnLnNlbmRlciAhPSBvd25lcikKICAgICAgICAgICAgcmV2ZXJ0IFVuYXV0aG9yaXplZCgpOwoKICAgICAgICBwYXlhYmxlKG1zZy5zZW5kZXIpLnRyYW5zZmVyKGFkZHJlc3ModGhpcykuYmFsYW5jZSk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">VendingMachine</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>error<span class="w"> </span>Unauthorized<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">buy</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>amount<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">msg.value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="w"> </span>ether<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="p">(</span><span class="s2">&quot;Not enough Ether provided.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Alternative way to do it:</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span>amount<span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="k">msg.value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="w"> </span>ether<span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;Not enough Ether provided.&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Perform the purchase.</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span>owner<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>Unauthorized<span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">).</span>balance<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>دو راه  <code class="docutils literal notranslate"><span class="pre">;(...)if</span> <span class="pre">(!condition)</span> <span class="pre">revert</span></code> و <code class="docutils literal notranslate"><span class="pre">;require(condition,</span> <span class="pre">...)</span></code> معادل
+هستند تا زمانی که آرگومان‌ها برای  <code class="docutils literal notranslate"><span class="pre">revert</span></code> و  <code class="docutils literal notranslate"><span class="pre">require</span></code> عوارض جانبی نداشته باشند، به عنوان مثال اگر فقط string باشند.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تابع مورد  <code class="docutils literal notranslate"><span class="pre">require</span></code> نیز مانند سایر عملکردها ارزیابی می شود. این بدان معناست که همه آرگومان ها قبل
+از اجرای خود تابع ارزیابی می شوند. به طور خاص ، در  <code class="docutils literal notranslate"><span class="pre">require(condition,</span> <span class="pre">f())</span></code> تابع  <code class="docutils literal notranslate"><span class="pre">f</span></code>
+اجرا می‌شود حتی اگر  <code class="docutils literal notranslate"><span class="pre">condition</span></code> درست باشد.</p>
+</div>
+<p>رشته ارائه شده به گونه‌ای <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">abi-encoded</span></a>  می‌شود که انگار یک فراخوانی به یک تابع  <code class="docutils literal notranslate"><span class="pre">Error(string)</span></code> است.
+در مثال بالا،  <code class="docutils literal notranslate"><span class="pre">;revert(&quot;Not</span> <span class="pre">enough</span> <span class="pre">Ether</span> <span class="pre">provided.&quot;)</span></code> داده‌های هگزا دسیمال زیر را
+به عنوان داده‌های بازگشت خطا بر میگرداند:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=MHgwOGMzNzlhMCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8vIEZ1bmN0aW9uIHNlbGVjdG9yIGZvciBFcnJvcihzdHJpbmcpCjB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyMCAvLyBEYXRhIG9mZnNldAoweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMWEgLy8gU3RyaW5nIGxlbmd0aAoweDRlNmY3NDIwNjU2ZTZmNzU2NzY4MjA0NTc0Njg2NTcyMjA3MDcyNmY3NjY5NjQ2NTY0MmUwMDAwMDAwMDAwMDAgLy8gU3RyaW5nIGRhdGE="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="mh">0x08c379a0</span>                                                         <span class="c1">// Function selector for Error(string)</span>
+<span class="mh">0x0000000000000000000000000000000000000000000000000000000000000020</span> <span class="c1">// Data offset</span>
+<span class="mh">0x000000000000000000000000000000000000000000000000000000000000001a</span> <span class="c1">// String length</span>
+<span class="mh">0x4e6f7420656e6f7567682045746865722070726f76696465642e000000000000</span> <span class="c1">// String data</span>
+</pre></div>
+</div>
+<p>مطابق شکل زیر، پیام ارائه شده توسط فراخوانی کننده با استفاده از  <code class="docutils literal notranslate"><span class="pre">try/catch</span></code> بازیابی می‌شود.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبلاً یک کلمه کلیدی به نام  <code class="docutils literal notranslate"><span class="pre">throw</span></code> با سمنتیک مشابه <code class="docutils literal notranslate"><span class="pre">()revert</span></code> وجود داشت که در نسخه 0.4.13 منسوخ شده بود و در نسخه 0.5.0 حذف شد.</p>
+<p>There used to be a keyword called <code class="docutils literal notranslate"><span class="pre">throw</span></code> with the same semantics as <code class="docutils literal notranslate"><span class="pre">revert()</span></code> which
+was deprecated in version 0.4.13 and removed in version 0.5.0.</p>
+</div>
+</section>
+<section id="try-catch">
+<span id="id10"></span><h3><code class="docutils literal notranslate"><span class="pre">try</span></code>/<code class="docutils literal notranslate"><span class="pre">catch</span></code><a class="headerlink" href="#try-catch" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>شکست در یک فراخوانی خارجی را می‌توان با استفاده از دستور try/catch به شرح زیر تشخیص داد:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC44LjE7CgppbnRlcmZhY2UgRGF0YUZlZWQgeyBmdW5jdGlvbiBnZXREYXRhKGFkZHJlc3MgdG9rZW4pIGV4dGVybmFsIHJldHVybnMgKHVpbnQgdmFsdWUpOyB9Cgpjb250cmFjdCBGZWVkQ29uc3VtZXIgewogICAgRGF0YUZlZWQgZmVlZDsKICAgIHVpbnQgZXJyb3JDb3VudDsKICAgIGZ1bmN0aW9uIHJhdGUoYWRkcmVzcyB0b2tlbikgcHVibGljIHJldHVybnMgKHVpbnQgdmFsdWUsIGJvb2wgc3VjY2VzcykgewogICAgICAgIC8vIFBlcm1hbmVudGx5IGRpc2FibGUgdGhlIG1lY2hhbmlzbSBpZiB0aGVyZSBhcmUKICAgICAgICAvLyBtb3JlIHRoYW4gMTAgZXJyb3JzLgogICAgICAgIHJlcXVpcmUoZXJyb3JDb3VudCA8IDEwKTsKICAgICAgICB0cnkgZmVlZC5nZXREYXRhKHRva2VuKSByZXR1cm5zICh1aW50IHYpIHsKICAgICAgICAgICAgcmV0dXJuICh2LCB0cnVlKTsKICAgICAgICB9IGNhdGNoIEVycm9yKHN0cmluZyBtZW1vcnkgLypyZWFzb24qLykgewogICAgICAgICAgICAvLyBUaGlzIGlzIGV4ZWN1dGVkIGluIGNhc2UKICAgICAgICAgICAgLy8gcmV2ZXJ0IHdhcyBjYWxsZWQgaW5zaWRlIGdldERhdGEKICAgICAgICAgICAgLy8gYW5kIGEgcmVhc29uIHN0cmluZyB3YXMgcHJvdmlkZWQuCiAgICAgICAgICAgIGVycm9yQ291bnQrKzsKICAgICAgICAgICAgcmV0dXJuICgwLCBmYWxzZSk7CiAgICAgICAgfSBjYXRjaCBQYW5pYyh1aW50IC8qZXJyb3JDb2RlKi8pIHsKICAgICAgICAgICAgLy8gVGhpcyBpcyBleGVjdXRlZCBpbiBjYXNlIG9mIGEgcGFuaWMsCiAgICAgICAgICAgIC8vIGkuZS4gYSBzZXJpb3VzIGVycm9yIGxpa2UgZGl2aXNpb24gYnkgemVybwogICAgICAgICAgICAvLyBvciBvdmVyZmxvdy4gVGhlIGVycm9yIGNvZGUgY2FuIGJlIHVzZWQKICAgICAgICAgICAgLy8gdG8gZGV0ZXJtaW5lIHRoZSBraW5kIG9mIGVycm9yLgogICAgICAgICAgICBlcnJvckNvdW50Kys7CiAgICAgICAgICAgIHJldHVybiAoMCwgZmFsc2UpOwogICAgICAgIH0gY2F0Y2ggKGJ5dGVzIG1lbW9yeSAvKmxvd0xldmVsRGF0YSovKSB7CiAgICAgICAgICAgIC8vIFRoaXMgaXMgZXhlY3V0ZWQgaW4gY2FzZSByZXZlcnQoKSB3YXMgdXNlZC4KICAgICAgICAgICAgZXJyb3JDb3VudCsrOwogICAgICAgICAgICByZXR1cm4gKDAsIGZhbHNlKTsKICAgICAgICB9CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.8.1</span><span class="p">;</span><span class="w"></span>
+
+interface<span class="w"> </span>DataFeed<span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">function</span><span class="w"> </span><span class="nv">getData</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">token</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">value</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">FeedConsumer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>DataFeed<span class="w"> </span>feed<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="nv">errorCount</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">rate</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">token</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">value</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">success</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Permanently disable the mechanism if there are</span>
+<span class="w">        </span><span class="c1">// more than 10 errors.</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>errorCount<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>try<span class="w"> </span>feed<span class="p">.</span>getData<span class="p">(</span>token<span class="p">)</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span>v<span class="p">,</span><span class="w"> </span><span class="kt">true</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span>catch<span class="w"> </span>Error<span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span><span class="cm">/*reason*/</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// This is executed in case</span>
+<span class="w">            </span><span class="c1">// revert was called inside getData</span>
+<span class="w">            </span><span class="c1">// and a reason string was provided.</span>
+<span class="w">            </span>errorCount<span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="kt">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span>catch<span class="w"> </span>Panic<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="cm">/*errorCode*/</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// This is executed in case of a panic,</span>
+<span class="w">            </span><span class="c1">// i.e. a serious error like division by zero</span>
+<span class="w">            </span><span class="c1">// or overflow. The error code can be used</span>
+<span class="w">            </span><span class="c1">// to determine the kind of error.</span>
+<span class="w">            </span>errorCount<span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="kt">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span>catch<span class="w"> </span><span class="p">(</span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span><span class="cm">/*lowLevelData*/</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// This is executed in case revert() was used.</span>
+<span class="w">            </span>errorCount<span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="kt">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>کلمه کلیدی  <code class="docutils literal notranslate"><span class="pre">try</span></code> باید با عبارتی که یک فراخوانی تابع خارجی یا ایجاد قرارداد را نشان می‌دهد
+(<code class="docutils literal notranslate"><span class="pre">()new</span> <span class="pre">ContractName</span></code>) دنبال شود. خطاهای داخل عبارت گرفته نمی‌شوند (برای مثال اگر عبارت
+پیچیده‌ای است که شامل فراخوانی تابع داخلی نیز شود)، فقط یک  revert در داخل خود فراخوان خارجی اتفاق
+می‌افتد. قسمت  <code class="docutils literal notranslate"><span class="pre">returns</span></code> (که اختیاری است) که در زیر آمده است متغیرهای  returns را مطابقت
+می‌دهد که با انواع برگشت داده شده توسط فراخوانی خارجی مطابقت دارد. در صورت عدم وجود خطا، این متغیرها
+تعیین می شوند و اجرای قرارداد در اولین بلوک موفقیت ادامه می یابد. اگر بلوک موفقیت به پایان برسد، اجرا
+پس از بلوک های گرفتن ادامه می یابد.</p>
+<p>سالیدیتی بسته به نوع خطا از تایپ‌های مختلف بلوک‌های catch پشتیبانی می‌کند:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}catch</span> <span class="pre">Error(string</span> <span class="pre">memory</span> <span class="pre">reason)</span></code> : این عبارت catch در صورتی اجرا می‌شود که خطا ناشی از  <code class="docutils literal notranslate"><span class="pre">revert(&quot;reasonString&quot;)</span></code>  یا <code class="docutils literal notranslate"><span class="pre">require(false,</span> <span class="pre">&quot;reasonString&quot;)</span></code>  (یا خطای داخلی که باعث چنین اکسپشنی می‌شود) باشد.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}catch</span> <span class="pre">Panic(uint</span> <span class="pre">errorCode)</span></code> : اگر خطا ناشی از panic باشد، یعنی  با شکست  <code class="docutils literal notranslate"><span class="pre">assert</span></code> ، تقسیم بر صفر، دسترسی به آرایه نامعتبر، overflow حسابی و موارد دیگر، این عبارت catch اجرا خواهد شد.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}catch</span> <span class="pre">(bytes</span> <span class="pre">memory</span> <span class="pre">lowLevelData)</span></code>: این عبارت در صورتی اجرا می‌شود که خطای امضا  با هیچ عبارت دیگری مطابقت نداشته باشد، در هنگام رمزگشایی پیام خطا خطایی رخ داده باشد یا اگر هیچ داده خطایی به استثنا ارائه نشده باشد. متغیر اعلام شده در این حالت دسترسی به داده های خطای سطح پایین را فراهم می کند.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}catch</span></code>: اگر به داده‌های خطا علاقه‌ای ندارید، می توانید به جای بند قبلی از  catch { ... } (حتی به عنوان تنها بند گرفتن) استفاده کنید.</p></li>
+</ul>
+<p>برنامه ریزی شده است که در آینده از تایپ‌های دیگر خطای داده‌ه نیز پشتیبانی شود. رشته‌های <code class="docutils literal notranslate"><span class="pre">Error</span></code>
+و <code class="docutils literal notranslate"><span class="pre">Panic</span></code> در حال حاضر به همانطور که هست تجزیه میشوند و با آن‌ها به  عنوان identifiers رفتار نمی‌شوند.</p>
+<p>برای گرفتن همه موارد خطا، باید حداقل عبارت <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...}catch</span></code>
+یا  <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">...</span> <span class="pre">}catch</span> <span class="pre">(bytes</span> <span class="pre">memory</span> <span class="pre">lowLevelData)</span></code> داشته باشید.</p>
+<p>متغیرهای اعلام شده در  <code class="docutils literal notranslate"><span class="pre">returns</span></code> و عبارت  <code class="docutils literal notranslate"><span class="pre">catch</span></code> فقط در محدوده بلوکی هستند که دنبال میکنند.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اگر هنگام رمزگشایی داده‌های بازگشتی در یک دستور try/catch خطایی رخ دهد، این امر باعث ایجاد یک
+اکسپشن در قرارداد در حال اجرا می‌شود و به همین دلیل، در عبارت catch دریافت نمیشود. اگر هنگام
+رمزگشایی  <code class="docutils literal notranslate"><span class="pre">catch</span> <span class="pre">Error(string</span> <span class="pre">memory</span> <span class="pre">reason)</span></code> خطایی رخ دهد و یک عبارت
+catch سطح پایین وجود داشته باشد، این خطا در آنجا تشخیص داده می‌شود.</p>
+<p>If an error happens during the decoding of the return data
+inside a try/catch-statement, this causes an exception in the currently
+executing contract and because of that, it is not caught in the catch clause.
+If there is an error during decoding of <code class="docutils literal notranslate"><span class="pre">catch</span> <span class="pre">Error(string</span> <span class="pre">memory</span> <span class="pre">reason)</span></code>
+and there is a low-level catch clause, this error is caught there.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اگر اجرا به یک catch-block برسد، اثرات تغییر state فراخوانی خارجی برگردانده شده است. اگر اجرا به
+بلوک موفقیت برسد، اثرات برگشت داده نمی‌شوند. اگر اثرات برگردانده شده‌ باشد، اجرا یا در یک بلوک catch
+ادامه می یابد یا اجرای دستور try/catch به خودی خود revert می‌شود (برای مثال به دلیل شکست در
+رمزگشایی همانطور که در بالا ذکر شد یا به دلیل عدم ارائه یک عبارت catch سطح پایین).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>دلیل یک فراخوانی ناموفق می‌تواند manifold باشد. تصور نکنید که پیام خطا مستقیماً از قرارداد فراخوانی
+شده می‌آید: ممکن است خطا در اعماق فراخوانی زنجیره رخ داده باشد و قرارداد فراخوانی شده فقط آن را
+ارسال کرده باشد. همچنین، ممکن است به دلیل وضعیت اتمام گاز (out-of-gas) باشد و نه یک خطای
+عمدی: فراخوانی کننده همیشه 63/64 گاز را در فراخوانی حفظ می‌کند و بنابراین حتی اگر قرارداد فراخوانی
+کننده از بین برود، فراخوانی کننده هنوز مقداری گاز باقی مانده دارد.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="units-and-global-variables.html" class="btn btn-neutral float-left" title="واحدها و متغیرهای موجود در سطح جهانی" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="contracts.html" class="btn btn-neutral float-right" title="Contracts" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

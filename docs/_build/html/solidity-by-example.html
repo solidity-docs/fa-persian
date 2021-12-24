@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سالیدیتی با مثال &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="چیدمان یک فایل منبع سالیدیتی" href="layout-of-source-files.html" />
+    <link rel="prev" title="نصب کامپایلر سالیدیتی" href="installing-solidity.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">سالیدیتی با مثال</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#voting">رای گیری</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">بهبودهای احتمالی</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-1">مزایده کور</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-auction">مزایده باز ساده</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">مزایده کور</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-2">خرید امن از راه دور</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">کانال پرداخت خرد</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">ایجاد و تأیید امضا</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">ایجاد امضا</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">چه چیزی برای امضا</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">بسته بندی آرگومان‌ها</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">بازیابی امضای پیام در سالیدیتی</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">استخراج پارامترهای امضا</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">محاسبه پیام هش</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">قرارداد کامل</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">نوشتن یک کانال پرداخت  ساده</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id18">کانال پرداخت چیست؟</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">باز کردن کانال پرداخت</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">ایجاد پرداخت ها</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">بستن کانال پرداخت</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">انقضا کانال</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id23">قرارداد کامل</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id25">تأیید پرداخت‌ها</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-3">قراردادهای ماژولی</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>سالیدیتی با مثال</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/solidity-by-example.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>سالیدیتی با مثال<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="voting">
+<span id="index-0"></span><span id="id2"></span><h2>رای گیری<a class="headerlink" href="#voting" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>قرارداد زیر کاملاً پیچیده است، اما بسیاری از ویژگی‌های سالیدیتی را به نمایش می‌گذارد. قرارداد رای گیری را اجرا می‌کند. البته، مشکلات اصلی رای گیری الکترونیکی نحوه واگذاری حق رای به افراد صحیح و نحوه جلوگیری از دستکاری است. ما همه مشکلات را در اینجا حل نخواهیم کرد، اما حداقل نشان خواهیم داد که چگونه می‌توان رای گیریِ نمایندگان را انجام داد تا شمارش آراء در همان زمان <strong>به صورت خودکار و کاملاً شفاف</strong> انجام شود..</p>
+<p>ایده این است که یک قرارداد برای هر رأی ایجاد شود و نام کوتاهی برای هر گزینه ارائه شود. سپس خالق قرارداد که به عنوان رئیس فعالیت می‌کند به هر آدرس به طور جداگانه حق رای می‌دهد.</p>
+<p>افراد پشت آدرس‌ها می‌توانند انتخاب کنند که یا خود رأی دهند یا رای خود را به شخصی که به او اعتماد دارند واگذار کنند.</p>
+<p>در پایان زمان رای گیری، <code class="docutils literal notranslate"><span class="pre">()winningProposal</span></code>  پیشنهاد را با بیشترین تعداد رای برمیگرداند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwovLy8gQHRpdGxlIFZvdGluZyB3aXRoIGRlbGVnYXRpb24uCmNvbnRyYWN0IEJhbGxvdCB7CiAgICAvLyBUaGlzIGRlY2xhcmVzIGEgbmV3IGNvbXBsZXggdHlwZSB3aGljaCB3aWxsCiAgICAvLyBiZSB1c2VkIGZvciB2YXJpYWJsZXMgbGF0ZXIuCiAgICAvLyBJdCB3aWxsIHJlcHJlc2VudCBhIHNpbmdsZSB2b3Rlci4KICAgIHN0cnVjdCBWb3RlciB7CiAgICAgICAgdWludCB3ZWlnaHQ7IC8vIHdlaWdodCBpcyBhY2N1bXVsYXRlZCBieSBkZWxlZ2F0aW9uCiAgICAgICAgYm9vbCB2b3RlZDsgIC8vIGlmIHRydWUsIHRoYXQgcGVyc29uIGFscmVhZHkgdm90ZWQKICAgICAgICBhZGRyZXNzIGRlbGVnYXRlOyAvLyBwZXJzb24gZGVsZWdhdGVkIHRvCiAgICAgICAgdWludCB2b3RlOyAgIC8vIGluZGV4IG9mIHRoZSB2b3RlZCBwcm9wb3NhbAogICAgfQoKICAgIC8vIFRoaXMgaXMgYSB0eXBlIGZvciBhIHNpbmdsZSBwcm9wb3NhbC4KICAgIHN0cnVjdCBQcm9wb3NhbCB7CiAgICAgICAgYnl0ZXMzMiBuYW1lOyAgIC8vIHNob3J0IG5hbWUgKHVwIHRvIDMyIGJ5dGVzKQogICAgICAgIHVpbnQgdm90ZUNvdW50OyAvLyBudW1iZXIgb2YgYWNjdW11bGF0ZWQgdm90ZXMKICAgIH0KCiAgICBhZGRyZXNzIHB1YmxpYyBjaGFpcnBlcnNvbjsKCiAgICAvLyBUaGlzIGRlY2xhcmVzIGEgc3RhdGUgdmFyaWFibGUgdGhhdAogICAgLy8gc3RvcmVzIGEgYFZvdGVyYCBzdHJ1Y3QgZm9yIGVhY2ggcG9zc2libGUgYWRkcmVzcy4KICAgIG1hcHBpbmcoYWRkcmVzcyA9PiBWb3RlcikgcHVibGljIHZvdGVyczsKCiAgICAvLyBBIGR5bmFtaWNhbGx5LXNpemVkIGFycmF5IG9mIGBQcm9wb3NhbGAgc3RydWN0cy4KICAgIFByb3Bvc2FsW10gcHVibGljIHByb3Bvc2FsczsKCiAgICAvLy8gQ3JlYXRlIGEgbmV3IGJhbGxvdCB0byBjaG9vc2Ugb25lIG9mIGBwcm9wb3NhbE5hbWVzYC4KICAgIGNvbnN0cnVjdG9yKGJ5dGVzMzJbXSBtZW1vcnkgcHJvcG9zYWxOYW1lcykgewogICAgICAgIGNoYWlycGVyc29uID0gbXNnLnNlbmRlcjsKICAgICAgICB2b3RlcnNbY2hhaXJwZXJzb25dLndlaWdodCA9IDE7CgogICAgICAgIC8vIEZvciBlYWNoIG9mIHRoZSBwcm92aWRlZCBwcm9wb3NhbCBuYW1lcywKICAgICAgICAvLyBjcmVhdGUgYSBuZXcgcHJvcG9zYWwgb2JqZWN0IGFuZCBhZGQgaXQKICAgICAgICAvLyB0byB0aGUgZW5kIG9mIHRoZSBhcnJheS4KICAgICAgICBmb3IgKHVpbnQgaSA9IDA7IGkgPCBwcm9wb3NhbE5hbWVzLmxlbmd0aDsgaSsrKSB7CiAgICAgICAgICAgIC8vIGBQcm9wb3NhbCh7Li4ufSlgIGNyZWF0ZXMgYSB0ZW1wb3JhcnkKICAgICAgICAgICAgLy8gUHJvcG9zYWwgb2JqZWN0IGFuZCBgcHJvcG9zYWxzLnB1c2goLi4uKWAKICAgICAgICAgICAgLy8gYXBwZW5kcyBpdCB0byB0aGUgZW5kIG9mIGBwcm9wb3NhbHNgLgogICAgICAgICAgICBwcm9wb3NhbHMucHVzaChQcm9wb3NhbCh7CiAgICAgICAgICAgICAgICBuYW1lOiBwcm9wb3NhbE5hbWVzW2ldLAogICAgICAgICAgICAgICAgdm90ZUNvdW50OiAwCiAgICAgICAgICAgIH0pKTsKICAgICAgICB9CiAgICB9CgogICAgLy8gR2l2ZSBgdm90ZXJgIHRoZSByaWdodCB0byB2b3RlIG9uIHRoaXMgYmFsbG90LgogICAgLy8gTWF5IG9ubHkgYmUgY2FsbGVkIGJ5IGBjaGFpcnBlcnNvbmAuCiAgICBmdW5jdGlvbiBnaXZlUmlnaHRUb1ZvdGUoYWRkcmVzcyB2b3RlcikgZXh0ZXJuYWwgewogICAgICAgIC8vIElmIHRoZSBmaXJzdCBhcmd1bWVudCBvZiBgcmVxdWlyZWAgZXZhbHVhdGVzCiAgICAgICAgLy8gdG8gYGZhbHNlYCwgZXhlY3V0aW9uIHRlcm1pbmF0ZXMgYW5kIGFsbAogICAgICAgIC8vIGNoYW5nZXMgdG8gdGhlIHN0YXRlIGFuZCB0byBFdGhlciBiYWxhbmNlcwogICAgICAgIC8vIGFyZSByZXZlcnRlZC4KICAgICAgICAvLyBUaGlzIHVzZWQgdG8gY29uc3VtZSBhbGwgZ2FzIGluIG9sZCBFVk0gdmVyc2lvbnMsIGJ1dAogICAgICAgIC8vIG5vdCBhbnltb3JlLgogICAgICAgIC8vIEl0IGlzIG9mdGVuIGEgZ29vZCBpZGVhIHRvIHVzZSBgcmVxdWlyZWAgdG8gY2hlY2sgaWYKICAgICAgICAvLyBmdW5jdGlvbnMgYXJlIGNhbGxlZCBjb3JyZWN0bHkuCiAgICAgICAgLy8gQXMgYSBzZWNvbmQgYXJndW1lbnQsIHlvdSBjYW4gYWxzbyBwcm92aWRlIGFuCiAgICAgICAgLy8gZXhwbGFuYXRpb24gYWJvdXQgd2hhdCB3ZW50IHdyb25nLgogICAgICAgIHJlcXVpcmUoCiAgICAgICAgICAgIG1zZy5zZW5kZXIgPT0gY2hhaXJwZXJzb24sCiAgICAgICAgICAgICJPbmx5IGNoYWlycGVyc29uIGNhbiBnaXZlIHJpZ2h0IHRvIHZvdGUuIgogICAgICAgICk7CiAgICAgICAgcmVxdWlyZSgKICAgICAgICAgICAgIXZvdGVyc1t2b3Rlcl0udm90ZWQsCiAgICAgICAgICAgICJUaGUgdm90ZXIgYWxyZWFkeSB2b3RlZC4iCiAgICAgICAgKTsKICAgICAgICByZXF1aXJlKHZvdGVyc1t2b3Rlcl0ud2VpZ2h0ID09IDApOwogICAgICAgIHZvdGVyc1t2b3Rlcl0ud2VpZ2h0ID0gMTsKICAgIH0KCiAgICAvLy8gRGVsZWdhdGUgeW91ciB2b3RlIHRvIHRoZSB2b3RlciBgdG9gLgogICAgZnVuY3Rpb24gZGVsZWdhdGUoYWRkcmVzcyB0bykgZXh0ZXJuYWwgewogICAgICAgIC8vIGFzc2lnbnMgcmVmZXJlbmNlCiAgICAgICAgVm90ZXIgc3RvcmFnZSBzZW5kZXIgPSB2b3RlcnNbbXNnLnNlbmRlcl07CiAgICAgICAgcmVxdWlyZSghc2VuZGVyLnZvdGVkLCAiWW91IGFscmVhZHkgdm90ZWQuIik7CgogICAgICAgIHJlcXVpcmUodG8gIT0gbXNnLnNlbmRlciwgIlNlbGYtZGVsZWdhdGlvbiBpcyBkaXNhbGxvd2VkLiIpOwoKICAgICAgICAvLyBGb3J3YXJkIHRoZSBkZWxlZ2F0aW9uIGFzIGxvbmcgYXMKICAgICAgICAvLyBgdG9gIGFsc28gZGVsZWdhdGVkLgogICAgICAgIC8vIEluIGdlbmVyYWwsIHN1Y2ggbG9vcHMgYXJlIHZlcnkgZGFuZ2Vyb3VzLAogICAgICAgIC8vIGJlY2F1c2UgaWYgdGhleSBydW4gdG9vIGxvbmcsIHRoZXkgbWlnaHQKICAgICAgICAvLyBuZWVkIG1vcmUgZ2FzIHRoYW4gaXMgYXZhaWxhYmxlIGluIGEgYmxvY2suCiAgICAgICAgLy8gSW4gdGhpcyBjYXNlLCB0aGUgZGVsZWdhdGlvbiB3aWxsIG5vdCBiZSBleGVjdXRlZCwKICAgICAgICAvLyBidXQgaW4gb3RoZXIgc2l0dWF0aW9ucywgc3VjaCBsb29wcyBtaWdodAogICAgICAgIC8vIGNhdXNlIGEgY29udHJhY3QgdG8gZ2V0ICJzdHVjayIgY29tcGxldGVseS4KICAgICAgICB3aGlsZSAodm90ZXJzW3RvXS5kZWxlZ2F0ZSAhPSBhZGRyZXNzKDApKSB7CiAgICAgICAgICAgIHRvID0gdm90ZXJzW3RvXS5kZWxlZ2F0ZTsKCiAgICAgICAgICAgIC8vIFdlIGZvdW5kIGEgbG9vcCBpbiB0aGUgZGVsZWdhdGlvbiwgbm90IGFsbG93ZWQuCiAgICAgICAgICAgIHJlcXVpcmUodG8gIT0gbXNnLnNlbmRlciwgIkZvdW5kIGxvb3AgaW4gZGVsZWdhdGlvbi4iKTsKICAgICAgICB9CgogICAgICAgIC8vIFNpbmNlIGBzZW5kZXJgIGlzIGEgcmVmZXJlbmNlLCB0aGlzCiAgICAgICAgLy8gbW9kaWZpZXMgYHZvdGVyc1ttc2cuc2VuZGVyXS52b3RlZGAKICAgICAgICBzZW5kZXIudm90ZWQgPSB0cnVlOwogICAgICAgIHNlbmRlci5kZWxlZ2F0ZSA9IHRvOwogICAgICAgIFZvdGVyIHN0b3JhZ2UgZGVsZWdhdGVfID0gdm90ZXJzW3RvXTsKICAgICAgICBpZiAoZGVsZWdhdGVfLnZvdGVkKSB7CiAgICAgICAgICAgIC8vIElmIHRoZSBkZWxlZ2F0ZSBhbHJlYWR5IHZvdGVkLAogICAgICAgICAgICAvLyBkaXJlY3RseSBhZGQgdG8gdGhlIG51bWJlciBvZiB2b3RlcwogICAgICAgICAgICBwcm9wb3NhbHNbZGVsZWdhdGVfLnZvdGVdLnZvdGVDb3VudCArPSBzZW5kZXIud2VpZ2h0OwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIC8vIElmIHRoZSBkZWxlZ2F0ZSBkaWQgbm90IHZvdGUgeWV0LAogICAgICAgICAgICAvLyBhZGQgdG8gaGVyIHdlaWdodC4KICAgICAgICAgICAgZGVsZWdhdGVfLndlaWdodCArPSBzZW5kZXIud2VpZ2h0OwogICAgICAgIH0KICAgIH0KCiAgICAvLy8gR2l2ZSB5b3VyIHZvdGUgKGluY2x1ZGluZyB2b3RlcyBkZWxlZ2F0ZWQgdG8geW91KQogICAgLy8vIHRvIHByb3Bvc2FsIGBwcm9wb3NhbHNbcHJvcG9zYWxdLm5hbWVgLgogICAgZnVuY3Rpb24gdm90ZSh1aW50IHByb3Bvc2FsKSBleHRlcm5hbCB7CiAgICAgICAgVm90ZXIgc3RvcmFnZSBzZW5kZXIgPSB2b3RlcnNbbXNnLnNlbmRlcl07CiAgICAgICAgcmVxdWlyZShzZW5kZXIud2VpZ2h0ICE9IDAsICJIYXMgbm8gcmlnaHQgdG8gdm90ZSIpOwogICAgICAgIHJlcXVpcmUoIXNlbmRlci52b3RlZCwgIkFscmVhZHkgdm90ZWQuIik7CiAgICAgICAgc2VuZGVyLnZvdGVkID0gdHJ1ZTsKICAgICAgICBzZW5kZXIudm90ZSA9IHByb3Bvc2FsOwoKICAgICAgICAvLyBJZiBgcHJvcG9zYWxgIGlzIG91dCBvZiB0aGUgcmFuZ2Ugb2YgdGhlIGFycmF5LAogICAgICAgIC8vIHRoaXMgd2lsbCB0aHJvdyBhdXRvbWF0aWNhbGx5IGFuZCByZXZlcnQgYWxsCiAgICAgICAgLy8gY2hhbmdlcy4KICAgICAgICBwcm9wb3NhbHNbcHJvcG9zYWxdLnZvdGVDb3VudCArPSBzZW5kZXIud2VpZ2h0OwogICAgfQoKICAgIC8vLyBAZGV2IENvbXB1dGVzIHRoZSB3aW5uaW5nIHByb3Bvc2FsIHRha2luZyBhbGwKICAgIC8vLyBwcmV2aW91cyB2b3RlcyBpbnRvIGFjY291bnQuCiAgICBmdW5jdGlvbiB3aW5uaW5nUHJvcG9zYWwoKSBwdWJsaWMgdmlldwogICAgICAgICAgICByZXR1cm5zICh1aW50IHdpbm5pbmdQcm9wb3NhbF8pCiAgICB7CiAgICAgICAgdWludCB3aW5uaW5nVm90ZUNvdW50ID0gMDsKICAgICAgICBmb3IgKHVpbnQgcCA9IDA7IHAgPCBwcm9wb3NhbHMubGVuZ3RoOyBwKyspIHsKICAgICAgICAgICAgaWYgKHByb3Bvc2Fsc1twXS52b3RlQ291bnQgPiB3aW5uaW5nVm90ZUNvdW50KSB7CiAgICAgICAgICAgICAgICB3aW5uaW5nVm90ZUNvdW50ID0gcHJvcG9zYWxzW3BdLnZvdGVDb3VudDsKICAgICAgICAgICAgICAgIHdpbm5pbmdQcm9wb3NhbF8gPSBwOwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIC8vIENhbGxzIHdpbm5pbmdQcm9wb3NhbCgpIGZ1bmN0aW9uIHRvIGdldCB0aGUgaW5kZXgKICAgIC8vIG9mIHRoZSB3aW5uZXIgY29udGFpbmVkIGluIHRoZSBwcm9wb3NhbHMgYXJyYXkgYW5kIHRoZW4KICAgIC8vIHJldHVybnMgdGhlIG5hbWUgb2YgdGhlIHdpbm5lcgogICAgZnVuY3Rpb24gd2lubmVyTmFtZSgpIGV4dGVybmFsIHZpZXcKICAgICAgICAgICAgcmV0dXJucyAoYnl0ZXMzMiB3aW5uZXJOYW1lXykKICAgIHsKICAgICAgICB3aW5uZXJOYW1lXyA9IHByb3Bvc2Fsc1t3aW5uaW5nUHJvcG9zYWwoKV0ubmFtZTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="c1">/// @title Voting with delegation.</span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">Ballot</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// This declares a new complex type which will</span>
+<span class="w">    </span><span class="c1">// be used for variables later.</span>
+<span class="w">    </span><span class="c1">// It will represent a single voter.</span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Voter</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">weight</span><span class="p">;</span><span class="w"> </span><span class="c1">// weight is accumulated by delegation</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nv">voted</span><span class="p">;</span><span class="w">  </span><span class="c1">// if true, that person already voted</span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">delegate</span><span class="p">;</span><span class="w"> </span><span class="c1">// person delegated to</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">vote</span><span class="p">;</span><span class="w">   </span><span class="c1">// index of the voted proposal</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This is a type for a single proposal.</span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Proposal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">name</span><span class="p">;</span><span class="w">   </span><span class="c1">// short name (up to 32 bytes)</span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">voteCount</span><span class="p">;</span><span class="w"> </span><span class="c1">// number of accumulated votes</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">chairperson</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This declares a state variable that</span>
+<span class="w">    </span><span class="c1">// stores a `Voter` struct for each possible address.</span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>Voter<span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>voters<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// A dynamically-sized array of `Proposal` structs.</span>
+<span class="w">    </span>Proposal<span class="p">[]</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>proposals<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Create a new ballot to choose one of `proposalNames`.</span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="kt">bytes32</span><span class="p">[]</span><span class="w"> </span><span class="kt">memory</span><span class="w"> </span>proposalNames<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>chairperson<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>voters<span class="p">[</span>chairperson<span class="p">].</span>weight<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// For each of the provided proposal names,</span>
+<span class="w">        </span><span class="c1">// create a new proposal object and add it</span>
+<span class="w">        </span><span class="c1">// to the end of the array.</span>
+<span class="w">        </span><span class="kt">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"> </span>i<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>proposalNames<span class="p">.</span>length<span class="p">;</span><span class="w"> </span>i<span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// `Proposal({...})` creates a temporary</span>
+<span class="w">            </span><span class="c1">// Proposal object and `proposals.push(...)`</span>
+<span class="w">            </span><span class="c1">// appends it to the end of `proposals`.</span>
+<span class="w">            </span>proposals<span class="p">.</span>push<span class="p">(</span>Proposal<span class="p">({</span><span class="w"></span>
+<span class="w">                </span>name<span class="p">:</span><span class="w"> </span>proposalNames<span class="p">[</span>i<span class="p">],</span><span class="w"></span>
+<span class="w">                </span>voteCount<span class="p">:</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="w"></span>
+<span class="w">            </span><span class="p">}));</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Give `voter` the right to vote on this ballot.</span>
+<span class="w">    </span><span class="c1">// May only be called by `chairperson`.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">giveRightToVote</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">voter</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// If the first argument of `require` evaluates</span>
+<span class="w">        </span><span class="c1">// to `false`, execution terminates and all</span>
+<span class="w">        </span><span class="c1">// changes to the state and to Ether balances</span>
+<span class="w">        </span><span class="c1">// are reverted.</span>
+<span class="w">        </span><span class="c1">// This used to consume all gas in old EVM versions, but</span>
+<span class="w">        </span><span class="c1">// not anymore.</span>
+<span class="w">        </span><span class="c1">// It is often a good idea to use `require` to check if</span>
+<span class="w">        </span><span class="c1">// functions are called correctly.</span>
+<span class="w">        </span><span class="c1">// As a second argument, you can also provide an</span>
+<span class="w">        </span><span class="c1">// explanation about what went wrong.</span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>chairperson<span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;Only chairperson can give right to vote.&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="o">!</span>voters<span class="p">[</span>voter<span class="p">].</span>voted<span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;The voter already voted.&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>voters<span class="p">[</span>voter<span class="p">].</span>weight<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>voters<span class="p">[</span>voter<span class="p">].</span>weight<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Delegate your vote to the voter `to`.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">delegate</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// assigns reference</span>
+<span class="w">        </span>Voter<span class="w"> </span>storage<span class="w"> </span>sender<span class="w"> </span><span class="o">=</span><span class="w"> </span>voters<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="o">!</span>sender<span class="p">.</span>voted<span class="p">,</span><span class="w"> </span><span class="s2">&quot;You already voted.&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>to<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Self-delegation is disallowed.&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Forward the delegation as long as</span>
+<span class="w">        </span><span class="c1">// `to` also delegated.</span>
+<span class="w">        </span><span class="c1">// In general, such loops are very dangerous,</span>
+<span class="w">        </span><span class="c1">// because if they run too long, they might</span>
+<span class="w">        </span><span class="c1">// need more gas than is available in a block.</span>
+<span class="w">        </span><span class="c1">// In this case, the delegation will not be executed,</span>
+<span class="w">        </span><span class="c1">// but in other situations, such loops might</span>
+<span class="w">        </span><span class="c1">// cause a contract to get &quot;stuck&quot; completely.</span>
+<span class="w">        </span><span class="kt">while</span><span class="w"> </span><span class="p">(</span>voters<span class="p">[</span>to<span class="p">].</span>delegate<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kt">address</span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>to<span class="w"> </span><span class="o">=</span><span class="w"> </span>voters<span class="p">[</span>to<span class="p">].</span>delegate<span class="p">;</span><span class="w"></span>
+
+<span class="w">            </span><span class="c1">// We found a loop in the delegation, not allowed.</span>
+<span class="w">            </span><span class="kt">require</span><span class="p">(</span>to<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Found loop in delegation.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Since `sender` is a reference, this</span>
+<span class="w">        </span><span class="c1">// modifies `voters[msg.sender].voted`</span>
+<span class="w">        </span>sender<span class="p">.</span>voted<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>sender<span class="p">.</span>delegate<span class="w"> </span><span class="o">=</span><span class="w"> </span>to<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>Voter<span class="w"> </span>storage<span class="w"> </span>delegate_<span class="w"> </span><span class="o">=</span><span class="w"> </span>voters<span class="p">[</span>to<span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>delegate_<span class="p">.</span>voted<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// If the delegate already voted,</span>
+<span class="w">            </span><span class="c1">// directly add to the number of votes</span>
+<span class="w">            </span>proposals<span class="p">[</span>delegate_<span class="p">.</span>vote<span class="p">].</span>voteCount<span class="w"> </span><span class="o">+=</span><span class="w"> </span>sender<span class="p">.</span>weight<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="kt">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// If the delegate did not vote yet,</span>
+<span class="w">            </span><span class="c1">// add to her weight.</span>
+<span class="w">            </span>delegate_<span class="p">.</span>weight<span class="w"> </span><span class="o">+=</span><span class="w"> </span>sender<span class="p">.</span>weight<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Give your vote (including votes delegated to you)</span>
+<span class="w">    </span><span class="c1">/// to proposal `proposals[proposal].name`.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">vote</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">proposal</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>Voter<span class="w"> </span>storage<span class="w"> </span>sender<span class="w"> </span><span class="o">=</span><span class="w"> </span>voters<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>sender<span class="p">.</span>weight<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Has no right to vote&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="o">!</span>sender<span class="p">.</span>voted<span class="p">,</span><span class="w"> </span><span class="s2">&quot;Already voted.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>sender<span class="p">.</span>voted<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>sender<span class="p">.</span>vote<span class="w"> </span><span class="o">=</span><span class="w"> </span>proposal<span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// If `proposal` is out of the range of the array,</span>
+<span class="w">        </span><span class="c1">// this will throw automatically and revert all</span>
+<span class="w">        </span><span class="c1">// changes.</span>
+<span class="w">        </span>proposals<span class="p">[</span>proposal<span class="p">].</span>voteCount<span class="w"> </span><span class="o">+=</span><span class="w"> </span>sender<span class="p">.</span>weight<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// @dev Computes the winning proposal taking all</span>
+<span class="w">    </span><span class="c1">/// previous votes into account.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">winningProposal</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>view<span class="w"></span>
+<span class="w">            </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">winningProposal_</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">winningVoteCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"> </span>p<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>proposals<span class="p">.</span>length<span class="p">;</span><span class="w"> </span>p<span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>proposals<span class="p">[</span>p<span class="p">].</span>voteCount<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span>winningVoteCount<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span>winningVoteCount<span class="w"> </span><span class="o">=</span><span class="w"> </span>proposals<span class="p">[</span>p<span class="p">].</span>voteCount<span class="p">;</span><span class="w"></span>
+<span class="w">                </span>winningProposal_<span class="w"> </span><span class="o">=</span><span class="w"> </span>p<span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Calls winningProposal() function to get the index</span>
+<span class="w">    </span><span class="c1">// of the winner contained in the proposals array and then</span>
+<span class="w">    </span><span class="c1">// returns the name of the winner</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">winnerName</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"></span>
+<span class="w">            </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">winnerName_</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>winnerName_<span class="w"> </span><span class="o">=</span><span class="w"> </span>proposals<span class="p">[</span>winningProposal<span class="p">()].</span>name<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="id3">
+<h3>بهبودهای احتمالی<a class="headerlink" href="#id3" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>در حال حاضر، تراکنش‌ها زیادی برای واگذاری حق رأی به همه شرکت کنندگان مورد نیاز است. آیا می‌توانید به راه بهتری فکر کنید؟</p>
+</section>
+</section>
+<section id="index-1">
+<span id="id4"></span><h2>مزایده کور<a class="headerlink" href="#index-1" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>در این بخش، نشان خواهیم داد که ایجاد یک قرارداد حراجِ کاملا کور  در اتریوم چقدر آسان است. ما با یک مزایده باز  شروع می‌کنیم که در آن همه می‌توانند پیشنهادات  ارائه شده را ببینند و سپس این قرارداد را به حراج کور توسعه می‌دهیم که در آن امکان مشاهده پیشنهاد واقعی تا زمان پایان مناقصه وجود ندارد.</p>
+<section id="simple-auction">
+<span id="id5"></span><h3>مزایده باز ساده<a class="headerlink" href="#simple-auction" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>ایده‌ی کلی قرارداد مزایده ساده  زیر این است که همه می‌توانند پیشنهادات خود را در طول یک دوره مناقصه  ارسال کنند. پیشنهادات در حال حاضر شامل ارسال پول/ اتر  به منظور متصل کردن مناقصه‌گرانِ  مناقصه به پیشنهاد آنها است. اگر بالاترین پیشنهاد  افزایش یابد، مناقصه‌گران قبلی پول خود را پس می‌گیرد. پس از پایان دوره مناقصه، قرارداد باید به صورت دستی فراخوانده شود تا ذینفع پول خود را دریافت کند- قراردادها نمی‌توانند خودشان فعال شوند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKY29udHJhY3QgU2ltcGxlQXVjdGlvbiB7CiAgICAvLyBQYXJhbWV0ZXJzIG9mIHRoZSBhdWN0aW9uLiBUaW1lcyBhcmUgZWl0aGVyCiAgICAvLyBhYnNvbHV0ZSB1bml4IHRpbWVzdGFtcHMgKHNlY29uZHMgc2luY2UgMTk3MC0wMS0wMSkKICAgIC8vIG9yIHRpbWUgcGVyaW9kcyBpbiBzZWNvbmRzLgogICAgYWRkcmVzcyBwYXlhYmxlIHB1YmxpYyBiZW5lZmljaWFyeTsKICAgIHVpbnQgcHVibGljIGF1Y3Rpb25FbmRUaW1lOwoKICAgIC8vIEN1cnJlbnQgc3RhdGUgb2YgdGhlIGF1Y3Rpb24uCiAgICBhZGRyZXNzIHB1YmxpYyBoaWdoZXN0QmlkZGVyOwogICAgdWludCBwdWJsaWMgaGlnaGVzdEJpZDsKCiAgICAvLyBBbGxvd2VkIHdpdGhkcmF3YWxzIG9mIHByZXZpb3VzIGJpZHMKICAgIG1hcHBpbmcoYWRkcmVzcyA9PiB1aW50KSBwZW5kaW5nUmV0dXJuczsKCiAgICAvLyBTZXQgdG8gdHJ1ZSBhdCB0aGUgZW5kLCBkaXNhbGxvd3MgYW55IGNoYW5nZS4KICAgIC8vIEJ5IGRlZmF1bHQgaW5pdGlhbGl6ZWQgdG8gYGZhbHNlYC4KICAgIGJvb2wgZW5kZWQ7CgogICAgLy8gRXZlbnRzIHRoYXQgd2lsbCBiZSBlbWl0dGVkIG9uIGNoYW5nZXMuCiAgICBldmVudCBIaWdoZXN0QmlkSW5jcmVhc2VkKGFkZHJlc3MgYmlkZGVyLCB1aW50IGFtb3VudCk7CiAgICBldmVudCBBdWN0aW9uRW5kZWQoYWRkcmVzcyB3aW5uZXIsIHVpbnQgYW1vdW50KTsKCiAgICAvLyBFcnJvcnMgdGhhdCBkZXNjcmliZSBmYWlsdXJlcy4KCiAgICAvLyBUaGUgdHJpcGxlLXNsYXNoIGNvbW1lbnRzIGFyZSBzby1jYWxsZWQgbmF0c3BlYwogICAgLy8gY29tbWVudHMuIFRoZXkgd2lsbCBiZSBzaG93biB3aGVuIHRoZSB1c2VyCiAgICAvLyBpcyBhc2tlZCB0byBjb25maXJtIGEgdHJhbnNhY3Rpb24gb3IKICAgIC8vIHdoZW4gYW4gZXJyb3IgaXMgZGlzcGxheWVkLgoKICAgIC8vLyBUaGUgYXVjdGlvbiBoYXMgYWxyZWFkeSBlbmRlZC4KICAgIGVycm9yIEF1Y3Rpb25BbHJlYWR5RW5kZWQoKTsKICAgIC8vLyBUaGVyZSBpcyBhbHJlYWR5IGEgaGlnaGVyIG9yIGVxdWFsIGJpZC4KICAgIGVycm9yIEJpZE5vdEhpZ2hFbm91Z2godWludCBoaWdoZXN0QmlkKTsKICAgIC8vLyBUaGUgYXVjdGlvbiBoYXMgbm90IGVuZGVkIHlldC4KICAgIGVycm9yIEF1Y3Rpb25Ob3RZZXRFbmRlZCgpOwogICAgLy8vIFRoZSBmdW5jdGlvbiBhdWN0aW9uRW5kIGhhcyBhbHJlYWR5IGJlZW4gY2FsbGVkLgogICAgZXJyb3IgQXVjdGlvbkVuZEFscmVhZHlDYWxsZWQoKTsKCiAgICAvLy8gQ3JlYXRlIGEgc2ltcGxlIGF1Y3Rpb24gd2l0aCBgYmlkZGluZ1RpbWVgCiAgICAvLy8gc2Vjb25kcyBiaWRkaW5nIHRpbWUgb24gYmVoYWxmIG9mIHRoZQogICAgLy8vIGJlbmVmaWNpYXJ5IGFkZHJlc3MgYGJlbmVmaWNpYXJ5QWRkcmVzc2AuCiAgICBjb25zdHJ1Y3RvcigKICAgICAgICB1aW50IGJpZGRpbmdUaW1lLAogICAgICAgIGFkZHJlc3MgcGF5YWJsZSBiZW5lZmljaWFyeUFkZHJlc3MKICAgICkgewogICAgICAgIGJlbmVmaWNpYXJ5ID0gYmVuZWZpY2lhcnlBZGRyZXNzOwogICAgICAgIGF1Y3Rpb25FbmRUaW1lID0gYmxvY2sudGltZXN0YW1wICsgYmlkZGluZ1RpbWU7CiAgICB9CgogICAgLy8vIEJpZCBvbiB0aGUgYXVjdGlvbiB3aXRoIHRoZSB2YWx1ZSBzZW50CiAgICAvLy8gdG9nZXRoZXIgd2l0aCB0aGlzIHRyYW5zYWN0aW9uLgogICAgLy8vIFRoZSB2YWx1ZSB3aWxsIG9ubHkgYmUgcmVmdW5kZWQgaWYgdGhlCiAgICAvLy8gYXVjdGlvbiBpcyBub3Qgd29uLgogICAgZnVuY3Rpb24gYmlkKCkgZXh0ZXJuYWwgcGF5YWJsZSB7CiAgICAgICAgLy8gTm8gYXJndW1lbnRzIGFyZSBuZWNlc3NhcnksIGFsbAogICAgICAgIC8vIGluZm9ybWF0aW9uIGlzIGFscmVhZHkgcGFydCBvZgogICAgICAgIC8vIHRoZSB0cmFuc2FjdGlvbi4gVGhlIGtleXdvcmQgcGF5YWJsZQogICAgICAgIC8vIGlzIHJlcXVpcmVkIGZvciB0aGUgZnVuY3Rpb24gdG8KICAgICAgICAvLyBiZSBhYmxlIHRvIHJlY2VpdmUgRXRoZXIuCgogICAgICAgIC8vIFJldmVydCB0aGUgY2FsbCBpZiB0aGUgYmlkZGluZwogICAgICAgIC8vIHBlcmlvZCBpcyBvdmVyLgogICAgICAgIGlmIChibG9jay50aW1lc3RhbXAgPiBhdWN0aW9uRW5kVGltZSkKICAgICAgICAgICAgcmV2ZXJ0IEF1Y3Rpb25BbHJlYWR5RW5kZWQoKTsKCiAgICAgICAgLy8gSWYgdGhlIGJpZCBpcyBub3QgaGlnaGVyLCBzZW5kIHRoZQogICAgICAgIC8vIG1vbmV5IGJhY2sgKHRoZSByZXZlcnQgc3RhdGVtZW50CiAgICAgICAgLy8gd2lsbCByZXZlcnQgYWxsIGNoYW5nZXMgaW4gdGhpcwogICAgICAgIC8vIGZ1bmN0aW9uIGV4ZWN1dGlvbiBpbmNsdWRpbmcKICAgICAgICAvLyBpdCBoYXZpbmcgcmVjZWl2ZWQgdGhlIG1vbmV5KS4KICAgICAgICBpZiAobXNnLnZhbHVlIDw9IGhpZ2hlc3RCaWQpCiAgICAgICAgICAgIHJldmVydCBCaWROb3RIaWdoRW5vdWdoKGhpZ2hlc3RCaWQpOwoKICAgICAgICBpZiAoaGlnaGVzdEJpZCAhPSAwKSB7CiAgICAgICAgICAgIC8vIFNlbmRpbmcgYmFjayB0aGUgbW9uZXkgYnkgc2ltcGx5IHVzaW5nCiAgICAgICAgICAgIC8vIGhpZ2hlc3RCaWRkZXIuc2VuZChoaWdoZXN0QmlkKSBpcyBhIHNlY3VyaXR5IHJpc2sKICAgICAgICAgICAgLy8gYmVjYXVzZSBpdCBjb3VsZCBleGVjdXRlIGFuIHVudHJ1c3RlZCBjb250cmFjdC4KICAgICAgICAgICAgLy8gSXQgaXMgYWx3YXlzIHNhZmVyIHRvIGxldCB0aGUgcmVjaXBpZW50cwogICAgICAgICAgICAvLyB3aXRoZHJhdyB0aGVpciBtb25leSB0aGVtc2VsdmVzLgogICAgICAgICAgICBwZW5kaW5nUmV0dXJuc1toaWdoZXN0QmlkZGVyXSArPSBoaWdoZXN0QmlkOwogICAgICAgIH0KICAgICAgICBoaWdoZXN0QmlkZGVyID0gbXNnLnNlbmRlcjsKICAgICAgICBoaWdoZXN0QmlkID0gbXNnLnZhbHVlOwogICAgICAgIGVtaXQgSGlnaGVzdEJpZEluY3JlYXNlZChtc2cuc2VuZGVyLCBtc2cudmFsdWUpOwogICAgfQoKICAgIC8vLyBXaXRoZHJhdyBhIGJpZCB0aGF0IHdhcyBvdmVyYmlkLgogICAgZnVuY3Rpb24gd2l0aGRyYXcoKSBleHRlcm5hbCByZXR1cm5zIChib29sKSB7CiAgICAgICAgdWludCBhbW91bnQgPSBwZW5kaW5nUmV0dXJuc1ttc2cuc2VuZGVyXTsKICAgICAgICBpZiAoYW1vdW50ID4gMCkgewogICAgICAgICAgICAvLyBJdCBpcyBpbXBvcnRhbnQgdG8gc2V0IHRoaXMgdG8gemVybyBiZWNhdXNlIHRoZSByZWNpcGllbnQKICAgICAgICAgICAgLy8gY2FuIGNhbGwgdGhpcyBmdW5jdGlvbiBhZ2FpbiBhcyBwYXJ0IG9mIHRoZSByZWNlaXZpbmcgY2FsbAogICAgICAgICAgICAvLyBiZWZvcmUgYHNlbmRgIHJldHVybnMuCiAgICAgICAgICAgIHBlbmRpbmdSZXR1cm5zW21zZy5zZW5kZXJdID0gMDsKCiAgICAgICAgICAgIGlmICghcGF5YWJsZShtc2cuc2VuZGVyKS5zZW5kKGFtb3VudCkpIHsKICAgICAgICAgICAgICAgIC8vIE5vIG5lZWQgdG8gY2FsbCB0aHJvdyBoZXJlLCBqdXN0IHJlc2V0IHRoZSBhbW91bnQgb3dpbmcKICAgICAgICAgICAgICAgIHBlbmRpbmdSZXR1cm5zW21zZy5zZW5kZXJdID0gYW1vdW50OwogICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiB0cnVlOwogICAgfQoKICAgIC8vLyBFbmQgdGhlIGF1Y3Rpb24gYW5kIHNlbmQgdGhlIGhpZ2hlc3QgYmlkCiAgICAvLy8gdG8gdGhlIGJlbmVmaWNpYXJ5LgogICAgZnVuY3Rpb24gYXVjdGlvbkVuZCgpIGV4dGVybmFsIHsKICAgICAgICAvLyBJdCBpcyBhIGdvb2QgZ3VpZGVsaW5lIHRvIHN0cnVjdHVyZSBmdW5jdGlvbnMgdGhhdCBpbnRlcmFjdAogICAgICAgIC8vIHdpdGggb3RoZXIgY29udHJhY3RzIChpLmUuIHRoZXkgY2FsbCBmdW5jdGlvbnMgb3Igc2VuZCBFdGhlcikKICAgICAgICAvLyBpbnRvIHRocmVlIHBoYXNlczoKICAgICAgICAvLyAxLiBjaGVja2luZyBjb25kaXRpb25zCiAgICAgICAgLy8gMi4gcGVyZm9ybWluZyBhY3Rpb25zIChwb3RlbnRpYWxseSBjaGFuZ2luZyBjb25kaXRpb25zKQogICAgICAgIC8vIDMuIGludGVyYWN0aW5nIHdpdGggb3RoZXIgY29udHJhY3RzCiAgICAgICAgLy8gSWYgdGhlc2UgcGhhc2VzIGFyZSBtaXhlZCB1cCwgdGhlIG90aGVyIGNvbnRyYWN0IGNvdWxkIGNhbGwKICAgICAgICAvLyBiYWNrIGludG8gdGhlIGN1cnJlbnQgY29udHJhY3QgYW5kIG1vZGlmeSB0aGUgc3RhdGUgb3IgY2F1c2UKICAgICAgICAvLyBlZmZlY3RzIChldGhlciBwYXlvdXQpIHRvIGJlIHBlcmZvcm1lZCBtdWx0aXBsZSB0aW1lcy4KICAgICAgICAvLyBJZiBmdW5jdGlvbnMgY2FsbGVkIGludGVybmFsbHkgaW5jbHVkZSBpbnRlcmFjdGlvbiB3aXRoIGV4dGVybmFsCiAgICAgICAgLy8gY29udHJhY3RzLCB0aGV5IGFsc28gaGF2ZSB0byBiZSBjb25zaWRlcmVkIGludGVyYWN0aW9uIHdpdGgKICAgICAgICAvLyBleHRlcm5hbCBjb250cmFjdHMuCgogICAgICAgIC8vIDEuIENvbmRpdGlvbnMKICAgICAgICBpZiAoYmxvY2sudGltZXN0YW1wIDwgYXVjdGlvbkVuZFRpbWUpCiAgICAgICAgICAgIHJldmVydCBBdWN0aW9uTm90WWV0RW5kZWQoKTsKICAgICAgICBpZiAoZW5kZWQpCiAgICAgICAgICAgIHJldmVydCBBdWN0aW9uRW5kQWxyZWFkeUNhbGxlZCgpOwoKICAgICAgICAvLyAyLiBFZmZlY3RzCiAgICAgICAgZW5kZWQgPSB0cnVlOwogICAgICAgIGVtaXQgQXVjdGlvbkVuZGVkKGhpZ2hlc3RCaWRkZXIsIGhpZ2hlc3RCaWQpOwoKICAgICAgICAvLyAzLiBJbnRlcmFjdGlvbgogICAgICAgIGJlbmVmaWNpYXJ5LnRyYW5zZmVyKGhpZ2hlc3RCaWQpOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimpleAuction</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Parameters of the auction. Times are either</span>
+<span class="w">    </span><span class="c1">// absolute unix timestamps (seconds since 1970-01-01)</span>
+<span class="w">    </span><span class="c1">// or time periods in seconds.</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>beneficiary<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">auctionEndTime</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Current state of the auction.</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">highestBidder</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">highestBid</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Allowed withdrawals of previous bids</span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>pendingReturns<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Set to true at the end, disallows any change.</span>
+<span class="w">    </span><span class="c1">// By default initialized to `false`.</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nv">ended</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Events that will be emitted on changes.</span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">HighestBidIncreased</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">bidder</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">AuctionEnded</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">winner</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Errors that describe failures.</span>
+
+<span class="w">    </span><span class="c1">// The triple-slash comments are so-called natspec</span>
+<span class="w">    </span><span class="c1">// comments. They will be shown when the user</span>
+<span class="w">    </span><span class="c1">// is asked to confirm a transaction or</span>
+<span class="w">    </span><span class="c1">// when an error is displayed.</span>
+
+<span class="w">    </span><span class="c1">/// The auction has already ended.</span>
+<span class="w">    </span>error<span class="w"> </span>AuctionAlreadyEnded<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// There is already a higher or equal bid.</span>
+<span class="w">    </span>error<span class="w"> </span>BidNotHighEnough<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">highestBid</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The auction has not ended yet.</span>
+<span class="w">    </span>error<span class="w"> </span>AuctionNotYetEnded<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The function auctionEnd has already been called.</span>
+<span class="w">    </span>error<span class="w"> </span>AuctionEndAlreadyCalled<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Create a simple auction with `biddingTime`</span>
+<span class="w">    </span><span class="c1">/// seconds bidding time on behalf of the</span>
+<span class="w">    </span><span class="c1">/// beneficiary address `beneficiaryAddress`.</span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">biddingTime</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span>beneficiaryAddress<span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>beneficiary<span class="w"> </span><span class="o">=</span><span class="w"> </span>beneficiaryAddress<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>auctionEndTime<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>biddingTime<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Bid on the auction with the value sent</span>
+<span class="w">    </span><span class="c1">/// together with this transaction.</span>
+<span class="w">    </span><span class="c1">/// The value will only be refunded if the</span>
+<span class="w">    </span><span class="c1">/// auction is not won.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bid</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// No arguments are necessary, all</span>
+<span class="w">        </span><span class="c1">// information is already part of</span>
+<span class="w">        </span><span class="c1">// the transaction. The keyword payable</span>
+<span class="w">        </span><span class="c1">// is required for the function to</span>
+<span class="w">        </span><span class="c1">// be able to receive Ether.</span>
+
+<span class="w">        </span><span class="c1">// Revert the call if the bidding</span>
+<span class="w">        </span><span class="c1">// period is over.</span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span>auctionEndTime<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>AuctionAlreadyEnded<span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// If the bid is not higher, send the</span>
+<span class="w">        </span><span class="c1">// money back (the revert statement</span>
+<span class="w">        </span><span class="c1">// will revert all changes in this</span>
+<span class="w">        </span><span class="c1">// function execution including</span>
+<span class="w">        </span><span class="c1">// it having received the money).</span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>highestBid<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>BidNotHighEnough<span class="p">(</span>highestBid<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>highestBid<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Sending back the money by simply using</span>
+<span class="w">            </span><span class="c1">// highestBidder.send(highestBid) is a security risk</span>
+<span class="w">            </span><span class="c1">// because it could execute an untrusted contract.</span>
+<span class="w">            </span><span class="c1">// It is always safer to let the recipients</span>
+<span class="w">            </span><span class="c1">// withdraw their money themselves.</span>
+<span class="w">            </span>pendingReturns<span class="p">[</span>highestBidder<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>highestBid<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span>highestBidder<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>highestBid<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>HighestBidIncreased<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span><span class="k">msg.value</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Withdraw a bid that was overbid.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pendingReturns<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>amount<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// It is important to set this to zero because the recipient</span>
+<span class="w">            </span><span class="c1">// can call this function again as part of the receiving call</span>
+<span class="w">            </span><span class="c1">// before `send` returns.</span>
+<span class="w">            </span>pendingReturns<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">            </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>send<span class="p">(</span>amount<span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="c1">// No need to call throw here, just reset the amount owing</span>
+<span class="w">                </span>pendingReturns<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="kt">return</span><span class="w"> </span><span class="kt">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// End the auction and send the highest bid</span>
+<span class="w">    </span><span class="c1">/// to the beneficiary.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">auctionEnd</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// It is a good guideline to structure functions that interact</span>
+<span class="w">        </span><span class="c1">// with other contracts (i.e. they call functions or send Ether)</span>
+<span class="w">        </span><span class="c1">// into three phases:</span>
+<span class="w">        </span><span class="c1">// 1. checking conditions</span>
+<span class="w">        </span><span class="c1">// 2. performing actions (potentially changing conditions)</span>
+<span class="w">        </span><span class="c1">// 3. interacting with other contracts</span>
+<span class="w">        </span><span class="c1">// If these phases are mixed up, the other contract could call</span>
+<span class="w">        </span><span class="c1">// back into the current contract and modify the state or cause</span>
+<span class="w">        </span><span class="c1">// effects (ether payout) to be performed multiple times.</span>
+<span class="w">        </span><span class="c1">// If functions called internally include interaction with external</span>
+<span class="w">        </span><span class="c1">// contracts, they also have to be considered interaction with</span>
+<span class="w">        </span><span class="c1">// external contracts.</span>
+
+<span class="w">        </span><span class="c1">// 1. Conditions</span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>auctionEndTime<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>AuctionNotYetEnded<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>ended<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>AuctionEndAlreadyCalled<span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// 2. Effects</span>
+<span class="w">        </span>ended<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>AuctionEnded<span class="p">(</span>highestBidder<span class="p">,</span><span class="w"> </span>highestBid<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// 3. Interaction</span>
+<span class="w">        </span>beneficiary<span class="p">.</span>transfer<span class="p">(</span>highestBid<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>مزایده کور<a class="headerlink" href="#id6" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>مزایده باز  قبلی در ادامه به مزایده کور  توسعه یافته‌است. مزیت مزایده کور این است که هیچ گونه فشار زمانی نسبت به پایان دوره مناقصه  وجود ندارد. ایجاد مزایده کور بر روی یک پلتفرم محاسباتی شفاف ممکن است متناقض به نظر برسد، اما رمزنگاری به کمک شما می‌آید.</p>
+<p>در طول دوره مناقصه، <strong>یک پیشنهاد دهنده</strong> در واقع پیشنهاد  خود را ارسال نمی‌کند، بلکه فقط یک نسخه هش شده از آن را ارسال می‌کند. از آنجا که در حال حاضر یافتن دو مقدار (به اندازه کافی طولانی) که مقادیر هش آنها برابر باشد، عملاً غیرممکن تلقی می‌شود، مناقصه‌گر  با این کار متعهد به مناقصه می‌شود. پس از پایان دوره مناقصه، مناقصه‌گران باید پیشنهادات خود را آشکار کنند: آنها مقادیر خود را بدون رمزگذاری ارسال می‌کنند و قرارداد بررسی می‌کند که مقدار هش همان مقدار ارائه شده در دوره مناقصه است.</p>
+<p>چالش دیگر این است که چگونه مزایده را به طور همزمان <strong>اجباری و پنهان یا کور</strong> جلوه دهید: تنها راه جلوگیری از ارسال نکردن مبلغ توسط داوطلب پس از برنده شدن در مزایده، ارسال آنها به همراه پیشنهاد است. از آنجا که انتقال مقدار در اتریوم  پنهان یا کور نمی‌شود، هر کسی می‌تواند مقدار را ببیند.</p>
+<blockquote>
+<div><p>قرارداد زیر با قبول هر مقداری که بزرگتر از بالاترین پیشنهاد  باشد، این مشکل را حل می‌کند. از آنجایی که این فقط در مرحله آشکار شدن قابل بررسی است، ممکن است برخی از پیشنهادات نامعتبر باشند، و این هدفمند است (حتی یک فلَگ  صریح برای قرار دادن پیشنهادات <strong>نامعتبر</strong> با انتقال مقدار بالا ارائه می‌دهد): مناقصه‌گران  با قرار دادن چند پیشنهاد زیاد یا کم اعتبار، می‌توانند رقابت را  مختل کنند.</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKY29udHJhY3QgQmxpbmRBdWN0aW9uIHsKICAgIHN0cnVjdCBCaWQgewogICAgICAgIGJ5dGVzMzIgYmxpbmRlZEJpZDsKICAgICAgICB1aW50IGRlcG9zaXQ7CiAgICB9CgogICAgYWRkcmVzcyBwYXlhYmxlIHB1YmxpYyBiZW5lZmljaWFyeTsKICAgIHVpbnQgcHVibGljIGJpZGRpbmdFbmQ7CiAgICB1aW50IHB1YmxpYyByZXZlYWxFbmQ7CiAgICBib29sIHB1YmxpYyBlbmRlZDsKCiAgICBtYXBwaW5nKGFkZHJlc3MgPT4gQmlkW10pIHB1YmxpYyBiaWRzOwoKICAgIGFkZHJlc3MgcHVibGljIGhpZ2hlc3RCaWRkZXI7CiAgICB1aW50IHB1YmxpYyBoaWdoZXN0QmlkOwoKICAgIC8vIEFsbG93ZWQgd2l0aGRyYXdhbHMgb2YgcHJldmlvdXMgYmlkcwogICAgbWFwcGluZyhhZGRyZXNzID0+IHVpbnQpIHBlbmRpbmdSZXR1cm5zOwoKICAgIGV2ZW50IEF1Y3Rpb25FbmRlZChhZGRyZXNzIHdpbm5lciwgdWludCBoaWdoZXN0QmlkKTsKCiAgICAvLyBFcnJvcnMgdGhhdCBkZXNjcmliZSBmYWlsdXJlcy4KCiAgICAvLy8gVGhlIGZ1bmN0aW9uIGhhcyBiZWVuIGNhbGxlZCB0b28gZWFybHkuCiAgICAvLy8gVHJ5IGFnYWluIGF0IGB0aW1lYC4KICAgIGVycm9yIFRvb0Vhcmx5KHVpbnQgdGltZSk7CiAgICAvLy8gVGhlIGZ1bmN0aW9uIGhhcyBiZWVuIGNhbGxlZCB0b28gbGF0ZS4KICAgIC8vLyBJdCBjYW5ub3QgYmUgY2FsbGVkIGFmdGVyIGB0aW1lYC4KICAgIGVycm9yIFRvb0xhdGUodWludCB0aW1lKTsKICAgIC8vLyBUaGUgZnVuY3Rpb24gYXVjdGlvbkVuZCBoYXMgYWxyZWFkeSBiZWVuIGNhbGxlZC4KICAgIGVycm9yIEF1Y3Rpb25FbmRBbHJlYWR5Q2FsbGVkKCk7CgogICAgLy8gTW9kaWZpZXJzIGFyZSBhIGNvbnZlbmllbnQgd2F5IHRvIHZhbGlkYXRlIGlucHV0cyB0bwogICAgLy8gZnVuY3Rpb25zLiBgb25seUJlZm9yZWAgaXMgYXBwbGllZCB0byBgYmlkYCBiZWxvdzoKICAgIC8vIFRoZSBuZXcgZnVuY3Rpb24gYm9keSBpcyB0aGUgbW9kaWZpZXIncyBib2R5IHdoZXJlCiAgICAvLyBgX2AgaXMgcmVwbGFjZWQgYnkgdGhlIG9sZCBmdW5jdGlvbiBib2R5LgogICAgbW9kaWZpZXIgb25seUJlZm9yZSh1aW50IHRpbWUpIHsKICAgICAgICBpZiAoYmxvY2sudGltZXN0YW1wID49IHRpbWUpIHJldmVydCBUb29MYXRlKHRpbWUpOwogICAgICAgIF87CiAgICB9CiAgICBtb2RpZmllciBvbmx5QWZ0ZXIodWludCB0aW1lKSB7CiAgICAgICAgaWYgKGJsb2NrLnRpbWVzdGFtcCA8PSB0aW1lKSByZXZlcnQgVG9vRWFybHkodGltZSk7CiAgICAgICAgXzsKICAgIH0KCiAgICBjb25zdHJ1Y3RvcigKICAgICAgICB1aW50IGJpZGRpbmdUaW1lLAogICAgICAgIHVpbnQgcmV2ZWFsVGltZSwKICAgICAgICBhZGRyZXNzIHBheWFibGUgYmVuZWZpY2lhcnlBZGRyZXNzCiAgICApIHsKICAgICAgICBiZW5lZmljaWFyeSA9IGJlbmVmaWNpYXJ5QWRkcmVzczsKICAgICAgICBiaWRkaW5nRW5kID0gYmxvY2sudGltZXN0YW1wICsgYmlkZGluZ1RpbWU7CiAgICAgICAgcmV2ZWFsRW5kID0gYmlkZGluZ0VuZCArIHJldmVhbFRpbWU7CiAgICB9CgogICAgLy8vIFBsYWNlIGEgYmxpbmRlZCBiaWQgd2l0aCBgYmxpbmRlZEJpZGAgPQogICAgLy8vIGtlY2NhazI1NihhYmkuZW5jb2RlUGFja2VkKHZhbHVlLCBmYWtlLCBzZWNyZXQpKS4KICAgIC8vLyBUaGUgc2VudCBldGhlciBpcyBvbmx5IHJlZnVuZGVkIGlmIHRoZSBiaWQgaXMgY29ycmVjdGx5CiAgICAvLy8gcmV2ZWFsZWQgaW4gdGhlIHJldmVhbGluZyBwaGFzZS4gVGhlIGJpZCBpcyB2YWxpZCBpZiB0aGUKICAgIC8vLyBldGhlciBzZW50IHRvZ2V0aGVyIHdpdGggdGhlIGJpZCBpcyBhdCBsZWFzdCAidmFsdWUiIGFuZAogICAgLy8vICJmYWtlIiBpcyBub3QgdHJ1ZS4gU2V0dGluZyAiZmFrZSIgdG8gdHJ1ZSBhbmQgc2VuZGluZwogICAgLy8vIG5vdCB0aGUgZXhhY3QgYW1vdW50IGFyZSB3YXlzIHRvIGhpZGUgdGhlIHJlYWwgYmlkIGJ1dAogICAgLy8vIHN0aWxsIG1ha2UgdGhlIHJlcXVpcmVkIGRlcG9zaXQuIFRoZSBzYW1lIGFkZHJlc3MgY2FuCiAgICAvLy8gcGxhY2UgbXVsdGlwbGUgYmlkcy4KICAgIGZ1bmN0aW9uIGJpZChieXRlczMyIGJsaW5kZWRCaWQpCiAgICAgICAgZXh0ZXJuYWwKICAgICAgICBwYXlhYmxlCiAgICAgICAgb25seUJlZm9yZShiaWRkaW5nRW5kKQogICAgewogICAgICAgIGJpZHNbbXNnLnNlbmRlcl0ucHVzaChCaWQoewogICAgICAgICAgICBibGluZGVkQmlkOiBibGluZGVkQmlkLAogICAgICAgICAgICBkZXBvc2l0OiBtc2cudmFsdWUKICAgICAgICB9KSk7CiAgICB9CgogICAgLy8vIFJldmVhbCB5b3VyIGJsaW5kZWQgYmlkcy4gWW91IHdpbGwgZ2V0IGEgcmVmdW5kIGZvciBhbGwKICAgIC8vLyBjb3JyZWN0bHkgYmxpbmRlZCBpbnZhbGlkIGJpZHMgYW5kIGZvciBhbGwgYmlkcyBleGNlcHQgZm9yCiAgICAvLy8gdGhlIHRvdGFsbHkgaGlnaGVzdC4KICAgIGZ1bmN0aW9uIHJldmVhbCgKICAgICAgICB1aW50W10gY2FsbGRhdGEgdmFsdWVzLAogICAgICAgIGJvb2xbXSBjYWxsZGF0YSBmYWtlcywKICAgICAgICBieXRlczMyW10gY2FsbGRhdGEgc2VjcmV0cwogICAgKQogICAgICAgIGV4dGVybmFsCiAgICAgICAgb25seUFmdGVyKGJpZGRpbmdFbmQpCiAgICAgICAgb25seUJlZm9yZShyZXZlYWxFbmQpCiAgICB7CiAgICAgICAgdWludCBsZW5ndGggPSBiaWRzW21zZy5zZW5kZXJdLmxlbmd0aDsKICAgICAgICByZXF1aXJlKHZhbHVlcy5sZW5ndGggPT0gbGVuZ3RoKTsKICAgICAgICByZXF1aXJlKGZha2VzLmxlbmd0aCA9PSBsZW5ndGgpOwogICAgICAgIHJlcXVpcmUoc2VjcmV0cy5sZW5ndGggPT0gbGVuZ3RoKTsKCiAgICAgICAgdWludCByZWZ1bmQ7CiAgICAgICAgZm9yICh1aW50IGkgPSAwOyBpIDwgbGVuZ3RoOyBpKyspIHsKICAgICAgICAgICAgQmlkIHN0b3JhZ2UgYmlkVG9DaGVjayA9IGJpZHNbbXNnLnNlbmRlcl1baV07CiAgICAgICAgICAgICh1aW50IHZhbHVlLCBib29sIGZha2UsIGJ5dGVzMzIgc2VjcmV0KSA9CiAgICAgICAgICAgICAgICAgICAgKHZhbHVlc1tpXSwgZmFrZXNbaV0sIHNlY3JldHNbaV0pOwogICAgICAgICAgICBpZiAoYmlkVG9DaGVjay5ibGluZGVkQmlkICE9IGtlY2NhazI1NihhYmkuZW5jb2RlUGFja2VkKHZhbHVlLCBmYWtlLCBzZWNyZXQpKSkgewogICAgICAgICAgICAgICAgLy8gQmlkIHdhcyBub3QgYWN0dWFsbHkgcmV2ZWFsZWQuCiAgICAgICAgICAgICAgICAvLyBEbyBub3QgcmVmdW5kIGRlcG9zaXQuCiAgICAgICAgICAgICAgICBjb250aW51ZTsKICAgICAgICAgICAgfQogICAgICAgICAgICByZWZ1bmQgKz0gYmlkVG9DaGVjay5kZXBvc2l0OwogICAgICAgICAgICBpZiAoIWZha2UgJiYgYmlkVG9DaGVjay5kZXBvc2l0ID49IHZhbHVlKSB7CiAgICAgICAgICAgICAgICBpZiAocGxhY2VCaWQobXNnLnNlbmRlciwgdmFsdWUpKQogICAgICAgICAgICAgICAgICAgIHJlZnVuZCAtPSB2YWx1ZTsKICAgICAgICAgICAgfQogICAgICAgICAgICAvLyBNYWtlIGl0IGltcG9zc2libGUgZm9yIHRoZSBzZW5kZXIgdG8gcmUtY2xhaW0KICAgICAgICAgICAgLy8gdGhlIHNhbWUgZGVwb3NpdC4KICAgICAgICAgICAgYmlkVG9DaGVjay5ibGluZGVkQmlkID0gYnl0ZXMzMigwKTsKICAgICAgICB9CiAgICAgICAgcGF5YWJsZShtc2cuc2VuZGVyKS50cmFuc2ZlcihyZWZ1bmQpOwogICAgfQoKICAgIC8vLyBXaXRoZHJhdyBhIGJpZCB0aGF0IHdhcyBvdmVyYmlkLgogICAgZnVuY3Rpb24gd2l0aGRyYXcoKSBleHRlcm5hbCB7CiAgICAgICAgdWludCBhbW91bnQgPSBwZW5kaW5nUmV0dXJuc1ttc2cuc2VuZGVyXTsKICAgICAgICBpZiAoYW1vdW50ID4gMCkgewogICAgICAgICAgICAvLyBJdCBpcyBpbXBvcnRhbnQgdG8gc2V0IHRoaXMgdG8gemVybyBiZWNhdXNlIHRoZSByZWNpcGllbnQKICAgICAgICAgICAgLy8gY2FuIGNhbGwgdGhpcyBmdW5jdGlvbiBhZ2FpbiBhcyBwYXJ0IG9mIHRoZSByZWNlaXZpbmcgY2FsbAogICAgICAgICAgICAvLyBiZWZvcmUgYHRyYW5zZmVyYCByZXR1cm5zIChzZWUgdGhlIHJlbWFyayBhYm92ZSBhYm91dAogICAgICAgICAgICAvLyBjb25kaXRpb25zIC0+IGVmZmVjdHMgLT4gaW50ZXJhY3Rpb24pLgogICAgICAgICAgICBwZW5kaW5nUmV0dXJuc1ttc2cuc2VuZGVyXSA9IDA7CgogICAgICAgICAgICBwYXlhYmxlKG1zZy5zZW5kZXIpLnRyYW5zZmVyKGFtb3VudCk7CiAgICAgICAgfQogICAgfQoKICAgIC8vLyBFbmQgdGhlIGF1Y3Rpb24gYW5kIHNlbmQgdGhlIGhpZ2hlc3QgYmlkCiAgICAvLy8gdG8gdGhlIGJlbmVmaWNpYXJ5LgogICAgZnVuY3Rpb24gYXVjdGlvbkVuZCgpCiAgICAgICAgZXh0ZXJuYWwKICAgICAgICBvbmx5QWZ0ZXIocmV2ZWFsRW5kKQogICAgewogICAgICAgIGlmIChlbmRlZCkgcmV2ZXJ0IEF1Y3Rpb25FbmRBbHJlYWR5Q2FsbGVkKCk7CiAgICAgICAgZW1pdCBBdWN0aW9uRW5kZWQoaGlnaGVzdEJpZGRlciwgaGlnaGVzdEJpZCk7CiAgICAgICAgZW5kZWQgPSB0cnVlOwogICAgICAgIGJlbmVmaWNpYXJ5LnRyYW5zZmVyKGhpZ2hlc3RCaWQpOwogICAgfQoKICAgIC8vIFRoaXMgaXMgYW4gImludGVybmFsIiBmdW5jdGlvbiB3aGljaCBtZWFucyB0aGF0IGl0CiAgICAvLyBjYW4gb25seSBiZSBjYWxsZWQgZnJvbSB0aGUgY29udHJhY3QgaXRzZWxmIChvciBmcm9tCiAgICAvLyBkZXJpdmVkIGNvbnRyYWN0cykuCiAgICBmdW5jdGlvbiBwbGFjZUJpZChhZGRyZXNzIGJpZGRlciwgdWludCB2YWx1ZSkgaW50ZXJuYWwKICAgICAgICAgICAgcmV0dXJucyAoYm9vbCBzdWNjZXNzKQogICAgewogICAgICAgIGlmICh2YWx1ZSA8PSBoaWdoZXN0QmlkKSB7CiAgICAgICAgICAgIHJldHVybiBmYWxzZTsKICAgICAgICB9CiAgICAgICAgaWYgKGhpZ2hlc3RCaWRkZXIgIT0gYWRkcmVzcygwKSkgewogICAgICAgICAgICAvLyBSZWZ1bmQgdGhlIHByZXZpb3VzbHkgaGlnaGVzdCBiaWRkZXIuCiAgICAgICAgICAgIHBlbmRpbmdSZXR1cm5zW2hpZ2hlc3RCaWRkZXJdICs9IGhpZ2hlc3RCaWQ7CiAgICAgICAgfQogICAgICAgIGhpZ2hlc3RCaWQgPSB2YWx1ZTsKICAgICAgICBoaWdoZXN0QmlkZGVyID0gYmlkZGVyOwogICAgICAgIHJldHVybiB0cnVlOwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">BlindAuction</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">Bid</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">blindedBid</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">deposit</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>beneficiary<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">biddingEnd</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">revealEnd</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="k">public </span><span class="nv">ended</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>Bid<span class="p">[])</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>bids<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">highestBidder</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">highestBid</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Allowed withdrawals of previous bids</span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>pendingReturns<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">AuctionEnded</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">winner</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">highestBid</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Errors that describe failures.</span>
+
+<span class="w">    </span><span class="c1">/// The function has been called too early.</span>
+<span class="w">    </span><span class="c1">/// Try again at `time`.</span>
+<span class="w">    </span>error<span class="w"> </span>TooEarly<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">time</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The function has been called too late.</span>
+<span class="w">    </span><span class="c1">/// It cannot be called after `time`.</span>
+<span class="w">    </span>error<span class="w"> </span>TooLate<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">time</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The function auctionEnd has already been called.</span>
+<span class="w">    </span>error<span class="w"> </span>AuctionEndAlreadyCalled<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Modifiers are a convenient way to validate inputs to</span>
+<span class="w">    </span><span class="c1">// functions. `onlyBefore` is applied to `bid` below:</span>
+<span class="w">    </span><span class="c1">// The new function body is the modifier&#39;s body where</span>
+<span class="w">    </span><span class="c1">// `_` is replaced by the old function body.</span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyBefore<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">time</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>time<span class="p">)</span><span class="w"> </span>revert<span class="w"> </span>TooLate<span class="p">(</span>time<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyAfter<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">time</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>time<span class="p">)</span><span class="w"> </span>revert<span class="w"> </span>TooEarly<span class="p">(</span>time<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">biddingTime</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">revealTime</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span>beneficiaryAddress<span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>beneficiary<span class="w"> </span><span class="o">=</span><span class="w"> </span>beneficiaryAddress<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>biddingEnd<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>biddingTime<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>revealEnd<span class="w"> </span><span class="o">=</span><span class="w"> </span>biddingEnd<span class="w"> </span><span class="o">+</span><span class="w"> </span>revealTime<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Place a blinded bid with `blindedBid` =</span>
+<span class="w">    </span><span class="c1">/// keccak256(abi.encodePacked(value, fake, secret)).</span>
+<span class="w">    </span><span class="c1">/// The sent ether is only refunded if the bid is correctly</span>
+<span class="w">    </span><span class="c1">/// revealed in the revealing phase. The bid is valid if the</span>
+<span class="w">    </span><span class="c1">/// ether sent together with the bid is at least &quot;value&quot; and</span>
+<span class="w">    </span><span class="c1">/// &quot;fake&quot; is not true. Setting &quot;fake&quot; to true and sending</span>
+<span class="w">    </span><span class="c1">/// not the exact amount are ways to hide the real bid but</span>
+<span class="w">    </span><span class="c1">/// still make the required deposit. The same address can</span>
+<span class="w">    </span><span class="c1">/// place multiple bids.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bid</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">blindedBid</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="w"></span>
+<span class="w">        </span>onlyBefore<span class="p">(</span>biddingEnd<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>bids<span class="p">[</span><span class="k">msg.sender</span><span class="p">].</span>push<span class="p">(</span>Bid<span class="p">({</span><span class="w"></span>
+<span class="w">            </span>blindedBid<span class="p">:</span><span class="w"> </span>blindedBid<span class="p">,</span><span class="w"></span>
+<span class="w">            </span>deposit<span class="p">:</span><span class="w"> </span><span class="k">msg.value</span><span class="w"></span>
+<span class="w">        </span><span class="p">}));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Reveal your blinded bids. You will get a refund for all</span>
+<span class="w">    </span><span class="c1">/// correctly blinded invalid bids and for all bids except for</span>
+<span class="w">    </span><span class="c1">/// the totally highest.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">reveal</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span>calldata<span class="w"> </span>values<span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bool</span><span class="p">[]</span><span class="w"> </span>calldata<span class="w"> </span>fakes<span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bytes32</span><span class="p">[]</span><span class="w"> </span>calldata<span class="w"> </span>secrets<span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>onlyAfter<span class="p">(</span>biddingEnd<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>onlyBefore<span class="p">(</span>revealEnd<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>bids<span class="p">[</span><span class="k">msg.sender</span><span class="p">].</span>length<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>values<span class="p">.</span>length<span class="w"> </span><span class="o">==</span><span class="w"> </span>length<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>fakes<span class="p">.</span>length<span class="w"> </span><span class="o">==</span><span class="w"> </span>length<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>secrets<span class="p">.</span>length<span class="w"> </span><span class="o">==</span><span class="w"> </span>length<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">refund</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"> </span>i<span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>length<span class="p">;</span><span class="w"> </span>i<span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>Bid<span class="w"> </span>storage<span class="w"> </span>bidToCheck<span class="w"> </span><span class="o">=</span><span class="w"> </span>bids<span class="p">[</span><span class="k">msg.sender</span><span class="p">][</span>i<span class="p">];</span><span class="w"></span>
+<span class="w">            </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">value</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">fake</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">secret</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">                    </span><span class="p">(</span>values<span class="p">[</span>i<span class="p">],</span><span class="w"> </span>fakes<span class="p">[</span>i<span class="p">],</span><span class="w"> </span>secrets<span class="p">[</span>i<span class="p">]);</span><span class="w"></span>
+<span class="w">            </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>bidToCheck<span class="p">.</span>blindedBid<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span>value<span class="p">,</span><span class="w"> </span>fake<span class="p">,</span><span class="w"> </span>secret<span class="p">)))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="c1">// Bid was not actually revealed.</span>
+<span class="w">                </span><span class="c1">// Do not refund deposit.</span>
+<span class="w">                </span><span class="kt">continue</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span>refund<span class="w"> </span><span class="o">+=</span><span class="w"> </span>bidToCheck<span class="p">.</span>deposit<span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span>fake<span class="w"> </span><span class="err">&amp;&amp;</span><span class="w"> </span>bidToCheck<span class="p">.</span>deposit<span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>value<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>placeBid<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>value<span class="p">))</span><span class="w"></span>
+<span class="w">                    </span>refund<span class="w"> </span><span class="o">-=</span><span class="w"> </span>value<span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Make it impossible for the sender to re-claim</span>
+<span class="w">            </span><span class="c1">// the same deposit.</span>
+<span class="w">            </span>bidToCheck<span class="p">.</span>blindedBid<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">bytes32</span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span>refund<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Withdraw a bid that was overbid.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pendingReturns<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>amount<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// It is important to set this to zero because the recipient</span>
+<span class="w">            </span><span class="c1">// can call this function again as part of the receiving call</span>
+<span class="w">            </span><span class="c1">// before `transfer` returns (see the remark above about</span>
+<span class="w">            </span><span class="c1">// conditions -&gt; effects -&gt; interaction).</span>
+<span class="w">            </span>pendingReturns<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">            </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// End the auction and send the highest bid</span>
+<span class="w">    </span><span class="c1">/// to the beneficiary.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">auctionEnd</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>onlyAfter<span class="p">(</span>revealEnd<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>ended<span class="p">)</span><span class="w"> </span>revert<span class="w"> </span>AuctionEndAlreadyCalled<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>AuctionEnded<span class="p">(</span>highestBidder<span class="p">,</span><span class="w"> </span>highestBid<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>ended<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>beneficiary<span class="p">.</span>transfer<span class="p">(</span>highestBid<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This is an &quot;internal&quot; function which means that it</span>
+<span class="w">    </span><span class="c1">// can only be called from the contract itself (or from</span>
+<span class="w">    </span><span class="c1">// derived contracts).</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">placeBid</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">bidder</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">value</span><span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">            </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">success</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>value<span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>highestBid<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kt">return</span><span class="w"> </span><span class="kt">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>highestBidder<span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kt">address</span><span class="p">(</span><span class="m m-Decimal">0</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Refund the previously highest bidder.</span>
+<span class="w">            </span>pendingReturns<span class="p">[</span>highestBidder<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>highestBid<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span>highestBid<span class="w"> </span><span class="o">=</span><span class="w"> </span>value<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>highestBidder<span class="w"> </span><span class="o">=</span><span class="w"> </span>bidder<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="index-2">
+<span id="id7"></span><h2>خرید امن از راه دور<a class="headerlink" href="#index-2" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>خرید کالا از راه دور در حال حاضر نیاز به چندین طرف دارد که باید به یکدیگر اعتماد کنند. ساده ترین پیکربندی شامل یک فروشنده و یک خریدار است. خریدار مایل است کالایی را از فروشنده دریافت کند و فروشنده مایل است در ازای آن پول (یا معادل آن) دریافت کند. قسمت مشکل ساز محموله در اینجا است: هیچ راهی برای تعیین اطمینان از رسیدن کالا به خریدار وجود ندارد.</p>
+<p>روش‌های مختلفی برای حل این مشکل وجود دارد، اما همه آنها در مقابل یک یا بقیه راه‌ها کم می‌آورند. در مثال زیر، هر دو طرف باید مقدار دو برابر یک قلم کالا را به عنوان ضمانت  در قرارداد قرار دهند. به محض اینکه این اتفاق افتاد، پول در قرارداد قفل شده  خواهد ماند تا زمانی که خریدار تأیید کند که کالا را دریافت کرده‌است. پس از آن، مقدار (نیمی از سپرده خود) به خریدار بازگردانده می‌شود و فروشنده سه برابر مقدار (سپرده خود به علاوه مقدار) دریافت می‌کند. ایده پشت این امر این است که هر دو طرف انگیزه‌ای برای حل اوضاع دارند یا در غیر این صورت پول آنها برای همیشه قفل شده خواهد ماند.</p>
+<p>البته این قرارداد مشکلی را حل نمی‌کند‌، اما یک نمای کلی از چگونگی استفاده از ساختار ماشین حالت مانند  در داخل قرارداد ارائه می‌دهد.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKY29udHJhY3QgUHVyY2hhc2UgewogICAgdWludCBwdWJsaWMgdmFsdWU7CiAgICBhZGRyZXNzIHBheWFibGUgcHVibGljIHNlbGxlcjsKICAgIGFkZHJlc3MgcGF5YWJsZSBwdWJsaWMgYnV5ZXI7CgogICAgZW51bSBTdGF0ZSB7IENyZWF0ZWQsIExvY2tlZCwgUmVsZWFzZSwgSW5hY3RpdmUgfQogICAgLy8gVGhlIHN0YXRlIHZhcmlhYmxlIGhhcyBhIGRlZmF1bHQgdmFsdWUgb2YgdGhlIGZpcnN0IG1lbWJlciwgYFN0YXRlLmNyZWF0ZWRgCiAgICBTdGF0ZSBwdWJsaWMgc3RhdGU7CgogICAgbW9kaWZpZXIgY29uZGl0aW9uKGJvb2wgY29uZGl0aW9uXykgewogICAgICAgIHJlcXVpcmUoY29uZGl0aW9uXyk7CiAgICAgICAgXzsKICAgIH0KCiAgICAvLy8gT25seSB0aGUgYnV5ZXIgY2FuIGNhbGwgdGhpcyBmdW5jdGlvbi4KICAgIGVycm9yIE9ubHlCdXllcigpOwogICAgLy8vIE9ubHkgdGhlIHNlbGxlciBjYW4gY2FsbCB0aGlzIGZ1bmN0aW9uLgogICAgZXJyb3IgT25seVNlbGxlcigpOwogICAgLy8vIFRoZSBmdW5jdGlvbiBjYW5ub3QgYmUgY2FsbGVkIGF0IHRoZSBjdXJyZW50IHN0YXRlLgogICAgZXJyb3IgSW52YWxpZFN0YXRlKCk7CiAgICAvLy8gVGhlIHByb3ZpZGVkIHZhbHVlIGhhcyB0byBiZSBldmVuLgogICAgZXJyb3IgVmFsdWVOb3RFdmVuKCk7CgogICAgbW9kaWZpZXIgb25seUJ1eWVyKCkgewogICAgICAgIGlmIChtc2cuc2VuZGVyICE9IGJ1eWVyKQogICAgICAgICAgICByZXZlcnQgT25seUJ1eWVyKCk7CiAgICAgICAgXzsKICAgIH0KCiAgICBtb2RpZmllciBvbmx5U2VsbGVyKCkgewogICAgICAgIGlmIChtc2cuc2VuZGVyICE9IHNlbGxlcikKICAgICAgICAgICAgcmV2ZXJ0IE9ubHlTZWxsZXIoKTsKICAgICAgICBfOwogICAgfQoKICAgIG1vZGlmaWVyIGluU3RhdGUoU3RhdGUgc3RhdGVfKSB7CiAgICAgICAgaWYgKHN0YXRlICE9IHN0YXRlXykKICAgICAgICAgICAgcmV2ZXJ0IEludmFsaWRTdGF0ZSgpOwogICAgICAgIF87CiAgICB9CgogICAgZXZlbnQgQWJvcnRlZCgpOwogICAgZXZlbnQgUHVyY2hhc2VDb25maXJtZWQoKTsKICAgIGV2ZW50IEl0ZW1SZWNlaXZlZCgpOwogICAgZXZlbnQgU2VsbGVyUmVmdW5kZWQoKTsKCiAgICAvLyBFbnN1cmUgdGhhdCBgbXNnLnZhbHVlYCBpcyBhbiBldmVuIG51bWJlci4KICAgIC8vIERpdmlzaW9uIHdpbGwgdHJ1bmNhdGUgaWYgaXQgaXMgYW4gb2RkIG51bWJlci4KICAgIC8vIENoZWNrIHZpYSBtdWx0aXBsaWNhdGlvbiB0aGF0IGl0IHdhc24ndCBhbiBvZGQgbnVtYmVyLgogICAgY29uc3RydWN0b3IoKSBwYXlhYmxlIHsKICAgICAgICBzZWxsZXIgPSBwYXlhYmxlKG1zZy5zZW5kZXIpOwogICAgICAgIHZhbHVlID0gbXNnLnZhbHVlIC8gMjsKICAgICAgICBpZiAoKDIgKiB2YWx1ZSkgIT0gbXNnLnZhbHVlKQogICAgICAgICAgICByZXZlcnQgVmFsdWVOb3RFdmVuKCk7CiAgICB9CgogICAgLy8vIEFib3J0IHRoZSBwdXJjaGFzZSBhbmQgcmVjbGFpbSB0aGUgZXRoZXIuCiAgICAvLy8gQ2FuIG9ubHkgYmUgY2FsbGVkIGJ5IHRoZSBzZWxsZXIgYmVmb3JlCiAgICAvLy8gdGhlIGNvbnRyYWN0IGlzIGxvY2tlZC4KICAgIGZ1bmN0aW9uIGFib3J0KCkKICAgICAgICBleHRlcm5hbAogICAgICAgIG9ubHlTZWxsZXIKICAgICAgICBpblN0YXRlKFN0YXRlLkNyZWF0ZWQpCiAgICB7CiAgICAgICAgZW1pdCBBYm9ydGVkKCk7CiAgICAgICAgc3RhdGUgPSBTdGF0ZS5JbmFjdGl2ZTsKICAgICAgICAvLyBXZSB1c2UgdHJhbnNmZXIgaGVyZSBkaXJlY3RseS4gSXQgaXMKICAgICAgICAvLyByZWVudHJhbmN5LXNhZmUsIGJlY2F1c2UgaXQgaXMgdGhlCiAgICAgICAgLy8gbGFzdCBjYWxsIGluIHRoaXMgZnVuY3Rpb24gYW5kIHdlCiAgICAgICAgLy8gYWxyZWFkeSBjaGFuZ2VkIHRoZSBzdGF0ZS4KICAgICAgICBzZWxsZXIudHJhbnNmZXIoYWRkcmVzcyh0aGlzKS5iYWxhbmNlKTsKICAgIH0KCiAgICAvLy8gQ29uZmlybSB0aGUgcHVyY2hhc2UgYXMgYnV5ZXIuCiAgICAvLy8gVHJhbnNhY3Rpb24gaGFzIHRvIGluY2x1ZGUgYDIgKiB2YWx1ZWAgZXRoZXIuCiAgICAvLy8gVGhlIGV0aGVyIHdpbGwgYmUgbG9ja2VkIHVudGlsIGNvbmZpcm1SZWNlaXZlZAogICAgLy8vIGlzIGNhbGxlZC4KICAgIGZ1bmN0aW9uIGNvbmZpcm1QdXJjaGFzZSgpCiAgICAgICAgZXh0ZXJuYWwKICAgICAgICBpblN0YXRlKFN0YXRlLkNyZWF0ZWQpCiAgICAgICAgY29uZGl0aW9uKG1zZy52YWx1ZSA9PSAoMiAqIHZhbHVlKSkKICAgICAgICBwYXlhYmxlCiAgICB7CiAgICAgICAgZW1pdCBQdXJjaGFzZUNvbmZpcm1lZCgpOwogICAgICAgIGJ1eWVyID0gcGF5YWJsZShtc2cuc2VuZGVyKTsKICAgICAgICBzdGF0ZSA9IFN0YXRlLkxvY2tlZDsKICAgIH0KCiAgICAvLy8gQ29uZmlybSB0aGF0IHlvdSAodGhlIGJ1eWVyKSByZWNlaXZlZCB0aGUgaXRlbS4KICAgIC8vLyBUaGlzIHdpbGwgcmVsZWFzZSB0aGUgbG9ja2VkIGV0aGVyLgogICAgZnVuY3Rpb24gY29uZmlybVJlY2VpdmVkKCkKICAgICAgICBleHRlcm5hbAogICAgICAgIG9ubHlCdXllcgogICAgICAgIGluU3RhdGUoU3RhdGUuTG9ja2VkKQogICAgewogICAgICAgIGVtaXQgSXRlbVJlY2VpdmVkKCk7CiAgICAgICAgLy8gSXQgaXMgaW1wb3J0YW50IHRvIGNoYW5nZSB0aGUgc3RhdGUgZmlyc3QgYmVjYXVzZQogICAgICAgIC8vIG90aGVyd2lzZSwgdGhlIGNvbnRyYWN0cyBjYWxsZWQgdXNpbmcgYHNlbmRgIGJlbG93CiAgICAgICAgLy8gY2FuIGNhbGwgaW4gYWdhaW4gaGVyZS4KICAgICAgICBzdGF0ZSA9IFN0YXRlLlJlbGVhc2U7CgogICAgICAgIGJ1eWVyLnRyYW5zZmVyKHZhbHVlKTsKICAgIH0KCiAgICAvLy8gVGhpcyBmdW5jdGlvbiByZWZ1bmRzIHRoZSBzZWxsZXIsIGkuZS4KICAgIC8vLyBwYXlzIGJhY2sgdGhlIGxvY2tlZCBmdW5kcyBvZiB0aGUgc2VsbGVyLgogICAgZnVuY3Rpb24gcmVmdW5kU2VsbGVyKCkKICAgICAgICBleHRlcm5hbAogICAgICAgIG9ubHlTZWxsZXIKICAgICAgICBpblN0YXRlKFN0YXRlLlJlbGVhc2UpCiAgICB7CiAgICAgICAgZW1pdCBTZWxsZXJSZWZ1bmRlZCgpOwogICAgICAgIC8vIEl0IGlzIGltcG9ydGFudCB0byBjaGFuZ2UgdGhlIHN0YXRlIGZpcnN0IGJlY2F1c2UKICAgICAgICAvLyBvdGhlcndpc2UsIHRoZSBjb250cmFjdHMgY2FsbGVkIHVzaW5nIGBzZW5kYCBiZWxvdwogICAgICAgIC8vIGNhbiBjYWxsIGluIGFnYWluIGhlcmUuCiAgICAgICAgc3RhdGUgPSBTdGF0ZS5JbmFjdGl2ZTsKCiAgICAgICAgc2VsbGVyLnRyYW5zZmVyKDMgKiB2YWx1ZSk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">Purchase</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>seller<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>buyer<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">enum</span><span class="w"> </span><span class="nv">State</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>Created<span class="p">,</span><span class="w"> </span>Locked<span class="p">,</span><span class="w"> </span>Release<span class="p">,</span><span class="w"> </span>Inactive<span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// The state variable has a default value of the first member, `State.created`</span>
+<span class="w">    </span>State<span class="w"> </span><span class="kt">public</span><span class="w"> </span>state<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>condition<span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">condition_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>condition_<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Only the buyer can call this function.</span>
+<span class="w">    </span>error<span class="w"> </span>OnlyBuyer<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// Only the seller can call this function.</span>
+<span class="w">    </span>error<span class="w"> </span>OnlySeller<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The function cannot be called at the current state.</span>
+<span class="w">    </span>error<span class="w"> </span>InvalidState<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// The provided value has to be even.</span>
+<span class="w">    </span>error<span class="w"> </span>ValueNotEven<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyBuyer<span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span>buyer<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>OnlyBuyer<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlySeller<span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span>seller<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>OnlySeller<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>inState<span class="p">(</span>State<span class="w"> </span>state_<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>state<span class="w"> </span><span class="o">!=</span><span class="w"> </span>state_<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>InvalidState<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Aborted</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">PurchaseConfirmed</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">ItemReceived</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">SellerRefunded</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Ensure that `msg.value` is an even number.</span>
+<span class="w">    </span><span class="c1">// Division will truncate if it is an odd number.</span>
+<span class="w">    </span><span class="c1">// Check via multiplication that it wasn&#39;t an odd number.</span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>seller<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>value<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">((</span><span class="m m-Decimal">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>value<span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>ValueNotEven<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Abort the purchase and reclaim the ether.</span>
+<span class="w">    </span><span class="c1">/// Can only be called by the seller before</span>
+<span class="w">    </span><span class="c1">/// the contract is locked.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">abort</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>onlySeller<span class="w"></span>
+<span class="w">        </span>inState<span class="p">(</span>State<span class="p">.</span>Created<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>Aborted<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>state<span class="w"> </span><span class="o">=</span><span class="w"> </span>State<span class="p">.</span>Inactive<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// We use transfer here directly. It is</span>
+<span class="w">        </span><span class="c1">// reentrancy-safe, because it is the</span>
+<span class="w">        </span><span class="c1">// last call in this function and we</span>
+<span class="w">        </span><span class="c1">// already changed the state.</span>
+<span class="w">        </span>seller<span class="p">.</span>transfer<span class="p">(</span><span class="kt">address</span><span class="p">(</span><span class="kt">this</span><span class="p">).</span>balance<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Confirm the purchase as buyer.</span>
+<span class="w">    </span><span class="c1">/// Transaction has to include `2 * value` ether.</span>
+<span class="w">    </span><span class="c1">/// The ether will be locked until confirmReceived</span>
+<span class="w">    </span><span class="c1">/// is called.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">confirmPurchase</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>inState<span class="p">(</span>State<span class="p">.</span>Created<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>condition<span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">(</span><span class="m m-Decimal">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>value<span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>PurchaseConfirmed<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>buyer<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>state<span class="w"> </span><span class="o">=</span><span class="w"> </span>State<span class="p">.</span>Locked<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Confirm that you (the buyer) received the item.</span>
+<span class="w">    </span><span class="c1">/// This will release the locked ether.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">confirmReceived</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>onlyBuyer<span class="w"></span>
+<span class="w">        </span>inState<span class="p">(</span>State<span class="p">.</span>Locked<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>ItemReceived<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// It is important to change the state first because</span>
+<span class="w">        </span><span class="c1">// otherwise, the contracts called using `send` below</span>
+<span class="w">        </span><span class="c1">// can call in again here.</span>
+<span class="w">        </span>state<span class="w"> </span><span class="o">=</span><span class="w"> </span>State<span class="p">.</span>Release<span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span>buyer<span class="p">.</span>transfer<span class="p">(</span>value<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// This function refunds the seller, i.e.</span>
+<span class="w">    </span><span class="c1">/// pays back the locked funds of the seller.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">refundSeller</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">external</span><span class="w"></span>
+<span class="w">        </span>onlySeller<span class="w"></span>
+<span class="w">        </span>inState<span class="p">(</span>State<span class="p">.</span>Release<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>SellerRefunded<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// It is important to change the state first because</span>
+<span class="w">        </span><span class="c1">// otherwise, the contracts called using `send` below</span>
+<span class="w">        </span><span class="c1">// can call in again here.</span>
+<span class="w">        </span>state<span class="w"> </span><span class="o">=</span><span class="w"> </span>State<span class="p">.</span>Inactive<span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span>seller<span class="p">.</span>transfer<span class="p">(</span><span class="m m-Decimal">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>value<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h2>کانال پرداخت خرد<a class="headerlink" href="#id8" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>در این بخش نحوه ساختن نمونه پیاده سازی کانال پرداخت  را خواهیم آموخت. کانال پرداخت از امضاهای رمزنگاری شده برای انتقال مکرر اتر بین طرف‌های مشابه به صورت ایمن، آنی و بدون کارمزد استفاده می‌کند. برای مثال، باید نحوه امضا و تأیید امضاها و راه اندازی کانال پرداخت را درک کنیم.</p>
+<section id="id9">
+<h3>ایجاد و تأیید امضا<a class="headerlink" href="#id9" title="پیوند ثابت به این سر مقاله"></a></h3>
+<blockquote>
+<div><p>تصور کنید آلیس می‌خواهد مقداری اتر برای باب ارسال کند، یعنی آلیس فرستنده است و باب گیرنده آن می‌باشد.</p>
+</div></blockquote>
+<p>آلیس فقط باید پیام های خارج از زنجیرهِ امضا شده با رمزنگاری (مثلاً از طریق ایمیل) را به باب بفرستد و این شبیه چک نوشتن است.</p>
+<blockquote>
+<div><p>آلیس و باب برای تأیید تراکنش‌ها از امضاها استفاده می‌کنند که با قراردادهای هوشمند در اتریوم امکان پذیر است. آلیس یک قرارداد هوشمند ساده خواهد ساخت که به او امکان می‌دهد اتر را منتقل کند، اما به جای اینکه خودش یک تابع را برای شروع پرداخت فراخوانی کند، به باب اجازه این کار را می‌دهد و بنابراین هزینه تراکنش را پرداخت می‌کند.</p>
+</div></blockquote>
+<p>قرارداد به شرح زیر کار می‌کند:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>آلیس قرارداد <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code>  را دیپلوی می‌کند، به اندازه کافی اتر را برای پوشش پرداخت‌هایی که انجام خواهد شد، پیوست می‌کند.</p></li>
+<li><p>آلیس با امضای پیام با کلید خصوصی خود اجازه پرداخت را می‌دهد.</p></li>
+<li><p>آلیس پیام امضا شده با رمزنگاری را برای باب می‌فرستد. نیازی به مخفی نگه داشتن پیام نیست (بعداً توضیح داده خواهد شد) و سازوکار ارسال آن اهمیتی ندارد.</p></li>
+<li><p>باب با ارائه پیام امضا شده به قرارداد هوشمند، پرداخت خود را مدعی می‌شود. قرارداد صحت پیام را تأیید می‌کند و سپس وجوه را آزاد می‌کند.</p></li>
+</ol>
+</div></blockquote>
+<section id="id10">
+<h4>ایجاد امضا<a class="headerlink" href="#id10" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>آلیس برای امضای تراکنش نیازی به تعامل با شبکه اتریوم ندارد، روند کار کاملا آفلاین است. در این آموزش، ما با استفاده از روش توصیف شده در <a class="reference external" href="https://github.com/ethereum/EIPs/pull/712">EIP-762</a>  پیام‌ها را در مرورگر با استفاده از  <a class="reference external" href="https://github.com/ethereum/web3.js">web3.js</a>  و <a class="reference external" href="https://metamask.io">MetaMask</a>, امضا خواهیم کرد، زیرا تعدادی از مزایای امنیتی دیگر را فراهم می‌کند.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Hashing first makes things easier</span>
+<span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">web3</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">sha3</span><span class="p">(</span><span class="s2">&quot;message to sign&quot;</span><span class="p">);</span>
+<span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">personal</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">defaultAccount</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Signed&quot;</span><span class="p">);</span> <span class="p">});</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">web3.eth.personal.sign</span></code> طول پیام را به داده‌های امضا شده اضافه می‌کند. از آنجا که ما ابتدا هش می‌کنیم، پیام همیشه دقیقاً 32 بایت خواهد بود و بنابراین این پیشوند طول  همیشه یکسان است.</p>
+</section>
+<section id="id11">
+<h4>چه چیزی برای امضا<a class="headerlink" href="#id11" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>برای قراردادی که پرداخت‌ها را انجام می‌دهد، پیام امضا شده باید شامل موارد زیر باشد:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>آدرس گیرنده.</p></li>
+<li><p>مبلغی که باید منتقل شود.</p></li>
+<li><p>محافظت در برابر حملات مجدد.</p></li>
+</ol>
+</div></blockquote>
+<p>حمله مجدد زمانی رخ می‌دهد که از پیام امضا شده مجدداً برای درخواست مجوز برای اقدام دیگر استفاده می‌شود. برای جلوگیری از حملات مجدد، ما از همان روش تراکنش اتریوم استفاده می‌کنیم، اصطلاحاً نانس  نامیده می‎شود، یعنی تعداد تراکنش‌های ارسال شده توسط یک حساب می‌باشد. قرارداد هوشمند بررسی می‌کند که آیا یک نانس چندین بار استفاده شده‌است.</p>
+<p>نوع دیگر حمله مجدد می‌تواند هنگامی رخ دهد که مالکِ قرارداد هوشمند  <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code> را دیپلوی  کند،  مقداری پرداخت انجام بدهد و سپس قرارداد را از بین ببرد. بعداً، آنها تصمیم می‌گیرند که قرارداد هوشمند <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code>  را دوباره دیپلوی کنند، اما قرارداد جدید، نانس  استفاده شده در دیپلوی قبلی را نمی‌شناسد، بنابراین مهاجم می‌تواند دوباره از پیام‌های قدیمی استفاده کند.</p>
+<p>آلیس می‌تواند با درج آدرس قرارداد در پیام در برابر این حمله محافظت کند و فقط پیام‌های حاوی آدرس قرارداد خود پذیرفته می‌شوند. نمونه‌ای از این مورد را می‌توانید در دو خط اول تابع <code class="docutils literal notranslate"><span class="pre">()claimPayment</span></code>  در قرارداد کامل در انتهای این بخش بیابید.</p>
+</section>
+<section id="id12">
+<h4>بسته بندی آرگومان‌ها<a class="headerlink" href="#id12" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>حالا که ما مشخص کرده‌ایم که چه اطلاعاتی را باید در پیام امضا شده قرار دهیم، ما آماده هستیم که پیام را کنار هم قرار دهیم و آن را هش و امضا کنیم.
+برای سادگی، داده‌ها را بهم پیوند می‌دهیم. کتابخانه <a class="reference external" href="https://github.com/ethereumjs/ethereumjs-abi">ethereumjs-abi</a> تابعی به نام <code class="docutils literal notranslate"><span class="pre">soliditySHA3</span></code>  را فراهم می‌کند که رفتار <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>  سالیدیتی را که برای آرگومان‌های رمزگذاری شده با استفاده از  <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> اعمال می‌شود، را تقلید می‌کند. در اینجا یک تابع جاوا اسکریپت وجود دارد که امضای مناسب را برای مثال <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code>  ایجاد می‌کند:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// recipient is the address that should be paid.</span>
+<span class="c1">// amount, in wei, specifies how much ether should be sent.</span>
+<span class="c1">// nonce can be any unique number to prevent replay attacks</span>
+<span class="c1">// contractAddress is used to prevent cross-contract replay attacks</span>
+<span class="kd">function</span> <span class="nx">signPayment</span><span class="p">(</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">amount</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">,</span> <span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="s2">&quot;0x&quot;</span> <span class="o">+</span> <span class="nx">abi</span><span class="p">.</span><span class="nx">soliditySHA3</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="s2">&quot;uint256&quot;</span><span class="p">,</span> <span class="s2">&quot;uint256&quot;</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="nx">recipient</span><span class="p">,</span> <span class="nx">amount</span><span class="p">,</span> <span class="nx">nonce</span><span class="p">,</span> <span class="nx">contractAddress</span><span class="p">]</span>
+    <span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">);</span>
+
+    <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">personal</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">defaultAccount</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h4>بازیابی امضای پیام در سالیدیتی<a class="headerlink" href="#id13" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>به طور کلی، امضاهای ECDSA از دو پارامتر  <code class="docutils literal notranslate"><span class="pre">r</span></code> و  <code class="docutils literal notranslate"><span class="pre">s</span></code> تشکیل شده‌است. امضاها در اتریوم شامل یک پارامتر سوم به نام  <code class="docutils literal notranslate"><span class="pre">v</span></code>  هستند که می‌توانید برای تایید اینکه کدام کلیدخصوصیِ حساب، برای امضای پیام و تراکنش فرستنده بکار رفته‌است، استفاده کنید. سالیدیتی یک تابع داخلی <a class="reference internal" href="units-and-global-variables.html#mathematical-and-cryptographic-functions"><span class="std std-ref">ecrecover</span></a>  را ارائه می‌دهد که با استفاده از پارامترهای  <code class="docutils literal notranslate"><span class="pre">r</span></code>  ،  <code class="docutils literal notranslate"><span class="pre">s</span></code>  و  <code class="docutils literal notranslate"><span class="pre">v</span></code>  یک پیام را می‌پذیرد و آدرسی را که برای امضای پیام استفاده شده بود، برمی‌گرداند.</p>
+</section>
+<section id="id14">
+<h4>استخراج پارامترهای امضا<a class="headerlink" href="#id14" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>امضاهای تولید شده توسط web3.js بهم پیوستن  <code class="docutils literal notranslate"><span class="pre">r</span></code>  ، <code class="docutils literal notranslate"><span class="pre">s</span></code>  و  <code class="docutils literal notranslate"><span class="pre">v</span></code>  هستند، بنابراین اولین قدم جدا کردن این پارامترها از یکدیگر است. شما می‌توانید این کار را در سمت کلاینت انجام دهید، اما انجام آن در داخل قرارداد هوشمند به این معنی است که شما فقط باید یک پارامتر امضا را بجای سه پارامتر ارسال کنید. جداسازی آرایه بایت  به قسمت‌های تشکیل دهنده آن یک خرابکاری است، بنابراین ما برای انجام این کار در تابع <code class="docutils literal notranslate"><span class="pre">splitSignature</span></code>  از <a class="reference internal" href="assembly.html"><span class="doc">اسمبلی درون خطی</span></a>  استفاده می‌کنیم (سومین تابع در قرارداد کامل در انتهای این بخش).</p>
+</section>
+<section id="id15">
+<h4>محاسبه پیام هش<a class="headerlink" href="#id15" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>قرارداد هوشمند باید دقیقاً بداند چه پارامترهایی امضا شده‌اند، بنابراین باید پیام را از طریق پارامترها دوباره ایجاد کند و از آن برای تأیید امضا استفاده کند. توابع <code class="docutils literal notranslate"><span class="pre">prefixed</span></code>   و  <code class="docutils literal notranslate"><span class="pre">recoverSigner</span></code> این کار را در تابع  <code class="docutils literal notranslate"><span class="pre">claimPayment</span></code> انجام می‌دهند.</p>
+</section>
+<section id="id16">
+<h4>قرارداد کامل<a class="headerlink" href="#id16" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBSZWNlaXZlclBheXMgewogICAgYWRkcmVzcyBvd25lciA9IG1zZy5zZW5kZXI7CgogICAgbWFwcGluZyh1aW50MjU2ID0+IGJvb2wpIHVzZWROb25jZXM7CgogICAgY29uc3RydWN0b3IoKSBwYXlhYmxlIHt9CgogICAgZnVuY3Rpb24gY2xhaW1QYXltZW50KHVpbnQyNTYgYW1vdW50LCB1aW50MjU2IG5vbmNlLCBieXRlcyBtZW1vcnkgc2lnbmF0dXJlKSBleHRlcm5hbCB7CiAgICAgICAgcmVxdWlyZSghdXNlZE5vbmNlc1tub25jZV0pOwogICAgICAgIHVzZWROb25jZXNbbm9uY2VdID0gdHJ1ZTsKCiAgICAgICAgLy8gdGhpcyByZWNyZWF0ZXMgdGhlIG1lc3NhZ2UgdGhhdCB3YXMgc2lnbmVkIG9uIHRoZSBjbGllbnQKICAgICAgICBieXRlczMyIG1lc3NhZ2UgPSBwcmVmaXhlZChrZWNjYWsyNTYoYWJpLmVuY29kZVBhY2tlZChtc2cuc2VuZGVyLCBhbW91bnQsIG5vbmNlLCB0aGlzKSkpOwoKICAgICAgICByZXF1aXJlKHJlY292ZXJTaWduZXIobWVzc2FnZSwgc2lnbmF0dXJlKSA9PSBvd25lcik7CgogICAgICAgIHBheWFibGUobXNnLnNlbmRlcikudHJhbnNmZXIoYW1vdW50KTsKICAgIH0KCiAgICAvLy8gZGVzdHJveSB0aGUgY29udHJhY3QgYW5kIHJlY2xhaW0gdGhlIGxlZnRvdmVyIGZ1bmRzLgogICAgZnVuY3Rpb24gc2h1dGRvd24oKSBleHRlcm5hbCB7CiAgICAgICAgcmVxdWlyZShtc2cuc2VuZGVyID09IG93bmVyKTsKICAgICAgICBzZWxmZGVzdHJ1Y3QocGF5YWJsZShtc2cuc2VuZGVyKSk7CiAgICB9CgogICAgLy8vIHNpZ25hdHVyZSBtZXRob2RzLgogICAgZnVuY3Rpb24gc3BsaXRTaWduYXR1cmUoYnl0ZXMgbWVtb3J5IHNpZykKICAgICAgICBpbnRlcm5hbAogICAgICAgIHB1cmUKICAgICAgICByZXR1cm5zICh1aW50OCB2LCBieXRlczMyIHIsIGJ5dGVzMzIgcykKICAgIHsKICAgICAgICByZXF1aXJlKHNpZy5sZW5ndGggPT0gNjUpOwoKICAgICAgICBhc3NlbWJseSB7CiAgICAgICAgICAgIC8vIGZpcnN0IDMyIGJ5dGVzLCBhZnRlciB0aGUgbGVuZ3RoIHByZWZpeC4KICAgICAgICAgICAgciA6PSBtbG9hZChhZGQoc2lnLCAzMikpCiAgICAgICAgICAgIC8vIHNlY29uZCAzMiBieXRlcy4KICAgICAgICAgICAgcyA6PSBtbG9hZChhZGQoc2lnLCA2NCkpCiAgICAgICAgICAgIC8vIGZpbmFsIGJ5dGUgKGZpcnN0IGJ5dGUgb2YgdGhlIG5leHQgMzIgYnl0ZXMpLgogICAgICAgICAgICB2IDo9IGJ5dGUoMCwgbWxvYWQoYWRkKHNpZywgOTYpKSkKICAgICAgICB9CgogICAgICAgIHJldHVybiAodiwgciwgcyk7CiAgICB9CgogICAgZnVuY3Rpb24gcmVjb3ZlclNpZ25lcihieXRlczMyIG1lc3NhZ2UsIGJ5dGVzIG1lbW9yeSBzaWcpCiAgICAgICAgaW50ZXJuYWwKICAgICAgICBwdXJlCiAgICAgICAgcmV0dXJucyAoYWRkcmVzcykKICAgIHsKICAgICAgICAodWludDggdiwgYnl0ZXMzMiByLCBieXRlczMyIHMpID0gc3BsaXRTaWduYXR1cmUoc2lnKTsKCiAgICAgICAgcmV0dXJuIGVjcmVjb3ZlcihtZXNzYWdlLCB2LCByLCBzKTsKICAgIH0KCiAgICAvLy8gYnVpbGRzIGEgcHJlZml4ZWQgaGFzaCB0byBtaW1pYyB0aGUgYmVoYXZpb3Igb2YgZXRoX3NpZ24uCiAgICBmdW5jdGlvbiBwcmVmaXhlZChieXRlczMyIGhhc2gpIGludGVybmFsIHB1cmUgcmV0dXJucyAoYnl0ZXMzMikgewogICAgICAgIHJldHVybiBrZWNjYWsyNTYoYWJpLmVuY29kZVBhY2tlZCgiXHgxOUV0aGVyZXVtIFNpZ25lZCBNZXNzYWdlOlxuMzIiLCBoYXNoKSk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">ReceiverPays</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span>usedNonces<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">claimPayment</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">nonce</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>signature<span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="o">!</span>usedNonces<span class="p">[</span>nonce<span class="p">]);</span><span class="w"></span>
+<span class="w">        </span>usedNonces<span class="p">[</span>nonce<span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// this recreates the message that was signed on the client</span>
+<span class="w">        </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>prefixed<span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>amount<span class="p">,</span><span class="w"> </span>nonce<span class="p">,</span><span class="w"> </span><span class="kt">this</span><span class="p">)));</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>recoverSigner<span class="p">(</span>message<span class="p">,</span><span class="w"> </span>signature<span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>owner<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// destroy the contract and reclaim the leftover funds.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">shutdown</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>owner<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>selfdestruct<span class="p">(</span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// signature methods.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">splitSignature</span><span class="p">(</span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>sig<span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">        </span>pure<span class="w"></span>
+<span class="w">        </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>sig<span class="p">.</span>length<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">65</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span>assembly<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// first 32 bytes, after the length prefix.</span>
+<span class="w">            </span>r<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">32</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// second 32 bytes.</span>
+<span class="w">            </span>s<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">64</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// final byte (first byte of the next 32 bytes).</span>
+<span class="w">            </span>v<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>byte<span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">96</span><span class="p">)))</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span>v<span class="p">,</span><span class="w"> </span>r<span class="p">,</span><span class="w"> </span>s<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">recoverSigner</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">message</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>sig<span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">        </span>pure<span class="w"></span>
+<span class="w">        </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">(</span><span class="kt">uint8</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>splitSignature<span class="p">(</span>sig<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>ecrecover<span class="p">(</span>message<span class="p">,</span><span class="w"> </span>v<span class="p">,</span><span class="w"> </span>r<span class="p">,</span><span class="w"> </span>s<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// builds a prefixed hash to mimic the behavior of eth_sign.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">prefixed</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">hash</span><span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bytes32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="s2">&quot;\x19Ethereum Signed Message:\n32&quot;</span><span class="p">,</span><span class="w"> </span><span class="kt">hash</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id17">
+<h3>نوشتن یک کانال پرداخت  ساده<a class="headerlink" href="#id17" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>اکنون آلیس یک پیاده سازی ساده اما کامل از یک کانال پرداخت ایجاد کرده‌است. کانال‌های پرداخت از امضاهای رمزنگاری شده برای انتقال مکرر اتر به صورت ایمن، فوری و تراکنش بدون کارمزد استفاده می‌کنند.</p>
+<section id="id18">
+<h4>کانال پرداخت چیست؟<a class="headerlink" href="#id18" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>کانال‌های پرداخت به شرکت کنندگان این امکان را می‌دهد تا انتقال‌های مکرر اتر را بدون استفاده از تراکنش انجام دهند. این بدان معنی است که شما می‌توانید از تأخیر و هزینه‌های مرتبط با تراکنش‌ها جلوگیری کنید. ما می‌خواهیم یک کانال پرداخت یک طرفه ساده بین دو طرف (آلیس و باب) را بررسی کنیم. شامل سه مرحله است:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>آلیس قرارداد هوشمند همراه با اتر را تأمین می‌کند. این کانال پرداخت را &quot;باز&quot; می‌کند.</p></li>
+<li><p>آلیس پیام‌هایی را امضا می‌کند که مشخص می‌کند چه مقدار از آن اتر به گیرنده بدهکار است. این مرحله برای هر پرداخت تکرار می‌شود.</p></li>
+<li><p>باب کانال پرداخت را &quot;می بندد&quot;، سهم خود را از اتر پس می‌گیرد و باقیمانده را به فرستنده ارسال می‌کند.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>فقط مراحل 1 و 3 به تراکنش‌های اتریوم نیاز دارند، مرحله 2 به این معنی است که فرستنده از طریق روش‌های غیر زنجیره‌ای (به عنوان مثال ایمیل) پیام امضا شده رمزنگاری شده را به گیرنده منتقل می‌کند. این بدان معناست که برای پشتیبانی از هر تعداد تراکنش  فقط دو تراکنش لازم است.</p>
+</div>
+<p>تضمین شده که باب وجوه  خود را دریافت می‌کند زیرا قرارداد هوشمند اتر را اسکو  می‌کند (اسکو  به معنی اینکه طرفین معامله بر یک سری شرایط توافق میکنند که اگر این شرایط توسط دو طرفین انجام شوند طرف ثالث مانند قرارداد هوشمند امکان برداشت یا پرداخت وجوه را امکان پذیر میکند.) و قول یک پیام معتبر امضا شده را می‌دهد. قرارداد هوشمند همچنین مهلت زمانی را اعمال می‌کند، بنابراین آلیس تضمین می‌کند که سرانجام وجوه خود را بازیابی می‌کند حتی اگر گیرنده از بستن کانال خودداری کند. شرکت کنندگان در یک کانال پرداخت تصمیم میگیرند که چه مدت آن را باز نگه دارند. برای یک معامله کوتاه مدت، مانند پرداخت کافی نت  به ازای هر دقیقه دسترسی به شبکه، کانال پرداخت ممکن است به مدت محدودی باز نگه داشته شود. از طرف دیگر، برای پرداخت مکرر، مانند پرداخت دستمزد ساعتی به یک کارمند، کانال پرداخت ممکن است برای چندین ماه یا سال باز نگه داشته شود.</p>
+</section>
+<section id="id19">
+<h4>باز کردن کانال پرداخت<a class="headerlink" href="#id19" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>برای باز کردن کانال پرداخت، آلیس قرارداد هوشمند را دیپلوی می‌کند، اتر را برای تضمین  ضمیمه می‌کند و دریافت کننده مورد نظر و حداکثر مدت زمان  وجود کانال را مشخص می‌کند. در انتهای این بخش این تابع <code class="docutils literal notranslate"><span class="pre">SimplePaymentChannel</span></code>  در قرارداد است.</p>
+</section>
+<section id="id20">
+<h4>ایجاد پرداخت ها<a class="headerlink" href="#id20" title="پیوند ثابت به این سر مقاله"></a></h4>
+<blockquote>
+<div><p>آلیس با ارسال پیام های امضا شده به باب، پرداخت‌ها را انجام می‌دهد. این مرحله کاملاً خارج از شبکه اتریوم انجام می‌شود. پیام‌ها به صورت رمزنگاری شده توسط فرستنده امضا می‌شوند و سپس مستقیماً به گیرنده ارسال می‌شوند.</p>
+</div></blockquote>
+<p>هر پیام شامل اطلاعات زیر است:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>آدرسِ قراردادِ هوشمند استفاده شده برای جلوگیری از حملات مجدد  بین قراردادی.</p></li>
+<li><p>مقدارِ کلِ اتری که تاکنون به گیرنده بدهکار است.</p></li>
+</ul>
+</div></blockquote>
+<p>در پایان یک سری انتقال‌ها، فقط یک بار کانال پرداخت بسته می‌شود. به همین دلیل، فقط یکی از پیام‌های ارسالی استفاده می‌شود. به همین دلیل است که هر پیام مجموع مقدار کل اتر بدهکار  را  به جای مقدار جداگانه کانال پرداخت  مشخص می‌کند.گیرنده به طور طبیعی آخرین پیام را بخاطر اینکه بالاترین جمع کل  را دارد، برای بازخرید   انتخاب خواهد کرد. دیگر به نانس  برای هر پیام نیاز نمی‌باشد زیرا قرارداد هوشمند فقط به یک پیام پایبند‌است. برای جلوگیری از استفاده پیامی که در نظر گرفته شده برای یک کانال پرداخت در کانال دیگر، از آدرس قرارداد هوشمند همچنان استفاده می‌شود.</p>
+<blockquote>
+<div><p>در اینجا کد جاوا اسکریپت ویرایش شده برای امضای یک پیام به صورت رمزنگاری از بخش قبلی وجود دارد:</p>
+</div></blockquote>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">constructPaymentMessage</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">abi</span><span class="p">.</span><span class="nx">soliditySHA3</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="s2">&quot;uint256&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">]</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">signMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">personal</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span>
+        <span class="s2">&quot;0x&quot;</span> <span class="o">+</span> <span class="nx">message</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">),</span>
+        <span class="nx">web3</span><span class="p">.</span><span class="nx">eth</span><span class="p">.</span><span class="nx">defaultAccount</span><span class="p">,</span>
+        <span class="nx">callback</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// contractAddress is used to prevent cross-contract replay attacks.</span>
+<span class="c1">// amount, in wei, specifies how much Ether should be sent.</span>
+
+<span class="kd">function</span> <span class="nx">signPayment</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">constructPaymentMessage</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">);</span>
+    <span class="nx">signMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id21">
+<h4>بستن کانال پرداخت<a class="headerlink" href="#id21" title="پیوند ثابت به این سر مقاله"></a></h4>
+<blockquote>
+<div><blockquote>
+<div><p>هنگامی که باب آماده دریافت وجوه  خود باشد، وقت آن است که با فراخوانی تابع <code class="docutils literal notranslate"><span class="pre">close</span></code>  در قرارداد هوشمند کانال پرداخت را ببندید. بستن کانال به گیرنده اتری که بدهکار است را پرداخت می‌کند و قرارداد را از بین می‌برد و اتر باقی مانده را برای آلیس می‌فرستد. برای بستن کانال، باب باید پیامی را امضا کند که توسط آلیس امضا شده باشد.</p>
+</div></blockquote>
+<p>قرارداد هوشمند باید تأیید کند که پیام حاوی یک امضای معتبر از طرف فرستنده است. روند انجام این تأیید همان روندی است که گیرنده از آن استفاده می‌کند. توابع سالیدیتی <code class="docutils literal notranslate"><span class="pre">isValidSignature</span></code>  و <code class="docutils literal notranslate"><span class="pre">recoverSigner</span></code>  درست همانند رونوشت‌های جاوا اسکریپت  در بخش قبلی با تابع آخری که از قرارداد <code class="docutils literal notranslate"><span class="pre">ReceiverPays</span></code>   گرفته شده کار می‌کند.</p>
+</div></blockquote>
+<p>فقط گیرنده کانال پرداخت می‌تواند تابع <code class="docutils literal notranslate"><span class="pre">close</span></code>  را فراخوانی کند، که به طور طبیعی جدیدترین پیام پرداخت را ارسال می‌کند زیرا این پیام بیشترین مجموع بدهی  را دارد. اگر فرستنده اجازه فراخوانی این تابع را داشته باشد، می‌تواند پیامی با مقدار کمتری ارائه دهد و گیرنده را از آنچه طلبکار است، فریب دهد.</p>
+<p>تابع تأیید می‌کند که پیام امضا شده با پارامترهای داده شده مطابقت دارد. اگر همه چیز بررسی شود، به گیرنده بخشی از اتر ارسال می شود، و بقیه را از طریق  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> برای فرستنده ارسال می‌کند. تابع  <code class="docutils literal notranslate"><span class="pre">close</span></code>  را می‌توانید در قراردادِ کامل مشاهده کنید.</p>
+</section>
+<section id="id22">
+<h4>انقضا کانال<a class="headerlink" href="#id22" title="پیوند ثابت به این سر مقاله"></a></h4>
+<blockquote>
+<div><p>باب می‌تواند در هر زمان کانال پرداخت را ببندد، اما اگر آنها موفق به انجام این کار نشوند، آلیس به راهی برای بازیابی وجوه پس انداز شده  خود نیاز دارد. زمان انقضا در زمان استقرار قرارداد تعیین می‌شود. پس از رسیدن به این زمان، آلیس می‌تواند با فراخوانی تابع <code class="docutils literal notranslate"><span class="pre">claimTimeout</span></code> وجوه خود پس بگیرد. تابع  <code class="docutils literal notranslate"><span class="pre">claimTimeout</span></code>  را می‌توانید در قرارداد کامل مشاهده کنید.
+بعد از فراخوانی این تابع، باب دیگر نمی‌تواند هیچ اتری دریافت کند، بنابراین مهم است که باب قبل از رسیدن به زمان انقضا، کانال را ببندد.</p>
+</div></blockquote>
+</section>
+<section id="id23">
+<h4>قرارداد کامل<a class="headerlink" href="#id23" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwpjb250cmFjdCBTaW1wbGVQYXltZW50Q2hhbm5lbCB7CiAgICBhZGRyZXNzIHBheWFibGUgcHVibGljIHNlbmRlcjsgICAgICAvLyBUaGUgYWNjb3VudCBzZW5kaW5nIHBheW1lbnRzLgogICAgYWRkcmVzcyBwYXlhYmxlIHB1YmxpYyByZWNpcGllbnQ7ICAgLy8gVGhlIGFjY291bnQgcmVjZWl2aW5nIHRoZSBwYXltZW50cy4KICAgIHVpbnQyNTYgcHVibGljIGV4cGlyYXRpb247ICAvLyBUaW1lb3V0IGluIGNhc2UgdGhlIHJlY2lwaWVudCBuZXZlciBjbG9zZXMuCgogICAgY29uc3RydWN0b3IgKGFkZHJlc3MgcGF5YWJsZSByZWNpcGllbnRBZGRyZXNzLCB1aW50MjU2IGR1cmF0aW9uKQogICAgICAgIHBheWFibGUKICAgIHsKICAgICAgICBzZW5kZXIgPSBwYXlhYmxlKG1zZy5zZW5kZXIpOwogICAgICAgIHJlY2lwaWVudCA9IHJlY2lwaWVudEFkZHJlc3M7CiAgICAgICAgZXhwaXJhdGlvbiA9IGJsb2NrLnRpbWVzdGFtcCArIGR1cmF0aW9uOwogICAgfQoKICAgIC8vLyB0aGUgcmVjaXBpZW50IGNhbiBjbG9zZSB0aGUgY2hhbm5lbCBhdCBhbnkgdGltZSBieSBwcmVzZW50aW5nIGEKICAgIC8vLyBzaWduZWQgYW1vdW50IGZyb20gdGhlIHNlbmRlci4gdGhlIHJlY2lwaWVudCB3aWxsIGJlIHNlbnQgdGhhdCBhbW91bnQsCiAgICAvLy8gYW5kIHRoZSByZW1haW5kZXIgd2lsbCBnbyBiYWNrIHRvIHRoZSBzZW5kZXIKICAgIGZ1bmN0aW9uIGNsb3NlKHVpbnQyNTYgYW1vdW50LCBieXRlcyBtZW1vcnkgc2lnbmF0dXJlKSBleHRlcm5hbCB7CiAgICAgICAgcmVxdWlyZShtc2cuc2VuZGVyID09IHJlY2lwaWVudCk7CiAgICAgICAgcmVxdWlyZShpc1ZhbGlkU2lnbmF0dXJlKGFtb3VudCwgc2lnbmF0dXJlKSk7CgogICAgICAgIHJlY2lwaWVudC50cmFuc2ZlcihhbW91bnQpOwogICAgICAgIHNlbGZkZXN0cnVjdChzZW5kZXIpOwogICAgfQoKICAgIC8vLyB0aGUgc2VuZGVyIGNhbiBleHRlbmQgdGhlIGV4cGlyYXRpb24gYXQgYW55IHRpbWUKICAgIGZ1bmN0aW9uIGV4dGVuZCh1aW50MjU2IG5ld0V4cGlyYXRpb24pIGV4dGVybmFsIHsKICAgICAgICByZXF1aXJlKG1zZy5zZW5kZXIgPT0gc2VuZGVyKTsKICAgICAgICByZXF1aXJlKG5ld0V4cGlyYXRpb24gPiBleHBpcmF0aW9uKTsKCiAgICAgICAgZXhwaXJhdGlvbiA9IG5ld0V4cGlyYXRpb247CiAgICB9CgogICAgLy8vIGlmIHRoZSB0aW1lb3V0IGlzIHJlYWNoZWQgd2l0aG91dCB0aGUgcmVjaXBpZW50IGNsb3NpbmcgdGhlIGNoYW5uZWwsCiAgICAvLy8gdGhlbiB0aGUgRXRoZXIgaXMgcmVsZWFzZWQgYmFjayB0byB0aGUgc2VuZGVyLgogICAgZnVuY3Rpb24gY2xhaW1UaW1lb3V0KCkgZXh0ZXJuYWwgewogICAgICAgIHJlcXVpcmUoYmxvY2sudGltZXN0YW1wID49IGV4cGlyYXRpb24pOwogICAgICAgIHNlbGZkZXN0cnVjdChzZW5kZXIpOwogICAgfQoKICAgIGZ1bmN0aW9uIGlzVmFsaWRTaWduYXR1cmUodWludDI1NiBhbW91bnQsIGJ5dGVzIG1lbW9yeSBzaWduYXR1cmUpCiAgICAgICAgaW50ZXJuYWwKICAgICAgICB2aWV3CiAgICAgICAgcmV0dXJucyAoYm9vbCkKICAgIHsKICAgICAgICBieXRlczMyIG1lc3NhZ2UgPSBwcmVmaXhlZChrZWNjYWsyNTYoYWJpLmVuY29kZVBhY2tlZCh0aGlzLCBhbW91bnQpKSk7CgogICAgICAgIC8vIGNoZWNrIHRoYXQgdGhlIHNpZ25hdHVyZSBpcyBmcm9tIHRoZSBwYXltZW50IHNlbmRlcgogICAgICAgIHJldHVybiByZWNvdmVyU2lnbmVyKG1lc3NhZ2UsIHNpZ25hdHVyZSkgPT0gc2VuZGVyOwogICAgfQoKICAgIC8vLyBBbGwgZnVuY3Rpb25zIGJlbG93IHRoaXMgYXJlIGp1c3QgdGFrZW4gZnJvbSB0aGUgY2hhcHRlcgogICAgLy8vICdjcmVhdGluZyBhbmQgdmVyaWZ5aW5nIHNpZ25hdHVyZXMnIGNoYXB0ZXIuCgogICAgZnVuY3Rpb24gc3BsaXRTaWduYXR1cmUoYnl0ZXMgbWVtb3J5IHNpZykKICAgICAgICBpbnRlcm5hbAogICAgICAgIHB1cmUKICAgICAgICByZXR1cm5zICh1aW50OCB2LCBieXRlczMyIHIsIGJ5dGVzMzIgcykKICAgIHsKICAgICAgICByZXF1aXJlKHNpZy5sZW5ndGggPT0gNjUpOwoKICAgICAgICBhc3NlbWJseSB7CiAgICAgICAgICAgIC8vIGZpcnN0IDMyIGJ5dGVzLCBhZnRlciB0aGUgbGVuZ3RoIHByZWZpeAogICAgICAgICAgICByIDo9IG1sb2FkKGFkZChzaWcsIDMyKSkKICAgICAgICAgICAgLy8gc2Vjb25kIDMyIGJ5dGVzCiAgICAgICAgICAgIHMgOj0gbWxvYWQoYWRkKHNpZywgNjQpKQogICAgICAgICAgICAvLyBmaW5hbCBieXRlIChmaXJzdCBieXRlIG9mIHRoZSBuZXh0IDMyIGJ5dGVzKQogICAgICAgICAgICB2IDo9IGJ5dGUoMCwgbWxvYWQoYWRkKHNpZywgOTYpKSkKICAgICAgICB9CgogICAgICAgIHJldHVybiAodiwgciwgcyk7CiAgICB9CgogICAgZnVuY3Rpb24gcmVjb3ZlclNpZ25lcihieXRlczMyIG1lc3NhZ2UsIGJ5dGVzIG1lbW9yeSBzaWcpCiAgICAgICAgaW50ZXJuYWwKICAgICAgICBwdXJlCiAgICAgICAgcmV0dXJucyAoYWRkcmVzcykKICAgIHsKICAgICAgICAodWludDggdiwgYnl0ZXMzMiByLCBieXRlczMyIHMpID0gc3BsaXRTaWduYXR1cmUoc2lnKTsKCiAgICAgICAgcmV0dXJuIGVjcmVjb3ZlcihtZXNzYWdlLCB2LCByLCBzKTsKICAgIH0KCiAgICAvLy8gYnVpbGRzIGEgcHJlZml4ZWQgaGFzaCB0byBtaW1pYyB0aGUgYmVoYXZpb3Igb2YgZXRoX3NpZ24uCiAgICBmdW5jdGlvbiBwcmVmaXhlZChieXRlczMyIGhhc2gpIGludGVybmFsIHB1cmUgcmV0dXJucyAoYnl0ZXMzMikgewogICAgICAgIHJldHVybiBrZWNjYWsyNTYoYWJpLmVuY29kZVBhY2tlZCgiXHgxOUV0aGVyZXVtIFNpZ25lZCBNZXNzYWdlOlxuMzIiLCBoYXNoKSk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+<span class="k">contract</span><span class="w"> </span><span class="ni">SimplePaymentChannel</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>sender<span class="p">;</span><span class="w">      </span><span class="c1">// The account sending payments.</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>recipient<span class="p">;</span><span class="w">   </span><span class="c1">// The account receiving the payments.</span>
+<span class="w">    </span><span class="kt">uint256</span><span class="w"> </span><span class="k">public </span><span class="nv">expiration</span><span class="p">;</span><span class="w">  </span><span class="c1">// Timeout in case the recipient never closes.</span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span>recipientAddress<span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">duration</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>sender<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>recipient<span class="w"> </span><span class="o">=</span><span class="w"> </span>recipientAddress<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>expiration<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>duration<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// the recipient can close the channel at any time by presenting a</span>
+<span class="w">    </span><span class="c1">/// signed amount from the sender. the recipient will be sent that amount,</span>
+<span class="w">    </span><span class="c1">/// and the remainder will go back to the sender</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">close</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>signature<span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>recipient<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>isValidSignature<span class="p">(</span>amount<span class="p">,</span><span class="w"> </span>signature<span class="p">));</span><span class="w"></span>
+
+<span class="w">        </span>recipient<span class="p">.</span>transfer<span class="p">(</span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>selfdestruct<span class="p">(</span>sender<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// the sender can extend the expiration at any time</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">extend</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">newExpiration</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>sender<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>newExpiration<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span>expiration<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span>expiration<span class="w"> </span><span class="o">=</span><span class="w"> </span>newExpiration<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// if the timeout is reached without the recipient closing the channel,</span>
+<span class="w">    </span><span class="c1">/// then the Ether is released back to the sender.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">claimTimeout</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>expiration<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>selfdestruct<span class="p">(</span>sender<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">isValidSignature</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>signature<span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">        </span>view<span class="w"></span>
+<span class="w">        </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>prefixed<span class="p">(</span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="kt">this</span><span class="p">,</span><span class="w"> </span>amount<span class="p">)));</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// check that the signature is from the payment sender</span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>recoverSigner<span class="p">(</span>message<span class="p">,</span><span class="w"> </span>signature<span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>sender<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// All functions below this are just taken from the chapter</span>
+<span class="w">    </span><span class="c1">/// &#39;creating and verifying signatures&#39; chapter.</span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">splitSignature</span><span class="p">(</span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>sig<span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">        </span>pure<span class="w"></span>
+<span class="w">        </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>sig<span class="p">.</span>length<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">65</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span>assembly<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// first 32 bytes, after the length prefix</span>
+<span class="w">            </span>r<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">32</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// second 32 bytes</span>
+<span class="w">            </span>s<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">64</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// final byte (first byte of the next 32 bytes)</span>
+<span class="w">            </span>v<span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span>byte<span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span>mload<span class="p">(</span>add<span class="p">(</span>sig<span class="p">,</span><span class="w"> </span><span class="m m-Decimal">96</span><span class="p">)))</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="p">(</span>v<span class="p">,</span><span class="w"> </span>r<span class="p">,</span><span class="w"> </span>s<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">recoverSigner</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">message</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span>sig<span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">internal</span><span class="w"></span>
+<span class="w">        </span>pure<span class="w"></span>
+<span class="w">        </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">(</span><span class="kt">uint8</span><span class="w"> </span><span class="nv">v</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">r</span><span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>splitSignature<span class="p">(</span>sig<span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>ecrecover<span class="p">(</span>message<span class="p">,</span><span class="w"> </span>v<span class="p">,</span><span class="w"> </span>r<span class="p">,</span><span class="w"> </span>s<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// builds a prefixed hash to mimic the behavior of eth_sign.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">prefixed</span><span class="p">(</span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">hash</span><span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bytes32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="nb">keccak256</span><span class="p">(</span>abi<span class="p">.</span>encodePacked<span class="p">(</span><span class="s2">&quot;\x19Ethereum Signed Message:\n32&quot;</span><span class="p">,</span><span class="w"> </span><span class="kt">hash</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تابع <code class="docutils literal notranslate"><span class="pre">splitSignature</span></code> از همه بررسی‌های امنیتی  استفاده نمی‌کند. برای پیاده سازی واقعی باید از یک کتابخانه تست شده با دقت بیشتری استفاده کرد،  مانند <a class="reference external" href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol">نسخه</a>  openzepplin از این کد.</p>
+</div>
+</section>
+<section id="id25">
+<h4>تأیید پرداخت‌ها<a class="headerlink" href="#id25" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>برخلاف بخش قبلی، پیام‌های موجود در یک کانال پرداخت  بلافاصله استفاده نمی‌شوند. گیرنده آخرین پیام را پیگیری می‌کند و هنگامی که زمان بستن کانال پرداخت باشد،  آن را استفاده می‌کند. این به این معنی است که بسیار مهم می‌باشد که گیرنده تأیید خود را برای هر پیام انجام دهد. در غیر این صورت هیچ تضمینی وجود ندارد که در پایان گیرنده بتواند وجوه را دریافت کند. گیرنده باید هر پیام را با استفاده از روند زیر تأیید کند:</p>
+<p>گیرنده باید هر پیام را با استفاده از روند زیر تأیید کند:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>تأیید کند که آدرس قرارداد در پیام با کانال پرداخت مطابقت دارد.</p></li>
+<li><p>تأیید کند که کل جدید ، مقدار مورد انتظار است.</p></li>
+<li><p>تأیید کند که کل جدید  از مقدار اتر پس انداز شده  بیشتر نیست.</p></li>
+<li><p>تأیید کند که امضا معتبر است و از طرف فرستنده کانال پرداخت می‌باشد.</p></li>
+</ol>
+</div></blockquote>
+<p>برای نوشتن این تأیید از کتابخانه <a class="reference external" href="https://github.com/ethereumjs/ethereumjs-util">ethereumjs-util</a> استفاده خواهیم کرد. مرحله آخر را می‌توان به روش‌های مختلفی انجام داد، و ما از <strong>جاوا اسکریپت</strong> استفاده می‌کنیم. کد زیر تابع <code class="docutils literal notranslate"><span class="pre">constructPaymentMessage</span></code>  را از امضای کد جاوا اسکریپت در بالا گرفتیم:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// this mimics the prefixing behavior of the eth_sign JSON-RPC method.</span>
+<span class="kd">function</span> <span class="nx">prefixed</span><span class="p">(</span><span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">ethereumjs</span><span class="p">.</span><span class="nx">ABI</span><span class="p">.</span><span class="nx">soliditySHA3</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;bytes32&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;\x19Ethereum Signed Message:\n32&quot;</span><span class="p">,</span> <span class="nx">hash</span><span class="p">]</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">recoverSigner</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">signature</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">split</span> <span class="o">=</span> <span class="nx">ethereumjs</span><span class="p">.</span><span class="nx">Util</span><span class="p">.</span><span class="nx">fromRpcSig</span><span class="p">(</span><span class="nx">signature</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="nx">ethereumjs</span><span class="p">.</span><span class="nx">Util</span><span class="p">.</span><span class="nx">ecrecover</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">split</span><span class="p">.</span><span class="nx">v</span><span class="p">,</span> <span class="nx">split</span><span class="p">.</span><span class="nx">r</span><span class="p">,</span> <span class="nx">split</span><span class="p">.</span><span class="nx">s</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">signer</span> <span class="o">=</span> <span class="nx">ethereumjs</span><span class="p">.</span><span class="nx">Util</span><span class="p">.</span><span class="nx">pubToAddress</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">signer</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">isValidSignature</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">,</span> <span class="nx">signature</span><span class="p">,</span> <span class="nx">expectedSigner</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">prefixed</span><span class="p">(</span><span class="nx">constructPaymentMessage</span><span class="p">(</span><span class="nx">contractAddress</span><span class="p">,</span> <span class="nx">amount</span><span class="p">));</span>
+    <span class="kd">var</span> <span class="nx">signer</span> <span class="o">=</span> <span class="nx">recoverSigner</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">signature</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">signer</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">==</span>
+        <span class="nx">ethereumjs</span><span class="p">.</span><span class="nx">Util</span><span class="p">.</span><span class="nx">stripHexPrefix</span><span class="p">(</span><span class="nx">expectedSigner</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="index-3">
+<span id="id26"></span><h2>قراردادهای ماژولی<a class="headerlink" href="#index-3" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>یک رویکرد ماژولی برای ساخت قراردادها، در کاهش پیچیدگی‌ها و بهبود خوانایی، که به شناسایی باگ‌ها و آسیب پذیری‌ها هنگام توسعه و بررسی کد کمک می‌کند. اگر رفتار یا هر ماژول را جداگانه تعیین و کنترل کنید، فعل و انفعالاتی را  باید فقط در روابط بین مشخصات ماژول در نظر بگیرید و نه هر قسمت متحرک دیگر قرارداد.
+در مثال زیر، قرارداد از روش  <code class="docutils literal notranslate"><span class="pre">move</span></code>   <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">کتابخانه</span></a>  <code class="docutils literal notranslate"><span class="pre">Balances</span></code>   برای بررسی اینکه بالانس‌های ارسال شده بین آدرس‌ها با آنچه شما انتظار دارید مطابقت دارد، استفاده می‌کند. به این ترتیب، کتابخانه <code class="docutils literal notranslate"><span class="pre">Balances</span></code>  یک جز جداگانه است که موجودی حساب‌ها را به درستی ردیابی می‌کند را ارائه می‌دهد. به راحتی می‌توان تأیید کرد که کتابخانه  <code class="docutils literal notranslate"><span class="pre">Balances</span></code>    هرگز موجودی یا سرریز منفی  تولید نمی‌کند و مجموع کل موجودی در طول مدت قرارداد ثابت نیست.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwoKbGlicmFyeSBCYWxhbmNlcyB7CiAgICBmdW5jdGlvbiBtb3ZlKG1hcHBpbmcoYWRkcmVzcyA9PiB1aW50MjU2KSBzdG9yYWdlIGJhbGFuY2VzLCBhZGRyZXNzIGZyb20sIGFkZHJlc3MgdG8sIHVpbnQgYW1vdW50KSBpbnRlcm5hbCB7CiAgICAgICAgcmVxdWlyZShiYWxhbmNlc1tmcm9tXSA+PSBhbW91bnQpOwogICAgICAgIHJlcXVpcmUoYmFsYW5jZXNbdG9dICsgYW1vdW50ID49IGJhbGFuY2VzW3RvXSk7CiAgICAgICAgYmFsYW5jZXNbZnJvbV0gLT0gYW1vdW50OwogICAgICAgIGJhbGFuY2VzW3RvXSArPSBhbW91bnQ7CiAgICB9Cn0KCmNvbnRyYWN0IFRva2VuIHsKICAgIG1hcHBpbmcoYWRkcmVzcyA9PiB1aW50MjU2KSBiYWxhbmNlczsKICAgIHVzaW5nIEJhbGFuY2VzIGZvciAqOwogICAgbWFwcGluZyhhZGRyZXNzID0+IG1hcHBpbmcgKGFkZHJlc3MgPT4gdWludDI1NikpIGFsbG93ZWQ7CgogICAgZXZlbnQgVHJhbnNmZXIoYWRkcmVzcyBmcm9tLCBhZGRyZXNzIHRvLCB1aW50IGFtb3VudCk7CiAgICBldmVudCBBcHByb3ZhbChhZGRyZXNzIG93bmVyLCBhZGRyZXNzIHNwZW5kZXIsIHVpbnQgYW1vdW50KTsKCiAgICBmdW5jdGlvbiB0cmFuc2ZlcihhZGRyZXNzIHRvLCB1aW50IGFtb3VudCkgZXh0ZXJuYWwgcmV0dXJucyAoYm9vbCBzdWNjZXNzKSB7CiAgICAgICAgYmFsYW5jZXMubW92ZShtc2cuc2VuZGVyLCB0bywgYW1vdW50KTsKICAgICAgICBlbWl0IFRyYW5zZmVyKG1zZy5zZW5kZXIsIHRvLCBhbW91bnQpOwogICAgICAgIHJldHVybiB0cnVlOwoKICAgIH0KCiAgICBmdW5jdGlvbiB0cmFuc2ZlckZyb20oYWRkcmVzcyBmcm9tLCBhZGRyZXNzIHRvLCB1aW50IGFtb3VudCkgZXh0ZXJuYWwgcmV0dXJucyAoYm9vbCBzdWNjZXNzKSB7CiAgICAgICAgcmVxdWlyZShhbGxvd2VkW2Zyb21dW21zZy5zZW5kZXJdID49IGFtb3VudCk7CiAgICAgICAgYWxsb3dlZFtmcm9tXVttc2cuc2VuZGVyXSAtPSBhbW91bnQ7CiAgICAgICAgYmFsYW5jZXMubW92ZShmcm9tLCB0bywgYW1vdW50KTsKICAgICAgICBlbWl0IFRyYW5zZmVyKGZyb20sIHRvLCBhbW91bnQpOwogICAgICAgIHJldHVybiB0cnVlOwogICAgfQoKICAgIGZ1bmN0aW9uIGFwcHJvdmUoYWRkcmVzcyBzcGVuZGVyLCB1aW50IHRva2VucykgZXh0ZXJuYWwgcmV0dXJucyAoYm9vbCBzdWNjZXNzKSB7CiAgICAgICAgcmVxdWlyZShhbGxvd2VkW21zZy5zZW5kZXJdW3NwZW5kZXJdID09IDAsICIiKTsKICAgICAgICBhbGxvd2VkW21zZy5zZW5kZXJdW3NwZW5kZXJdID0gdG9rZW5zOwogICAgICAgIGVtaXQgQXBwcm92YWwobXNnLnNlbmRlciwgc3BlbmRlciwgdG9rZW5zKTsKICAgICAgICByZXR1cm4gdHJ1ZTsKICAgIH0KCiAgICBmdW5jdGlvbiBiYWxhbmNlT2YoYWRkcmVzcyB0b2tlbk93bmVyKSBleHRlcm5hbCB2aWV3IHJldHVybnMgKHVpbnQgYmFsYW5jZSkgewogICAgICAgIHJldHVybiBiYWxhbmNlc1t0b2tlbk93bmVyXTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.5.0</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">library</span><span class="w"> </span>Balances<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">move</span><span class="p">(</span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint256</span><span class="p">)</span><span class="w"> </span>storage<span class="w"> </span>balances<span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">from</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>balances<span class="p">[</span>from<span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>balances<span class="p">[</span>to<span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>amount<span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>balances<span class="p">[</span>to<span class="p">]);</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span>from<span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">[</span>to<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Token</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint256</span><span class="p">)</span><span class="w"> </span>balances<span class="p">;</span><span class="w"></span>
+<span class="w">    </span>using<span class="w"> </span>Balances<span class="w"> </span><span class="kt">for</span><span class="w"> </span><span class="o">*</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">mapping</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint256</span><span class="p">))</span><span class="w"> </span>allowed<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Transfer</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">from</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Approval</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">spender</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transfer</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">success</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">.</span>move<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>to<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>Transfer<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>to<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transferFrom</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">from</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">to</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">success</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>allowed<span class="p">[</span>from<span class="p">][</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>allowed<span class="p">[</span>from<span class="p">][</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span>amount<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>balances<span class="p">.</span>move<span class="p">(</span>from<span class="p">,</span><span class="w"> </span>to<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>Transfer<span class="p">(</span>from<span class="p">,</span><span class="w"> </span>to<span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">approve</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">spender</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">tokens</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">success</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">require</span><span class="p">(</span>allowed<span class="p">[</span><span class="k">msg.sender</span><span class="p">][</span>spender<span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>allowed<span class="p">[</span><span class="k">msg.sender</span><span class="p">][</span>spender<span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>tokens<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>emit<span class="w"> </span>Approval<span class="p">(</span><span class="k">msg.sender</span><span class="p">,</span><span class="w"> </span>spender<span class="p">,</span><span class="w"> </span>tokens<span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">balanceOf</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">tokenOwner</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span>view<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">balance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">return</span><span class="w"> </span>balances<span class="p">[</span>tokenOwner<span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installing-solidity.html" class="btn btn-neutral float-left" title="نصب کامپایلر سالیدیتی" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="layout-of-source-files.html" class="btn btn-neutral float-right" title="چیدمان یک فایل منبع سالیدیتی" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

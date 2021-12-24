@@ -1,36 +1,39 @@
 .. index:: ! contract;creation, constructor
 
 ******************
-Creating Contracts
+ایجاد قراردادها
 ******************
+قراردادها را می‌توان "از خارج" از طریق تراکنش‌های اتریوم یا از طریق قراردادهای سالیدیتی ایجاد کرد.
 
-Contracts can be created "from outside" via Ethereum transactions or from within Solidity contracts.
 
-IDEs, such as `Remix <https://remix.ethereum.org/>`_, make the creation process seamless using UI elements.
+IDE هایی، مانند `Remix <https://remix.ethereum.org/>`_ ، فرآیند ایجاد را با استفاده از المان‌های UI انجام می‌دهند.
 
-One way to create contracts programmatically on Ethereum is via the JavaScript API `web3.js <https://github.com/ethereum/web3.js>`_.
-It has a function called `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_
-to facilitate contract creation.
 
-When a contract is created, its :ref:`constructor <constructor>` (a function declared with
-the ``constructor`` keyword) is executed once.
+یکی از راه‌های ایجاد قراردادها به صورت برنامه‌ای در اتریوم، استفاده از API جاوا اسکریپت `web3.js <https://github.com/ethereum/web3.js>`_ است. 
+یک تابع به نام  `web3.eth.Contract <https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#new-contract>`_ برای تسهیل ایجاد قرارداد را دارد.
 
-A constructor is optional. Only one constructor is allowed, which means
-overloading is not supported.
 
-After the constructor has executed, the final code of the contract is stored on the
-blockchain. This code includes all public and external functions and all functions
-that are reachable from there through function calls. The deployed code does not
-include the constructor code or internal functions only called from the constructor.
+هنگامی که یک قرارداد ایجاد می‌شود، :ref:`constructor <constructor>` آن (تابع اعلام شده با کلمه کلیدی ``constructor`` ) 
+یک بار اجرا می‌شود.
+
+
+کانستراکتور اختیاری است. فقط یک کانستراکتور مجاز است، به این معنی که overloading پشتیبانی نمی‌شود.
+
+
+
+پس از اجرای کانستراکتور، کد نهایی قرارداد بر روی بلاکچین ذخیره می‌شود. این کد شامل تمام توابع عمومی و 
+خارجی و همه توابعی است که از طریق فراخوانی تابع از آنجا قابل دسترسی است. کد به کار رفته شامل کد 
+کانستراکتور یا توابع داخلی نیست که فقط از سازنده فراخوانی می‌شوند.
+
 
 .. index:: constructor;arguments
 
-Internally, constructor arguments are passed :ref:`ABI encoded <ABI>` after the code of
-the contract itself, but you do not have to care about this if you use ``web3.js``.
+در داخل، آرگومان‌های کانستراکتور :ref:`ABI encoded <ABI>` پس از کد خود قرارداد ارسال می‌شوند، اما اگر از 
+``web3.js`` استفاده می‌کنید لازم نیست به این موضوع اهمیت دهید.
 
-If a contract wants to create another contract, the source code
-(and the binary) of the created contract has to be known to the creator.
-This means that cyclic creation dependencies are impossible.
+اگر یک قرارداد می‌خواهد قرارداد دیگری ایجاد کند، سورس‌کد (و باینری) قرارداد ایجاد شده باید برای کانستراکتور 
+شناخته شود. این بدان معنی است که وابستگی ایجاد چرخه‌ای غیرممکن است.
+
 
 .. code-block:: solidity
 

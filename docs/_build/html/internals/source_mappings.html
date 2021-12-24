@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Source Mappings &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script src="../_static/js/toggle.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="../genindex.html" />
+    <link rel="search" title="جستجو" href="../search.html" />
+    <link rel="next" title="The Optimizer" href="optimizer.html" />
+    <link rel="prev" title="Cleaning Up Variables" href="variable_cleanup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="../index.html">
+            <img src="../_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="../genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Source Mappings</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/internals/source_mappings.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="source-mappings">
+<span id="index-0"></span><h1>Source Mappings<a class="headerlink" href="#source-mappings" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>As part of the AST output, the compiler provides the range of the source
+code that is represented by the respective node in the AST. This can be
+used for various purposes ranging from static analysis tools that report
+errors based on the AST and debugging tools that highlight local variables
+and their uses.</p>
+<p>Furthermore, the compiler can also generate a mapping from the bytecode
+to the range in the source code that generated the instruction. This is again
+important for static analysis tools that operate on bytecode level and
+for displaying the current position in the source code inside a debugger
+or for breakpoint handling. This mapping also contains other information,
+like the jump type and the modifier depth (see below).</p>
+<p>Both kinds of source mappings use integer identifiers to refer to source files.
+The identifier of a source file is stored in
+<code class="docutils literal notranslate"><span class="pre">output['sources'][sourceName]['id']</span></code> where <code class="docutils literal notranslate"><span class="pre">output</span></code> is the output of the
+standard-json compiler interface parsed as JSON.
+For some utility routines, the compiler generates &quot;internal&quot; source files
+that are not part of the original input but are referenced from the source
+mappings. These source files together with their identifiers can be
+obtained via <code class="docutils literal notranslate"><span class="pre">output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>In the case of instructions that are not associated with any particular source file,
+the source mapping assigns an integer identifier of <code class="docutils literal notranslate"><span class="pre">-1</span></code>. This may happen for
+bytecode sections stemming from compiler-generated inline assembly statements.</p>
+</div>
+<p>The source mappings inside the AST use the following
+notation:</p>
+<p><code class="docutils literal notranslate"><span class="pre">s:l:f</span></code></p>
+<p>Where <code class="docutils literal notranslate"><span class="pre">s</span></code> is the byte-offset to the start of the range in the source file,
+<code class="docutils literal notranslate"><span class="pre">l</span></code> is the length of the source range in bytes and <code class="docutils literal notranslate"><span class="pre">f</span></code> is the source
+index mentioned above.</p>
+<p>The encoding in the source mapping for the bytecode is more complicated:
+It is a list of <code class="docutils literal notranslate"><span class="pre">s:l:f:j:m</span></code> separated by <code class="docutils literal notranslate"><span class="pre">;</span></code>. Each of these
+elements corresponds to an instruction, i.e. you cannot use the byte offset
+but have to use the instruction offset (push instructions are longer than a single byte).
+The fields <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code> are as above. <code class="docutils literal notranslate"><span class="pre">j</span></code> can be either
+<code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">o</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> signifying whether a jump instruction goes into a
+function, returns from a function or is a regular jump as part of e.g. a loop.
+The last field, <code class="docutils literal notranslate"><span class="pre">m</span></code>, is an integer that denotes the &quot;modifier depth&quot;. This depth
+is increased whenever the placeholder statement (<code class="docutils literal notranslate"><span class="pre">_</span></code>) is entered in a modifier
+and decreased when it is left again. This allows debuggers to track tricky cases
+like the same modifier being used twice or multiple placeholder statements being
+used in a single modifier.</p>
+<p>In order to compress these source mappings especially for bytecode, the
+following rules are used:</p>
+<ul class="simple">
+<li><p>If a field is empty, the value of the preceding element is used.</p></li>
+<li><p>If a <code class="docutils literal notranslate"><span class="pre">:</span></code> is missing, all following fields are considered empty.</p></li>
+</ul>
+<p>This means the following source mappings represent the same information:</p>
+<p><code class="docutils literal notranslate"><span class="pre">1:2:1;1:9:1;2:1:2;2:1:2;2:1:2</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">1:2:1;:9;2:1:2;;</span></code></p>
+<p>Important to note is that when the <a class="reference internal" href="../yul.html#yul-verbatim"><span class="std std-ref">verbatim</span></a> builtin is used,
+the source mappings will be invalid: The builtin is considered a single
+instruction instead of potentially multiple.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="variable_cleanup.html" class="btn btn-neutral float-left" title="Cleaning Up Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="optimizer.html" class="btn btn-neutral float-right" title="The Optimizer" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="../credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contract Metadata &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Contract ABI Specification" href="abi-spec.html" />
+    <link rel="prev" title="The Optimizer" href="internals/optimizer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contract Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#encoding-of-the-metadata-hash-in-the-bytecode">Encoding of the Metadata Hash in the Bytecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-automatic-interface-generation-and-natspec">Usage for Automatic Interface Generation and NatSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-source-code-verification">Usage for Source Code Verification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Contract Metadata</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metadata.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contract-metadata">
+<span id="metadata"></span><h1>Contract Metadata<a class="headerlink" href="#contract-metadata" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p id="index-0">The Solidity compiler automatically generates a JSON file, the contract
+metadata, that contains information about the compiled contract. You can use
+this file to query the compiler version, the sources used, the ABI and NatSpec
+documentation to more safely interact with the contract and verify its source
+code.</p>
+<p>The compiler appends by default the IPFS hash of the metadata file to the end
+of the bytecode (for details, see below) of each contract, so that you can
+retrieve the file in an authenticated way without having to resort to a
+centralized data provider. The other available options are the Swarm hash and
+not appending the metadata hash to the bytecode.  These can be configured via
+the <a class="reference internal" href="using-the-compiler.html#compiler-api"><span class="std std-ref">Standard JSON Interface</span></a>.</p>
+<p>You have to publish the metadata file to IPFS, Swarm, or another service so
+that others can access it. You create the file by using the <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--metadata</span></code>
+command that generates a file called <code class="docutils literal notranslate"><span class="pre">ContractName_meta.json</span></code>. It contains
+IPFS and Swarm references to the source code, so you have to upload all source
+files and the metadata file.</p>
+<p>The metadata file has the following format. The example below is presented in a
+human-readable way. Properly formatted metadata should use quotes correctly,
+reduce whitespace to a minimum and sort the keys of all objects to arrive at a
+unique formatting. Comments are not permitted and used here only for
+explanatory purposes.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="c1">// Required: The version of the metadata format</span>
+  <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="c1">// Required: Source code language, basically selects a &quot;sub-version&quot;</span>
+  <span class="c1">// of the specification</span>
+  <span class="s2">&quot;language&quot;</span><span class="o">:</span> <span class="s2">&quot;Solidity&quot;</span><span class="p">,</span>
+  <span class="c1">// Required: Details about the compiler, contents are specific</span>
+  <span class="c1">// to the language.</span>
+  <span class="s2">&quot;compiler&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Required for Solidity: Version of the compiler</span>
+    <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.4.6+commit.2dabbdf0.Emscripten.clang&quot;</span><span class="p">,</span>
+    <span class="c1">// Optional: Hash of the compiler binary which produced this output</span>
+    <span class="s2">&quot;keccak256&quot;</span><span class="o">:</span> <span class="s2">&quot;0x123...&quot;</span>
+  <span class="p">},</span>
+  <span class="c1">// Required: Compilation source files/source units, keys are file names</span>
+  <span class="s2">&quot;sources&quot;</span><span class="o">:</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;myFile.sol&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Required: keccak256 hash of the source file</span>
+      <span class="s2">&quot;keccak256&quot;</span><span class="o">:</span> <span class="s2">&quot;0x123...&quot;</span><span class="p">,</span>
+      <span class="c1">// Required (unless &quot;content&quot; is used, see below): Sorted URL(s)</span>
+      <span class="c1">// to the source file, protocol is more or less arbitrary, but a</span>
+      <span class="c1">// Swarm URL is recommended</span>
+      <span class="s2">&quot;urls&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;bzzr://56ab...&quot;</span> <span class="p">],</span>
+      <span class="c1">// Optional: SPDX license identifier as given in the source file</span>
+      <span class="s2">&quot;license&quot;</span><span class="o">:</span> <span class="s2">&quot;MIT&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;destructible&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Required: keccak256 hash of the source file</span>
+      <span class="s2">&quot;keccak256&quot;</span><span class="o">:</span> <span class="s2">&quot;0x234...&quot;</span><span class="p">,</span>
+      <span class="c1">// Required (unless &quot;url&quot; is used): literal contents of the source file</span>
+      <span class="s2">&quot;content&quot;</span><span class="o">:</span> <span class="s2">&quot;contract destructible is owned { function destroy() { if (msg.sender == owner) selfdestruct(owner); } }&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">// Required: Compiler settings</span>
+  <span class="s2">&quot;settings&quot;</span><span class="o">:</span>
+  <span class="p">{</span>
+    <span class="c1">// Required for Solidity: Sorted list of remappings</span>
+    <span class="s2">&quot;remappings&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;:g=/dir&quot;</span> <span class="p">],</span>
+    <span class="c1">// Optional: Optimizer settings. The fields &quot;enabled&quot; and &quot;runs&quot; are deprecated</span>
+    <span class="c1">// and are only given for backwards-compatibility.</span>
+    <span class="s2">&quot;optimizer&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;enabled&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="s2">&quot;runs&quot;</span><span class="o">:</span> <span class="mf">500</span><span class="p">,</span>
+      <span class="s2">&quot;details&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// peephole defaults to &quot;true&quot;</span>
+        <span class="s2">&quot;peephole&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// inliner defaults to &quot;true&quot;</span>
+        <span class="s2">&quot;inliner&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// jumpdestRemover defaults to &quot;true&quot;</span>
+        <span class="s2">&quot;jumpdestRemover&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">&quot;orderLiterals&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;deduplicate&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;cse&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;constantOptimizer&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="s2">&quot;yul&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Optional: Only present if &quot;yul&quot; is &quot;true&quot;</span>
+        <span class="s2">&quot;yulDetails&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;stackAllocation&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+          <span class="s2">&quot;optimizerSteps&quot;</span><span class="o">:</span> <span class="s2">&quot;dhfoDgvulfnTUtnIf...&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;metadata&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Reflects the setting used in the input json, defaults to false</span>
+      <span class="s2">&quot;useLiteralContent&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="c1">// Reflects the setting used in the input json, defaults to &quot;ipfs&quot;</span>
+      <span class="s2">&quot;bytecodeHash&quot;</span><span class="o">:</span> <span class="s2">&quot;ipfs&quot;</span>
+    <span class="p">},</span>
+    <span class="c1">// Required for Solidity: File and name of the contract or library this</span>
+    <span class="c1">// metadata is created for.</span>
+    <span class="s2">&quot;compilationTarget&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;myFile.sol&quot;</span><span class="o">:</span> <span class="s2">&quot;MyContract&quot;</span>
+    <span class="p">},</span>
+    <span class="c1">// Required for Solidity: Addresses for libraries used</span>
+    <span class="s2">&quot;libraries&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;MyLib&quot;</span><span class="o">:</span> <span class="s2">&quot;0x123123...&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">// Required: Generated information about the contract.</span>
+  <span class="s2">&quot;output&quot;</span><span class="o">:</span>
+  <span class="p">{</span>
+    <span class="c1">// Required: ABI definition of the contract</span>
+    <span class="s2">&quot;abi&quot;</span><span class="o">:</span> <span class="p">[</span><span class="cm">/* ... */</span><span class="p">],</span>
+    <span class="c1">// Required: NatSpec user documentation of the contract</span>
+    <span class="s2">&quot;userdoc&quot;</span><span class="o">:</span> <span class="p">[</span><span class="cm">/* ... */</span><span class="p">],</span>
+    <span class="c1">// Required: NatSpec developer documentation of the contract</span>
+    <span class="s2">&quot;devdoc&quot;</span><span class="o">:</span> <span class="p">[</span><span class="cm">/* ... */</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Since the bytecode of the resulting contract contains the metadata hash by default, any
+change to the metadata might result in a change of the bytecode. This includes
+changes to a filename or path, and since the metadata includes a hash of all the
+sources used, a single whitespace change results in different metadata, and
+different bytecode.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The ABI definition above has no fixed order. It can change with compiler versions.
+Starting from Solidity version 0.5.12, though, the array maintains a certain
+order.</p>
+</div>
+<section id="encoding-of-the-metadata-hash-in-the-bytecode">
+<span id="id1"></span><h2>Encoding of the Metadata Hash in the Bytecode<a class="headerlink" href="#encoding-of-the-metadata-hash-in-the-bytecode" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Because we might support other ways to retrieve the metadata file in the future,
+the mapping <code class="docutils literal notranslate"><span class="pre">{&quot;ipfs&quot;:</span> <span class="pre">&lt;IPFS</span> <span class="pre">hash&gt;,</span> <span class="pre">&quot;solc&quot;:</span> <span class="pre">&lt;compiler</span> <span class="pre">version&gt;}</span></code> is stored
+<a class="reference external" href="https://tools.ietf.org/html/rfc7049">CBOR</a>-encoded. Since the mapping might
+contain more keys (see below) and the beginning of that
+encoding is not easy to find, its length is added in a two-byte big-endian
+encoding. The current version of the Solidity compiler usually adds the following
+to the end of the deployed bytecode</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>0xa2
+0x64 &#39;i&#39; &#39;p&#39; &#39;f&#39; &#39;s&#39; 0x58 0x22 &lt;34 bytes IPFS hash&gt;
+0x64 &#39;s&#39; &#39;o&#39; &#39;l&#39; &#39;c&#39; 0x43 &lt;3 byte version encoding&gt;
+0x00 0x33
+</pre></div>
+</div>
+<p>So in order to retrieve the data, the end of the deployed bytecode can be checked
+to match that pattern and use the IPFS hash to retrieve the file.</p>
+<p>Whereas release builds of solc use a 3 byte encoding of the version as shown
+above (one byte each for major, minor and patch version number), prerelease builds
+will instead use a complete version string including commit hash and build date.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The CBOR mapping can also contain other keys, so it is better to fully
+decode the data instead of relying on it starting with <code class="docutils literal notranslate"><span class="pre">0xa264</span></code>.
+For example, if any experimental features that affect code generation
+are used, the mapping will also contain <code class="docutils literal notranslate"><span class="pre">&quot;experimental&quot;:</span> <span class="pre">true</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The compiler currently uses the IPFS hash of the metadata by default, but
+it may also use the bzzr1 hash or some other hash in the future, so do
+not rely on this sequence to start with <code class="docutils literal notranslate"><span class="pre">0xa2</span> <span class="pre">0x64</span> <span class="pre">'i'</span> <span class="pre">'p'</span> <span class="pre">'f'</span> <span class="pre">'s'</span></code>.  We
+might also add additional data to this CBOR structure, so the best option
+is to use a proper CBOR parser.</p>
+</div>
+</section>
+<section id="usage-for-automatic-interface-generation-and-natspec">
+<h2>Usage for Automatic Interface Generation and NatSpec<a class="headerlink" href="#usage-for-automatic-interface-generation-and-natspec" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The metadata is used in the following way: A component that wants to interact
+with a contract (e.g. Mist or any wallet) retrieves the code of the contract,
+from that the IPFS/Swarm hash of a file which is then retrieved.  That file
+is JSON-decoded into a structure like above.</p>
+<p>The component can then use the ABI to automatically generate a rudimentary
+user interface for the contract.</p>
+<p>Furthermore, the wallet can use the NatSpec user documentation to display a confirmation message to the user
+whenever they interact with the contract, together with requesting
+authorization for the transaction signature.</p>
+<p>For additional information, read <a class="reference internal" href="natspec-format.html"><span class="doc">Ethereum Natural Language Specification (NatSpec) format</span></a>.</p>
+</section>
+<section id="usage-for-source-code-verification">
+<h2>Usage for Source Code Verification<a class="headerlink" href="#usage-for-source-code-verification" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>In order to verify the compilation, sources can be retrieved from IPFS/Swarm
+via the link in the metadata file.
+The compiler of the correct version (which is checked to be part of the &quot;official&quot; compilers)
+is invoked on that input with the specified settings. The resulting
+bytecode is compared to the data of the creation transaction or <code class="docutils literal notranslate"><span class="pre">CREATE</span></code> opcode data.
+This automatically verifies the metadata since its hash is part of the bytecode.
+Excess data corresponds to the constructor input data, which should be decoded
+according to the interface and presented to the user.</p>
+<p>In the repository <a class="reference external" href="https://github.com/ethereum/sourcify">sourcify</a>
+(<a class="reference external" href="https://www.npmjs.com/package/source-verify">npm package</a>) you can see
+example code that shows how to use this feature.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="internals/optimizer.html" class="btn btn-neutral float-left" title="The Optimizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="abi-spec.html" class="btn btn-neutral float-right" title="Contract ABI Specification" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

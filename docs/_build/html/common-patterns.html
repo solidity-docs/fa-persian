@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common Patterns &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="List of Known Bugs" href="bugs.html" />
+    <link rel="prev" title="Style Guide" href="style-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Common Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#withdrawal-from-contracts">Withdrawal from Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restricting-access">Restricting Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-machine">State Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Common Patterns</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/common-patterns.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="common-patterns">
+<h1>Common Patterns<a class="headerlink" href="#common-patterns" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="withdrawal-from-contracts">
+<span id="withdrawal-pattern"></span><span id="index-0"></span><h2>Withdrawal from Contracts<a class="headerlink" href="#withdrawal-from-contracts" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The recommended method of sending funds after an effect
+is using the withdrawal pattern. Although the most intuitive
+method of sending Ether, as a result of an effect, is a
+direct <code class="docutils literal notranslate"><span class="pre">transfer</span></code> call, this is not recommended as it
+introduces a potential security risk. You may read
+more about this on the <a class="reference internal" href="security-considerations.html#security-considerations"><span class="std std-ref">Security Considerations</span></a> page.</p>
+<p>The following is an example of the withdrawal pattern in practice in
+a contract where the goal is to send the most money to the
+contract in order to become the &quot;richest&quot;, inspired by
+<a class="reference external" href="https://www.kingoftheether.com/">King of the Ether</a>.</p>
+<p>In the following contract, if you are no longer the richest,
+you receive the funds of the person who is now the richest.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IFdpdGhkcmF3YWxDb250cmFjdCB7CiAgICBhZGRyZXNzIHB1YmxpYyByaWNoZXN0OwogICAgdWludCBwdWJsaWMgbW9zdFNlbnQ7CgogICAgbWFwcGluZyAoYWRkcmVzcyA9PiB1aW50KSBwZW5kaW5nV2l0aGRyYXdhbHM7CgogICAgLy8vIFRoZSBhbW91bnQgb2YgRXRoZXIgc2VudCB3YXMgbm90IGhpZ2hlciB0aGFuCiAgICAvLy8gdGhlIGN1cnJlbnRseSBoaWdoZXN0IGFtb3VudC4KICAgIGVycm9yIE5vdEVub3VnaEV0aGVyKCk7CgogICAgY29uc3RydWN0b3IoKSBwYXlhYmxlIHsKICAgICAgICByaWNoZXN0ID0gbXNnLnNlbmRlcjsKICAgICAgICBtb3N0U2VudCA9IG1zZy52YWx1ZTsKICAgIH0KCiAgICBmdW5jdGlvbiBiZWNvbWVSaWNoZXN0KCkgcHVibGljIHBheWFibGUgewogICAgICAgIGlmIChtc2cudmFsdWUgPD0gbW9zdFNlbnQpIHJldmVydCBOb3RFbm91Z2hFdGhlcigpOwogICAgICAgIHBlbmRpbmdXaXRoZHJhd2Fsc1tyaWNoZXN0XSArPSBtc2cudmFsdWU7CiAgICAgICAgcmljaGVzdCA9IG1zZy5zZW5kZXI7CiAgICAgICAgbW9zdFNlbnQgPSBtc2cudmFsdWU7CiAgICB9CgogICAgZnVuY3Rpb24gd2l0aGRyYXcoKSBwdWJsaWMgewogICAgICAgIHVpbnQgYW1vdW50ID0gcGVuZGluZ1dpdGhkcmF3YWxzW21zZy5zZW5kZXJdOwogICAgICAgIC8vIFJlbWVtYmVyIHRvIHplcm8gdGhlIHBlbmRpbmcgcmVmdW5kIGJlZm9yZQogICAgICAgIC8vIHNlbmRpbmcgdG8gcHJldmVudCByZS1lbnRyYW5jeSBhdHRhY2tzCiAgICAgICAgcGVuZGluZ1dpdGhkcmF3YWxzW21zZy5zZW5kZXJdID0gMDsKICAgICAgICBwYXlhYmxlKG1zZy5zZW5kZXIpLnRyYW5zZmVyKGFtb3VudCk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">WithdrawalContract</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">richest</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">mostSent</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">mapping</span><span class="w"> </span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span>pendingWithdrawals<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// The amount of Ether sent was not higher than</span>
+<span class="w">    </span><span class="c1">/// the currently highest amount.</span>
+<span class="w">    </span>error<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>richest<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>mostSent<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">becomeRichest</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>mostSent<span class="p">)</span><span class="w"> </span>revert<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>pendingWithdrawals<span class="p">[</span>richest<span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>richest<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>mostSent<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pendingWithdrawals<span class="p">[</span><span class="k">msg.sender</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Remember to zero the pending refund before</span>
+<span class="w">        </span><span class="c1">// sending to prevent re-entrancy attacks</span>
+<span class="w">        </span>pendingWithdrawals<span class="p">[</span><span class="k">msg.sender</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This is as opposed to the more intuitive sending pattern:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IFNlbmRDb250cmFjdCB7CiAgICBhZGRyZXNzIHBheWFibGUgcHVibGljIHJpY2hlc3Q7CiAgICB1aW50IHB1YmxpYyBtb3N0U2VudDsKCiAgICAvLy8gVGhlIGFtb3VudCBvZiBFdGhlciBzZW50IHdhcyBub3QgaGlnaGVyIHRoYW4KICAgIC8vLyB0aGUgY3VycmVudGx5IGhpZ2hlc3QgYW1vdW50LgogICAgZXJyb3IgTm90RW5vdWdoRXRoZXIoKTsKCiAgICBjb25zdHJ1Y3RvcigpIHBheWFibGUgewogICAgICAgIHJpY2hlc3QgPSBwYXlhYmxlKG1zZy5zZW5kZXIpOwogICAgICAgIG1vc3RTZW50ID0gbXNnLnZhbHVlOwogICAgfQoKICAgIGZ1bmN0aW9uIGJlY29tZVJpY2hlc3QoKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgaWYgKG1zZy52YWx1ZSA8PSBtb3N0U2VudCkgcmV2ZXJ0IE5vdEVub3VnaEV0aGVyKCk7CiAgICAgICAgLy8gVGhpcyBsaW5lIGNhbiBjYXVzZSBwcm9ibGVtcyAoZXhwbGFpbmVkIGJlbG93KS4KICAgICAgICByaWNoZXN0LnRyYW5zZmVyKG1zZy52YWx1ZSk7CiAgICAgICAgcmljaGVzdCA9IHBheWFibGUobXNnLnNlbmRlcik7CiAgICAgICAgbW9zdFNlbnQgPSBtc2cudmFsdWU7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">SendContract</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="nv">payable</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>richest<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">mostSent</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// The amount of Ether sent was not higher than</span>
+<span class="w">    </span><span class="c1">/// the currently highest amount.</span>
+<span class="w">    </span>error<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>richest<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>mostSent<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">becomeRichest</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span>mostSent<span class="p">)</span><span class="w"> </span>revert<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// This line can cause problems (explained below).</span>
+<span class="w">        </span>richest<span class="p">.</span>transfer<span class="p">(</span><span class="k">msg.value</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>richest<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span>mostSent<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Notice that, in this example, an attacker could trap the
+contract into an unusable state by causing <code class="docutils literal notranslate"><span class="pre">richest</span></code> to be
+the address of a contract that has a receive or fallback function
+which fails (e.g. by using <code class="docutils literal notranslate"><span class="pre">revert()</span></code> or by just
+consuming more than the 2300 gas stipend transferred to them). That way,
+whenever <code class="docutils literal notranslate"><span class="pre">transfer</span></code> is called to deliver funds to the
+&quot;poisoned&quot; contract, it will fail and thus also <code class="docutils literal notranslate"><span class="pre">becomeRichest</span></code>
+will fail, with the contract being stuck forever.</p>
+<p>In contrast, if you use the &quot;withdraw&quot; pattern from the first example,
+the attacker can only cause his or her own withdraw to fail and not the
+rest of the contract's workings.</p>
+</section>
+<section id="restricting-access">
+<span id="index-1"></span><h2>Restricting Access<a class="headerlink" href="#restricting-access" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Restricting access is a common pattern for contracts.
+Note that you can never restrict any human or computer
+from reading the content of your transactions or
+your contract's state. You can make it a bit harder
+by using encryption, but if your contract is supposed
+to read the data, so will everyone else.</p>
+<p>You can restrict read access to your contract's state
+by <strong>other contracts</strong>. That is actually the default
+unless you declare your state variables <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p>
+<p>Furthermore, you can restrict who can make modifications
+to your contract's state or call your contract's
+functions and this is what this section is about.</p>
+<p id="index-2">The use of <strong>function modifiers</strong> makes these
+restrictions highly readable.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IEFjY2Vzc1Jlc3RyaWN0aW9uIHsKICAgIC8vIFRoZXNlIHdpbGwgYmUgYXNzaWduZWQgYXQgdGhlIGNvbnN0cnVjdGlvbgogICAgLy8gcGhhc2UsIHdoZXJlIGBtc2cuc2VuZGVyYCBpcyB0aGUgYWNjb3VudAogICAgLy8gY3JlYXRpbmcgdGhpcyBjb250cmFjdC4KICAgIGFkZHJlc3MgcHVibGljIG93bmVyID0gbXNnLnNlbmRlcjsKICAgIHVpbnQgcHVibGljIGNyZWF0aW9uVGltZSA9IGJsb2NrLnRpbWVzdGFtcDsKCiAgICAvLyBOb3cgZm9sbG93cyBhIGxpc3Qgb2YgZXJyb3JzIHRoYXQKICAgIC8vIHRoaXMgY29udHJhY3QgY2FuIGdlbmVyYXRlIHRvZ2V0aGVyCiAgICAvLyB3aXRoIGEgdGV4dHVhbCBleHBsYW5hdGlvbiBpbiBzcGVjaWFsCiAgICAvLyBjb21tZW50cy4KCiAgICAvLy8gU2VuZGVyIG5vdCBhdXRob3JpemVkIGZvciB0aGlzCiAgICAvLy8gb3BlcmF0aW9uLgogICAgZXJyb3IgVW5hdXRob3JpemVkKCk7CgogICAgLy8vIEZ1bmN0aW9uIGNhbGxlZCB0b28gZWFybHkuCiAgICBlcnJvciBUb29FYXJseSgpOwoKICAgIC8vLyBOb3QgZW5vdWdoIEV0aGVyIHNlbnQgd2l0aCBmdW5jdGlvbiBjYWxsLgogICAgZXJyb3IgTm90RW5vdWdoRXRoZXIoKTsKCiAgICAvLyBNb2RpZmllcnMgY2FuIGJlIHVzZWQgdG8gY2hhbmdlCiAgICAvLyB0aGUgYm9keSBvZiBhIGZ1bmN0aW9uLgogICAgLy8gSWYgdGhpcyBtb2RpZmllciBpcyB1c2VkLCBpdCB3aWxsCiAgICAvLyBwcmVwZW5kIGEgY2hlY2sgdGhhdCBvbmx5IHBhc3NlcwogICAgLy8gaWYgdGhlIGZ1bmN0aW9uIGlzIGNhbGxlZCBmcm9tCiAgICAvLyBhIGNlcnRhaW4gYWRkcmVzcy4KICAgIG1vZGlmaWVyIG9ubHlCeShhZGRyZXNzIF9hY2NvdW50KQogICAgewogICAgICAgIGlmIChtc2cuc2VuZGVyICE9IF9hY2NvdW50KQogICAgICAgICAgICByZXZlcnQgVW5hdXRob3JpemVkKCk7CiAgICAgICAgLy8gRG8gbm90IGZvcmdldCB0aGUgIl87IiEgSXQgd2lsbAogICAgICAgIC8vIGJlIHJlcGxhY2VkIGJ5IHRoZSBhY3R1YWwgZnVuY3Rpb24KICAgICAgICAvLyBib2R5IHdoZW4gdGhlIG1vZGlmaWVyIGlzIHVzZWQuCiAgICAgICAgXzsKICAgIH0KCiAgICAvLy8gTWFrZSBgX25ld093bmVyYCB0aGUgbmV3IG93bmVyIG9mIHRoaXMKICAgIC8vLyBjb250cmFjdC4KICAgIGZ1bmN0aW9uIGNoYW5nZU93bmVyKGFkZHJlc3MgX25ld093bmVyKQogICAgICAgIHB1YmxpYwogICAgICAgIG9ubHlCeShvd25lcikKICAgIHsKICAgICAgICBvd25lciA9IF9uZXdPd25lcjsKICAgIH0KCiAgICBtb2RpZmllciBvbmx5QWZ0ZXIodWludCBfdGltZSkgewogICAgICAgIGlmIChibG9jay50aW1lc3RhbXAgPCBfdGltZSkKICAgICAgICAgICAgcmV2ZXJ0IFRvb0Vhcmx5KCk7CiAgICAgICAgXzsKICAgIH0KCiAgICAvLy8gRXJhc2Ugb3duZXJzaGlwIGluZm9ybWF0aW9uLgogICAgLy8vIE1heSBvbmx5IGJlIGNhbGxlZCA2IHdlZWtzIGFmdGVyCiAgICAvLy8gdGhlIGNvbnRyYWN0IGhhcyBiZWVuIGNyZWF0ZWQuCiAgICBmdW5jdGlvbiBkaXNvd24oKQogICAgICAgIHB1YmxpYwogICAgICAgIG9ubHlCeShvd25lcikKICAgICAgICBvbmx5QWZ0ZXIoY3JlYXRpb25UaW1lICsgNiB3ZWVrcykKICAgIHsKICAgICAgICBkZWxldGUgb3duZXI7CiAgICB9CgogICAgLy8gVGhpcyBtb2RpZmllciByZXF1aXJlcyBhIGNlcnRhaW4KICAgIC8vIGZlZSBiZWluZyBhc3NvY2lhdGVkIHdpdGggYSBmdW5jdGlvbiBjYWxsLgogICAgLy8gSWYgdGhlIGNhbGxlciBzZW50IHRvbyBtdWNoLCBoZSBvciBzaGUgaXMKICAgIC8vIHJlZnVuZGVkLCBidXQgb25seSBhZnRlciB0aGUgZnVuY3Rpb24gYm9keS4KICAgIC8vIFRoaXMgd2FzIGRhbmdlcm91cyBiZWZvcmUgU29saWRpdHkgdmVyc2lvbiAwLjQuMCwKICAgIC8vIHdoZXJlIGl0IHdhcyBwb3NzaWJsZSB0byBza2lwIHRoZSBwYXJ0IGFmdGVyIGBfO2AuCiAgICBtb2RpZmllciBjb3N0cyh1aW50IF9hbW91bnQpIHsKICAgICAgICBpZiAobXNnLnZhbHVlIDwgX2Ftb3VudCkKICAgICAgICAgICAgcmV2ZXJ0IE5vdEVub3VnaEV0aGVyKCk7CgogICAgICAgIF87CiAgICAgICAgaWYgKG1zZy52YWx1ZSA+IF9hbW91bnQpCiAgICAgICAgICAgIHBheWFibGUobXNnLnNlbmRlcikudHJhbnNmZXIobXNnLnZhbHVlIC0gX2Ftb3VudCk7CiAgICB9CgogICAgZnVuY3Rpb24gZm9yY2VPd25lckNoYW5nZShhZGRyZXNzIF9uZXdPd25lcikKICAgICAgICBwdWJsaWMKICAgICAgICBwYXlhYmxlCiAgICAgICAgY29zdHMoMjAwIGV0aGVyKQogICAgewogICAgICAgIG93bmVyID0gX25ld093bmVyOwogICAgICAgIC8vIGp1c3Qgc29tZSBleGFtcGxlIGNvbmRpdGlvbgogICAgICAgIGlmICh1aW50MTYwKG93bmVyKSAmIDAgPT0gMSkKICAgICAgICAgICAgLy8gVGhpcyBkaWQgbm90IHJlZnVuZCBmb3IgU29saWRpdHkKICAgICAgICAgICAgLy8gYmVmb3JlIHZlcnNpb24gMC40LjAuCiAgICAgICAgICAgIHJldHVybjsKICAgICAgICAvLyByZWZ1bmQgb3ZlcnBhaWQgZmVlcwogICAgfQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">AccessRestriction</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// These will be assigned at the construction</span>
+<span class="w">    </span><span class="c1">// phase, where `msg.sender` is the account</span>
+<span class="w">    </span><span class="c1">// creating this contract.</span>
+<span class="w">    </span><span class="kt">address</span><span class="w"> </span><span class="k">public </span><span class="nv">owner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">msg.sender</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">creationTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">block.timestamp</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Now follows a list of errors that</span>
+<span class="w">    </span><span class="c1">// this contract can generate together</span>
+<span class="w">    </span><span class="c1">// with a textual explanation in special</span>
+<span class="w">    </span><span class="c1">// comments.</span>
+
+<span class="w">    </span><span class="c1">/// Sender not authorized for this</span>
+<span class="w">    </span><span class="c1">/// operation.</span>
+<span class="w">    </span>error<span class="w"> </span>Unauthorized<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Function called too early.</span>
+<span class="w">    </span>error<span class="w"> </span>TooEarly<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Not enough Ether sent with function call.</span>
+<span class="w">    </span>error<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Modifiers can be used to change</span>
+<span class="w">    </span><span class="c1">// the body of a function.</span>
+<span class="w">    </span><span class="c1">// If this modifier is used, it will</span>
+<span class="w">    </span><span class="c1">// prepend a check that only passes</span>
+<span class="w">    </span><span class="c1">// if the function is called from</span>
+<span class="w">    </span><span class="c1">// a certain address.</span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyBy<span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_account</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.sender</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span>_account<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>Unauthorized<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Do not forget the &quot;_;&quot;! It will</span>
+<span class="w">        </span><span class="c1">// be replaced by the actual function</span>
+<span class="w">        </span><span class="c1">// body when the modifier is used.</span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Make `_newOwner` the new owner of this</span>
+<span class="w">    </span><span class="c1">/// contract.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">changeOwner</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_newOwner</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>onlyBy<span class="p">(</span>owner<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span>_newOwner<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>onlyAfter<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">_time</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>_time<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>TooEarly<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">/// Erase ownership information.</span>
+<span class="w">    </span><span class="c1">/// May only be called 6 weeks after</span>
+<span class="w">    </span><span class="c1">/// the contract has been created.</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">disown</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>onlyBy<span class="p">(</span>owner<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>onlyAfter<span class="p">(</span>creationTime<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">6</span><span class="w"> </span>weeks<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>delete<span class="w"> </span>owner<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This modifier requires a certain</span>
+<span class="w">    </span><span class="c1">// fee being associated with a function call.</span>
+<span class="w">    </span><span class="c1">// If the caller sent too much, he or she is</span>
+<span class="w">    </span><span class="c1">// refunded, but only after the function body.</span>
+<span class="w">    </span><span class="c1">// This was dangerous before Solidity version 0.4.0,</span>
+<span class="w">    </span><span class="c1">// where it was possible to skip the part after `_;`.</span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>costs<span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">_amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span>_amount<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>NotEnoughEther<span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span>_amount<span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="kt">payable</span><span class="p">(</span><span class="k">msg.sender</span><span class="p">).</span>transfer<span class="p">(</span><span class="k">msg.value</span><span class="w"> </span><span class="o">-</span><span class="w"> </span>_amount<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">forceOwnerChange</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="nv">_newOwner</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="w"></span>
+<span class="w">        </span>costs<span class="p">(</span><span class="m m-Decimal">200</span><span class="w"> </span>ether<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>owner<span class="w"> </span><span class="o">=</span><span class="w"> </span>_newOwner<span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// just some example condition</span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="kt">uint160</span><span class="p">(</span>owner<span class="p">)</span><span class="w"> </span><span class="err">&amp;</span><span class="w"> </span><span class="m m-Decimal">0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// This did not refund for Solidity</span>
+<span class="w">            </span><span class="c1">// before version 0.4.0.</span>
+<span class="w">            </span><span class="kt">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// refund overpaid fees</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>A more specialised way in which access to function
+calls can be restricted will be discussed
+in the next example.</p>
+</section>
+<section id="state-machine">
+<span id="index-3"></span><h2>State Machine<a class="headerlink" href="#state-machine" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Contracts often act as a state machine, which means
+that they have certain <strong>stages</strong> in which they behave
+differently or in which different functions can
+be called. A function call often ends a stage
+and transitions the contract into the next stage
+(especially if the contract models <strong>interaction</strong>).
+It is also common that some stages are automatically
+reached at a certain point in <strong>time</strong>.</p>
+<p>An example for this is a blind auction contract which
+starts in the stage &quot;accepting blinded bids&quot;, then
+transitions to &quot;revealing bids&quot; which is ended by
+&quot;determine auction outcome&quot;.</p>
+<p id="index-4">Function modifiers can be used in this situation
+to model the states and guard against
+incorrect usage of the contract.</p>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>In the following example,
+the modifier <code class="docutils literal notranslate"><span class="pre">atStage</span></code> ensures that the function can
+only be called at a certain stage.</p>
+<p>Automatic timed transitions
+are handled by the modifier <code class="docutils literal notranslate"><span class="pre">timedTransitions</span></code>, which
+should be used for all functions.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p><strong>Modifier Order Matters</strong>.
+If atStage is combined
+with timedTransitions, make sure that you mention
+it after the latter, so that the new stage is
+taken into account.</p>
+</div>
+<p>Finally, the modifier <code class="docutils literal notranslate"><span class="pre">transitionNext</span></code> can be used
+to automatically go to the next stage when the
+function finishes.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p><strong>Modifier May be Skipped</strong>.
+This only applies to Solidity before version 0.4.0:
+Since modifiers are applied by simply replacing
+code and not by using a function call,
+the code in the transitionNext modifier
+can be skipped if the function itself uses
+return. If you want to do that, make sure
+to call nextStage manually from those functions.
+Starting with version 0.4.0, modifier code
+will run even if the function explicitly returns.</p>
+</div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IFN0YXRlTWFjaGluZSB7CiAgICBlbnVtIFN0YWdlcyB7CiAgICAgICAgQWNjZXB0aW5nQmxpbmRlZEJpZHMsCiAgICAgICAgUmV2ZWFsQmlkcywKICAgICAgICBBbm90aGVyU3RhZ2UsCiAgICAgICAgQXJlV2VEb25lWWV0LAogICAgICAgIEZpbmlzaGVkCiAgICB9CiAgICAvLy8gRnVuY3Rpb24gY2Fubm90IGJlIGNhbGxlZCBhdCB0aGlzIHRpbWUuCiAgICBlcnJvciBGdW5jdGlvbkludmFsaWRBdFRoaXNTdGFnZSgpOwoKICAgIC8vIFRoaXMgaXMgdGhlIGN1cnJlbnQgc3RhZ2UuCiAgICBTdGFnZXMgcHVibGljIHN0YWdlID0gU3RhZ2VzLkFjY2VwdGluZ0JsaW5kZWRCaWRzOwoKICAgIHVpbnQgcHVibGljIGNyZWF0aW9uVGltZSA9IGJsb2NrLnRpbWVzdGFtcDsKCiAgICBtb2RpZmllciBhdFN0YWdlKFN0YWdlcyBfc3RhZ2UpIHsKICAgICAgICBpZiAoc3RhZ2UgIT0gX3N0YWdlKQogICAgICAgICAgICByZXZlcnQgRnVuY3Rpb25JbnZhbGlkQXRUaGlzU3RhZ2UoKTsKICAgICAgICBfOwogICAgfQoKICAgIGZ1bmN0aW9uIG5leHRTdGFnZSgpIGludGVybmFsIHsKICAgICAgICBzdGFnZSA9IFN0YWdlcyh1aW50KHN0YWdlKSArIDEpOwogICAgfQoKICAgIC8vIFBlcmZvcm0gdGltZWQgdHJhbnNpdGlvbnMuIEJlIHN1cmUgdG8gbWVudGlvbgogICAgLy8gdGhpcyBtb2RpZmllciBmaXJzdCwgb3RoZXJ3aXNlIHRoZSBndWFyZHMKICAgIC8vIHdpbGwgbm90IHRha2UgdGhlIG5ldyBzdGFnZSBpbnRvIGFjY291bnQuCiAgICBtb2RpZmllciB0aW1lZFRyYW5zaXRpb25zKCkgewogICAgICAgIGlmIChzdGFnZSA9PSBTdGFnZXMuQWNjZXB0aW5nQmxpbmRlZEJpZHMgJiYKICAgICAgICAgICAgICAgICAgICBibG9jay50aW1lc3RhbXAgPj0gY3JlYXRpb25UaW1lICsgMTAgZGF5cykKICAgICAgICAgICAgbmV4dFN0YWdlKCk7CiAgICAgICAgaWYgKHN0YWdlID09IFN0YWdlcy5SZXZlYWxCaWRzICYmCiAgICAgICAgICAgICAgICBibG9jay50aW1lc3RhbXAgPj0gY3JlYXRpb25UaW1lICsgMTIgZGF5cykKICAgICAgICAgICAgbmV4dFN0YWdlKCk7CiAgICAgICAgLy8gVGhlIG90aGVyIHN0YWdlcyB0cmFuc2l0aW9uIGJ5IHRyYW5zYWN0aW9uCiAgICAgICAgXzsKICAgIH0KCiAgICAvLyBPcmRlciBvZiB0aGUgbW9kaWZpZXJzIG1hdHRlcnMgaGVyZSEKICAgIGZ1bmN0aW9uIGJpZCgpCiAgICAgICAgcHVibGljCiAgICAgICAgcGF5YWJsZQogICAgICAgIHRpbWVkVHJhbnNpdGlvbnMKICAgICAgICBhdFN0YWdlKFN0YWdlcy5BY2NlcHRpbmdCbGluZGVkQmlkcykKICAgIHsKICAgICAgICAvLyBXZSB3aWxsIG5vdCBpbXBsZW1lbnQgdGhhdCBoZXJlCiAgICB9CgogICAgZnVuY3Rpb24gcmV2ZWFsKCkKICAgICAgICBwdWJsaWMKICAgICAgICB0aW1lZFRyYW5zaXRpb25zCiAgICAgICAgYXRTdGFnZShTdGFnZXMuUmV2ZWFsQmlkcykKICAgIHsKICAgIH0KCiAgICAvLyBUaGlzIG1vZGlmaWVyIGdvZXMgdG8gdGhlIG5leHQgc3RhZ2UKICAgIC8vIGFmdGVyIHRoZSBmdW5jdGlvbiBpcyBkb25lLgogICAgbW9kaWZpZXIgdHJhbnNpdGlvbk5leHQoKQogICAgewogICAgICAgIF87CiAgICAgICAgbmV4dFN0YWdlKCk7CiAgICB9CgogICAgZnVuY3Rpb24gZygpCiAgICAgICAgcHVibGljCiAgICAgICAgdGltZWRUcmFuc2l0aW9ucwogICAgICAgIGF0U3RhZ2UoU3RhZ2VzLkFub3RoZXJTdGFnZSkKICAgICAgICB0cmFuc2l0aW9uTmV4dAogICAgewogICAgfQoKICAgIGZ1bmN0aW9uIGgoKQogICAgICAgIHB1YmxpYwogICAgICAgIHRpbWVkVHJhbnNpdGlvbnMKICAgICAgICBhdFN0YWdlKFN0YWdlcy5BcmVXZURvbmVZZXQpCiAgICAgICAgdHJhbnNpdGlvbk5leHQKICAgIHsKICAgIH0KCiAgICBmdW5jdGlvbiBpKCkKICAgICAgICBwdWJsaWMKICAgICAgICB0aW1lZFRyYW5zaXRpb25zCiAgICAgICAgYXRTdGFnZShTdGFnZXMuRmluaXNoZWQpCiAgICB7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">StateMachine</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">enum</span><span class="w"> </span><span class="nv">Stages</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>AcceptingBlindedBids<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>RevealBids<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>AnotherStage<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>AreWeDoneYet<span class="p">,</span><span class="w"></span>
+<span class="w">        </span>Finished<span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">/// Function cannot be called at this time.</span>
+<span class="w">    </span>error<span class="w"> </span>FunctionInvalidAtThisStage<span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This is the current stage.</span>
+<span class="w">    </span>Stages<span class="w"> </span><span class="kt">public</span><span class="w"> </span>stage<span class="w"> </span><span class="o">=</span><span class="w"> </span>Stages<span class="p">.</span>AcceptingBlindedBids<span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">uint</span><span class="w"> </span><span class="k">public </span><span class="nv">creationTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">block.timestamp</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>atStage<span class="p">(</span>Stages<span class="w"> </span>_stage<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>stage<span class="w"> </span><span class="o">!=</span><span class="w"> </span>_stage<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>revert<span class="w"> </span>FunctionInvalidAtThisStage<span class="p">();</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">nextStage</span><span class="p">()</span><span class="w"> </span><span class="kt">internal</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>stage<span class="w"> </span><span class="o">=</span><span class="w"> </span>Stages<span class="p">(</span><span class="kt">uint</span><span class="p">(</span>stage<span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Perform timed transitions. Be sure to mention</span>
+<span class="w">    </span><span class="c1">// this modifier first, otherwise the guards</span>
+<span class="w">    </span><span class="c1">// will not take the new stage into account.</span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>timedTransitions<span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>stage<span class="w"> </span><span class="o">==</span><span class="w"> </span>Stages<span class="p">.</span>AcceptingBlindedBids<span class="w"> </span><span class="err">&amp;&amp;</span><span class="w"></span>
+<span class="w">                    </span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>creationTime<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">10</span><span class="w"> </span>days<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>nextStage<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span>stage<span class="w"> </span><span class="o">==</span><span class="w"> </span>Stages<span class="p">.</span>RevealBids<span class="w"> </span><span class="err">&amp;&amp;</span><span class="w"></span>
+<span class="w">                </span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>creationTime<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">12</span><span class="w"> </span>days<span class="p">)</span><span class="w"></span>
+<span class="w">            </span>nextStage<span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// The other stages transition by transaction</span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Order of the modifiers matters here!</span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bid</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span><span class="kt">payable</span><span class="w"></span>
+<span class="w">        </span>timedTransitions<span class="w"></span>
+<span class="w">        </span>atStage<span class="p">(</span>Stages<span class="p">.</span>AcceptingBlindedBids<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// We will not implement that here</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">reveal</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>timedTransitions<span class="w"></span>
+<span class="w">        </span>atStage<span class="p">(</span>Stages<span class="p">.</span>RevealBids<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// This modifier goes to the next stage</span>
+<span class="w">    </span><span class="c1">// after the function is done.</span>
+<span class="w">    </span><span class="kt">modifier</span><span class="w"> </span>transitionNext<span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>_<span class="p">;</span><span class="w"></span>
+<span class="w">        </span>nextStage<span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>timedTransitions<span class="w"></span>
+<span class="w">        </span>atStage<span class="p">(</span>Stages<span class="p">.</span>AnotherStage<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>transitionNext<span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">h</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>timedTransitions<span class="w"></span>
+<span class="w">        </span>atStage<span class="p">(</span>Stages<span class="p">.</span>AreWeDoneYet<span class="p">)</span><span class="w"></span>
+<span class="w">        </span>transitionNext<span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">i</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="kt">public</span><span class="w"></span>
+<span class="w">        </span>timedTransitions<span class="w"></span>
+<span class="w">        </span>atStage<span class="p">(</span>Stages<span class="p">.</span>Finished<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="style-guide.html" class="btn btn-neutral float-left" title="Style Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="bugs.html" class="btn btn-neutral float-right" title="List of Known Bugs" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

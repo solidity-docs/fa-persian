@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the Compiler &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Analysing the Compiler Output" href="analysing-compilation-output.html" />
+    <link rel="prev" title="Language Grammar" href="grammar.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-commandline-compiler">Using the Commandline Compiler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizer-options">Optimizer Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#base-path-and-import-remapping">Base Path and Import Remapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#library-linking">Library Linking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-the-evm-version-to-target">Setting the EVM Version to Target</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#target-options">Target Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-input-and-output-json-description">Compiler Input and Output JSON Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-description">Input Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-description">Output Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#error-types">Error Types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-tools">Compiler Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solidity-upgrade">solidity-upgrade</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#how-it-works">How it Works</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#available-upgrade-modules">Available Upgrade Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bug-reports-feature-requests">Bug Reports / Feature Requests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Using the Compiler</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/using-the-compiler.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-the-compiler">
+<h1>Using the Compiler<a class="headerlink" href="#using-the-compiler" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="using-the-commandline-compiler">
+<span id="commandline-compiler"></span><span id="index-0"></span><h2>Using the Commandline Compiler<a class="headerlink" href="#using-the-commandline-compiler" title="پیوند ثابت به این سر مقاله"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>This section does not apply to <a class="reference internal" href="installing-solidity.html#solcjs"><span class="std std-ref">solcjs</span></a>, not even if it is used in commandline mode.</p>
+</div>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>One of the build targets of the Solidity repository is <code class="docutils literal notranslate"><span class="pre">solc</span></code>, the solidity commandline compiler.
+Using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--help</span></code> provides you with an explanation of all options. The compiler can produce various outputs, ranging from simple binaries and assembly over an abstract syntax tree (parse tree) to estimations of gas usage.
+If you only want to compile a single file, you run it as <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code> and it will print the binary. If you want to get some of the more advanced output variants of <code class="docutils literal notranslate"><span class="pre">solc</span></code>, it is probably better to tell it to output everything to separate files using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">-o</span> <span class="pre">outputDirectory</span> <span class="pre">--bin</span> <span class="pre">--ast-compact-json</span> <span class="pre">--asm</span> <span class="pre">sourceFile.sol</span></code>.</p>
+</section>
+<section id="optimizer-options">
+<h3>Optimizer Options<a class="headerlink" href="#optimizer-options" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Before you deploy your contract, activate the optimizer when compiling using <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--optimize</span> <span class="pre">--bin</span> <span class="pre">sourceFile.sol</span></code>.
+By default, the optimizer will optimize the contract assuming it is called 200 times across its lifetime
+(more specifically, it assumes each opcode is executed around 200 times).
+If you want the initial contract deployment to be cheaper and the later function executions to be more expensive,
+set it to <code class="docutils literal notranslate"><span class="pre">--optimize-runs=1</span></code>. If you expect many transactions and do not care for higher deployment cost and
+output size, set <code class="docutils literal notranslate"><span class="pre">--optimize-runs</span></code> to a high number.
+This parameter has effects on the following (this might change in the future):</p>
+<ul class="simple">
+<li><p>the size of the binary search in the function dispatch routine</p></li>
+<li><p>the way constants like large numbers or strings are stored</p></li>
+</ul>
+</section>
+<section id="base-path-and-import-remapping">
+<span id="index-1"></span><h3>Base Path and Import Remapping<a class="headerlink" href="#base-path-and-import-remapping" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The commandline compiler will automatically read imported files from the filesystem, but
+it is also possible to provide <a class="reference internal" href="path-resolution.html#import-remapping"><span class="std std-ref">path redirects</span></a> using <code class="docutils literal notranslate"><span class="pre">prefix=path</span></code> in the following way:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc github.com/ethereum/dapp-bin/<span class="o">=</span>/usr/local/lib/dapp-bin/ file.sol
+</pre></div>
+</div>
+<p>This essentially instructs the compiler to search for anything starting with
+<code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/</span></code> under <code class="docutils literal notranslate"><span class="pre">/usr/local/lib/dapp-bin</span></code>.</p>
+<p>When accessing the filesystem to search for imports, <a class="reference internal" href="path-resolution.html#direct-imports"><span class="std std-ref">paths that do not start with ./
+or ../</span></a> are treated as relative to the directories specified using
+<code class="docutils literal notranslate"><span class="pre">--base-path</span></code> and <code class="docutils literal notranslate"><span class="pre">--include-path</span></code> options (or the current working directory if base path is not specified).
+Furthermore, the part of the path added via these options will not appear in the contract metadata.</p>
+<p>For security reasons the compiler has <a class="reference internal" href="path-resolution.html#allowed-paths"><span class="std std-ref">restrictions on what directories it can access</span></a>.
+Directories of source files specified on the command line and target paths of
+remappings are automatically allowed to be accessed by the file reader, but everything
+else is rejected by default.
+Additional paths (and their subdirectories) can be allowed via the
+<code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">/sample/path,/another/sample/path</span></code> switch.
+Everything inside the path specified via <code class="docutils literal notranslate"><span class="pre">--base-path</span></code> is always allowed.</p>
+<p>The above is only a simplification of how the compiler handles import paths.
+For a detailed explanation with examples and discussion of corner cases please refer to the section on
+<a class="reference internal" href="path-resolution.html#path-resolution"><span class="std std-ref">path resolution</span></a>.</p>
+</section>
+<section id="library-linking">
+<span id="index-2"></span><span id="id1"></span><h3>Library Linking<a class="headerlink" href="#library-linking" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>If your contracts use <a class="reference internal" href="contracts.html#libraries"><span class="std std-ref">libraries</span></a>, you will notice that the bytecode contains substrings of the form <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>. These are placeholders for the actual library addresses.
+The placeholder is a 34 character prefix of the hex encoding of the keccak256 hash of the fully qualified library name.
+The bytecode file will also contain lines of the form <code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">&lt;placeholder&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;fq</span> <span class="pre">library</span> <span class="pre">name&gt;</span></code> at the end to help
+identify which libraries the placeholders represent. Note that the fully qualified library name
+is the path of its source file and the library name separated by <code class="docutils literal notranslate"><span class="pre">:</span></code>.
+You can use <code class="docutils literal notranslate"><span class="pre">solc</span></code> as a linker meaning that it will insert the library addresses for you at those points:</p>
+<p>Either add <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">&quot;file.sol:Math=0x1234567890123456789012345678901234567890</span> <span class="pre">file.sol:Heap=0xabCD567890123456789012345678901234567890&quot;</span></code> to your command to provide an address for each library (use commas or spaces as separators) or store the string in a file (one library per line) and run <code class="docutils literal notranslate"><span class="pre">solc</span></code> using <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">fileName</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Starting Solidity 0.8.1 accepts <code class="docutils literal notranslate"><span class="pre">=</span></code> as separator between library and address, and <code class="docutils literal notranslate"><span class="pre">:</span></code> as a separator is deprecated. It will be removed in the future. Currently <code class="docutils literal notranslate"><span class="pre">--libraries</span> <span class="pre">&quot;file.sol:Math:0x1234567890123456789012345678901234567890</span> <span class="pre">file.sol:Heap:0xabCD567890123456789012345678901234567890&quot;</span></code> will work too.</p>
+</div>
+<p id="index-3">If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--standard-json</span></code>, it will expect a JSON input (as explained below) on the standard input, and return a JSON output on the standard output. This is the recommended interface for more complex and especially automated uses. The process will always terminate in a &quot;success&quot; state and report any errors via the JSON output.
+The option <code class="docutils literal notranslate"><span class="pre">--base-path</span></code> is also processed in standard-json mode.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">solc</span></code> is called with the option <code class="docutils literal notranslate"><span class="pre">--link</span></code>, all input files are interpreted to be unlinked binaries (hex-encoded) in the <code class="docutils literal notranslate"><span class="pre">__$53aea86b7d70b31448b230b20ae141a537$__</span></code>-format given above and are linked in-place (if the input is read from stdin, it is written to stdout). All options except <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> are ignored (including <code class="docutils literal notranslate"><span class="pre">-o</span></code>) in this case.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Manually linking libraries on the generated bytecode is discouraged because it does not update
+contract metadata. Since metadata contains a list of libraries specified at the time of
+compilation and bytecode contains a metadata hash, you will get different binaries, depending
+on when linking is performed.</p>
+<p>You should ask the compiler to link the libraries at the time a contract is compiled by either
+using the <code class="docutils literal notranslate"><span class="pre">--libraries</span></code> option of <code class="docutils literal notranslate"><span class="pre">solc</span></code> or the <code class="docutils literal notranslate"><span class="pre">libraries</span></code> key if you use the
+standard-JSON interface to the compiler.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The library placeholder used to be the fully qualified name of the library itself
+instead of the hash of it. This format is still supported by <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--link</span></code> but
+the compiler will no longer output it. This change was made to reduce
+the likelihood of a collision between libraries, since only the first 36 characters
+of the fully qualified library name could be used.</p>
+</div>
+<span class="target" id="evm-version"></span></section>
+</section>
+<section id="setting-the-evm-version-to-target">
+<span id="index-4"></span><h2>Setting the EVM Version to Target<a class="headerlink" href="#setting-the-evm-version-to-target" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>When you compile your contract code you can specify the Ethereum virtual machine
+version to compile for to avoid particular features or behaviours.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Compiling for the wrong EVM version can result in wrong, strange and failing
+behaviour. Please ensure, especially if running a private chain, that you
+use matching EVM versions.</p>
+</div>
+<p>On the command line, you can select the EVM version as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>solc --evm-version &lt;VERSION&gt; contract.sol
+</pre></div>
+</div>
+<p>In the <a class="reference internal" href="#compiler-api"><span class="std std-ref">standard JSON interface</span></a>, use the <code class="docutils literal notranslate"><span class="pre">&quot;evmVersion&quot;</span></code>
+key in the <code class="docutils literal notranslate"><span class="pre">&quot;settings&quot;</span></code> field:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;sources&quot;</span><span class="o">:</span> <span class="p">{</span><span class="cm">/* ... */</span><span class="p">},</span>
+  <span class="s2">&quot;settings&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;optimizer&quot;</span><span class="o">:</span> <span class="p">{</span><span class="cm">/* ... */</span><span class="p">},</span>
+    <span class="s2">&quot;evmVersion&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;VERSION&gt;&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="target-options">
+<h3>Target Options<a class="headerlink" href="#target-options" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Below is a list of target EVM versions and the compiler-relevant changes introduced
+at each version. Backward compatibility is not guaranteed between each version.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">homestead</span></code></dt><dd><ul>
+<li><p>(oldest version)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">tangerineWhistle</span></code></dt><dd><ul>
+<li><p>Gas cost for access to other accounts increased, relevant for gas estimation and the optimizer.</p></li>
+<li><p>All gas sent by default for external calls, previously a certain amount had to be retained.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">spuriousDragon</span></code></dt><dd><ul>
+<li><p>Gas cost for the <code class="docutils literal notranslate"><span class="pre">exp</span></code> opcode increased, relevant for gas estimation and the optimizer.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">byzantium</span></code></dt><dd><ul>
+<li><p>Opcodes <code class="docutils literal notranslate"><span class="pre">returndatacopy</span></code>, <code class="docutils literal notranslate"><span class="pre">returndatasize</span></code> and <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> are available in assembly.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">staticcall</span></code> opcode is used when calling non-library view or pure functions, which prevents the functions from modifying state at the EVM level, i.e., even applies when you use invalid type conversions.</p></li>
+<li><p>It is possible to access dynamic data returned from function calls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">revert</span></code> opcode introduced, which means that <code class="docutils literal notranslate"><span class="pre">revert()</span></code> will not waste gas.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">constantinople</span></code></dt><dd><ul>
+<li><p>Opcodes <code class="docutils literal notranslate"><span class="pre">create2`,</span> <span class="pre">``extcodehash</span></code>, <code class="docutils literal notranslate"><span class="pre">shl</span></code>, <code class="docutils literal notranslate"><span class="pre">shr</span></code> and <code class="docutils literal notranslate"><span class="pre">sar</span></code> are available in assembly.</p></li>
+<li><p>Shifting operators use shifting opcodes and thus need less gas.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">petersburg</span></code></dt><dd><ul>
+<li><p>The compiler behaves the same way as with constantinople.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">istanbul</span></code></dt><dd><ul>
+<li><p>Opcodes <code class="docutils literal notranslate"><span class="pre">chainid</span></code> and <code class="docutils literal notranslate"><span class="pre">selfbalance</span></code> are available in assembly.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">berlin</span></code></dt><dd><ul>
+<li><p>Gas costs for <code class="docutils literal notranslate"><span class="pre">SLOAD</span></code>, <code class="docutils literal notranslate"><span class="pre">*CALL</span></code>, <code class="docutils literal notranslate"><span class="pre">BALANCE</span></code>, <code class="docutils literal notranslate"><span class="pre">EXT*</span></code> and <code class="docutils literal notranslate"><span class="pre">SELFDESTRUCT</span></code> increased. The
+compiler assumes cold gas costs for such operations. This is relevant for gas estimation and
+the optimizer.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">london</span></code> (<strong>default</strong>)</dt><dd><ul>
+<li><p>The block's base fee (<a class="reference external" href="https://eips.ethereum.org/EIPS/eip-3198">EIP-3198</a> and <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-1559">EIP-1559</a>) can be accessed via the global <code class="docutils literal notranslate"><span class="pre">block.basefee</span></code> or <code class="docutils literal notranslate"><span class="pre">basefee()</span></code> in inline assembly.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="compiler-input-and-output-json-description">
+<span id="compiler-api"></span><span id="index-5"></span><h2>Compiler Input and Output JSON Description<a class="headerlink" href="#compiler-input-and-output-json-description" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The recommended way to interface with the Solidity compiler especially for
+more complex and automated setups is the so-called JSON-input-output interface.
+The same interface is provided by all distributions of the compiler.</p>
+<p>The fields are generally subject to change,
+some are optional (as noted), but we try to only make backwards compatible changes.</p>
+<p>The compiler API expects a JSON formatted input and outputs the compilation result in a JSON formatted output.
+The standard error output is not used and the process will always terminate in a &quot;success&quot; state, even
+if there were errors. Errors are always reported as part of the JSON output.</p>
+<p>The following subsections describe the format through an example.
+Comments are of course not permitted and used here only for explanatory purposes.</p>
+<section id="input-description">
+<h3>Input Description<a class="headerlink" href="#input-description" title="پیوند ثابت به این سر مقاله"></a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="c1">// Required: Source code language. Currently supported are &quot;Solidity&quot; and &quot;Yul&quot;.</span>
+  <span class="s2">&quot;language&quot;</span><span class="o">:</span> <span class="s2">&quot;Solidity&quot;</span><span class="p">,</span>
+  <span class="c1">// Required</span>
+  <span class="s2">&quot;sources&quot;</span><span class="o">:</span>
+  <span class="p">{</span>
+    <span class="c1">// The keys here are the &quot;global&quot; names of the source files,</span>
+    <span class="c1">// imports can use other files via remappings (see below).</span>
+    <span class="s2">&quot;myFile.sol&quot;</span><span class="o">:</span>
+    <span class="p">{</span>
+      <span class="c1">// Optional: keccak256 hash of the source file</span>
+      <span class="c1">// It is used to verify the retrieved content if imported via URLs.</span>
+      <span class="s2">&quot;keccak256&quot;</span><span class="o">:</span> <span class="s2">&quot;0x123...&quot;</span><span class="p">,</span>
+      <span class="c1">// Required (unless &quot;content&quot; is used, see below): URL(s) to the source file.</span>
+      <span class="c1">// URL(s) should be imported in this order and the result checked against the</span>
+      <span class="c1">// keccak256 hash (if available). If the hash doesn&#39;t match or none of the</span>
+      <span class="c1">// URL(s) result in success, an error should be raised.</span>
+      <span class="c1">// Using the commandline interface only filesystem paths are supported.</span>
+      <span class="c1">// With the JavaScript interface the URL will be passed to the user-supplied</span>
+      <span class="c1">// read callback, so any URL supported by the callback can be used.</span>
+      <span class="s2">&quot;urls&quot;</span><span class="o">:</span>
+      <span class="p">[</span>
+        <span class="s2">&quot;bzzr://56ab...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ipfs://Qma...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;/tmp/path/to/file.sol&quot;</span>
+        <span class="c1">// If files are used, their directories should be added to the command line via</span>
+        <span class="c1">// `--allow-paths &lt;path&gt;`.</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;destructible&quot;</span><span class="o">:</span>
+    <span class="p">{</span>
+      <span class="c1">// Optional: keccak256 hash of the source file</span>
+      <span class="s2">&quot;keccak256&quot;</span><span class="o">:</span> <span class="s2">&quot;0x234...&quot;</span><span class="p">,</span>
+      <span class="c1">// Required (unless &quot;urls&quot; is used): literal contents of the source file</span>
+      <span class="s2">&quot;content&quot;</span><span class="o">:</span> <span class="s2">&quot;contract destructible is owned { function shutdown() { if (msg.sender == owner) selfdestruct(owner); } }&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">// Optional</span>
+  <span class="s2">&quot;settings&quot;</span><span class="o">:</span>
+  <span class="p">{</span>
+    <span class="c1">// Optional: Stop compilation after the given stage. Currently only &quot;parsing&quot; is valid here</span>
+    <span class="s2">&quot;stopAfter&quot;</span><span class="o">:</span> <span class="s2">&quot;parsing&quot;</span><span class="p">,</span>
+    <span class="c1">// Optional: Sorted list of remappings</span>
+    <span class="s2">&quot;remappings&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;:g=/dir&quot;</span> <span class="p">],</span>
+    <span class="c1">// Optional: Optimizer settings</span>
+    <span class="s2">&quot;optimizer&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Disabled by default.</span>
+      <span class="c1">// NOTE: enabled=false still leaves some optimizations on. See comments below.</span>
+      <span class="c1">// WARNING: Before version 0.8.6 omitting the &#39;enabled&#39; key was not equivalent to setting</span>
+      <span class="c1">// it to false and would actually disable all the optimizations.</span>
+      <span class="s2">&quot;enabled&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="c1">// Optimize for how many times you intend to run the code.</span>
+      <span class="c1">// Lower values will optimize more for initial deployment cost, higher</span>
+      <span class="c1">// values will optimize more for high-frequency usage.</span>
+      <span class="s2">&quot;runs&quot;</span><span class="o">:</span> <span class="mf">200</span><span class="p">,</span>
+      <span class="c1">// Switch optimizer components on or off in detail.</span>
+      <span class="c1">// The &quot;enabled&quot; switch above provides two defaults which can be</span>
+      <span class="c1">// tweaked here. If &quot;details&quot; is given, &quot;enabled&quot; can be omitted.</span>
+      <span class="s2">&quot;details&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// The peephole optimizer is always on if no details are given,</span>
+        <span class="c1">// use details to switch it off.</span>
+        <span class="s2">&quot;peephole&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// The inliner is always on if no details are given,</span>
+        <span class="c1">// use details to switch it off.</span>
+        <span class="s2">&quot;inliner&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// The unused jumpdest remover is always on if no details are given,</span>
+        <span class="c1">// use details to switch it off.</span>
+        <span class="s2">&quot;jumpdestRemover&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Sometimes re-orders literals in commutative operations.</span>
+        <span class="s2">&quot;orderLiterals&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// Removes duplicate code blocks</span>
+        <span class="s2">&quot;deduplicate&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// Common subexpression elimination, this is the most complicated step but</span>
+        <span class="c1">// can also provide the largest gain.</span>
+        <span class="s2">&quot;cse&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// Optimize representation of literal numbers and strings in code.</span>
+        <span class="s2">&quot;constantOptimizer&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// The new Yul optimizer. Mostly operates on the code of ABI coder v2</span>
+        <span class="c1">// and inline assembly.</span>
+        <span class="c1">// It is activated together with the global optimizer setting</span>
+        <span class="c1">// and can be deactivated here.</span>
+        <span class="c1">// Before Solidity 0.6.0 it had to be activated through this switch.</span>
+        <span class="s2">&quot;yul&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="c1">// Tuning options for the Yul optimizer.</span>
+        <span class="s2">&quot;yulDetails&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="c1">// Improve allocation of stack slots for variables, can free up stack slots early.</span>
+          <span class="c1">// Activated by default if the Yul optimizer is activated.</span>
+          <span class="s2">&quot;stackAllocation&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+          <span class="c1">// Select optimization steps to be applied.</span>
+          <span class="c1">// Optional, the optimizer will use the default sequence if omitted.</span>
+          <span class="s2">&quot;optimizerSteps&quot;</span><span class="o">:</span> <span class="s2">&quot;dhfoDgvulfnTUtnIf...&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// Version of the EVM to compile for.</span>
+    <span class="c1">// Affects type checking and code generation. Can be homestead,</span>
+    <span class="c1">// tangerineWhistle, spuriousDragon, byzantium, constantinople, petersburg, istanbul or berlin</span>
+    <span class="s2">&quot;evmVersion&quot;</span><span class="o">:</span> <span class="s2">&quot;byzantium&quot;</span><span class="p">,</span>
+    <span class="c1">// Optional: Change compilation pipeline to go through the Yul intermediate representation.</span>
+    <span class="c1">// This is a highly EXPERIMENTAL feature, not to be used for production. This is false by default.</span>
+    <span class="s2">&quot;viaIR&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="c1">// Optional: Debugging settings</span>
+    <span class="s2">&quot;debug&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// How to treat revert (and require) reason strings. Settings are</span>
+      <span class="c1">// &quot;default&quot;, &quot;strip&quot;, &quot;debug&quot; and &quot;verboseDebug&quot;.</span>
+      <span class="c1">// &quot;default&quot; does not inject compiler-generated revert strings and keeps user-supplied ones.</span>
+      <span class="c1">// &quot;strip&quot; removes all revert strings (if possible, i.e. if literals are used) keeping side-effects</span>
+      <span class="c1">// &quot;debug&quot; injects strings for compiler-generated internal reverts, implemented for ABI encoders V1 and V2 for now.</span>
+      <span class="c1">// &quot;verboseDebug&quot; even appends further information to user-supplied revert strings (not yet implemented)</span>
+      <span class="s2">&quot;revertStrings&quot;</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+      <span class="c1">// Optional: How much extra debug information to include in comments in the produced EVM</span>
+      <span class="c1">// assembly and Yul code. Available components are:</span>
+      <span class="c1">// - `location`: Annotations of the form `@src &lt;index&gt;:&lt;start&gt;:&lt;end&gt;` indicating the</span>
+      <span class="c1">//    location of the corresponding element in the original Solidity file, where:</span>
+      <span class="c1">//     - `&lt;index&gt;` is the file index matching the `@use-src` annotation,</span>
+      <span class="c1">//     - `&lt;start&gt;` is the index of the first byte at that location,</span>
+      <span class="c1">//     - `&lt;end&gt;` is the index of the first byte after that location.</span>
+      <span class="c1">// - `snippet`: A single-line code snippet from the location indicated by `@src`.</span>
+      <span class="c1">//     The snippet is quoted and follows the corresponding `@src` annotation.</span>
+      <span class="c1">// - `*`: Wildcard value that can be used to request everything.</span>
+      <span class="s2">&quot;debugInfo&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;snippet&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="c1">// Metadata settings (optional)</span>
+    <span class="s2">&quot;metadata&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Use only literal content and not URLs (false by default)</span>
+      <span class="s2">&quot;useLiteralContent&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="c1">// Use the given hash method for the metadata hash that is appended to the bytecode.</span>
+      <span class="c1">// The metadata hash can be removed from the bytecode via option &quot;none&quot;.</span>
+      <span class="c1">// The other options are &quot;ipfs&quot; and &quot;bzzr1&quot;.</span>
+      <span class="c1">// If the option is omitted, &quot;ipfs&quot; is used by default.</span>
+      <span class="s2">&quot;bytecodeHash&quot;</span><span class="o">:</span> <span class="s2">&quot;ipfs&quot;</span>
+    <span class="p">},</span>
+    <span class="c1">// Addresses of the libraries. If not all libraries are given here,</span>
+    <span class="c1">// it can result in unlinked objects whose output data is different.</span>
+    <span class="s2">&quot;libraries&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// The top level key is the the name of the source file where the library is used.</span>
+      <span class="c1">// If remappings are used, this source file should match the global path</span>
+      <span class="c1">// after remappings were applied.</span>
+      <span class="c1">// If this key is an empty string, that refers to a global level.</span>
+      <span class="s2">&quot;myFile.sol&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;MyLib&quot;</span><span class="o">:</span> <span class="s2">&quot;0x123123...&quot;</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// The following can be used to select desired outputs based</span>
+    <span class="c1">// on file and contract names.</span>
+    <span class="c1">// If this field is omitted, then the compiler loads and does type checking,</span>
+    <span class="c1">// but will not generate any outputs apart from errors.</span>
+    <span class="c1">// The first level key is the file name and the second level key is the contract name.</span>
+    <span class="c1">// An empty contract name is used for outputs that are not tied to a contract</span>
+    <span class="c1">// but to the whole source file like the AST.</span>
+    <span class="c1">// A star as contract name refers to all contracts in the file.</span>
+    <span class="c1">// Similarly, a star as a file name matches all files.</span>
+    <span class="c1">// To select all outputs the compiler can possibly generate, use</span>
+    <span class="c1">// &quot;outputSelection: { &quot;*&quot;: { &quot;*&quot;: [ &quot;*&quot; ], &quot;&quot;: [ &quot;*&quot; ] } }&quot;</span>
+    <span class="c1">// but note that this might slow down the compilation process needlessly.</span>
+    <span class="c1">//</span>
+    <span class="c1">// The available output types are as follows:</span>
+    <span class="c1">//</span>
+    <span class="c1">// File level (needs empty string as contract name):</span>
+    <span class="c1">//   ast - AST of all source files</span>
+    <span class="c1">//</span>
+    <span class="c1">// Contract level (needs the contract name or &quot;*&quot;):</span>
+    <span class="c1">//   abi - ABI</span>
+    <span class="c1">//   devdoc - Developer documentation (natspec)</span>
+    <span class="c1">//   userdoc - User documentation (natspec)</span>
+    <span class="c1">//   metadata - Metadata</span>
+    <span class="c1">//   ir - Yul intermediate representation of the code before optimization</span>
+    <span class="c1">//   irOptimized - Intermediate representation after optimization</span>
+    <span class="c1">//   storageLayout - Slots, offsets and types of the contract&#39;s state variables.</span>
+    <span class="c1">//   evm.assembly - New assembly format</span>
+    <span class="c1">//   evm.legacyAssembly - Old-style assembly format in JSON</span>
+    <span class="c1">//   evm.bytecode.functionDebugData - Debugging information at function level</span>
+    <span class="c1">//   evm.bytecode.object - Bytecode object</span>
+    <span class="c1">//   evm.bytecode.opcodes - Opcodes list</span>
+    <span class="c1">//   evm.bytecode.sourceMap - Source mapping (useful for debugging)</span>
+    <span class="c1">//   evm.bytecode.linkReferences - Link references (if unlinked object)</span>
+    <span class="c1">//   evm.bytecode.generatedSources - Sources generated by the compiler</span>
+    <span class="c1">//   evm.deployedBytecode* - Deployed bytecode (has all the options that evm.bytecode has)</span>
+    <span class="c1">//   evm.deployedBytecode.immutableReferences - Map from AST ids to bytecode ranges that reference immutables</span>
+    <span class="c1">//   evm.methodIdentifiers - The list of function hashes</span>
+    <span class="c1">//   evm.gasEstimates - Function gas estimates</span>
+    <span class="c1">//   ewasm.wast - Ewasm in WebAssembly S-expressions format</span>
+    <span class="c1">//   ewasm.wasm - Ewasm in WebAssembly binary format</span>
+    <span class="c1">//</span>
+    <span class="c1">// Note that using a using `evm`, `evm.bytecode`, `ewasm`, etc. will select every</span>
+    <span class="c1">// target part of that output. Additionally, `*` can be used as a wildcard to request everything.</span>
+    <span class="c1">//</span>
+    <span class="s2">&quot;outputSelection&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;*&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;*&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;evm.bytecode&quot;</span> <span class="c1">// Enable the metadata and bytecode outputs of every single contract.</span>
+          <span class="p">,</span> <span class="s2">&quot;evm.bytecode.sourceMap&quot;</span> <span class="c1">// Enable the source map output of every single contract.</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s2">&quot;ast&quot;</span> <span class="c1">// Enable the AST output of every single file.</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="c1">// Enable the abi and opcodes output of MyContract defined in file def.</span>
+      <span class="s2">&quot;def&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;MyContract&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;abi&quot;</span><span class="p">,</span> <span class="s2">&quot;evm.bytecode.opcodes&quot;</span> <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="c1">// The modelChecker object is experimental and subject to changes.</span>
+    <span class="s2">&quot;modelChecker&quot;</span><span class="o">:</span>
+    <span class="p">{</span>
+      <span class="c1">// Chose which contracts should be analyzed as the deployed one.</span>
+      <span class="s2">&quot;contracts&quot;</span><span class="o">:</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;source1.sol&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;contract1&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;source2.sol&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;contract2&quot;</span><span class="p">,</span> <span class="s2">&quot;contract3&quot;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="c1">// Choose whether division and modulo operations should be replaced by</span>
+      <span class="c1">// multiplication with slack variables. Default is `true`.</span>
+      <span class="c1">// Using `false` here is recommended if you are using the CHC engine</span>
+      <span class="c1">// and not using Spacer as the Horn solver (using Eldarica, for example).</span>
+      <span class="c1">// See the Formal Verification section for a more detailed explanation of this option.</span>
+      <span class="s2">&quot;divModWithSlacks&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="c1">// Choose which model checker engine to use: all (default), bmc, chc, none.</span>
+      <span class="s2">&quot;engine&quot;</span><span class="o">:</span> <span class="s2">&quot;chc&quot;</span><span class="p">,</span>
+      <span class="c1">// Choose whether to output all unproved targets. The default is `false`.</span>
+      <span class="s2">&quot;showUnproved&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="c1">// Choose which solvers should be used, if available.</span>
+      <span class="c1">// See the Formal Verification section for the solvers description.</span>
+      <span class="s2">&quot;solvers&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;cvc4&quot;</span><span class="p">,</span> <span class="s2">&quot;smtlib2&quot;</span><span class="p">,</span> <span class="s2">&quot;z3&quot;</span><span class="p">],</span>
+      <span class="c1">// Choose which targets should be checked: constantCondition,</span>
+      <span class="c1">// underflow, overflow, divByZero, balance, assert, popEmptyArray, outOfBounds.</span>
+      <span class="c1">// If the option is not given all targets are checked by default,</span>
+      <span class="c1">// except underflow/overflow for Solidity &gt;=0.8.7.</span>
+      <span class="c1">// See the Formal Verification section for the targets description.</span>
+      <span class="s2">&quot;targets&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;underflow&quot;</span><span class="p">,</span> <span class="s2">&quot;overflow&quot;</span><span class="p">,</span> <span class="s2">&quot;assert&quot;</span><span class="p">],</span>
+      <span class="c1">// Timeout for each SMT query in milliseconds.</span>
+      <span class="c1">// If this option is not given, the SMTChecker will use a deterministic</span>
+      <span class="c1">// resource limit by default.</span>
+      <span class="c1">// A given timeout of 0 means no resource/time restrictions for any query.</span>
+      <span class="s2">&quot;timeout&quot;</span><span class="o">:</span> <span class="mf">20000</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="output-description">
+<h3>Output Description<a class="headerlink" href="#output-description" title="پیوند ثابت به این سر مقاله"></a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="c1">// Optional: not present if no errors/warnings/infos were encountered</span>
+  <span class="s2">&quot;errors&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="c1">// Optional: Location within the source file.</span>
+      <span class="s2">&quot;sourceLocation&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;sourceFile.sol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="o">:</span> <span class="mf">100</span>
+      <span class="p">},</span>
+      <span class="c1">// Optional: Further locations (e.g. places of conflicting declarations)</span>
+      <span class="s2">&quot;secondarySourceLocations&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;sourceFile.sol&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">64</span><span class="p">,</span>
+          <span class="s2">&quot;end&quot;</span><span class="o">:</span> <span class="mf">92</span><span class="p">,</span>
+          <span class="s2">&quot;message&quot;</span><span class="o">:</span> <span class="s2">&quot;Other declaration is here:&quot;</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="c1">// Mandatory: Error type, such as &quot;TypeError&quot;, &quot;InternalCompilerError&quot;, &quot;Exception&quot;, etc.</span>
+      <span class="c1">// See below for complete list of types.</span>
+      <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;TypeError&quot;</span><span class="p">,</span>
+      <span class="c1">// Mandatory: Component where the error originated, such as &quot;general&quot;, &quot;ewasm&quot;, etc.</span>
+      <span class="s2">&quot;component&quot;</span><span class="o">:</span> <span class="s2">&quot;general&quot;</span><span class="p">,</span>
+      <span class="c1">// Mandatory (&quot;error&quot;, &quot;warning&quot; or &quot;info&quot;, but please note that this may be extended in the future)</span>
+      <span class="s2">&quot;severity&quot;</span><span class="o">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+      <span class="c1">// Optional: unique code for the cause of the error</span>
+      <span class="s2">&quot;errorCode&quot;</span><span class="o">:</span> <span class="s2">&quot;3141&quot;</span><span class="p">,</span>
+      <span class="c1">// Mandatory</span>
+      <span class="s2">&quot;message&quot;</span><span class="o">:</span> <span class="s2">&quot;Invalid keyword&quot;</span><span class="p">,</span>
+      <span class="c1">// Optional: the message formatted with source location</span>
+      <span class="s2">&quot;formattedMessage&quot;</span><span class="o">:</span> <span class="s2">&quot;sourceFile.sol:100: Invalid keyword&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="c1">// This contains the file-level outputs.</span>
+  <span class="c1">// It can be limited/filtered by the outputSelection settings.</span>
+  <span class="s2">&quot;sources&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;sourceFile.sol&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Identifier of the source (used in source maps)</span>
+      <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span>
+      <span class="c1">// The AST object</span>
+      <span class="s2">&quot;ast&quot;</span><span class="o">:</span> <span class="p">{}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="c1">// This contains the contract-level outputs.</span>
+  <span class="c1">// It can be limited/filtered by the outputSelection settings.</span>
+  <span class="s2">&quot;contracts&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;sourceFile.sol&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// If the language used has no contract names, this field should equal to an empty string.</span>
+      <span class="s2">&quot;ContractName&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="c1">// The Ethereum Contract ABI. If empty, it is represented as an empty array.</span>
+        <span class="c1">// See https://docs.soliditylang.org/en/develop/abi-spec.html</span>
+        <span class="s2">&quot;abi&quot;</span><span class="o">:</span> <span class="p">[],</span>
+        <span class="c1">// See the Metadata Output documentation (serialised JSON string)</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="o">:</span> <span class="s2">&quot;{/* ... */}&quot;</span><span class="p">,</span>
+        <span class="c1">// User documentation (natspec)</span>
+        <span class="s2">&quot;userdoc&quot;</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="c1">// Developer documentation (natspec)</span>
+        <span class="s2">&quot;devdoc&quot;</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="c1">// Intermediate representation (string)</span>
+        <span class="s2">&quot;ir&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="c1">// See the Storage Layout documentation.</span>
+        <span class="s2">&quot;storageLayout&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;storage&quot;</span><span class="o">:</span> <span class="p">[</span><span class="cm">/* ... */</span><span class="p">],</span> <span class="s2">&quot;types&quot;</span><span class="o">:</span> <span class="p">{</span><span class="cm">/* ... */</span><span class="p">}</span> <span class="p">},</span>
+        <span class="c1">// EVM-related outputs</span>
+        <span class="s2">&quot;evm&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="c1">// Assembly (string)</span>
+          <span class="s2">&quot;assembly&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+          <span class="c1">// Old-style assembly (object)</span>
+          <span class="s2">&quot;legacyAssembly&quot;</span><span class="o">:</span> <span class="p">{},</span>
+          <span class="c1">// Bytecode and related details.</span>
+          <span class="s2">&quot;bytecode&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="c1">// Debugging data at the level of functions.</span>
+            <span class="s2">&quot;functionDebugData&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="c1">// Now follows a set of functions including compiler-internal and</span>
+              <span class="c1">// user-defined function. The set does not have to be complete.</span>
+              <span class="s2">&quot;@mint_13&quot;</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// Internal name of the function</span>
+                <span class="s2">&quot;entryPoint&quot;</span><span class="o">:</span> <span class="mf">128</span><span class="p">,</span> <span class="c1">// Byte offset into the bytecode where the function starts (optional)</span>
+                <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mf">13</span><span class="p">,</span> <span class="c1">// AST ID of the function definition or null for compiler-internal functions (optional)</span>
+                <span class="s2">&quot;parameterSlots&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span> <span class="c1">// Number of EVM stack slots for the function parameters (optional)</span>
+                <span class="s2">&quot;returnSlots&quot;</span><span class="o">:</span> <span class="mf">1</span> <span class="c1">// Number of EVM stack slots for the return values (optional)</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="c1">// The bytecode as a hex string.</span>
+            <span class="s2">&quot;object&quot;</span><span class="o">:</span> <span class="s2">&quot;00fe&quot;</span><span class="p">,</span>
+            <span class="c1">// Opcodes list (string)</span>
+            <span class="s2">&quot;opcodes&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="c1">// The source mapping as a string. See the source mapping definition.</span>
+            <span class="s2">&quot;sourceMap&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="c1">// Array of sources generated by the compiler. Currently only</span>
+            <span class="c1">// contains a single Yul file.</span>
+            <span class="s2">&quot;generatedSources&quot;</span><span class="o">:</span> <span class="p">[{</span>
+              <span class="c1">// Yul AST</span>
+              <span class="s2">&quot;ast&quot;</span><span class="o">:</span> <span class="p">{</span><span class="cm">/* ... */</span><span class="p">},</span>
+              <span class="c1">// Source file in its text form (may contain comments)</span>
+              <span class="s2">&quot;contents&quot;</span><span class="o">:</span><span class="s2">&quot;{ function abi_decode(start, end) -&gt; data { data := calldataload(start) } }&quot;</span><span class="p">,</span>
+              <span class="c1">// Source file ID, used for source references, same &quot;namespace&quot; as the Solidity source files</span>
+              <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mf">2</span><span class="p">,</span>
+              <span class="s2">&quot;language&quot;</span><span class="o">:</span> <span class="s2">&quot;Yul&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;#utility.yul&quot;</span>
+            <span class="p">}],</span>
+            <span class="c1">// If given, this is an unlinked object.</span>
+            <span class="s2">&quot;linkReferences&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;libraryFile.sol&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="c1">// Byte offsets into the bytecode.</span>
+                <span class="c1">// Linking replaces the 20 bytes located there.</span>
+                <span class="s2">&quot;Library1&quot;</span><span class="o">:</span> <span class="p">[</span>
+                  <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mf">20</span> <span class="p">},</span>
+                  <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">200</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mf">20</span> <span class="p">}</span>
+                <span class="p">]</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;deployedBytecode&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="cm">/* ..., */</span> <span class="c1">// The same layout as above.</span>
+            <span class="s2">&quot;immutableReferences&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="c1">// There are two references to the immutable with AST ID 3, both 32 bytes long. One is</span>
+              <span class="c1">// at bytecode offset 42, the other at bytecode offset 80.</span>
+              <span class="s2">&quot;3&quot;</span><span class="o">:</span> <span class="p">[{</span> <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">42</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mf">32</span> <span class="p">},</span> <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="o">:</span> <span class="mf">80</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mf">32</span> <span class="p">}]</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="c1">// The list of function hashes</span>
+          <span class="s2">&quot;methodIdentifiers&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;delegate(address)&quot;</span><span class="o">:</span> <span class="s2">&quot;5c19a95c&quot;</span>
+          <span class="p">},</span>
+          <span class="c1">// Function gas estimates</span>
+          <span class="s2">&quot;gasEstimates&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;creation&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;codeDepositCost&quot;</span><span class="o">:</span> <span class="s2">&quot;420000&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;executionCost&quot;</span><span class="o">:</span> <span class="s2">&quot;infinite&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;totalCost&quot;</span><span class="o">:</span> <span class="s2">&quot;infinite&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;external&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;delegate(address)&quot;</span><span class="o">:</span> <span class="s2">&quot;25000&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;internal&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;heavyLifting()&quot;</span><span class="o">:</span> <span class="s2">&quot;infinite&quot;</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1">// Ewasm related outputs</span>
+        <span class="s2">&quot;ewasm&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="c1">// S-expressions format</span>
+          <span class="s2">&quot;wast&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+          <span class="c1">// Binary format (hex string)</span>
+          <span class="s2">&quot;wasm&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="error-types">
+<h4>Error Types<a class="headerlink" href="#error-types" title="پیوند ثابت به این سر مقاله"></a></h4>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">JSONError</span></code>: JSON input doesn't conform to the required format, e.g. input is not a JSON object, the language is not supported, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IOError</span></code>: IO and import processing errors, such as unresolvable URL or hash mismatch in supplied sources.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ParserError</span></code>: Source code doesn't conform to the language rules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DocstringParsingError</span></code>: The NatSpec tags in the comment block cannot be parsed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code>: Syntactical error, such as <code class="docutils literal notranslate"><span class="pre">continue</span></code> is used outside of a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DeclarationError</span></code>: Invalid, unresolvable or clashing identifier names. e.g. <code class="docutils literal notranslate"><span class="pre">Identifier</span> <span class="pre">not</span> <span class="pre">found</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>: Error within the type system, such as invalid type conversions, invalid assignments, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UnimplementedFeatureError</span></code>: Feature is not supported by the compiler, but is expected to be supported in future versions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InternalCompilerError</span></code>: Internal bug triggered in the compiler - this should be reported as an issue.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Exception</span></code>: Unknown failure during compilation - this should be reported as an issue.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CompilerError</span></code>: Invalid use of the compiler stack - this should be reported as an issue.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FatalError</span></code>: Fatal error not processed correctly - this should be reported as an issue.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Warning</span></code>: A warning, which didn't stop the compilation, but should be addressed if possible.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Info</span></code>: Information that the compiler thinks the user might find useful, but is not dangerous and does not necessarily need to be addressed.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="compiler-tools">
+<span id="id2"></span><h2>Compiler Tools<a class="headerlink" href="#compiler-tools" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="solidity-upgrade">
+<h3>solidity-upgrade<a class="headerlink" href="#solidity-upgrade" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">solidity-upgrade</span></code> can help you to semi-automatically upgrade your contracts
+to breaking language changes. While it does not and cannot implement all
+required changes for every breaking release, it still supports the ones, that
+would need plenty of repetitive manual adjustments otherwise.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p><code class="docutils literal notranslate"><span class="pre">solidity-upgrade</span></code> carries out a large part of the work, but your
+contracts will most likely need further manual adjustments. We recommend
+using a version control system for your files. This helps reviewing and
+eventually rolling back the changes made.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p><code class="docutils literal notranslate"><span class="pre">solidity-upgrade</span></code> is not considered to be complete or free from bugs, so
+please use with care.</p>
+</div>
+<section id="how-it-works">
+<h4>How it Works<a class="headerlink" href="#how-it-works" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>You can pass (a) Solidity source file(s) to <code class="docutils literal notranslate"><span class="pre">solidity-upgrade</span> <span class="pre">[files]</span></code>. If
+these make use of <code class="docutils literal notranslate"><span class="pre">import</span></code> statement which refer to files outside the
+current source file's directory, you need to specify directories that
+are allowed to read and import files from, by passing
+<code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">[directory]</span></code>. You can ignore missing files by passing
+<code class="docutils literal notranslate"><span class="pre">--ignore-missing</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">solidity-upgrade</span></code> is based on <code class="docutils literal notranslate"><span class="pre">libsolidity</span></code> and can parse, compile and
+analyse your source files, and might find applicable source upgrades in them.</p>
+<p>Source upgrades are considered to be small textual changes to your source code.
+They are applied to an in-memory representation of the source files
+given. The corresponding source file is updated by default, but you can pass
+<code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> to simulate to whole upgrade process without writing to any file.</p>
+<p>The upgrade process itself has two phases. In the first phase source files are
+parsed, and since it is not possible to upgrade source code on that level,
+errors are collected and can be logged by passing <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>. No source
+upgrades available at this point.</p>
+<p>In the second phase, all sources are compiled and all activated upgrade analysis
+modules are run alongside compilation. By default, all available modules are
+activated. Please read the documentation on
+<a class="reference internal" href="#upgrade-modules"><span class="std std-ref">available modules</span></a> for further details.</p>
+<p>This can result in compilation errors that may
+be fixed by source upgrades. If no errors occur, no source upgrades are being
+reported and you're done.
+If errors occur and some upgrade module reported a source upgrade, the first
+reported one gets applied and compilation is triggered again for all given
+source files. The previous step is repeated as long as source upgrades are
+reported. If errors still occur, you can log them by passing <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>.
+If no errors occur, your contracts are up to date and can be compiled with
+the latest version of the compiler.</p>
+</section>
+<section id="available-upgrade-modules">
+<span id="upgrade-modules"></span><h4>Available Upgrade Modules<a class="headerlink" href="#available-upgrade-modules" title="پیوند ثابت به این سر مقاله"></a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 10%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">constructor</span></code></p></td>
+<td><p>0.5.0</p></td>
+<td><p>Constructors must now be defined using the
+<code class="docutils literal notranslate"><span class="pre">constructor</span></code> keyword.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">visibility</span></code></p></td>
+<td><p>0.5.0</p></td>
+<td><p>Explicit function visibility is now mandatory,
+defaults to <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">abstract</span></code></p></td>
+<td><p>0.6.0</p></td>
+<td><p>The keyword <code class="docutils literal notranslate"><span class="pre">abstract</span></code> has to be used if a
+contract does not implement all its functions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">virtual</span></code></p></td>
+<td><p>0.6.0</p></td>
+<td><p>Functions without implementation outside an
+interface have to be marked <code class="docutils literal notranslate"><span class="pre">virtual</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">override</span></code></p></td>
+<td><p>0.6.0</p></td>
+<td><p>When overriding a function or modifier, the new
+keyword <code class="docutils literal notranslate"><span class="pre">override</span></code> must be used.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dotsyntax</span></code></p></td>
+<td><p>0.7.0</p></td>
+<td><p>The following syntax is deprecated:
+<code class="docutils literal notranslate"><span class="pre">f.gas(...)()</span></code>, <code class="docutils literal notranslate"><span class="pre">f.value(...)()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(new</span> <span class="pre">C).value(...)()</span></code>. Replace these calls by
+<code class="docutils literal notranslate"><span class="pre">f{gas:</span> <span class="pre">...,</span> <span class="pre">value:</span> <span class="pre">...}()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(new</span> <span class="pre">C){value:</span> <span class="pre">...}()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">now</span></code></p></td>
+<td><p>0.7.0</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">now</span></code> keyword is deprecated. Use
+<code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">constructor-visibility</span></code></p></td>
+<td><p>0.7.0</p></td>
+<td><p>Removes visibility of constructors.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please read <a class="reference internal" href="050-breaking-changes.html"><span class="doc">0.5.0 release notes</span></a>,
+<a class="reference internal" href="060-breaking-changes.html"><span class="doc">0.6.0 release notes</span></a>,
+<a class="reference internal" href="070-breaking-changes.html"><span class="doc">0.7.0 release notes</span></a> and <a class="reference internal" href="080-breaking-changes.html"><span class="doc">0.8.0 release notes</span></a> for further details.</p>
+</section>
+<section id="synopsis">
+<h4>Synopsis<a class="headerlink" href="#synopsis" title="پیوند ثابت به این سر مقاله"></a></h4>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Usage: solidity-upgrade [options] contract.sol
+
+Allowed options:
+    --help               Show help message and exit.
+    --version            Show version and exit.
+    --allow-paths path(s)
+                         Allow a given path for imports. A list of paths can be
+                         supplied by separating them with a comma.
+    --ignore-missing     Ignore missing files.
+    --modules module(s)  Only activate a specific upgrade module. A list of
+                         modules can be supplied by separating them with a comma.
+    --dry-run            Apply changes in-memory only and don&#39;t write to input
+                         file.
+    --verbose            Print logs, errors and changes. Shortens output of
+                         upgrade patches.
+    --unsafe             Accept *unsafe* changes.
+</pre></div>
+</div>
+</section>
+<section id="bug-reports-feature-requests">
+<h4>Bug Reports / Feature Requests<a class="headerlink" href="#bug-reports-feature-requests" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>If you found a bug or if you have a feature request, please
+<a class="reference external" href="https://github.com/ethereum/solidity/issues/new/choose">file an issue</a> on Github.</p>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Assume that you have the following contract in <code class="docutils literal notranslate"><span class="pre">Source.sol</span></code>:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=cHJhZ21hIHNvbGlkaXR5ID49MC42LjAgPDAuNi40OwovLyBUaGlzIHdpbGwgbm90IGNvbXBpbGUgYWZ0ZXIgMC43LjAKLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKY29udHJhY3QgQyB7CiAgICAvLyBGSVhNRTogcmVtb3ZlIGNvbnN0cnVjdG9yIHZpc2liaWxpdHkgYW5kIG1ha2UgdGhlIGNvbnRyYWN0IGFic3RyYWN0CiAgICBjb25zdHJ1Y3RvcigpIGludGVybmFsIHt9Cn0KCmNvbnRyYWN0IEQgewogICAgdWludCB0aW1lOwoKICAgIGZ1bmN0aW9uIGYoKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgLy8gRklYTUU6IGNoYW5nZSBub3cgdG8gYmxvY2sudGltZXN0YW1wCiAgICAgICAgdGltZSA9IG5vdzsKICAgIH0KfQoKY29udHJhY3QgRSB7CiAgICBEIGQ7CgogICAgLy8gRklYTUU6IHJlbW92ZSBjb25zdHJ1Y3RvciB2aXNpYmlsaXR5CiAgICBjb25zdHJ1Y3RvcigpIHB1YmxpYyB7fQoKICAgIGZ1bmN0aW9uIGcoKSBwdWJsaWMgewogICAgICAgIC8vIEZJWE1FOiBjaGFuZ2UgLnZhbHVlKDUpID0+ICB7dmFsdWU6IDV9CiAgICAgICAgZC5mLnZhbHVlKDUpKCk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="k">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.6</span><span class="p">.</span><span class="mi">4</span><span class="p">;</span>
+<span class="c1">// This will not compile after 0.7.0</span>
+<span class="c1">// </span><span class="cs">SPDX-License-Identifier:</span><span class="c1"> GPL-3.0</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="c1">// FIXME: remove constructor visibility and make the contract abstract</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="k">internal</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">time</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="k">public</span> <span class="k">payable</span> <span class="p">{</span>
+        <span class="c1">// FIXME: change now to block.timestamp</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="nb">now</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">E</span> <span class="p">{</span>
+    <span class="n">D</span> <span class="n">d</span><span class="p">;</span>
+
+    <span class="c1">// FIXME: remove constructor visibility</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="k">public</span> <span class="p">{}</span>
+
+    <span class="kd">function</span> <span class="n">g</span><span class="p">()</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="c1">// FIXME: change .value(5) =&gt;  {value: 5}</span>
+        <span class="n">d</span><span class="p">.</span><span class="n">f</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">5</span><span class="p">)();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="required-changes">
+<h5>Required Changes<a class="headerlink" href="#required-changes" title="پیوند ثابت به این سر مقاله"></a></h5>
+<p>The above contract will not compile starting from 0.7.0. To bring the contract up to date with the
+current Solidity version, the following upgrade modules have to be executed:
+<code class="docutils literal notranslate"><span class="pre">constructor-visibility</span></code>, <code class="docutils literal notranslate"><span class="pre">now</span></code> and <code class="docutils literal notranslate"><span class="pre">dotsyntax</span></code>. Please read the documentation on
+<a class="reference internal" href="#upgrade-modules"><span class="std std-ref">available modules</span></a> for further details.</p>
+</section>
+<section id="running-the-upgrade">
+<h5>Running the Upgrade<a class="headerlink" href="#running-the-upgrade" title="پیوند ثابت به این سر مقاله"></a></h5>
+<p>It is recommended to explicitly specify the upgrade modules by using <code class="docutils literal notranslate"><span class="pre">--modules</span></code> argument.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solidity-upgrade --modules constructor-visibility,now,dotsyntax Source.sol
+</pre></div>
+</div>
+<p>The command above applies all changes as shown below. Please review them carefully (the pragmas will
+have to be updated manually.)</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjAgPDAuOS4wOwphYnN0cmFjdCBjb250cmFjdCBDIHsKICAgIC8vIEZJWE1FOiByZW1vdmUgY29uc3RydWN0b3IgdmlzaWJpbGl0eSBhbmQgbWFrZSB0aGUgY29udHJhY3QgYWJzdHJhY3QKICAgIGNvbnN0cnVjdG9yKCkge30KfQoKY29udHJhY3QgRCB7CiAgICB1aW50IHRpbWU7CgogICAgZnVuY3Rpb24gZigpIHB1YmxpYyBwYXlhYmxlIHsKICAgICAgICAvLyBGSVhNRTogY2hhbmdlIG5vdyB0byBibG9jay50aW1lc3RhbXAKICAgICAgICB0aW1lID0gYmxvY2sudGltZXN0YW1wOwogICAgfQp9Cgpjb250cmFjdCBFIHsKICAgIEQgZDsKCiAgICAvLyBGSVhNRTogcmVtb3ZlIGNvbnN0cnVjdG9yIHZpc2liaWxpdHkKICAgIGNvbnN0cnVjdG9yKCkge30KCiAgICBmdW5jdGlvbiBnKCkgcHVibGljIHsKICAgICAgICAvLyBGSVhNRTogY2hhbmdlIC52YWx1ZSg1KSA9PiAge3ZhbHVlOiA1fQogICAgICAgIGQuZnt2YWx1ZTogNX0oKTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// </span><span class="cs">SPDX-License-Identifier:</span><span class="c1"> GPL-3.0</span>
+<span class="k">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.7</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.9</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="k">abstract</span> <span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="c1">// FIXME: remove constructor visibility and make the contract abstract</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">D</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">time</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="n">f</span><span class="p">()</span> <span class="k">public</span> <span class="k">payable</span> <span class="p">{</span>
+        <span class="c1">// FIXME: change now to block.timestamp</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="nb">block.timestamp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">contract</span> <span class="n">E</span> <span class="p">{</span>
+    <span class="n">D</span> <span class="n">d</span><span class="p">;</span>
+
+    <span class="c1">// FIXME: remove constructor visibility</span>
+    <span class="kd">constructor</span><span class="p">()</span> <span class="p">{}</span>
+
+    <span class="kd">function</span> <span class="n">g</span><span class="p">()</span> <span class="k">public</span> <span class="p">{</span>
+        <span class="c1">// FIXME: change .value(5) =&gt;  {value: 5}</span>
+        <span class="n">d</span><span class="p">.</span><span class="n">f</span><span class="p">{</span><span class="n">value</span><span class="o">:</span> <span class="mi">5</span><span class="p">}();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="grammar.html" class="btn btn-neutral float-left" title="Language Grammar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="analysing-compilation-output.html" class="btn btn-neutral float-right" title="Analysing the Compiler Output" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

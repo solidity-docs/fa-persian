@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysing the Compiler Output &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Layout of State Variables in Storage" href="internals/layout_in_storage.html" />
+    <link rel="prev" title="Using the Compiler" href="using-the-compiler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Analysing the Compiler Output</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/analysing-compilation-output.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="analysing-the-compiler-output">
+<span id="index-0"></span><h1>Analysing the Compiler Output<a class="headerlink" href="#analysing-the-compiler-output" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>It is often useful to look at the assembly code generated by the compiler. The generated binary,
+i.e., the output of <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--bin</span> <span class="pre">contract.sol</span></code>, is generally difficult to read. It is recommended
+to use the flag <code class="docutils literal notranslate"><span class="pre">--asm</span></code> to analyse the assembly output. Even for large contracts, looking at a
+visual diff of the assembly before and after a change is often very enlightening.</p>
+<p>Consider the following contract (named, say <code class="docutils literal notranslate"><span class="pre">contract.sol</span></code>):</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC41LjAgPDAuOS4wOwpjb250cmFjdCBDIHsKICAgIGZ1bmN0aW9uIG9uZSgpIHB1YmxpYyBwdXJlIHJldHVybnMgKHVpbnQpIHsKICAgICAgICByZXR1cm4gMTsKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-Solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// </span><span class="cs">SPDX-License-Identifier:</span><span class="c1"> GPL-3.0</span>
+<span class="k">pragma solidity</span> <span class="o">&gt;=</span><span class="mf">0.5</span><span class="p">.</span><span class="mi">0</span> <span class="o">&lt;</span><span class="mf">0.9</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="kd">contract</span> <span class="n">C</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="n">one</span><span class="p">()</span> <span class="k">public</span> <span class="k">pure</span> <span class="k">returns</span> <span class="p">(</span><span class="kt">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The following would be the output of <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--asm</span> <span class="pre">contract.sol</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>======= contract.sol:C =======
+EVM assembly:
+    /* &quot;contract.sol&quot;:0:86  contract C {... */
+  mstore(0x40, 0x80)
+  callvalue
+  dup1
+  iszero
+  tag_1
+  jumpi
+  0x00
+  dup1
+  revert
+tag_1:
+  pop
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x00
+  codecopy
+  0x00
+  return
+stop
+
+sub_0: assembly {
+        /* &quot;contract.sol&quot;:0:86  contract C {... */
+      mstore(0x40, 0x80)
+      callvalue
+      dup1
+      iszero
+      tag_1
+      jumpi
+      0x00
+      dup1
+      revert
+    tag_1:
+      pop
+      jumpi(tag_2, lt(calldatasize, 0x04))
+      shr(0xe0, calldataload(0x00))
+      dup1
+      0x901717d1
+      eq
+      tag_3
+      jumpi
+    tag_2:
+      0x00
+      dup1
+      revert
+        /* &quot;contract.sol&quot;:17:84  function one() public pure returns (uint) {... */
+    tag_3:
+      tag_4
+      tag_5
+      jump  // in
+    tag_4:
+      mload(0x40)
+      tag_6
+      swap2
+      swap1
+      tag_7
+      jump  // in
+    tag_6:
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+    tag_5:
+        /* &quot;contract.sol&quot;:53:57  uint */
+      0x00
+        /* &quot;contract.sol&quot;:76:77  1 */
+      0x01
+        /* &quot;contract.sol&quot;:69:77  return 1 */
+      swap1
+      pop
+        /* &quot;contract.sol&quot;:17:84  function one() public pure returns (uint) {... */
+      swap1
+      jump  // out
+        /* &quot;#utility.yul&quot;:7:125   */
+    tag_10:
+        /* &quot;#utility.yul&quot;:94:118   */
+      tag_12
+        /* &quot;#utility.yul&quot;:112:117   */
+      dup2
+        /* &quot;#utility.yul&quot;:94:118   */
+      tag_13
+      jump  // in
+    tag_12:
+        /* &quot;#utility.yul&quot;:89:92   */
+      dup3
+        /* &quot;#utility.yul&quot;:82:119   */
+      mstore
+        /* &quot;#utility.yul&quot;:72:125   */
+      pop
+      pop
+      jump  // out
+        /* &quot;#utility.yul&quot;:131:353   */
+    tag_7:
+      0x00
+        /* &quot;#utility.yul&quot;:262:264   */
+      0x20
+        /* &quot;#utility.yul&quot;:251:260   */
+      dup3
+        /* &quot;#utility.yul&quot;:247:265   */
+      add
+        /* &quot;#utility.yul&quot;:239:265   */
+      swap1
+      pop
+        /* &quot;#utility.yul&quot;:275:346   */
+      tag_15
+        /* &quot;#utility.yul&quot;:343:344   */
+      0x00
+        /* &quot;#utility.yul&quot;:332:341   */
+      dup4
+        /* &quot;#utility.yul&quot;:328:345   */
+      add
+        /* &quot;#utility.yul&quot;:319:325   */
+      dup5
+        /* &quot;#utility.yul&quot;:275:346   */
+      tag_10
+      jump  // in
+    tag_15:
+        /* &quot;#utility.yul&quot;:229:353   */
+      swap3
+      swap2
+      pop
+      pop
+      jump  // out
+        /* &quot;#utility.yul&quot;:359:436   */
+    tag_13:
+      0x00
+        /* &quot;#utility.yul&quot;:425:430   */
+      dup2
+        /* &quot;#utility.yul&quot;:414:430   */
+      swap1
+      pop
+        /* &quot;#utility.yul&quot;:404:436   */
+      swap2
+      swap1
+      pop
+      jump  // out
+
+    auxdata: 0xa2646970667358221220a5874f19737ddd4c5d77ace1619e5160c67b3d4bedac75fce908fed32d98899864736f6c637827302e382e342d646576656c6f702e323032312e332e33302b636f6d6d69742e65613065363933380058
+}
+</pre></div>
+</div>
+<p>Alternatively, the above output can also be obtained from <a class="reference external" href="https://remix.ethereum.org/">Remix</a>,
+under the option &quot;Compilation Details&quot; after compiling a contract.</p>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">asm</span></code> output starts with the creation / constructor code. The deploy code is
+provided as part of the sub object (in the above example, it is part of the sub-object <code class="docutils literal notranslate"><span class="pre">sub_0</span></code>).
+The <code class="docutils literal notranslate"><span class="pre">auxdata</span></code> field corresponds to the contract <a class="reference internal" href="metadata.html#encoding-of-the-metadata-hash-in-the-bytecode"><span class="std std-ref">metadata</span></a>. The comments in the assembly output point to the
+source location. Note that <code class="docutils literal notranslate"><span class="pre">#utility.yul</span></code> is an internally generated file of utility functions
+that can be obtained using the flags <code class="docutils literal notranslate"><span class="pre">--combined-json</span>
+<span class="pre">generated-sources,generated-sources-runtime</span></code>.</p>
+<p>Similarly, the optimized assembly can be obtained with the command: <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--optimize</span> <span class="pre">--asm</span>
+<span class="pre">contract.sol</span></code>. Often times, it is interesting to see if two different sources in Solidity result in
+the same optimized code. For example, to see if the expressions <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">*</span> <span class="pre">b)</span> <span class="pre">/</span> <span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span> <span class="pre">/</span> <span class="pre">c</span></code>
+generates the same bytecode. This can be easily done by taking a <code class="docutils literal notranslate"><span class="pre">diff</span></code> of the corresponding
+assembly output, after potentially stripping comments that reference the source locations.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--asm</span></code> output is not designed to be machine readable. Therefore, there may be breaking
+changes on the output between minor versions of solc.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="using-the-compiler.html" class="btn btn-neutral float-left" title="Using the Compiler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="internals/layout_in_storage.html" class="btn btn-neutral float-right" title="Layout of State Variables in Storage" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

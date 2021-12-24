@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solidity Brand Guide &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Language Influences" href="language-influences.html" />
+    <link rel="prev" title="Contributing" href="contributing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solidity Brand Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-solidity-brand">The Solidity Brand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-brand-name">Solidity Brand Name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-logo-license">Solidity Logo License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-logo-guidelines">Solidity Logo Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#credits">Credits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Solidity Brand Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/brand-guide.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solidity-brand-guide">
+<h1>Solidity Brand Guide<a class="headerlink" href="#solidity-brand-guide" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>This brand guide features information on Solidity's brand policy and
+logo usage guidelines.</p>
+<section id="the-solidity-brand">
+<h2>The Solidity Brand<a class="headerlink" href="#the-solidity-brand" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The Solidity programming language is an open-source, community project
+governed by a core team. The core team is sponsored by the <a class="reference external" href="https://ethereum.foundation/">Ethereum
+Foundation</a>.</p>
+<p>This document aims to provide information about how to best use the
+Solidity brand name and logo.</p>
+<p>We encourage you to read this document carefully before using the
+brand name or the logo. Your cooperation is highly appreciated!</p>
+</section>
+<section id="solidity-brand-name">
+<h2>Solidity Brand Name<a class="headerlink" href="#solidity-brand-name" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>&quot;Solidity&quot; should be used to refer to the Solidity programming language
+solely.</p>
+<p>Please do not use &quot;Solidity&quot;:</p>
+<ul class="simple">
+<li><p>To refer to any other programming language.</p></li>
+<li><p>In a way that is misleading or may imply association of unrelated
+modules, tools, documentation, or other resources with the Solidity
+programming language.</p></li>
+<li><p>In ways that confuse the community as to whether the Solidity
+programming language is open-source and free to use.</p></li>
+</ul>
+</section>
+<section id="solidity-logo-license">
+<h2>Solidity Logo License<a class="headerlink" href="#solidity-logo-license" title="پیوند ثابت به این سر مقاله"></a></h2>
+<a class="reference internal image-reference" href="https://i.creativecommons.org/l/by/4.0/88x31.png"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" style="width: 88px;" /></a>
+<p>The Solidity logo is distributed and licensed under a <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+Attribution 4.0 International License</a>.</p>
+<p>This is the most permissive Creative Commons license and allows reuse
+and modifications for any purpose.</p>
+<p>You are free to:</p>
+<ul class="simple">
+<li><p><strong>Share</strong> — Copy and redistribute the material in any medium or format.</p></li>
+<li><p><strong>Adapt</strong> — Remix, transform, and build upon the material for any
+purpose, even commercially.</p></li>
+</ul>
+<p>Under the following terms:</p>
+<ul class="simple">
+<li><p><strong>Attribution</strong> — You must give appropriate credit, provide a link to
+the license, and indicate if changes were made. You may do so in any
+reasonable manner, but not in any way that suggests the the Solidity
+core team endorses you or your use.</p></li>
+</ul>
+<p>When using the Solidity logo, please respect the Solidity logo guidelines.</p>
+</section>
+<section id="solidity-logo-guidelines">
+<h2>Solidity Logo Guidelines<a class="headerlink" href="#solidity-logo-guidelines" title="پیوند ثابت به این سر مقاله"></a></h2>
+<a class="reference internal image-reference" href="_images/logo.svg"><img alt="_images/logo.svg" src="_images/logo.svg" width="256" /></a>
+<p><em>(Right click on the logo to download it.)</em></p>
+<p>Please do not:</p>
+<ul class="simple">
+<li><p>Change the ratio of the logo (do not stretch it or cut it).</p></li>
+<li><p>Change the colors of the logo, unless it is absolutely necessary.</p></li>
+</ul>
+</section>
+<section id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This document was, in parts, derived from the <a class="reference external" href="https://www.python.org/psf/trademarks/">Python Software
+Foundation Trademark Usage Policy</a>
+and the <a class="reference external" href="https://www.rust-lang.org/policies/media-guide">Rust Media Guide</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="language-influences.html" class="btn btn-neutral float-right" title="Language Influences" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Optimizer &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+        <script src="../_static/js/toggle.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="../genindex.html" />
+    <link rel="search" title="جستجو" href="../search.html" />
+    <link rel="next" title="Contract Metadata" href="../metadata.html" />
+    <link rel="prev" title="Source Mappings" href="source_mappings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="../index.html">
+            <img src="../_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Optimizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#benefits-of-optimizing-solidity-code">Benefits of Optimizing Solidity Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#differences-between-optimized-and-non-optimized-code">Differences between Optimized and Non-Optimized Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimizer-parameter-runs">Optimizer Parameter Runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opcode-based-optimizer-module">Opcode-Based Optimizer Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-inlining">Simple Inlining</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#yul-based-optimizer-module">Yul-Based Optimizer Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#optimizer-steps">Optimizer Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selecting-optimizations">Selecting Optimizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocessing">Preprocessing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#disambiguator">Disambiguator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functionhoister">FunctionHoister</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functiongrouper">FunctionGrouper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forloopconditionintobody">ForLoopConditionIntoBody</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forloopinitrewriter">ForLoopInitRewriter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vardeclinitializer">VarDeclInitializer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pseudo-ssa-transformation">Pseudo-SSA Transformation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#expressionsplitter">ExpressionSplitter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ssatransform">SSATransform</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#redundantassigneliminator">RedundantAssignEliminator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tools">Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#movability">Movability</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dataflowanalyzer">DataflowAnalyzer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#expression-scale-simplifications">Expression-Scale Simplifications</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#commonsubexpressioneliminator">CommonSubexpressionEliminator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#expression-simplifier">Expression Simplifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#literalrematerialiser">LiteralRematerialiser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loadresolver">LoadResolver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reasoningbasedsimplifier">ReasoningBasedSimplifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#statement-scale-simplifications">Statement-Scale Simplifications</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#circularreferencespruner">CircularReferencesPruner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conditionalsimplifier">ConditionalSimplifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conditionalunsimplifier">ConditionalUnsimplifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#controlflowsimplifier">ControlFlowSimplifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deadcodeeliminator">DeadCodeEliminator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unusedpruner">UnusedPruner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structuralsimplifier">StructuralSimplifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blockflattener">BlockFlattener</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loopinvariantcodemotion">LoopInvariantCodeMotion</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#function-level-optimizations">Function-Level Optimizations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#functionspecializer">FunctionSpecializer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unusedfunctionparameterpruner">UnusedFunctionParameterPruner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equivalentfunctioncombiner">EquivalentFunctionCombiner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#function-inlining">Function Inlining</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#expressioninliner">ExpressionInliner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fullinliner">FullInliner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cleanup">Cleanup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#expressionjoiner">ExpressionJoiner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ssareverser">SSAReverser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stackcompressor">StackCompressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rematerialiser">Rematerialiser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#forloopconditionoutofbody">ForLoopConditionOutOfBody</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#webassembly-specific">WebAssembly specific</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mainfunction">MainFunction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="../genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>The Optimizer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/internals/optimizer.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-optimizer">
+<span id="optimizer"></span><span id="index-0"></span><h1>The Optimizer<a class="headerlink" href="#the-optimizer" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>The Solidity compiler uses two different optimizer modules: The &quot;old&quot; optimizer
+that operates at the opcode level and the &quot;new&quot; optimizer that operates on Yul IR code.</p>
+<p>The opcode-based optimizer applies a set of <a class="reference external" href="https://github.com/ethereum/solidity/blob/develop/libevmasm/RuleList.h">simplification rules</a>
+to opcodes. It also combines equal code sets and removes unused code.</p>
+<p>The Yul-based optimizer is much more powerful, because it can work across function
+calls. For example, arbitrary jumps are not possible in Yul, so it is
+possible to compute the side-effects of each function. Consider two function calls,
+where the first does not modify storage and the second does modify storage.
+If their arguments and return values do not depend on each other, we can reorder
+the function calls. Similarly, if a function is
+side-effect free and its result is multiplied by zero, you can remove the function
+call completely.</p>
+<p>Currently, the parameter <code class="docutils literal notranslate"><span class="pre">--optimize</span></code> activates the opcode-based optimizer for the
+generated bytecode and the Yul optimizer for the Yul code generated internally, for example for ABI coder v2.
+One can use <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--ir-optimized</span> <span class="pre">--optimize</span></code> to produce an
+optimized experimental Yul IR for a Solidity source. Similarly, one can use <code class="docutils literal notranslate"><span class="pre">solc</span> <span class="pre">--strict-assembly</span> <span class="pre">--optimize</span></code>
+for a stand-alone Yul mode.</p>
+<p>You can find more details on both optimizer modules and their optimization steps below.</p>
+<section id="benefits-of-optimizing-solidity-code">
+<h2>Benefits of Optimizing Solidity Code<a class="headerlink" href="#benefits-of-optimizing-solidity-code" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Overall, the optimizer tries to simplify complicated expressions, which reduces both code
+size and execution cost, i.e., it can reduce gas needed for contract deployment as well as for external calls made to the contract.
+It also specializes or inlines functions. Especially
+function inlining is an operation that can cause much bigger code, but it is
+often done because it results in opportunities for more simplifications.</p>
+</section>
+<section id="differences-between-optimized-and-non-optimized-code">
+<h2>Differences between Optimized and Non-Optimized Code<a class="headerlink" href="#differences-between-optimized-and-non-optimized-code" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Generally, the most visible difference is that constant expressions are evaluated at compile time.
+When it comes to the ASM output, one can also notice a reduction of equivalent or duplicate
+code blocks (compare the output of the flags <code class="docutils literal notranslate"><span class="pre">--asm</span></code> and <code class="docutils literal notranslate"><span class="pre">--asm</span> <span class="pre">--optimize</span></code>). However,
+when it comes to the Yul/intermediate-representation, there can be significant
+differences, for example, functions may be inlined, combined, or rewritten to eliminate
+redundancies, etc. (compare the output between the flags <code class="docutils literal notranslate"><span class="pre">--ir</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--optimize</span> <span class="pre">--ir-optimized</span></code>).</p>
+</section>
+<section id="optimizer-parameter-runs">
+<span id="id1"></span><h2>Optimizer Parameter Runs<a class="headerlink" href="#optimizer-parameter-runs" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The number of runs (<code class="docutils literal notranslate"><span class="pre">--optimize-runs</span></code>) specifies roughly how often each opcode of the
+deployed code will be executed across the life-time of the contract. This means it is a
+trade-off parameter between code size (deploy cost) and code execution cost (cost after deployment).
+A &quot;runs&quot; parameter of &quot;1&quot; will produce short but expensive code. In contrast, a larger &quot;runs&quot;
+parameter will produce longer but more gas efficient code. The maximum value of the parameter
+is <code class="docutils literal notranslate"><span class="pre">2**32-1</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>A common misconception is that this parameter specifies the number of iterations of the optimizer.
+This is not true: The optimizer will always run as many times as it can still improve the code.</p>
+</div>
+</section>
+<section id="opcode-based-optimizer-module">
+<h2>Opcode-Based Optimizer Module<a class="headerlink" href="#opcode-based-optimizer-module" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The opcode-based optimizer module operates on assembly code. It splits the
+sequence of instructions into basic blocks at <code class="docutils literal notranslate"><span class="pre">JUMPs</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPDESTs</span></code>.
+Inside these blocks, the optimizer analyzes the instructions and records every modification to the stack,
+memory, or storage as an expression which consists of an instruction and
+a list of arguments which are pointers to other expressions.</p>
+<p>Additionally, the opcode-based optimizer
+uses a component called &quot;CommonSubexpressionEliminator&quot; that, amongst other
+tasks, finds expressions that are always equal (on every input) and combines
+them into an expression class. It first tries to find each new
+expression in a list of already known expressions. If no such matches are found,
+it simplifies the expression according to rules like
+<code class="docutils literal notranslate"><span class="pre">constant</span> <span class="pre">+</span> <span class="pre">constant</span> <span class="pre">=</span> <span class="pre">sum_of_constants</span></code> or <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">=</span> <span class="pre">X</span></code>. Since this is
+a recursive process, we can also apply the latter rule if the second factor
+is a more complex expression which we know always evaluates to one.</p>
+<p>Certain optimizer steps symbolically track the storage and memory locations. For example, this
+information is used to compute Keccak-256 hashes that can be evaluated during compile time. Consider
+the sequence:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PUSH 32
+PUSH 0
+CALLDATALOAD
+PUSH 100
+DUP2
+MSTORE
+KECCAK256
+</pre></div>
+</div>
+<p>or the equivalent Yul</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=bGV0IHggOj0gY2FsbGRhdGFsb2FkKDApCm1zdG9yZSh4LCAxMDApCmxldCB2YWx1ZSA6PSBrZWNjYWsyNTYoeCwgMzIp"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="ow">let</span> <span class="nv">value</span> <span class="o">:=</span> <span class="nf">keccak256</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, the optimizer tracks the value at a memory location <code class="docutils literal notranslate"><span class="pre">calldataload(0)</span></code> and then
+realizes that the Keccak-256 hash can be evaluated at compile time. This only works if there is no
+other instruction that modifies memory between the <code class="docutils literal notranslate"><span class="pre">mstore</span></code> and <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>. So if there is an
+instruction that writes to memory (or storage), then we need to erase the knowledge of the current
+memory (or storage). There is, however, an exception to this erasing, when we can easily see that
+the instruction doesn't write to a certain location.</p>
+<p>For example,</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=bGV0IHggOj0gY2FsbGRhdGFsb2FkKDApCm1zdG9yZSh4LCAxMDApCi8vIEN1cnJlbnQga25vd2xlZGdlIG1lbW9yeSBsb2NhdGlvbiB4IC0+IDEwMApsZXQgeSA6PSBhZGQoeCwgMzIpCi8vIERvZXMgbm90IGNsZWFyIHRoZSBrbm93bGVkZ2UgdGhhdCB4IC0+IDEwMCwgc2luY2UgeSBkb2VzIG5vdCB3cml0ZSB0byBbeCwgeCArIDMyKQptc3RvcmUoeSwgMjAwKQovLyBUaGlzIEtlY2Nhay0yNTYgY2FuIG5vdyBiZSBldmFsdWF0ZWQKbGV0IHZhbHVlIDo9IGtlY2NhazI1Nih4LCAzMik="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1">// Current knowledge memory location x -&gt; 100</span>
+<span class="ow">let</span> <span class="nv">y</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="c1">// Does not clear the knowledge that x -&gt; 100, since y does not write to [x, x + 32)</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="c1">// This Keccak-256 can now be evaluated</span>
+<span class="ow">let</span> <span class="nv">value</span> <span class="o">:=</span> <span class="nf">keccak256</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Therefore, modifications to storage and memory locations, of say location <code class="docutils literal notranslate"><span class="pre">l</span></code>, must erase
+knowledge about storage or memory locations which may be equal to <code class="docutils literal notranslate"><span class="pre">l</span></code>. More specifically, for
+storage, the optimizer has to erase all knowledge of symbolic locations, that may be equal to <code class="docutils literal notranslate"><span class="pre">l</span></code>
+and for memory, the optimizer has to erase all knowledge of symbolic locations that may not be at
+least 32 bytes away. If <code class="docutils literal notranslate"><span class="pre">m</span></code> denotes an arbitrary location, then this decision on erasure is done
+by computing the value <code class="docutils literal notranslate"><span class="pre">sub(l,</span> <span class="pre">m)</span></code>. For storage, if this value evaluates to a literal that is
+non-zero, then the knowledge about <code class="docutils literal notranslate"><span class="pre">m</span></code> will be kept. For memory, if the value evaluates to a
+literal that is between <code class="docutils literal notranslate"><span class="pre">32</span></code> and <code class="docutils literal notranslate"><span class="pre">2**256</span> <span class="pre">-</span> <span class="pre">32</span></code>, then the knowledge about <code class="docutils literal notranslate"><span class="pre">m</span></code> will be kept. In
+all other cases, the knowledge about <code class="docutils literal notranslate"><span class="pre">m</span></code> will be erased.</p>
+<p>After this process, we know which expressions have to be on the stack at
+the end, and have a list of modifications to memory and storage. This information
+is stored together with the basic blocks and is used to link them. Furthermore,
+knowledge about the stack, storage and memory configuration is forwarded to
+the next block(s).</p>
+<p>If we know the targets of all <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> and <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> instructions,
+we can build a complete control flow graph of the program. If there is only
+one target we do not know (this can happen as in principle, jump targets can
+be computed from inputs), we have to erase all knowledge about the input state
+of a block as it can be the target of the unknown <code class="docutils literal notranslate"><span class="pre">JUMP</span></code>. If the opcode-based
+optimizer module finds a <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> whose condition evaluates to a constant, it transforms it
+to an unconditional jump.</p>
+<p>As the last step, the code in each block is re-generated. The optimizer creates
+a dependency graph from the expressions on the stack at the end of the block,
+and it drops every operation that is not part of this graph. It generates code
+that applies the modifications to memory and storage in the order they were
+made in the original code (dropping modifications which were found not to be
+needed). Finally, it generates all values that are required to be on the
+stack in the correct place.</p>
+<p>These steps are applied to each basic block and the newly generated code
+is used as replacement if it is smaller. If a basic block is split at a
+<code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> and during the analysis, the condition evaluates to a constant,
+the <code class="docutils literal notranslate"><span class="pre">JUMPI</span></code> is replaced based on the value of the constant. Thus code like</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=dWludCB4ID0gNzsKZGF0YVs3XSA9IDk7CmlmIChkYXRhW3hdICE9IHggKyAyKSAvLyB0aGlzIGNvbmRpdGlvbiBpcyBuZXZlciB0cnVlCiAgcmV0dXJuIDI7CmVsc2UKICByZXR1cm4gMTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">7</span><span class="p">;</span><span class="w"></span>
+data<span class="p">[</span><span class="m m-Decimal">7</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">9</span><span class="p">;</span><span class="w"></span>
+<span class="kt">if</span><span class="w"> </span><span class="p">(</span>data<span class="p">[</span>x<span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span>x<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">)</span><span class="w"> </span><span class="c1">// this condition is never true</span>
+<span class="w">  </span><span class="kt">return</span><span class="w"> </span><span class="m m-Decimal">2</span><span class="p">;</span><span class="w"></span>
+<span class="kt">else</span><span class="w"></span>
+<span class="w">  </span><span class="kt">return</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>simplifies to this:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZGF0YVs3XSA9IDk7CnJldHVybiAxOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>data<span class="p">[</span><span class="m m-Decimal">7</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m m-Decimal">9</span><span class="p">;</span><span class="w"></span>
+<span class="kt">return</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="simple-inlining">
+<h3>Simple Inlining<a class="headerlink" href="#simple-inlining" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Since Solidity version 0.8.2, there is another optimizer step that replaces certain
+jumps to blocks containing &quot;simple&quot; instructions ending with a &quot;jump&quot; by a copy of these instructions.
+This corresponds to inlining of simple, small Solidity or Yul functions. In particular, the sequence
+<code class="docutils literal notranslate"><span class="pre">PUSHTAG(tag)</span> <span class="pre">JUMP</span></code> may be replaced, whenever the <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> is marked as jump &quot;into&quot; a
+function and behind <code class="docutils literal notranslate"><span class="pre">tag</span></code> there is a basic block (as described above for the
+&quot;CommonSubexpressionEliminator&quot;) that ends in another <code class="docutils literal notranslate"><span class="pre">JUMP</span></code> which is marked as a jump
+&quot;out of&quot; a function.</p>
+<p>In particular, consider the following prototypical example of assembly generated for a
+call to an internal Solidity function:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  tag_return
+  tag_f
+  jump      // in
+tag_return:
+  ...opcodes after call to f...
+
+tag_f:
+  ...body of function f...
+  jump      // out
+</pre></div>
+</div>
+<p>As long as the body of the function is a continuous basic block, the &quot;Inliner&quot; can replace <code class="docutils literal notranslate"><span class="pre">tag_f</span> <span class="pre">jump</span></code> by
+the block at <code class="docutils literal notranslate"><span class="pre">tag_f</span></code> resulting in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  tag_return
+  ...body of function f...
+  jump
+tag_return:
+  ...opcodes after call to f...
+
+tag_f:
+  ...body of function f...
+  jump      // out
+</pre></div>
+</div>
+<p>Now ideally, the other optimizer steps described above will result in the return tag push being moved
+towards the remaining jump resulting in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  ...body of function f...
+  tag_return
+  jump
+tag_return:
+  ...opcodes after call to f...
+
+tag_f:
+  ...body of function f...
+  jump      // out
+</pre></div>
+</div>
+<p>In this situation the &quot;PeepholeOptimizer&quot; will remove the return jump. Ideally, all of this can be done
+for all references to <code class="docutils literal notranslate"><span class="pre">tag_f</span></code> leaving it unused, s.t. it can be removed, yielding:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>...body of function f...
+...opcodes after call to f...
+</pre></div>
+</div>
+<p>So the call to function <code class="docutils literal notranslate"><span class="pre">f</span></code> is inlined and the original definition of <code class="docutils literal notranslate"><span class="pre">f</span></code> can be removed.</p>
+<p>Inlining like this is attempted, whenever a heuristics suggests that inlining is cheaper over the lifetime of a
+contract than not inlining. This heuristics depends on the size of the function body, the
+number of other references to its tag (approximating the number of calls to the function) and
+the expected number of executions of the contract (the global optimizer parameter &quot;runs&quot;).</p>
+</section>
+</section>
+<section id="yul-based-optimizer-module">
+<h2>Yul-Based Optimizer Module<a class="headerlink" href="#yul-based-optimizer-module" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The Yul-based optimizer consists of several stages and components that all transform
+the AST in a semantically equivalent way. The goal is to end up either with code
+that is shorter or at least only marginally longer but will allow further
+optimization steps.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Since the optimizer is under heavy development, the information here might be outdated.
+If you rely on a certain functionality, please reach out to the team directly.</p>
+</div>
+<p>The optimizer currently follows a purely greedy strategy and does not do any
+backtracking.</p>
+<p>All components of the Yul-based optimizer module are explained below.
+The following transformation steps are the main components:</p>
+<ul class="simple">
+<li><p>SSA Transform</p></li>
+<li><p>Common Subexpression Eliminator</p></li>
+<li><p>Expression Simplifier</p></li>
+<li><p>Redundant Assign Eliminator</p></li>
+<li><p>Full Inliner</p></li>
+</ul>
+<section id="optimizer-steps">
+<h3>Optimizer Steps<a class="headerlink" href="#optimizer-steps" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>This is a list of all steps the Yul-based optimizer sorted alphabetically. You can find more information
+on the individual steps and their sequence below.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#block-flattener"><span class="std std-ref">BlockFlattener</span></a>.</p></li>
+<li><p><a class="reference internal" href="#circular-reference-pruner"><span class="std std-ref">CircularReferencesPruner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#common-subexpression-eliminator"><span class="std std-ref">CommonSubexpressionEliminator</span></a>.</p></li>
+<li><p><a class="reference internal" href="#conditional-simplifier"><span class="std std-ref">ConditionalSimplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#conditional-unsimplifier"><span class="std std-ref">ConditionalUnsimplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#control-flow-simplifier"><span class="std std-ref">ControlFlowSimplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#dead-code-eliminator"><span class="std std-ref">DeadCodeEliminator</span></a>.</p></li>
+<li><p><a class="reference internal" href="#equivalent-function-combiner"><span class="std std-ref">EquivalentFunctionCombiner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#expression-joiner"><span class="std std-ref">ExpressionJoiner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#expression-simplifier"><span class="std std-ref">Expression Simplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#expression-splitter"><span class="std std-ref">ExpressionSplitter</span></a>.</p></li>
+<li><p><a class="reference internal" href="#for-loop-condition-into-body"><span class="std std-ref">ForLoopConditionIntoBody</span></a>.</p></li>
+<li><p><a class="reference internal" href="#for-loop-condition-out-of-body"><span class="std std-ref">ForLoopConditionOutOfBody</span></a>.</p></li>
+<li><p><a class="reference internal" href="#for-loop-init-rewriter"><span class="std std-ref">ForLoopInitRewriter</span></a>.</p></li>
+<li><p><a class="reference internal" href="#expression-inliner"><span class="std std-ref">ExpressionInliner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#full-inliner"><span class="std std-ref">FullInliner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#function-grouper"><span class="std std-ref">FunctionGrouper</span></a>.</p></li>
+<li><p><a class="reference internal" href="#function-hoister"><span class="std std-ref">FunctionHoister</span></a>.</p></li>
+<li><p><a class="reference internal" href="#function-specializer"><span class="std std-ref">FunctionSpecializer</span></a>.</p></li>
+<li><p><a class="reference internal" href="#literal-rematerialiser"><span class="std std-ref">LiteralRematerialiser</span></a>.</p></li>
+<li><p><a class="reference internal" href="#load-resolver"><span class="std std-ref">LoadResolver</span></a>.</p></li>
+<li><p><a class="reference internal" href="#loop-invariant-code-motion"><span class="std std-ref">LoopInvariantCodeMotion</span></a>.</p></li>
+<li><p><a class="reference internal" href="#redundant-assign-eliminator"><span class="std std-ref">RedundantAssignEliminator</span></a>.</p></li>
+<li><p><a class="reference internal" href="#reasoning-based-simplifier"><span class="std std-ref">ReasoningBasedSimplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#rematerialiser"><span class="std std-ref">Rematerialiser</span></a>.</p></li>
+<li><p><a class="reference internal" href="#ssa-reverser"><span class="std std-ref">SSAReverser</span></a>.</p></li>
+<li><p><a class="reference internal" href="#ssa-transform"><span class="std std-ref">SSATransform</span></a>.</p></li>
+<li><p><a class="reference internal" href="#structural-simplifier"><span class="std std-ref">StructuralSimplifier</span></a>.</p></li>
+<li><p><a class="reference internal" href="#unused-function-parameter-pruner"><span class="std std-ref">UnusedFunctionParameterPruner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#unused-pruner"><span class="std std-ref">UnusedPruner</span></a>.</p></li>
+<li><p><a class="reference internal" href="#var-decl-initializer"><span class="std std-ref">VarDeclInitializer</span></a>.</p></li>
+</ul>
+</section>
+<section id="selecting-optimizations">
+<h3>Selecting Optimizations<a class="headerlink" href="#selecting-optimizations" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>By default the optimizer applies its predefined sequence of optimization steps to
+the generated assembly. You can override this sequence and supply your own using
+the <code class="docutils literal notranslate"><span class="pre">--yul-optimizations</span></code> option:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc --optimize --ir-optimized --yul-optimizations <span class="s1">&#39;dhfoD[xarrscLMcCTU]uljmul&#39;</span>
+</pre></div>
+</div>
+<p>The sequence inside <code class="docutils literal notranslate"><span class="pre">[...]</span></code> will be applied multiple times in a loop until the Yul code
+remains unchanged or until the maximum number of rounds (currently 12) has been reached.</p>
+<p>Available abbreviations are listed in the <a class="reference external" href="yul.rst#optimization-step-sequence">Yul optimizer docs</a>.</p>
+</section>
+<section id="preprocessing">
+<h3>Preprocessing<a class="headerlink" href="#preprocessing" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The preprocessing components perform transformations to get the program
+into a certain normal form that is easier to work with. This normal
+form is kept during the rest of the optimization process.</p>
+<section id="disambiguator">
+<span id="id2"></span><h4>Disambiguator<a class="headerlink" href="#disambiguator" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The disambiguator takes an AST and returns a fresh copy where all identifiers have
+unique names in the input AST. This is a prerequisite for all other optimizer stages.
+One of the benefits is that identifier lookup does not need to take scopes into account
+which simplifies the analysis needed for other steps.</p>
+<p>All subsequent stages have the property that all names stay unique. This means if
+a new identifier needs to be introduced, a new unique name is generated.</p>
+</section>
+<section id="functionhoister">
+<span id="function-hoister"></span><h4>FunctionHoister<a class="headerlink" href="#functionhoister" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The function hoister moves all function definitions to the end of the topmost block. This is
+a semantically equivalent transformation as long as it is performed after the
+disambiguation stage. The reason is that moving a definition to a higher-level block cannot decrease
+its visibility and it is impossible to reference variables defined in a different function.</p>
+<p>The benefit of this stage is that function definitions can be looked up more easily
+and functions can be optimized in isolation without having to traverse the AST completely.</p>
+</section>
+<section id="functiongrouper">
+<span id="function-grouper"></span><h4>FunctionGrouper<a class="headerlink" href="#functiongrouper" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The function grouper has to be applied after the disambiguator and the function hoister.
+Its effect is that all topmost elements that are not function definitions are moved
+into a single block which is the first statement of the root block.</p>
+<p>After this step, a program has the following normal form:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{ I F... }
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">I</span></code> is a (potentially empty) block that does not contain any function definitions (not even recursively)
+and <code class="docutils literal notranslate"><span class="pre">F</span></code> is a list of function definitions such that no function contains a function definition.</p>
+<p>The benefit of this stage is that we always know where the list of function begins.</p>
+</section>
+<section id="forloopconditionintobody">
+<span id="for-loop-condition-into-body"></span><h4>ForLoopConditionIntoBody<a class="headerlink" href="#forloopconditionintobody" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This transformation moves the loop-iteration condition of a for-loop into loop body.
+We need this transformation because <a class="reference internal" href="#expression-splitter"><span class="std std-ref">ExpressionSplitter</span></a> will not
+apply to iteration condition expressions (the <code class="docutils literal notranslate"><span class="pre">C</span></code> in the following example).</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for { Init... } C { Post... } {
+    Body...
+}
+</pre></div>
+</div>
+<p>is transformed to</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for { Init... } 1 { Post... } {
+    if iszero(C) { break }
+    Body...
+}
+</pre></div>
+</div>
+<p>This transformation can also be useful when paired with <code class="docutils literal notranslate"><span class="pre">LoopInvariantCodeMotion</span></code>, since
+invariants in the loop-invariant conditions can then be taken outside the loop.</p>
+</section>
+<section id="forloopinitrewriter">
+<span id="for-loop-init-rewriter"></span><h4>ForLoopInitRewriter<a class="headerlink" href="#forloopinitrewriter" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This transformation moves the initialization part of a for-loop to before
+the loop:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for { Init... } C { Post... } {
+    Body...
+}
+</pre></div>
+</div>
+<p>is transformed to</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
+    Init...
+    for {} C { Post... } {
+        Body...
+    }
+}
+</pre></div>
+</div>
+<p>This eases the rest of the optimization process because we can ignore
+the complicated scoping rules of the for loop initialisation block.</p>
+</section>
+<section id="vardeclinitializer">
+<span id="var-decl-initializer"></span><h4>VarDeclInitializer<a class="headerlink" href="#vardeclinitializer" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This step rewrites variable declarations so that all of them are initialized.
+Declarations like <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x,</span> <span class="pre">y</span></code> are split into multiple declaration statements.</p>
+<p>Only supports initializing with the zero literal for now.</p>
+</section>
+</section>
+<section id="pseudo-ssa-transformation">
+<h3>Pseudo-SSA Transformation<a class="headerlink" href="#pseudo-ssa-transformation" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The purpose of this components is to get the program into a longer form,
+so that other components can more easily work with it. The final representation
+will be similar to a static-single-assignment (SSA) form, with the difference
+that it does not make use of explicit &quot;phi&quot; functions which combines the values
+from different branches of control flow because such a feature does not exist
+in the Yul language. Instead, when control flow merges, if a variable is re-assigned
+in one of the branches, a new SSA variable is declared to hold its current value,
+so that the following expressions still only need to reference SSA variables.</p>
+<p>An example transformation is the following:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGEgOj0gY2FsbGRhdGFsb2FkKDApCiAgICBsZXQgYiA6PSBjYWxsZGF0YWxvYWQoMHgyMCkKICAgIGlmIGd0KGEsIDApIHsKICAgICAgICBiIDo9IG11bChiLCAweDIwKQogICAgfQogICAgYSA6PSBhZGQoYSwgMSkKICAgIHNzdG9yZShhLCBhZGQoYiwgMHgyMCkpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">b</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mh">0x20</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">b</span> <span class="o">:=</span> <span class="nf">mul</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nf">add</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When all the following transformation steps are applied, the program will look
+as follows:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IF8xIDo9IDAKICAgIGxldCBhXzkgOj0gY2FsbGRhdGFsb2FkKF8xKQogICAgbGV0IGEgOj0gYV85CiAgICBsZXQgXzIgOj0gMHgyMAogICAgbGV0IGJfMTAgOj0gY2FsbGRhdGFsb2FkKF8yKQogICAgbGV0IGIgOj0gYl8xMAogICAgbGV0IF8zIDo9IDAKICAgIGxldCBfNCA6PSBndChhXzksIF8zKQogICAgaWYgXzQKICAgIHsKICAgICAgICBsZXQgXzUgOj0gMHgyMAogICAgICAgIGxldCBiXzExIDo9IG11bChiXzEwLCBfNSkKICAgICAgICBiIDo9IGJfMTEKICAgIH0KICAgIGxldCBiXzEyIDo9IGIKICAgIGxldCBfNiA6PSAxCiAgICBsZXQgYV8xMyA6PSBhZGQoYV85LCBfNikKICAgIGxldCBfNyA6PSAweDIwCiAgICBsZXQgXzggOj0gYWRkKGJfMTIsIF83KQogICAgc3N0b3JlKGFfMTMsIF84KQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">_1</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="ow">let</span> <span class="nv">a_9</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="n">_1</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="n">a_9</span>
+    <span class="ow">let</span> <span class="nv">_2</span> <span class="o">:=</span> <span class="mh">0x20</span>
+    <span class="ow">let</span> <span class="nv">b_10</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="n">_2</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">b</span> <span class="o">:=</span> <span class="n">b_10</span>
+    <span class="ow">let</span> <span class="nv">_3</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="ow">let</span> <span class="nv">_4</span> <span class="o">:=</span> <span class="nf">gt</span><span class="p">(</span><span class="n">a_9</span><span class="p">,</span> <span class="n">_3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_4</span>
+    <span class="p">{</span>
+        <span class="ow">let</span> <span class="nv">_5</span> <span class="o">:=</span> <span class="mh">0x20</span>
+        <span class="ow">let</span> <span class="nv">b_11</span> <span class="o">:=</span> <span class="nf">mul</span><span class="p">(</span><span class="n">b_10</span><span class="p">,</span> <span class="n">_5</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">:=</span> <span class="n">b_11</span>
+    <span class="p">}</span>
+    <span class="ow">let</span> <span class="nv">b_12</span> <span class="o">:=</span> <span class="n">b</span>
+    <span class="ow">let</span> <span class="nv">_6</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="ow">let</span> <span class="nv">a_13</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">a_9</span><span class="p">,</span> <span class="n">_6</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">_7</span> <span class="o">:=</span> <span class="mh">0x20</span>
+    <span class="ow">let</span> <span class="nv">_8</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">b_12</span><span class="p">,</span> <span class="n">_7</span><span class="p">)</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a_13</span><span class="p">,</span> <span class="n">_8</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the only variable that is re-assigned in this snippet is <code class="docutils literal notranslate"><span class="pre">b</span></code>.
+This re-assignment cannot be avoided because <code class="docutils literal notranslate"><span class="pre">b</span></code> has different values
+depending on the control flow. All other variables never change their
+value once they are defined. The advantage of this property is that
+variables can be freely moved around and references to them
+can be exchanged by their initial value (and vice-versa),
+as long as these values are still valid in the new context.</p>
+<p>Of course, the code here is far from being optimized. To the contrary, it is much
+longer. The hope is that this code will be easier to work with and furthermore,
+there are optimizer steps that undo these changes and make the code more
+compact again at the end.</p>
+<section id="expressionsplitter">
+<span id="expression-splitter"></span><h4>ExpressionSplitter<a class="headerlink" href="#expressionsplitter" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The expression splitter turns expressions like <code class="docutils literal notranslate"><span class="pre">add(mload(0x123),</span> <span class="pre">mul(mload(0x456),</span> <span class="pre">0x20))</span></code>
+into a sequence of declarations of unique variables that are assigned sub-expressions
+of that expression so that each function call has only variables or literals
+as arguments.</p>
+<p>The above would be transformed into</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IF8xIDo9IG1sb2FkKDB4MTIzKQogICAgbGV0IF8yIDo9IG11bChfMSwgMHgyMCkKICAgIGxldCBfMyA6PSBtbG9hZCgweDQ1NikKICAgIGxldCB6IDo9IGFkZChfMywgXzIpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">_1</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="mh">0x123</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">_2</span> <span class="o">:=</span> <span class="nf">mul</span><span class="p">(</span><span class="n">_1</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">_3</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="mh">0x456</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">z</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="n">_3</span><span class="p">,</span> <span class="n">_2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that this transformation does not change the order of opcodes or function calls.</p>
+<p>It is not applied to loop iteration-condition, because the loop control flow does not allow
+this &quot;outlining&quot; of the inner expressions in all cases. We can sidestep this limitation by applying
+<a class="reference internal" href="#for-loop-condition-into-body"><span class="std std-ref">ForLoopConditionIntoBody</span></a> to move the iteration condition into loop body.</p>
+<p>The final program should be in a form such that (with the exception of loop conditions)
+function calls cannot appear nested inside expressions
+and all function call arguments have to be literals or variables.</p>
+<p>The benefits of this form are that it is much easier to re-order the sequence of opcodes
+and it is also easier to perform function call inlining. Furthermore, it is simpler
+to replace individual parts of expressions or re-organize the &quot;expression tree&quot;.
+The drawback is that such code is much harder to read for humans.</p>
+</section>
+<section id="ssatransform">
+<span id="ssa-transform"></span><h4>SSATransform<a class="headerlink" href="#ssatransform" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This stage tries to replace repeated assignments to
+existing variables by declarations of new variables as much as
+possible.
+The reassignments are still there, but all references to the
+reassigned variables are replaced by the newly declared variables.</p>
+<p>Example:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGEgOj0gMQogICAgbXN0b3JlKGEsIDIpCiAgICBhIDo9IDMKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="nf">mstore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="mi">3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>is transformed to</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGFfMSA6PSAxCiAgICBsZXQgYSA6PSBhXzEKICAgIG1zdG9yZShhXzEsIDIpCiAgICBsZXQgYV8zIDo9IDMKICAgIGEgOj0gYV8zCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a_1</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="n">a_1</span>
+    <span class="nf">mstore</span><span class="p">(</span><span class="n">a_1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">a_3</span> <span class="o">:=</span> <span class="mi">3</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="n">a_3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Exact semantics:</p>
+<p>For any variable <code class="docutils literal notranslate"><span class="pre">a</span></code> that is assigned to somewhere in the code
+(variables that are declared with value and never re-assigned
+are not modified) perform the following transforms:</p>
+<ul class="simple">
+<li><p>replace <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a</span> <span class="pre">:=</span> <span class="pre">v</span></code> by <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a_i</span> <span class="pre">:=</span> <span class="pre">v</span>&#160;&#160; <span class="pre">let</span> <span class="pre">a</span> <span class="pre">:=</span> <span class="pre">a_i</span></code></p></li>
+<li><p>replace <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">:=</span> <span class="pre">v</span></code> by <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">a_i</span> <span class="pre">:=</span> <span class="pre">v</span>&#160;&#160; <span class="pre">a</span> <span class="pre">:=</span> <span class="pre">a_i</span></code> where <code class="docutils literal notranslate"><span class="pre">i</span></code> is a number such that <code class="docutils literal notranslate"><span class="pre">a_i</span></code> is yet unused.</p></li>
+</ul>
+<p>Furthermore, always record the current value of <code class="docutils literal notranslate"><span class="pre">i</span></code> used for <code class="docutils literal notranslate"><span class="pre">a</span></code> and replace each
+reference to <code class="docutils literal notranslate"><span class="pre">a</span></code> by <code class="docutils literal notranslate"><span class="pre">a_i</span></code>.
+The current value mapping is cleared for a variable <code class="docutils literal notranslate"><span class="pre">a</span></code> at the end of each block
+in which it was assigned to and at the end of the for loop init block if it is assigned
+inside the for loop body or post block.
+If a variable's value is cleared according to the rule above and the variable is declared outside
+the block, a new SSA variable will be created at the location where control flow joins,
+this includes the beginning of loop post/body block and the location right after
+If/Switch/ForLoop/Block statement.</p>
+<p>After this stage, the Redundant Assign Eliminator is recommended to remove the unnecessary
+intermediate assignments.</p>
+<p>This stage provides best results if the Expression Splitter and the Common Subexpression Eliminator
+are run right before it, because then it does not generate excessive amounts of variables.
+On the other hand, the Common Subexpression Eliminator could be more efficient if run after the
+SSA transform.</p>
+</section>
+<section id="redundantassigneliminator">
+<span id="redundant-assign-eliminator"></span><h4>RedundantAssignEliminator<a class="headerlink" href="#redundantassigneliminator" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The SSA transform always generates an assignment of the form <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">:=</span> <span class="pre">a_i</span></code>, even though
+these might be unnecessary in many cases, like the following example:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGEgOj0gMQogICAgYSA6PSBtbG9hZChhKQogICAgYSA6PSBzbG9hZChhKQogICAgc3N0b3JlKGEsIDEpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="nf">sload</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The SSA transform converts this snippet to the following:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGFfMSA6PSAxCiAgICBsZXQgYSA6PSBhXzEKICAgIGxldCBhXzIgOj0gbWxvYWQoYV8xKQogICAgYSA6PSBhXzIKICAgIGxldCBhXzMgOj0gc2xvYWQoYV8yKQogICAgYSA6PSBhXzMKICAgIHNzdG9yZShhXzMsIDEpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a_1</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="n">a_1</span>
+    <span class="ow">let</span> <span class="nv">a_2</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="n">a_1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="n">a_2</span>
+    <span class="ow">let</span> <span class="nv">a_3</span> <span class="o">:=</span> <span class="nf">sload</span><span class="p">(</span><span class="n">a_2</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">:=</span> <span class="n">a_3</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a_3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The Redundant Assign Eliminator removes all the three assignments to <code class="docutils literal notranslate"><span class="pre">a</span></code>, because
+the value of <code class="docutils literal notranslate"><span class="pre">a</span></code> is not used and thus turn this
+snippet into strict SSA form:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IGFfMSA6PSAxCiAgICBsZXQgYV8yIDo9IG1sb2FkKGFfMSkKICAgIGxldCBhXzMgOj0gc2xvYWQoYV8yKQogICAgc3N0b3JlKGFfMywgMSkKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">a_1</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="ow">let</span> <span class="nv">a_2</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="n">a_1</span><span class="p">)</span>
+    <span class="ow">let</span> <span class="nv">a_3</span> <span class="o">:=</span> <span class="nf">sload</span><span class="p">(</span><span class="n">a_2</span><span class="p">)</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a_3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Of course the intricate parts of determining whether an assignment is redundant or not
+are connected to joining control flow.</p>
+<p>The component works as follows in detail:</p>
+<p>The AST is traversed twice: in an information gathering step and in the
+actual removal step. During information gathering, we maintain a
+mapping from assignment statements to the three states
+&quot;unused&quot;, &quot;undecided&quot; and &quot;used&quot; which signifies whether the assigned
+value will be used later by a reference to the variable.</p>
+<p>When an assignment is visited, it is added to the mapping in the &quot;undecided&quot; state
+(see remark about for loops below) and every other assignment to the same variable
+that is still in the &quot;undecided&quot; state is changed to &quot;unused&quot;.
+When a variable is referenced, the state of any assignment to that variable still
+in the &quot;undecided&quot; state is changed to &quot;used&quot;.</p>
+<p>At points where control flow splits, a copy
+of the mapping is handed over to each branch. At points where control flow
+joins, the two mappings coming from the two branches are combined in the following way:
+Statements that are only in one mapping or have the same state are used unchanged.
+Conflicting values are resolved in the following way:</p>
+<ul class="simple">
+<li><p>&quot;unused&quot;, &quot;undecided&quot; -&gt; &quot;undecided&quot;</p></li>
+<li><p>&quot;unused&quot;, &quot;used&quot; -&gt; &quot;used&quot;</p></li>
+<li><p>&quot;undecided, &quot;used&quot; -&gt; &quot;used&quot;</p></li>
+</ul>
+<p>For for-loops, the condition, body and post-part are visited twice, taking
+the joining control-flow at the condition into account.
+In other words, we create three control flow paths: Zero runs of the loop,
+one run and two runs and then combine them at the end.</p>
+<p>Simulating a third run or even more is unnecessary, which can be seen as follows:</p>
+<p>A state of an assignment at the beginning of the iteration will deterministically
+result in a state of that assignment at the end of the iteration. Let this
+state mapping function be called <code class="docutils literal notranslate"><span class="pre">f</span></code>. The combination of the three different
+states <code class="docutils literal notranslate"><span class="pre">unused</span></code>, <code class="docutils literal notranslate"><span class="pre">undecided</span></code> and <code class="docutils literal notranslate"><span class="pre">used</span></code> as explained above is the <code class="docutils literal notranslate"><span class="pre">max</span></code>
+operation where <code class="docutils literal notranslate"><span class="pre">unused</span> <span class="pre">=</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">undecided</span> <span class="pre">=</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">used</span> <span class="pre">=</span> <span class="pre">2</span></code>.</p>
+<p>The proper way would be to compute</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>max(s, f(s), f(f(s)), f(f(f(s))), ...)
+</pre></div>
+</div>
+<p>as state after the loop. Since <code class="docutils literal notranslate"><span class="pre">f</span></code> just has a range of three different values,
+iterating it has to reach a cycle after at most three iterations,
+and thus <code class="docutils literal notranslate"><span class="pre">f(f(f(s)))</span></code> has to equal one of <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">f(s)</span></code>, or <code class="docutils literal notranslate"><span class="pre">f(f(s))</span></code>
+and thus</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>max(s, f(s), f(f(s))) = max(s, f(s), f(f(s)), f(f(f(s))), ...).
+</pre></div>
+</div>
+<p>In summary, running the loop at most twice is enough because there are only three
+different states.</p>
+<p>For switch statements that have a &quot;default&quot;-case, there is no control-flow
+part that skips the switch.</p>
+<p>When a variable goes out of scope, all statements still in the &quot;undecided&quot;
+state are changed to &quot;unused&quot;, unless the variable is the return
+parameter of a function - there, the state changes to &quot;used&quot;.</p>
+<p>In the second traversal, all assignments that are in the &quot;unused&quot; state are removed.</p>
+<p>This step is usually run right after the SSA transform to complete
+the generation of the pseudo-SSA.</p>
+</section>
+</section>
+<section id="tools">
+<h3>Tools<a class="headerlink" href="#tools" title="پیوند ثابت به این سر مقاله"></a></h3>
+<section id="movability">
+<h4>Movability<a class="headerlink" href="#movability" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Movability is a property of an expression. It roughly means that the expression
+is side-effect free and its evaluation only depends on the values of variables
+and the call-constant state of the environment. Most expressions are movable.
+The following parts make an expression non-movable:</p>
+<ul class="simple">
+<li><p>function calls (might be relaxed in the future if all statements in the function are movable)</p></li>
+<li><p>opcodes that (can) have side-effects (like <code class="docutils literal notranslate"><span class="pre">call</span></code> or <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>)</p></li>
+<li><p>opcodes that read or write memory, storage or external state information</p></li>
+<li><p>opcodes that depend on the current PC, memory size or returndata size</p></li>
+</ul>
+</section>
+<section id="dataflowanalyzer">
+<h4>DataflowAnalyzer<a class="headerlink" href="#dataflowanalyzer" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The Dataflow Analyzer is not an optimizer step itself but is used as a tool
+by other components. While traversing the AST, it tracks the current value of
+each variable, as long as that value is a movable expression.
+It records the variables that are part of the expression
+that is currently assigned to each other variable. Upon each assignment to
+a variable <code class="docutils literal notranslate"><span class="pre">a</span></code>, the current stored value of <code class="docutils literal notranslate"><span class="pre">a</span></code> is updated and
+all stored values of all variables <code class="docutils literal notranslate"><span class="pre">b</span></code> are cleared whenever <code class="docutils literal notranslate"><span class="pre">a</span></code> is part
+of the currently stored expression for <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p>
+<p>At control-flow joins, knowledge about variables is cleared if they have or would be assigned
+in any of the control-flow paths. For instance, upon entering a
+for loop, all variables are cleared that will be assigned during the
+body or the post block.</p>
+</section>
+</section>
+<section id="expression-scale-simplifications">
+<h3>Expression-Scale Simplifications<a class="headerlink" href="#expression-scale-simplifications" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>These simplification passes change expressions and replace them by equivalent
+and hopefully simpler expressions.</p>
+<section id="commonsubexpressioneliminator">
+<span id="common-subexpression-eliminator"></span><h4>CommonSubexpressionEliminator<a class="headerlink" href="#commonsubexpressioneliminator" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This step uses the Dataflow Analyzer and replaces subexpressions that
+syntactically match the current value of a variable by a reference to
+that variable. This is an equivalence transform because such subexpressions have
+to be movable.</p>
+<p>All subexpressions that are identifiers themselves are replaced by their
+current value if the value is an identifier.</p>
+<p>The combination of the two rules above allow to compute a local value
+numbering, which means that if two variables have the same
+value, one of them will always be unused. The Unused Pruner or the
+Redundant Assign Eliminator will then be able to fully eliminate such
+variables.</p>
+<p>This step is especially efficient if the expression splitter is run
+before. If the code is in pseudo-SSA form,
+the values of variables are available for a longer time and thus we
+have a higher chance of expressions to be replaceable.</p>
+<p>The expression simplifier will be able to perform better replacements
+if the common subexpression eliminator was run right before it.</p>
+</section>
+<section id="expression-simplifier">
+<span id="id3"></span><h4>Expression Simplifier<a class="headerlink" href="#expression-simplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The Expression Simplifier uses the Dataflow Analyzer and makes use
+of a list of equivalence transforms on expressions like <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">+</span> <span class="pre">0</span> <span class="pre">-&gt;</span> <span class="pre">X</span></code>
+to simplify the code.</p>
+<p>It tries to match patterns like <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">+</span> <span class="pre">0</span></code> on each subexpression.
+During the matching procedure, it resolves variables to their currently
+assigned expressions to be able to match more deeply nested patterns
+even when the code is in pseudo-SSA form.</p>
+<p>Some of the patterns like <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">-</span> <span class="pre">X</span> <span class="pre">-&gt;</span> <span class="pre">0</span></code> can only be applied as long
+as the expression <code class="docutils literal notranslate"><span class="pre">X</span></code> is movable, because otherwise it would remove its potential side-effects.
+Since variable references are always movable, even if their current
+value might not be, the Expression Simplifier is again more powerful
+in split or pseudo-SSA form.</p>
+</section>
+<section id="literalrematerialiser">
+<span id="literal-rematerialiser"></span><h4>LiteralRematerialiser<a class="headerlink" href="#literalrematerialiser" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>To be documented.</p>
+</section>
+<section id="loadresolver">
+<span id="load-resolver"></span><h4>LoadResolver<a class="headerlink" href="#loadresolver" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Optimisation stage that replaces expressions of type <code class="docutils literal notranslate"><span class="pre">sload(x)</span></code> and <code class="docutils literal notranslate"><span class="pre">mload(x)</span></code> by the value
+currently stored in storage resp. memory, if known.</p>
+<p>Works best if the code is in SSA form.</p>
+<p>Prerequisite: Disambiguator, ForLoopInitRewriter.</p>
+</section>
+<section id="reasoningbasedsimplifier">
+<span id="reasoning-based-simplifier"></span><h4>ReasoningBasedSimplifier<a class="headerlink" href="#reasoningbasedsimplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This optimizer uses SMT solvers to check whether <code class="docutils literal notranslate"><span class="pre">if</span></code> conditions are constant.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">constraints</span> <span class="pre">AND</span> <span class="pre">condition</span></code> is UNSAT, the condition is never true and the whole body can be removed.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">constraints</span> <span class="pre">AND</span> <span class="pre">NOT</span> <span class="pre">condition</span></code> is UNSAT, the condition is always true and can be replaced by <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+<p>The simplifications above can only be applied if the condition is movable.</p>
+<p>It is only effective on the EVM dialect, but safe to use on other dialects.</p>
+<p>Prerequisite: Disambiguator, SSATransform.</p>
+</section>
+</section>
+<section id="statement-scale-simplifications">
+<h3>Statement-Scale Simplifications<a class="headerlink" href="#statement-scale-simplifications" title="پیوند ثابت به این سر مقاله"></a></h3>
+<section id="circularreferencespruner">
+<span id="circular-reference-pruner"></span><h4>CircularReferencesPruner<a class="headerlink" href="#circularreferencespruner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This stage removes functions that call each other but are
+neither externally referenced nor referenced from the outermost context.</p>
+</section>
+<section id="conditionalsimplifier">
+<span id="conditional-simplifier"></span><h4>ConditionalSimplifier<a class="headerlink" href="#conditionalsimplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The Conditional Simplifier inserts assignments to condition variables if the value can be determined
+from the control-flow.</p>
+<p>Destroys SSA form.</p>
+<p>Currently, this tool is very limited, mostly because we do not yet have support
+for boolean types. Since conditions only check for expressions being nonzero,
+we cannot assign a specific value.</p>
+<p>Current features:</p>
+<ul class="simple">
+<li><p>switch cases: insert &quot;&lt;condition&gt; := &lt;caseLabel&gt;&quot;</p></li>
+<li><p>after if statement with terminating control-flow, insert &quot;&lt;condition&gt; := 0&quot;</p></li>
+</ul>
+<p>Future features:</p>
+<ul class="simple">
+<li><p>allow replacements by &quot;1&quot;</p></li>
+<li><p>take termination of user-defined functions into account</p></li>
+</ul>
+<p>Works best with SSA form and if dead code removal has run before.</p>
+<p>Prerequisite: Disambiguator.</p>
+</section>
+<section id="conditionalunsimplifier">
+<span id="conditional-unsimplifier"></span><h4>ConditionalUnsimplifier<a class="headerlink" href="#conditionalunsimplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Reverse of Conditional Simplifier.</p>
+</section>
+<section id="controlflowsimplifier">
+<span id="control-flow-simplifier"></span><h4>ControlFlowSimplifier<a class="headerlink" href="#controlflowsimplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Simplifies several control-flow structures:</p>
+<ul class="simple">
+<li><p>replace if with empty body with pop(condition)</p></li>
+<li><p>remove empty default switch case</p></li>
+<li><p>remove empty switch case if no default case exists</p></li>
+<li><p>replace switch with no cases with pop(expression)</p></li>
+<li><p>turn switch with single case into if</p></li>
+<li><p>replace switch with only default case with pop(expression) and body</p></li>
+<li><p>replace switch with const expr with matching case body</p></li>
+<li><p>replace <code class="docutils literal notranslate"><span class="pre">for</span></code> with terminating control flow and without other break/continue by <code class="docutils literal notranslate"><span class="pre">if</span></code></p></li>
+<li><p>remove <code class="docutils literal notranslate"><span class="pre">leave</span></code> at the end of a function.</p></li>
+</ul>
+<p>None of these operations depend on the data flow. The StructuralSimplifier
+performs similar tasks that do depend on data flow.</p>
+<p>The ControlFlowSimplifier does record the presence or absence of <code class="docutils literal notranslate"><span class="pre">break</span></code>
+and <code class="docutils literal notranslate"><span class="pre">continue</span></code> statements during its traversal.</p>
+<p>Prerequisite: Disambiguator, FunctionHoister, ForLoopInitRewriter.
+Important: Introduces EVM opcodes and thus can only be used on EVM code for now.</p>
+</section>
+<section id="deadcodeeliminator">
+<span id="dead-code-eliminator"></span><h4>DeadCodeEliminator<a class="headerlink" href="#deadcodeeliminator" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This optimization stage removes unreachable code.</p>
+<p>Unreachable code is any code within a block which is preceded by a
+leave, return, invalid, break, continue, selfdestruct or revert.</p>
+<p>Function definitions are retained as they might be called by earlier
+code and thus are considered reachable.</p>
+<p>Because variables declared in a for loop's init block have their scope extended to the loop body,
+we require ForLoopInitRewriter to run before this step.</p>
+<p>Prerequisite: ForLoopInitRewriter, Function Hoister, Function Grouper</p>
+</section>
+<section id="unusedpruner">
+<span id="unused-pruner"></span><h4>UnusedPruner<a class="headerlink" href="#unusedpruner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This step removes the definitions of all functions that are never referenced.</p>
+<p>It also removes the declaration of variables that are never referenced.
+If the declaration assigns a value that is not movable, the expression is retained,
+but its value is discarded.</p>
+<p>All movable expression statements (expressions that are not assigned) are removed.</p>
+</section>
+<section id="structuralsimplifier">
+<span id="structural-simplifier"></span><h4>StructuralSimplifier<a class="headerlink" href="#structuralsimplifier" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This is a general step that performs various kinds of simplifications on
+a structural level:</p>
+<ul class="simple">
+<li><p>replace if statement with empty body by <code class="docutils literal notranslate"><span class="pre">pop(condition)</span></code></p></li>
+<li><p>replace if statement with true condition by its body</p></li>
+<li><p>remove if statement with false condition</p></li>
+<li><p>turn switch with single case into if</p></li>
+<li><p>replace switch with only default case by <code class="docutils literal notranslate"><span class="pre">pop(expression)</span></code> and body</p></li>
+<li><p>replace switch with literal expression by matching case body</p></li>
+<li><p>replace for loop with false condition by its initialization part</p></li>
+</ul>
+<p>This component uses the Dataflow Analyzer.</p>
+</section>
+<section id="blockflattener">
+<span id="block-flattener"></span><h4>BlockFlattener<a class="headerlink" href="#blockflattener" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This stage eliminates nested blocks by inserting the statement in the
+inner block at the appropriate place in the outer block:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IHggOj0gMgogICAgewogICAgICAgIGxldCB5IDo9IDMKICAgICAgICBtc3RvcmUoeCwgeSkKICAgIH0KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="mi">2</span>
+    <span class="p">{</span>
+        <span class="ow">let</span> <span class="nv">y</span> <span class="o">:=</span> <span class="mi">3</span>
+        <span class="nf">mstore</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>is transformed to</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ewogICAgbGV0IHggOj0gMgogICAgbGV0IHkgOj0gMwogICAgbXN0b3JlKHgsIHkpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">x</span> <span class="o">:=</span> <span class="mi">2</span>
+    <span class="ow">let</span> <span class="nv">y</span> <span class="o">:=</span> <span class="mi">3</span>
+    <span class="nf">mstore</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As long as the code is disambiguated, this does not cause a problem because
+the scopes of variables can only grow.</p>
+</section>
+<section id="loopinvariantcodemotion">
+<span id="loop-invariant-code-motion"></span><h4>LoopInvariantCodeMotion<a class="headerlink" href="#loopinvariantcodemotion" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This optimization moves movable SSA variable declarations outside the loop.</p>
+<p>Only statements at the top level in a loop's body or post block are considered, i.e variable
+declarations inside conditional branches will not be moved out of the loop.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>The Disambiguator, ForLoopInitRewriter and FunctionHoister must be run upfront.</p></li>
+<li><p>Expression splitter and SSA transform should be run upfront to obtain better result.</p></li>
+</ul>
+</section>
+</section>
+<section id="function-level-optimizations">
+<h3>Function-Level Optimizations<a class="headerlink" href="#function-level-optimizations" title="پیوند ثابت به این سر مقاله"></a></h3>
+<section id="functionspecializer">
+<span id="function-specializer"></span><h4>FunctionSpecializer<a class="headerlink" href="#functionspecializer" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This step specializes the function with its literal arguments.</p>
+<p>If a function, say, <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(a,</span> <span class="pre">b)</span> <span class="pre">{</span> <span class="pre">sstore</span> <span class="pre">(a,</span> <span class="pre">b)</span> <span class="pre">}</span></code>, is called with literal arguments, for
+example, <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">5)</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> is an identifier, it could be specialized by creating a new
+function <code class="docutils literal notranslate"><span class="pre">f_1</span></code> that takes only one argument, i.e.,</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gZl8xKGFfMSkgewogICAgbGV0IGJfMSA6PSA1CiAgICBzc3RvcmUoYV8xLCBiXzEpCn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">f_1</span><span class="p">(</span><span class="n">a_1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="ow">let</span> <span class="nv">b_1</span> <span class="o">:=</span> <span class="mi">5</span>
+    <span class="nf">sstore</span><span class="p">(</span><span class="n">a_1</span><span class="p">,</span> <span class="n">b_1</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Other optimization steps will be able to make more simplifications to the function. The
+optimization step is mainly useful for functions that would not be inlined.</p>
+<p>Prerequisites: Disambiguator, FunctionHoister</p>
+<p>LiteralRematerialiser is recommended as a prerequisite, even though it's not required for
+correctness.</p>
+</section>
+<section id="unusedfunctionparameterpruner">
+<span id="unused-function-parameter-pruner"></span><h4>UnusedFunctionParameterPruner<a class="headerlink" href="#unusedfunctionparameterpruner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This step removes unused parameters in a function.</p>
+<p>If a parameter is unused, like <code class="docutils literal notranslate"><span class="pre">c</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> in, <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(a,b,c)</span> <span class="pre">-&gt;</span> <span class="pre">x,</span> <span class="pre">y</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">div(a,b)</span> <span class="pre">}</span></code>, we
+remove the parameter and create a new &quot;linking&quot; function as follows:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gZihhLGIpIC0+IHggeyB4IDo9IGRpdihhLGIpIH0KZnVuY3Rpb24gZjIoYSxiLGMpIC0+IHgsIHkgeyB4IDo9IGYoYSxiKSB9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="p">{</span> <span class="n">x</span> <span class="o">:=</span> <span class="nf">div</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">function</span> <span class="n">f2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">{</span> <span class="n">x</span> <span class="o">:=</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>and replace all references to <code class="docutils literal notranslate"><span class="pre">f</span></code> by <code class="docutils literal notranslate"><span class="pre">f2</span></code>.
+The inliner should be run afterwards to make sure that all references to <code class="docutils literal notranslate"><span class="pre">f2</span></code> are replaced by
+<code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
+<p>Prerequisites: Disambiguator, FunctionHoister, LiteralRematerialiser.</p>
+<p>The step LiteralRematerialiser is not required for correctness. It helps deal with cases such as:
+<code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">y</span> <span class="pre">{</span> <span class="pre">revert(y,</span> <span class="pre">y}</span> <span class="pre">}</span></code> where the literal <code class="docutils literal notranslate"><span class="pre">y</span></code> will be replaced by its value <code class="docutils literal notranslate"><span class="pre">0</span></code>,
+allowing us to rewrite the function.</p>
+</section>
+<section id="equivalentfunctioncombiner">
+<span id="equivalent-function-combiner"></span><h4>EquivalentFunctionCombiner<a class="headerlink" href="#equivalentfunctioncombiner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>If two functions are syntactically equivalent, while allowing variable
+renaming but not any re-ordering, then any reference to one of the
+functions is replaced by the other.</p>
+<p>The actual removal of the function is performed by the Unused Pruner.</p>
+</section>
+</section>
+<section id="function-inlining">
+<h3>Function Inlining<a class="headerlink" href="#function-inlining" title="پیوند ثابت به این سر مقاله"></a></h3>
+<section id="expressioninliner">
+<span id="expression-inliner"></span><h4>ExpressionInliner<a class="headerlink" href="#expressioninliner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This component of the optimizer performs restricted function inlining by inlining functions that can be
+inlined inside functional expressions, i.e. functions that:</p>
+<ul class="simple">
+<li><p>return a single value.</p></li>
+<li><p>have a body like <code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">:=</span> <span class="pre">&lt;functional</span> <span class="pre">expression&gt;</span></code>.</p></li>
+<li><p>neither reference themselves nor <code class="docutils literal notranslate"><span class="pre">r</span></code> in the right hand side.</p></li>
+</ul>
+<p>Furthermore, for all parameters, all of the following need to be true:</p>
+<ul class="simple">
+<li><p>The argument is movable.</p></li>
+<li><p>The parameter is either referenced less than twice in the function body, or the argument is rather cheap
+(&quot;cost&quot; of at most 1, like a constant up to 0xff).</p></li>
+</ul>
+<p>Example: The function to be inlined has the form of <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f(...)</span> <span class="pre">-&gt;</span> <span class="pre">r</span> <span class="pre">{</span> <span class="pre">r</span> <span class="pre">:=</span> <span class="pre">E</span> <span class="pre">}</span></code> where
+<code class="docutils literal notranslate"><span class="pre">E</span></code> is an expression that does not reference <code class="docutils literal notranslate"><span class="pre">r</span></code> and all arguments in the function call are movable expressions.</p>
+<p>The result of this inlining is always a single expression.</p>
+<p>This component can only be used on sources with unique names.</p>
+</section>
+<section id="fullinliner">
+<span id="full-inliner"></span><h4>FullInliner<a class="headerlink" href="#fullinliner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The Full Inliner replaces certain calls of certain functions
+by the function's body. This is not very helpful in most cases, because
+it just increases the code size but does not have a benefit. Furthermore,
+code is usually very expensive and we would often rather have shorter
+code than more efficient code. In same cases, though, inlining a function
+can have positive effects on subsequent optimizer steps. This is the case
+if one of the function arguments is a constant, for example.</p>
+<p>During inlining, a heuristic is used to tell if the function call
+should be inlined or not.
+The current heuristic does not inline into &quot;large&quot; functions unless
+the called function is tiny. Functions that are only used once
+are inlined, as well as medium-sized functions, while function
+calls with constant arguments allow slightly larger functions.</p>
+<p>In the future, we may include a backtracking component
+that, instead of inlining a function right away, only specializes it,
+which means that a copy of the function is generated where
+a certain parameter is always replaced by a constant. After that,
+we can run the optimizer on this specialized function. If it
+results in heavy gains, the specialized function is kept,
+otherwise the original function is used instead.</p>
+</section>
+</section>
+<section id="cleanup">
+<h3>Cleanup<a class="headerlink" href="#cleanup" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The cleanup is performed at the end of the optimizer run. It tries
+to combine split expressions into deeply nested ones again and also
+improves the &quot;compilability&quot; for stack machines by eliminating
+variables as much as possible.</p>
+<section id="expressionjoiner">
+<span id="expression-joiner"></span><h4>ExpressionJoiner<a class="headerlink" href="#expressionjoiner" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This is the opposite operation of the expression splitter. It turns a sequence of
+variable declarations that have exactly one reference into a complex expression.
+This stage fully preserves the order of function calls and opcode executions.
+It does not make use of any information concerning the commutativity of the opcodes;
+if moving the value of a variable to its place of use would change the order
+of any function call or opcode execution, the transformation is not performed.</p>
+<p>Note that the component will not move the assigned value of a variable assignment
+or a variable that is referenced more than once.</p>
+<p>The snippet <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(0,</span> <span class="pre">2)</span> <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">mload(2))</span></code> is not transformed,
+because it would cause the order of the call to the opcodes <code class="docutils literal notranslate"><span class="pre">add</span></code> and
+<code class="docutils literal notranslate"><span class="pre">mload</span></code> to be swapped - even though this would not make a difference
+because <code class="docutils literal notranslate"><span class="pre">add</span></code> is movable.</p>
+<p>When reordering opcodes like that, variable references and literals are ignored.
+Because of that, the snippet <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">x</span> <span class="pre">:=</span> <span class="pre">add(0,</span> <span class="pre">2)</span> <span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(x,</span> <span class="pre">3)</span></code> is
+transformed to <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">y</span> <span class="pre">:=</span> <span class="pre">mul(add(0,</span> <span class="pre">2),</span> <span class="pre">3)</span></code>, even though the <code class="docutils literal notranslate"><span class="pre">add</span></code> opcode
+would be executed after the evaluation of the literal <code class="docutils literal notranslate"><span class="pre">3</span></code>.</p>
+</section>
+<section id="ssareverser">
+<span id="ssa-reverser"></span><h4>SSAReverser<a class="headerlink" href="#ssareverser" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>This is a tiny step that helps in reversing the effects of the SSA transform
+if it is combined with the Common Subexpression Eliminator and the
+Unused Pruner.</p>
+<p>The SSA form we generate is detrimental to code generation on the EVM and
+WebAssembly alike because it generates many local variables. It would
+be better to just re-use existing variables with assignments instead of
+fresh variable declarations.</p>
+<p>The SSA transform rewrites</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=bGV0IGEgOj0gY2FsbGRhdGFsb2FkKDApCm1zdG9yZShhLCAxKQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=bGV0IGFfMSA6PSBjYWxsZGF0YWxvYWQoMCkKbGV0IGEgOj0gYV8xCm1zdG9yZShhXzEsIDEpCmxldCBhXzIgOj0gY2FsbGRhdGFsb2FkKDB4MjApCmEgOj0gYV8y"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="ow">let</span> <span class="nv">a_1</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="n">a_1</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">a_1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="ow">let</span> <span class="nv">a_2</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mh">0x20</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">:=</span> <span class="n">a_2</span>
+</pre></div>
+</div>
+<p>The problem is that instead of <code class="docutils literal notranslate"><span class="pre">a</span></code>, the variable <code class="docutils literal notranslate"><span class="pre">a_1</span></code> is used
+whenever <code class="docutils literal notranslate"><span class="pre">a</span></code> was referenced. The SSA transform changes statements
+of this form by just swapping out the declaration and the assignment. The above
+snippet is turned into</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=bGV0IGEgOj0gY2FsbGRhdGFsb2FkKDApCmxldCBhXzEgOj0gYQptc3RvcmUoYV8xLCAxKQphIDo9IGNhbGxkYXRhbG9hZCgweDIwKQpsZXQgYV8yIDo9IGE="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="ow">let</span> <span class="nv">a</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="ow">let</span> <span class="nv">a_1</span> <span class="o">:=</span> <span class="n">a</span>
+<span class="nf">mstore</span><span class="p">(</span><span class="n">a_1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">:=</span> <span class="nf">calldataload</span><span class="p">(</span><span class="mh">0x20</span><span class="p">)</span>
+<span class="ow">let</span> <span class="nv">a_2</span> <span class="o">:=</span> <span class="n">a</span>
+</pre></div>
+</div>
+<p>This is a very simple equivalence transform, but when we now run the
+Common Subexpression Eliminator, it will replace all occurrences of <code class="docutils literal notranslate"><span class="pre">a_1</span></code>
+by <code class="docutils literal notranslate"><span class="pre">a</span></code> (until <code class="docutils literal notranslate"><span class="pre">a</span></code> is re-assigned). The Unused Pruner will then
+eliminate the variable <code class="docutils literal notranslate"><span class="pre">a_1</span></code> altogether and thus fully reverse the
+SSA transform.</p>
+</section>
+<section id="stackcompressor">
+<span id="stack-compressor"></span><h4>StackCompressor<a class="headerlink" href="#stackcompressor" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>One problem that makes code generation for the Ethereum Virtual Machine
+hard is the fact that there is a hard limit of 16 slots for reaching
+down the expression stack. This more or less translates to a limit
+of 16 local variables. The stack compressor takes Yul code and
+compiles it to EVM bytecode. Whenever the stack difference is too
+large, it records the function this happened in.</p>
+<p>For each function that caused such a problem, the Rematerialiser
+is called with a special request to aggressively eliminate specific
+variables sorted by the cost of their values.</p>
+<p>On failure, this procedure is repeated multiple times.</p>
+</section>
+<section id="rematerialiser">
+<span id="id4"></span><h4>Rematerialiser<a class="headerlink" href="#rematerialiser" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>The rematerialisation stage tries to replace variable references by the expression that
+was last assigned to the variable. This is of course only beneficial if this expression
+is comparatively cheap to evaluate. Furthermore, it is only semantically equivalent if
+the value of the expression did not change between the point of assignment and the
+point of use. The main benefit of this stage is that it can save stack slots if it
+leads to a variable being eliminated completely (see below), but it can also
+save a DUP opcode on the EVM if the expression is very cheap.</p>
+<p>The Rematerialiser uses the Dataflow Analyzer to track the current values of variables,
+which are always movable.
+If the value is very cheap or the variable was explicitly requested to be eliminated,
+the variable reference is replaced by its current value.</p>
+</section>
+<section id="forloopconditionoutofbody">
+<span id="for-loop-condition-out-of-body"></span><h4>ForLoopConditionOutOfBody<a class="headerlink" href="#forloopconditionoutofbody" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Reverses the transformation of ForLoopConditionIntoBody.</p>
+<p>For any movable <code class="docutils literal notranslate"><span class="pre">c</span></code>, it turns</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>for { ... } 1 { ... } {
+if iszero(c) { break }
+...
+}
+</pre></div>
+</div>
+<p>into</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>for { ... } c { ... } {
+...
+}
+</pre></div>
+</div>
+<p>and it turns</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>for { ... } 1 { ... } {
+if c { break }
+...
+}
+</pre></div>
+</div>
+<p>into</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>for { ... } iszero(c) { ... } {
+...
+}
+</pre></div>
+</div>
+<p>The LiteralRematerialiser should be run before this step.</p>
+</section>
+</section>
+<section id="webassembly-specific">
+<h3>WebAssembly specific<a class="headerlink" href="#webassembly-specific" title="پیوند ثابت به این سر مقاله"></a></h3>
+<section id="mainfunction">
+<h4>MainFunction<a class="headerlink" href="#mainfunction" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>Changes the topmost block to be a function with a specific name (&quot;main&quot;) which has no
+inputs nor outputs.</p>
+<p>Depends on the Function Grouper.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="source_mappings.html" class="btn btn-neutral float-left" title="Source Mappings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="../metadata.html" class="btn btn-neutral float-right" title="Contract Metadata" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="../credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

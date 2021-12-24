@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>واحدها و متغیرهای موجود در سطح جهانی &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Expressions and Control Structures" href="control-structures.html" />
+    <link rel="prev" title="انواع" href="types.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">واحدها و متغیرهای موجود در سطح جهانی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#index-0">واحدهای اتر</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#time-units">واحد‌های زمان (Time Units)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-variables-and-functions">متغیرها و توابع ویژه (Special Variables and Functions)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#index-2">بلاک و ویژگی‌های تراکنش</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#abi">توابع رمزگذاری و رمزگشایی ABI :</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#members-of-bytes">اعضای بایت(Members of bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-handling">مدیریت خطا (Error Handling)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-and-cryptographic-functions">توابع ریاضی و رمزنگاری</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#members-of-address-types">اعضای انواع آدرس Members of Address Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contract-related">مربوط به قرارداد (Contract Related)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-information">اطلاعات نوع (Type Information)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>واحدها و متغیرهای موجود در سطح جهانی</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/units-and-global-variables.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>واحدها و متغیرهای موجود در سطح جهانی<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="index-0">
+<span id="id2"></span><h2>واحدهای اتر<a class="headerlink" href="#index-0" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>یک عدد لیترال می‌تواند از پسوند  <code class="docutils literal notranslate"><span class="pre">wei</span></code> ، <code class="docutils literal notranslate"><span class="pre">gwei</span></code> یا  <code class="docutils literal notranslate"><span class="pre">ether</span></code> برای تعیین زیر-واحد  اتر استفاده کند، هنگامی
+که اعداد اتر بدون پسوند باشند،<a href="#id3"><span class="problematic" id="id4">`</span></a>Wei فرض می‌شوند.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=YXNzZXJ0KDEgd2VpID09IDEpOwphc3NlcnQoMSBnd2VpID09IDFlOSk7CmFzc2VydCgxIGV0aGVyID09IDFlMTgpOw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span>assert<span class="p">(</span><span class="m m-Decimal">1</span><span class="w"> </span>wei<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="p">);</span><span class="w"></span>
+assert<span class="p">(</span><span class="m m-Decimal">1</span><span class="w"> </span>gwei<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">1</span>e9<span class="p">);</span><span class="w"></span>
+assert<span class="p">(</span><span class="m m-Decimal">1</span><span class="w"> </span>ether<span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="err">1</span>e18<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>تنها تأثیر پسوند زیر-واحد عبارت است از ضرب در توان ده.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>واحدهای <code class="docutils literal notranslate"><span class="pre">finney</span></code> و  <code class="docutils literal notranslate"><span class="pre">szabo</span></code> در نسخه 0.7.0 حذف شده اند.</p>
+</div>
+</section>
+<section id="time-units">
+<span id="index-1"></span><h2>واحد‌های زمان (Time Units)<a class="headerlink" href="#time-units" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>پسوندهایی مانند  <code class="docutils literal notranslate"><span class="pre">seconds</span></code> ،  <code class="docutils literal notranslate"><span class="pre">minutes</span></code>،  <code class="docutils literal notranslate"><span class="pre">hours</span></code> ،  <code class="docutils literal notranslate"><span class="pre">days</span></code> و  <code class="docutils literal notranslate"><span class="pre">weeks</span></code> پس از اعداد تحت اللفظی
+می‌توانند برای تعیین واحدهای زمانی که ثانیه واحد اصلی است و واحدها به صورت ساده لوحانه در نظر گرفته
+می شوند، استفاده شوند:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">seconds</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">minutes</span> <span class="pre">==</span> <span class="pre">60</span> <span class="pre">seconds</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">hours</span> <span class="pre">==</span> <span class="pre">60</span> <span class="pre">minutes</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">days</span> <span class="pre">==</span> <span class="pre">24</span> <span class="pre">hours</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">weeks</span> <span class="pre">==</span> <span class="pre">7</span> <span class="pre">days</span></code></p></li>
+</ul>
+<p>اگر محاسبات تقویم را با استفاده از این واحدها انجام می‌دهید، مراقب باشید، زیرا هر سال معادل 365 روز نیست
+و حتی هر روز به دلیل <a class="reference external" href="https://en.wikipedia.org/wiki/Leap_second">ثانیه‌های کبیسه</a>  24 ساعت نیست. با توجه به اینکه ثانیه‌های کبیسه را نمی‌توان پیش
+بینی کرد، یک کتابخانه تقویم دقیق باید توسط یک اوراکل خارجی بِروز شود.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>پسوند  <code class="docutils literal notranslate"><span class="pre">years</span></code> به دلایل بالا در نسخه 0.5.0 حذف شده است.</p>
+</div>
+<p>این پسوندها را نمی‌توان روی متغیرها اعمال کرد. به عنوان مثال، اگر می‌خواهید پارامتر تابع را در روز تفسیر
+کنید، می‌توانید به روش زیر عمل کنید:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gZih1aW50IHN0YXJ0LCB1aW50IGRheXNBZnRlcikgcHVibGljIHsKICAgIGlmIChibG9jay50aW1lc3RhbXAgPj0gc3RhcnQgKyBkYXlzQWZ0ZXIgKiAxIGRheXMpIHsKICAgICAgLy8gLi4uCiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">start</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">daysAfter</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">if</span><span class="w"> </span><span class="p">(</span><span class="k">block.timestamp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span>start<span class="w"> </span><span class="o">+</span><span class="w"> </span>daysAfter<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m m-Decimal">1</span><span class="w"> </span>days<span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="special-variables-and-functions">
+<span id="special-variables-functions"></span><h2>متغیرها و توابع ویژه (Special Variables and Functions)<a class="headerlink" href="#special-variables-and-functions" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>متغیرها و توابع خاصی وجود دارند که همیشه در فضای نام جهانی  وجود دارند و عمدتاً برای ارائه اطلاعات در
+مورد بلاکچین یا توابع کاربردی عمومی استفاده می‌شوند.</p>
+<section id="index-2">
+<span id="id6"></span><h3>بلاک و ویژگی‌های تراکنش<a class="headerlink" href="#index-2" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">blockhash(uint</span> <span class="pre">blockNumber)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>  : هش بلاک داده شده زمانی که <code class="docutils literal notranslate"><span class="pre">blocknumber</span></code> یکی از 256 بلاک اخیر باشد. در غیر این صورت صفر را برمی گرداند.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.basefee</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): بِیس فی بلاک فعلی ( <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-3198">EIP-3198</a> و <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-1559">EIP-1559</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.chainid</span> <span class="pre">(uint)</span></code> :  آی دی (id) زنجیره فعلی</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.coinbase</span> <span class="pre">(address</span> <span class="pre">payable)</span></code> : آدرس فعلی استخراج کننده بلاک</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.difficulty</span> <span class="pre">(uint)</span></code> : سختی بلاک فعلی</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.gaslimit</span> <span class="pre">(uint)</span></code>:   گَس لیمیت (gaslimit) بلاک فعلی</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.number</span> <span class="pre">(uint)</span></code> : شماره بلاک فعلی</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.timestamp</span> <span class="pre">(uint)</span></code> : تایم استمپ (timestamp) بلاک فعلی به عنوان ثانیه از دوران یونیکس</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gasleft()</span> <span class="pre">returns</span> <span class="pre">(uint256)</span></code> : گَس باقی مانده</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.data</span> <span class="pre">(bytes</span> <span class="pre">calldata)</span></code> : کالدیتا (calldata)  کامل</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.sender</span> <span class="pre">(address)</span></code> : فرستنده پیام (فراخوانی فعلی)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.sig</span> <span class="pre">(bytes4)</span></code> : چهار بایت اول calldata  ( مانند تابع identifier )</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.value</span> <span class="pre">(uint)</span></code> : تعداد wei ارسال شده با پیام</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tx.gasprice</span> <span class="pre">(uint)</span></code> : قیمت گَس  تراکنش</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tx.origin</span> <span class="pre">(address)</span></code> : فرستنده تراکنش (فراخوانی کامل زنجیره)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>مقادیر همه اعضای  <code class="docutils literal notranslate"><span class="pre">msg</span></code> ، از جمله <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code>  و  <code class="docutils literal notranslate"><span class="pre">msg.value</span></code> می‌تواند برای هر فراخوانی تابع
+خارجی تغییر کند. این شامل تماس با توابع کتابخانه است.</p>
+<p>The values of all members of <code class="docutils literal notranslate"><span class="pre">msg</span></code>, including <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> and
+<code class="docutils literal notranslate"><span class="pre">msg.value</span></code> can change for every <strong>external</strong> function call.
+This includes calls to library functions.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>When contracts are evaluated off-chain rather than in context of a transaction included in a
+block, you should not assume that <code class="docutils literal notranslate"><span class="pre">block.*</span></code> and <code class="docutils literal notranslate"><span class="pre">tx.*</span></code> refer to values from any specific
+block or transaction. These values are provided by the EVM implementation that executes the
+contract and can be arbitrary.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<blockquote>
+<div><p>به  <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> یا  <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> به عنوان منبع تصادفی اعتماد نکنید، مگر اینکه بدانید در حال انجام چه کاری هستید.</p>
+</div></blockquote>
+<p>timestamp و   block hash تا حدی می‌توانند تحت تأثیر ماینرها قرار بگیرند. به عنوان مثال بازیگران
+بد در جامعه ماینینگ می‌توانند تابع payout  کازینو را روی یک هش انتخاب شده اجرا کرده و در صورت
+عدم دریافت پول، یک هش متفاوت را دوباره امتحان کنند.</p>
+<p>زمانبندی بلاک فعلی باید بسیار بزرگتر از زمانبندی آخرین بلاک باشد، اما تنها تضمین در جایی است که بین
+زمانبندی دو بلاک متوالی در زنجیره متعارف  قرار گیرد.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>هش بلاک به دلایل مقیاس پذیری برای همه بلاک‌ها در دسترس نیست. فقط می‌توانید به هش‌های 256
+بلاک جدید دسترسی پیدا کنید، همه مقادیر دیگر صفر خواهند بود.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تابع  <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> قبلاً به عنوان  <code class="docutils literal notranslate"><span class="pre">block.blockhash</span></code> شناخته میشد، که در نسخه 0.4.22
+منسوخ شده بود و در نسخه 0.5.0 حذف شد.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تابع  <code class="docutils literal notranslate"><span class="pre">gasleft</span></code> قبلاً به عنوان  <code class="docutils literal notranslate"><span class="pre">msg.gas</span></code> شناخته میشد، که در نسخه 0.4.21 منسوخ شده بود و در
+نسخه 0.5.0 حذف شده بود.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>در نسخه 0.7.0 ، نام مستعار  <code class="docutils literal notranslate"><span class="pre">now</span></code> (برای  <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> ) حذف شد.</p>
+</div>
+</section>
+<section id="abi">
+<span id="index-3"></span><h3>توابع رمزگذاری و رمزگشایی ABI :<a class="headerlink" href="#abi" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>// saracodic comment آ for be sorted in text</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.decode(bytes</span> <span class="pre">memory</span> <span class="pre">encodedData,</span> <span class="pre">(...))</span> <span class="pre">returns</span> <span class="pre">(...)</span></code> : آABI داده‌های داده شده را رمزگشایی میکند، در حالی که انواع  آن در پرانتز به عنوان آرگومان دوم آورده شده است. مثال:</p></li>
+</ul>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">(uint</span> <span class="pre">a,</span> <span class="pre">uint[2]</span> <span class="pre">memory</span> <span class="pre">b,</span> <span class="pre">bytes</span> <span class="pre">memory</span> <span class="pre">c)</span> <span class="pre">=</span> <span class="pre">abi.decode(data,</span> <span class="pre">(uint,</span> <span class="pre">uint[2],</span> <span class="pre">bytes))</span></code></p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encode(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code> : آ ABI-encodes آرگومان‌های داده شده</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodePacked(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code> :  آ <a class="reference internal" href="abi-spec.html#abi-packed-mode"><span class="std std-ref">packed encoding</span></a> آرگومان‌های داده شده را انجام می‌دهد. توجه داشته باشید که رمزگذاری بسته بندی شده می‌تواند مبهم باشد !</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4</span> <span class="pre">selector,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code> : آBI-encodes آرگومان‌های داده شده را از دوم شروع می‌کند و انتخاب کننده چهار بایت داده شده را اضافه می‌کند.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature(string</span> <span class="pre">memory</span> <span class="pre">signature,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code> : معادل با  <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4(keccak256(bytes(signature))),</span> <span class="pre">...)</span></code> است.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>از این توابع رمزگذاری می‌توان برای ایجاد داده برای فراخوانی توابع خارجی بدون فراخوانی یک تابع خارجی
+استفاده کرد. علاوه بر این، <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encodePacked(a,</span> <span class="pre">b))</span></code>  روشی برای محاسبه
+هش داده‌های ساختار یافته است (اگرچه توجه داشته باشید که امکان ایجاد &quot;تصادم هش &quot; با استفاده از انواع
+مختلف پارامترهای تابع وجود دارد).</p>
+</div>
+<p>برای اطلاع از جزئیات مربوط به رمزگذاری، مستند مربوط به <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a> و  <a class="reference internal" href="abi-spec.html#abi-packed-mode"><span class="std std-ref">tightly packed encoding</span></a>  مراجعه کنید.</p>
+</section>
+<section id="members-of-bytes">
+<span id="index-4"></span><h3>اعضای بایت(Members of bytes)<a class="headerlink" href="#members-of-bytes" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes.concat(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code> : <a class="reference internal" href="types.html#bytes-concat"><span class="std std-ref">تعداد متغیر bytes و bytes1 ،… ، bytes32 آرگومان را به یک آرایه بایت متصل می‌کند</span></a></p></li>
+</ul>
+</section>
+<section id="error-handling">
+<span id="index-5"></span><h3>مدیریت خطا (Error Handling)<a class="headerlink" href="#error-handling" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>برای جزئیات بیشتر در مورد مدیریت خطا و زمان استفاده از کدام تابع، به بخش اختصاصی <a class="reference internal" href="control-structures.html#assert-and-require"><span class="std std-ref">assert and require</span></a> مراجعه کنید.</p>
+<p><code class="docutils literal notranslate"><span class="pre">assert(bool</span> <span class="pre">condition)</span></code></p>
+<blockquote>
+<div><p>در صورت برآورده نشدن شرایط برای استفاده از خطاهای داخلی، باعث ایجاد خطای Panic و در نتیجه برگشت تغییر حالت می‌شود.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition)</span></code></p>
+<blockquote>
+<div><p>اگر شرایط برآورده نشود revert  می‌شود- برای خطاهای ورودی یا کامپوننت‌ های خارجی استفاده می‌شود.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition,</span> <span class="pre">string</span> <span class="pre">memory</span> <span class="pre">message)</span></code></p>
+<blockquote>
+<div><p>اگر شرط برآورده نشود برمی‌گردد - برای خطاهای ورودی یا کامپوننت‌های خارجی استفاده می‌شود. همچنین یک پیام خطا ارائه می‌دهد.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">revert()</span></code></p>
+<blockquote>
+<div><p>اجرا را لغو کرده و تغییرات حالت را برگرداند.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">revert(string</span> <span class="pre">memory</span> <span class="pre">reason)</span></code></p>
+<blockquote>
+<div><p>اجرا را لغو کرده و تغییرات حالت را برمیگرداند، یک رشته  توضیحی ارائه دهید.</p>
+</div></blockquote>
+</section>
+<section id="mathematical-and-cryptographic-functions">
+<span id="index-6"></span><span id="id7"></span><h3>توابع ریاضی و رمزنگاری<a class="headerlink" href="#mathematical-and-cryptographic-functions" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>// comment saracodic  <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">+</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">addmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code></dt><dd><p>محاسبه  <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">+</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> که در آن ضرب با دقت دلخواه انجام می‌شود و در  <code class="docutils literal notranslate"><span class="pre">2**256</span></code> جمع نمی‌شود.
+اثبات کنید  که   <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> از نسخه 0.5.0 شروع می‌شود.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">mulmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code></p>
+<blockquote>
+<div><p>compute <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">*</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> where the multiplication is performed with arbitrary precision and does not wrap around at <code class="docutils literal notranslate"><span class="pre">2**256</span></code>. Assert that <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> starting from version 0.5.0.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">keccak256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code></p>
+<blockquote>
+<div><p>هش Keccak-256 ورودی را محاسبه می‌کند.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبلاً نام مستعار <code class="docutils literal notranslate"><span class="pre">keccak256</span></code> با نام <code class="docutils literal notranslate"><span class="pre">sha3</span></code> وجود داشت که در نسخه 0.5.0 حذف شد.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sha256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code></p>
+<blockquote>
+<div><p>هش SHA-256 ورودی را محاسبه کنید</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ripemd160(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes20)</span></code></p>
+<blockquote>
+<div><p>هش RIPEMD-160 ورودی را محاسبه کنید</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">ecrecover(bytes32</span> <span class="pre">hash,</span> <span class="pre">uint8</span> <span class="pre">v,</span> <span class="pre">bytes32</span> <span class="pre">r,</span> <span class="pre">bytes32</span> <span class="pre">s)</span> <span class="pre">returns</span> <span class="pre">(address)</span></code></p>
+<blockquote>
+<div><p>آدرس مربوط به کلید عمومی را از امضای منحنی بیضوی  بازیابی کنید یا خطا را صفر کنید. پارامترهای تابع با مقادیر ECDSA امضا مطابقت دارد:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">r</span></code>  = اولین 32 بایت  امضا</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>  = دوم 32 بایت امضا</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code>  =  یک بایت (1 byte) نهایی امضا</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">ecrecover</span></code>  یک  <code class="docutils literal notranslate"><span class="pre">address</span></code> را برمی‌گرداند و یک   <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> نیست. در صورت نیاز
+به انتقال وجه به آدرس بازیابی شده،  <a class="reference internal" href="types.html#address"><span class="std std-ref">address payable</span></a> برای تبدیل را ببینید.</p>
+<blockquote>
+<div><p>برای جزئیات بیشتر، <a class="reference external" href="https://ethereum.stackexchange.com/questions/1777/workflow-on-signing-a-string-with-private-key-followed-by-signature-verificatio">example usage</a> را مطالعه کنید.</p>
+</div></blockquote>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>اگر از    <code class="docutils literal notranslate"><span class="pre">ecrecover</span></code> استفاده می‌کنید، توجه داشته باشید که بدون نیاز به آگاهی از کلید خصوصی مربوطه،
+می‌توانید یک امضای معتبر را به امضای معتبر دیگری تبدیل کنید. در هارد فورک Homestead، این مسئله
+برای امضای _transaction_ ثابت شد ( <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-2#specification">EIP-2</a> را مشاهده کنید )، اما تابع ecrecover بدون تغییر باقی ماند.
+این معمولاً مشکلی ایجاد نمی‌کند مگر اینکه شما نیاز به امضا برای منحصر به فرد بودن یا استفاده از آنها برای</p>
+<p>شناسایی آیتم‌ها داشته باشید. OpenZeppelin <a class="reference external" href="https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA">دارای یک کتابخانه کمکی ECDSA</a> است که می‌توانید
+بدون این مشکل به عنوان یک  wrapper برای   <code class="docutils literal notranslate"><span class="pre">ecrecover</span></code> از آن استفاده کنید.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>هنگام اجرای  <code class="docutils literal notranslate"><span class="pre">sha256</span></code> ،  <code class="docutils literal notranslate"><span class="pre">ripemd160</span></code> یا  <code class="docutils literal notranslate"><span class="pre">ecrecover</span></code> در <em>بلاکچین خصوصی</em> ، ممکن است با Out-of-Gas روبرو شوید.
+این به این دلیل است که این توابع به عنوان &quot;قراردادهای از پیش تدوین شده&quot; اجرا می‌شوند و تنها پس از دریافت اولین پیام (اگرچه کد قرارداد آنها دارای hardcoded است) واقعاً وجود دارند.
+پیام به قراردادهای غیر موجود  گرانتر است و بنابراین ممکن است اجرا با خطای Out-of-Gas مواجه شود.
+یک راه حل برای این مشکل این است که قبل از استفاده از Wei  (به عنوان مثال 1) به هر یک از قراردادها،
+آنها را در قراردادهای واقعی خود بفرستید. این مسئله در شبکه اصلی یا آزمایشی نیست.</p>
+</div>
+</section>
+<section id="members-of-address-types">
+<span id="address-related"></span><span id="index-7"></span><h3>اعضای انواع آدرس Members of Address Types<a class="headerlink" href="#members-of-address-types" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>//saracodic swapping text</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.balance</span></code> (<code class="docutils literal notranslate"><span class="pre">uint256</span></code>)</p>
+<blockquote>
+<div><p>بالانس <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> در Wei</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.code</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>)</p>
+<blockquote>
+<div><p>کد در <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> (می‌تواند خالی باشد)</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.codehash</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes32</span></code>)</p>
+<blockquote>
+<div><p>هش کد  <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a></p>
+<p>the codehash of the <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a></p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.transfer(uint256</span> <span class="pre">amount)</span></code></p>
+<blockquote>
+<div><p>ارسال مقدار داده شده از Wei به <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> ، در صورت شکست  بازگردانده می‌شود، ارسال کارمزد  2300  گَس، غیر قابل قابل تنظیم</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.send(uint256</span> <span class="pre">amount)</span> <span class="pre">returns</span> <span class="pre">(bool)</span></code></p>
+<blockquote>
+<div><p>ارسال مقدار داده شده Wei به <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> ، در صورت خرابی  <code class="docutils literal notranslate"><span class="pre">false</span></code> برمیگرداند، ارسال کارمزد 2300  گَس، غیر قابل تنظیم</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.call(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code></p>
+<blockquote>
+<div><p>صدور  <code class="docutils literal notranslate"><span class="pre">CALL</span></code> سطح پایین با پیلود  داده شده، شرایط موفقیت را برمی‌گرداند و داده‌ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.delegatecall(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code></p>
+<blockquote>
+<div><p>صدور <code class="docutils literal notranslate"><span class="pre">DELEGATECALL</span></code> سطح پایین  با پیلود داده شده، شرط موفقیت را برمی‌گرداند و داده ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.staticcall(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bool,</span> <span class="pre">bytes</span> <span class="pre">memory)</span></code></p>
+<blockquote>
+<div><p>صدور سطح پایین  <code class="docutils literal notranslate"><span class="pre">STATICCALL</span></code> با میزان پیلود داده شده، شرط موفقیت را برمی‌گرداند و داده‌ها را برمی‌گرداند، ارسال تمام گَس موجود، قابل تنظیم</p>
+</div></blockquote>
+<p>برای اطلاعات بیشتر به بخش <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> مراجعه کنید.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>هنگام اجرای تابع قرارداد دیگر، تا جایی که ممکن است از استفاده از  <code class="docutils literal notranslate"><span class="pre">()call.</span></code> خودداری کنید زیرا مانع
+از بررسی نوع، بررسی وجود تابع و بسته بندی  آرگومان می‌شود.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>برخی از خطرات استفاده از  <code class="docutils literal notranslate"><span class="pre">send</span></code> وجود دارد: اگر عمق فراخوانی پشته 1024 باشد، انتقال با شکست مواجه
+می‌شود (این امر همیشه می‌تواند توسط تماس گیرنده اجبار شود) و همچنین در صورت تمام شدن گَس گیرنده
+با شکست مواجه می‌شود. بنابراین، برای انجام انتقال ایمن اتر، همیشه مقدار بازگشتی  <code class="docutils literal notranslate"><span class="pre">send</span></code> را بررسی کنید،
+یا حتی بهتر است از  <code class="docutils literal notranslate"><span class="pre">transfer</span></code> استفاده کنید: از الگویی استفاده کنید که گیرنده پول را برداشت می‌کند.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>با توجه به این واقعیت که EVM فراخوانی یک قرارداد غیر موجود را همیشه موفق می‌داند، سالیدیتی شامل
+یک بررسی اضافی با استفاده از آپکد  <code class="docutils literal notranslate"><span class="pre">extcodesize</span></code> هنگام انجام فراخوانی‌های خارجی است. این تضمین
+می‌کند که قراردادی که قرار است نامیده شود یا واقعاً وجود دارد (حاوی کد است) یا یک استثناء  مطرح
+می‌شود.</p>
+</div>
+<p>//saracodic swapping text</p>
+<blockquote>
+<div><p>فراخوانی‌های سطح پایین که بیشتر از آدرسها استفاده می‌کنند تا موارد قرارداد
+(i.e. <code class="docutils literal notranslate"><span class="pre">.call()</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>, <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code>, <code class="docutils literal notranslate"><span class="pre">.send()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transfer()</span></code>)
+شامل این بررسی نمی‌شوند، که از نظر گَس آنها را ارزان تر می‌کند اما از ایمنی کمتری برخوردار هستند.</p>
+<p>The low-level calls which operate on addresses rather than contract instances (i.e. <code class="docutils literal notranslate"><span class="pre">.call()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">.delegatecall()</span></code>, <code class="docutils literal notranslate"><span class="pre">.staticcall()</span></code>, <code class="docutils literal notranslate"><span class="pre">.send()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transfer()</span></code>) <strong>do not</strong> include this
+check, which makes them cheaper in terms of gas but also less safe.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<dl class="simple">
+<dt>قبل از نسخه 0.5.0، سالیدیتی به اعضای  آدرس اجازه می‌داد تا با یک مورد قرارداد، به عنوان</dt><dd><p>مثال  <code class="docutils literal notranslate"><span class="pre">this.balance</span></code> ، دسترسی داشته باشند. این در حال حاضر ممنوع است و تبدیل صریح  به آدرس
+باید انجام شود:  <code class="docutils literal notranslate"><span class="pre">address(this).balance</span></code> .</p>
+</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<blockquote>
+<div><p>اگر به متغیرهای حالت از طریق &quot;delegatecall&quot; سطح پایین دسترسی پیدا کنید، طرح storage دو
+قرارداد باید همسو باشد تا قرارداد فراخوانی شده به درستی به نام متغیرهای storage قرارداد فراخوانی شده
+دسترسی پیدا کند. البته اگر اشاره‌گرهای  storage به عنوان آرگومان‌های تابع مانند کتابخانه‌های سطح بالا
+ارسال شوند، اینطور نیست.</p>
+</div></blockquote>
+<p>// saracodic comment: swapping text</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبل از نسخه 0.5.0 ،   <code class="docutils literal notranslate"><span class="pre">call.</span></code>  ،    <code class="docutils literal notranslate"><span class="pre">delegatecall.</span></code>  و   <code class="docutils literal notranslate"><span class="pre">staticcall.</span></code>  فقط وضعیت موفقیت  را برمی‌گرداند و نه داده‌های بازگشتی.</p>
+<p>Prior to version 0.5.0, <code class="docutils literal notranslate"><span class="pre">.call</span></code>, <code class="docutils literal notranslate"><span class="pre">.delegatecall</span></code> and <code class="docutils literal notranslate"><span class="pre">.staticcall</span></code> only returned the
+success condition and not the return data.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبل از نسخه 0.5.0، یکی از اعضا به نام  <code class="docutils literal notranslate"><span class="pre">callcode</span></code> با معنایی مشابه اما کمی متفاوت از  <code class="docutils literal notranslate"><span class="pre">delegatecall</span></code> وجود داشت.</p>
+</div>
+</section>
+<section id="contract-related">
+<span id="index-8"></span><h3>مربوط به قرارداد (Contract Related)<a class="headerlink" href="#contract-related" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">this</span></code> (نوع قرارداد فعلی)</p>
+<blockquote>
+<div><p>قرارداد فعلی، به صراحت قابل تبدیل به <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a> است</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code></p>
+<blockquote>
+<div><p>قرارداد فعلی را از بین ببرید، وجوه آن را به <a class="reference internal" href="types.html#address"><span class="std std-ref">آدرس</span></a>  داده شده ارسال کرده و اجرا را پایان دهید. توجه داشته باشید
+که  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> برخی از ویژگی‌های به ارث برده شده از EVM را دارد:</p>
+<ul class="simple">
+<li><p>تابع دریافت قراردادِ دریافت کننده اجرا نمی‌شود.</p></li>
+<li><p>قرارداد واقعاً در پایان تراکنش از بین می‌رود و <code class="docutils literal notranslate"><span class="pre">revert</span></code>  ممکن است تخریب را &quot;undo&quot; کند.</p></li>
+</ul>
+</div></blockquote>
+<p>علاوه بر این، تمام توابع قرارداد فعلی مستقیماً از جمله تابع فعلی قابل فراخوانی هستند.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>قبل از نسخه 0.5.0 ، تابعی به نام  <code class="docutils literal notranslate"><span class="pre">suicide</span></code> با معنایی  مشابه  <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code> وجود داشت.</p>
+</div>
+</section>
+<section id="type-information">
+<span id="meta-type"></span><span id="index-9"></span><h3>اطلاعات نوع (Type Information)<a class="headerlink" href="#type-information" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>از عبارت  <code class="docutils literal notranslate"><span class="pre">type(X)</span></code> می‌توان برای بازیابی اطلاعات مربوط به <code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">X</span></code> استفاده کرد. در حال حاضر، پشتیبانی
+محدودی برای این ویژگی وجود دارد ( <code class="docutils literal notranslate"><span class="pre">X</span></code>  می‌تواند یک قرارداد یا یک نوع صحیح باشد) اما ممکن است در آینده
+گسترش یابد.</p>
+<p>ویژگیهای زیر برای قرارداد نوع  <code class="docutils literal notranslate"><span class="pre">C</span></code> موجود است:</p>
+<p><code class="docutils literal notranslate"><span class="pre">type(C).name</span></code></p>
+<blockquote>
+<div><p>نام قرارداد.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">type(C).creationCode</span></code></p>
+<blockquote>
+<div><p>آرایه بایت مِمٌوری که شامل بایت کد ایجاد قرارداد می‌باشد. این را می‌توان در اسمبلی داخلی برای ایجاد روال‌های
+build custom، به ویژه با استفاده از آپکد <code class="docutils literal notranslate"><span class="pre">create2</span></code>  استفاده کرد. این ویژگی در خود قرارداد یا هر
+قرارداد مشتق شده قابل دسترسی نیست. این باعث می‌شود که بایت‌کد در بایت‌کد سایت فراخوانی قرار گیرد و
+بنابراین رفرنس‌های circular  مانند آن امکان پذیر نیستند.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">type(C).runtimeCode</span></code></p>
+<blockquote>
+<div><p>آرایه بایت مِمُوری که شامل بایت کد زمان اجرای قرارداد است. این کدی است که معمولاً توسط کانستراکتور   <code class="docutils literal notranslate"><span class="pre">C</span></code> .
+دیپلوی می‌شود. اگر  <code class="docutils literal notranslate"><span class="pre">C</span></code> دارای کانستراکتوری باشد که از اسمبلی درون خطی استفاده می‌کند، ممکن است با
+بایت‌کد دیپلوی شده متفاوت باشد. همچنین توجه داشته باشید که کتابخانه‌ها برای محافظت در برابر فراخوانی‌های
+منظم، بایت‌کد زمان اجرا خود را در زمان دیپلوی تغییر می‌دهند. محدودیت‌های مشابه <code class="docutils literal notranslate"><span class="pre">creationCode.</span></code>
+نیز برای این ویژگی اعمال می‌شود.</p>
+</div></blockquote>
+<p>علاوه بر ویژگی‌های بالا، ویژگی‌های زیر برای اینترفیس تایپ   <code class="docutils literal notranslate"><span class="pre">I</span></code>  موجود است:</p>
+<p><code class="docutils literal notranslate"><span class="pre">type(I).interfaceId</span></code>:</p>
+<blockquote>
+<div><p>مقدار <code class="docutils literal notranslate"><span class="pre">bytes4</span></code>  حاوی مشخص کننده   اینترفیس <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-165">EIP-165</a> اینترفیس <code class="docutils literal notranslate"><span class="pre">I</span></code> داده شده‌است. این مشخص
+کننده به عنوان <code class="docutils literal notranslate"><span class="pre">XOR</span></code>  ، همه انتخاب کننده‌های  تابع تعریف شده در داخل اینترفیس تعریف می‌شود - بدون
+حذف همه توابع به ارث برد شده.</p>
+</div></blockquote>
+<p>خواص زیر برای یک عدد صحیح تایپ  <code class="docutils literal notranslate"><span class="pre">T</span></code> موجود است:</p>
+<p><code class="docutils literal notranslate"><span class="pre">type(T).min</span></code></p>
+<blockquote>
+<div><p>کوچکترین مقدار با تایپ  <code class="docutils literal notranslate"><span class="pre">T</span></code> قابل نمایش است.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">type(T).max</span></code></p>
+<blockquote>
+<div><p>بزرگترین مقدار با تایپ  <code class="docutils literal notranslate"><span class="pre">T</span></code> قابل نمایش است.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="types.html" class="btn btn-neutral float-left" title="انواع" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="control-structures.html" class="btn btn-neutral float-right" title="Expressions and Control Structures" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

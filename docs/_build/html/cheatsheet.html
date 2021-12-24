@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheatsheet &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Language Grammar" href="grammar.html" />
+    <link rel="prev" title="Inline Assembly" href="assembly.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cheatsheet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#order-of-precedence-of-operators">Order of Precedence of Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#global-variables">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-visibility-specifiers">Function Visibility Specifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifiers">Modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reserved-keywords">Reserved Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Cheatsheet</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cheatsheet.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cheatsheet">
+<h1>Cheatsheet<a class="headerlink" href="#cheatsheet" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="order-of-precedence-of-operators">
+<span id="order"></span><span id="index-0"></span><h2>Order of Precedence of Operators<a class="headerlink" href="#order-of-precedence-of-operators" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The following is the order of precedence for operators, listed in order of evaluation.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Precedence</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Operator</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="6"><p><em>1</em></p></td>
+<td><p>Postfix increment and decrement</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">++</span></code>, <code class="docutils literal notranslate"><span class="pre">--</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>New expression</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">&lt;typename&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Array subscripting</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;array&gt;[&lt;index&gt;]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Member access</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;object&gt;.&lt;member&gt;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Function-like call</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;func&gt;(&lt;args...&gt;)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Parentheses</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(&lt;statement&gt;)</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><p><em>2</em></p></td>
+<td><p>Prefix increment and decrement</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">++</span></code>, <code class="docutils literal notranslate"><span class="pre">--</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Unary minus</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Unary operations</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">delete</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Logical NOT</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">!</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Bitwise NOT</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>3</em></p></td>
+<td><p>Exponentiation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>4</em></p></td>
+<td><p>Multiplication, division and modulo</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>5</em></p></td>
+<td><p>Addition and subtraction</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>6</em></p></td>
+<td><p>Bitwise shift operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>7</em></p></td>
+<td><p>Bitwise AND</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>8</em></p></td>
+<td><p>Bitwise XOR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>9</em></p></td>
+<td><p>Bitwise OR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>10</em></p></td>
+<td><p>Inequality operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>11</em></p></td>
+<td><p>Equality operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>12</em></p></td>
+<td><p>Logical AND</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><em>13</em></p></td>
+<td><p>Logical OR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">||</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><em>14</em></p></td>
+<td><p>Ternary operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;conditional&gt;</span> <span class="pre">?</span> <span class="pre">&lt;if-true&gt;</span> <span class="pre">:</span> <span class="pre">&lt;if-false&gt;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Assignment operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">|=</span></code>, <code class="docutils literal notranslate"><span class="pre">^=</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;&lt;=</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&gt;&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code>,
+<code class="docutils literal notranslate"><span class="pre">%=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><em>15</em></p></td>
+<td><p>Comma operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="global-variables">
+<span id="index-1"></span><h2>Global Variables<a class="headerlink" href="#global-variables" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.decode(bytes</span> <span class="pre">memory</span> <span class="pre">encodedData,</span> <span class="pre">(...))</span> <span class="pre">returns</span> <span class="pre">(...)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-decodes
+the provided data. The types are given in parentheses as second argument.
+Example: <code class="docutils literal notranslate"><span class="pre">(uint</span> <span class="pre">a,</span> <span class="pre">uint[2]</span> <span class="pre">memory</span> <span class="pre">b,</span> <span class="pre">bytes</span> <span class="pre">memory</span> <span class="pre">c)</span> <span class="pre">=</span> <span class="pre">abi.decode(data,</span> <span class="pre">(uint,</span> <span class="pre">uint[2],</span> <span class="pre">bytes))</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encode(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-encodes the given arguments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodePacked(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: Performs <a class="reference internal" href="abi-spec.html#abi-packed-mode"><span class="std std-ref">packed encoding</span></a> of
+the given arguments. Note that this encoding can be ambiguous!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4</span> <span class="pre">selector,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: <a class="reference internal" href="abi-spec.html#abi"><span class="std std-ref">ABI</span></a>-encodes
+the given arguments starting from the second and prepends the given four-byte selector</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abi.encodeWithSignature(string</span> <span class="pre">memory</span> <span class="pre">signature,</span> <span class="pre">...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: Equivalent
+to <code class="docutils literal notranslate"><span class="pre">abi.encodeWithSelector(bytes4(keccak256(bytes(signature)),</span> <span class="pre">...)`</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes.concat(...)</span> <span class="pre">returns</span> <span class="pre">(bytes</span> <span class="pre">memory)</span></code>: <a class="reference internal" href="types.html#bytes-concat"><span class="std std-ref">Concatenates variable number of
+arguments to one byte array</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.basefee</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block's base fee (<a class="reference external" href="https://eips.ethereum.org/EIPS/eip-3198">EIP-3198</a> and <a class="reference external" href="https://eips.ethereum.org/EIPS/eip-1559">EIP-1559</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.chainid</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current chain id</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.coinbase</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>): current block miner's address</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.difficulty</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block difficulty</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.gaslimit</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block gaslimit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.number</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block number</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): current block timestamp</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gasleft()</span> <span class="pre">returns</span> <span class="pre">(uint256)</span></code>: remaining gas</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.data</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span></code>): complete calldata</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span></code>): sender of the message (current call)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">msg.value</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): number of wei sent with the message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tx.gasprice</span></code> (<code class="docutils literal notranslate"><span class="pre">uint</span></code>): gas price of the transaction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tx.origin</span></code> (<code class="docutils literal notranslate"><span class="pre">address</span></code>): sender of the transaction (full call chain)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">assert(bool</span> <span class="pre">condition)</span></code>: abort execution and revert state changes if condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use for internal error)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition)</span></code>: abort execution and revert state changes if condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use
+for malformed input or error in external component)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require(bool</span> <span class="pre">condition,</span> <span class="pre">string</span> <span class="pre">memory</span> <span class="pre">message)</span></code>: abort execution and revert state changes if
+condition is <code class="docutils literal notranslate"><span class="pre">false</span></code> (use for malformed input or error in external component). Also provide error message.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">revert()</span></code>: abort execution and revert state changes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">revert(string</span> <span class="pre">memory</span> <span class="pre">message)</span></code>: abort execution and revert state changes providing an explanatory string</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blockhash(uint</span> <span class="pre">blockNumber)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: hash of the given block - only works for 256 most recent blocks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">keccak256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: compute the Keccak-256 hash of the input</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sha256(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes32)</span></code>: compute the SHA-256 hash of the input</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ripemd160(bytes</span> <span class="pre">memory)</span> <span class="pre">returns</span> <span class="pre">(bytes20)</span></code>: compute the RIPEMD-160 hash of the input</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ecrecover(bytes32</span> <span class="pre">hash,</span> <span class="pre">uint8</span> <span class="pre">v,</span> <span class="pre">bytes32</span> <span class="pre">r,</span> <span class="pre">bytes32</span> <span class="pre">s)</span> <span class="pre">returns</span> <span class="pre">(address)</span></code>: recover address associated with
+the public key from elliptic curve signature, return zero on error</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code>: compute <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">+</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> where the addition is performed with
+arbitrary precision and does not wrap around at <code class="docutils literal notranslate"><span class="pre">2**256</span></code>. Assert that <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> starting from version 0.5.0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mulmod(uint</span> <span class="pre">x,</span> <span class="pre">uint</span> <span class="pre">y,</span> <span class="pre">uint</span> <span class="pre">k)</span> <span class="pre">returns</span> <span class="pre">(uint)</span></code>: compute <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">*</span> <span class="pre">y)</span> <span class="pre">%</span> <span class="pre">k</span></code> where the multiplication is performed
+with arbitrary precision and does not wrap around at <code class="docutils literal notranslate"><span class="pre">2**256</span></code>. Assert that <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">!=</span> <span class="pre">0</span></code> starting from version 0.5.0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (current contract's type): the current contract, explicitly convertible to <code class="docutils literal notranslate"><span class="pre">address</span></code> or <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">super</span></code>: the contract one level higher in the inheritance hierarchy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">selfdestruct(address</span> <span class="pre">payable</span> <span class="pre">recipient)</span></code>: destroy the current contract, sending its funds to the given address</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.balance</span></code> (<code class="docutils literal notranslate"><span class="pre">uint256</span></code>): balance of the <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> in Wei</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.code</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>): code at the <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a> (can be empty)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.codehash</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes32</span></code>): the codehash of the <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.send(uint256</span> <span class="pre">amount)</span> <span class="pre">returns</span> <span class="pre">(bool)</span></code>: send given amount of Wei to <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a>,
+returns <code class="docutils literal notranslate"><span class="pre">false</span></code> on failure</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;address</span> <span class="pre">payable&gt;.transfer(uint256</span> <span class="pre">amount)</span></code>: send given amount of Wei to <a class="reference internal" href="types.html#address"><span class="std std-ref">Address</span></a>, throws on failure</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(C).name</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>): the name of the contract</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(C).creationCode</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>): creation bytecode of the given contract, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(C).runtimeCode</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes</span> <span class="pre">memory</span></code>): runtime bytecode of the given contract, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(I).interfaceId</span></code> (<code class="docutils literal notranslate"><span class="pre">bytes4</span></code>): value containing the EIP-165 interface identifier of the given interface, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(T).min</span></code> (<code class="docutils literal notranslate"><span class="pre">T</span></code>): the minimum value representable by the integer type <code class="docutils literal notranslate"><span class="pre">T</span></code>, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type(T).max</span></code> (<code class="docutils literal notranslate"><span class="pre">T</span></code>): the maximum value representable by the integer type <code class="docutils literal notranslate"><span class="pre">T</span></code>, see <a class="reference internal" href="units-and-global-variables.html#meta-type"><span class="std std-ref">Type Information</span></a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>When contracts are evaluated off-chain rather than in context of a transaction included in a
+block, you should not assume that <code class="docutils literal notranslate"><span class="pre">block.*</span></code> and <code class="docutils literal notranslate"><span class="pre">tx.*</span></code> refer to values from any specific
+block or transaction. These values are provided by the EVM implementation that executes the
+contract and can be arbitrary.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Do not rely on <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> or <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> as a source of randomness,
+unless you know what you are doing.</p>
+<p>Both the timestamp and the block hash can be influenced by miners to some degree.
+Bad actors in the mining community can for example run a casino payout function on a chosen hash
+and just retry a different hash if they did not receive any money.</p>
+<p>The current block timestamp must be strictly larger than the timestamp of the last block,
+but the only guarantee is that it will be somewhere between the timestamps of two
+consecutive blocks in the canonical chain.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The block hashes are not available for all blocks for scalability reasons.
+You can only access the hashes of the most recent 256 blocks, all other
+values will be zero.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>In version 0.5.0, the following aliases were removed: <code class="docutils literal notranslate"><span class="pre">suicide</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">selfdestruct</span></code>,
+<code class="docutils literal notranslate"><span class="pre">msg.gas</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">gasleft</span></code>, <code class="docutils literal notranslate"><span class="pre">block.blockhash</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">blockhash</span></code> and
+<code class="docutils literal notranslate"><span class="pre">sha3</span></code> as alias for <code class="docutils literal notranslate"><span class="pre">keccak256</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>In version 0.7.0, the alias <code class="docutils literal notranslate"><span class="pre">now</span></code> (for <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code>) was removed.</p>
+</div>
+</section>
+<section id="function-visibility-specifiers">
+<span id="index-2"></span><h2>Function Visibility Specifiers<a class="headerlink" href="#function-visibility-specifiers" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gbXlGdW5jdGlvbigpIDx2aXNpYmlsaXR5IHNwZWNpZmllcj4gcmV0dXJucyAoYm9vbCkgewogICAgcmV0dXJuIHRydWU7Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">function</span><span class="w"> </span><span class="nv">myFunction</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span>visibility<span class="w"> </span>specifier<span class="o">&gt;</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">return</span><span class="w"> </span><span class="kt">true</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span></code>: visible externally and internally (creates a <a class="reference internal" href="contracts.html#getter-functions"><span class="std std-ref">getter function</span></a> for storage/state variables)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">private</span></code>: only visible in the current contract</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">external</span></code>: only visible externally (only for functions) - i.e. can only be message-called (via <code class="docutils literal notranslate"><span class="pre">this.func</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">internal</span></code>: only visible internally</p></li>
+</ul>
+</section>
+<section id="modifiers">
+<span id="index-3"></span><h2>Modifiers<a class="headerlink" href="#modifiers" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pure</span></code> for functions: Disallows modification or access of state.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">view</span></code> for functions: Disallows modification of state.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">payable</span></code> for functions: Allows them to receive Ether together with a call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">constant</span></code> for state variables: Disallows assignment (except initialisation), does not occupy storage slot.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">immutable</span></code> for state variables: Allows exactly one assignment at construction time and is constant afterwards. Is stored in code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">anonymous</span></code> for events: Does not store event signature as topic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indexed</span></code> for event parameters: Stores the parameter as topic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">virtual</span></code> for functions and modifiers: Allows the function's or modifier's
+behaviour to be changed in derived contracts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">override</span></code>: States that this function, modifier or public state variable changes
+the behaviour of a function or modifier in a base contract.</p></li>
+</ul>
+</section>
+<section id="reserved-keywords">
+<h2>Reserved Keywords<a class="headerlink" href="#reserved-keywords" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>These keywords are reserved in Solidity. They might become part of the syntax in the future:</p>
+<p><code class="docutils literal notranslate"><span class="pre">after</span></code>, <code class="docutils literal notranslate"><span class="pre">alias</span></code>, <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">byte</span></code>, <code class="docutils literal notranslate"><span class="pre">case</span></code>, <code class="docutils literal notranslate"><span class="pre">copyof</span></code>, <code class="docutils literal notranslate"><span class="pre">default</span></code>,
+<code class="docutils literal notranslate"><span class="pre">define</span></code>, <code class="docutils literal notranslate"><span class="pre">final</span></code>, <code class="docutils literal notranslate"><span class="pre">implements</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code>, <code class="docutils literal notranslate"><span class="pre">inline</span></code>, <code class="docutils literal notranslate"><span class="pre">let</span></code>, <code class="docutils literal notranslate"><span class="pre">macro</span></code>, <code class="docutils literal notranslate"><span class="pre">match</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mutable</span></code>, <code class="docutils literal notranslate"><span class="pre">null</span></code>, <code class="docutils literal notranslate"><span class="pre">of</span></code>, <code class="docutils literal notranslate"><span class="pre">partial</span></code>, <code class="docutils literal notranslate"><span class="pre">promise</span></code>, <code class="docutils literal notranslate"><span class="pre">reference</span></code>, <code class="docutils literal notranslate"><span class="pre">relocatable</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sealed</span></code>, <code class="docutils literal notranslate"><span class="pre">sizeof</span></code>, <code class="docutils literal notranslate"><span class="pre">static</span></code>, <code class="docutils literal notranslate"><span class="pre">supports</span></code>, <code class="docutils literal notranslate"><span class="pre">switch</span></code>, <code class="docutils literal notranslate"><span class="pre">typedef</span></code>, <code class="docutils literal notranslate"><span class="pre">typeof</span></code>,
+<code class="docutils literal notranslate"><span class="pre">var</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="assembly.html" class="btn btn-neutral float-left" title="Inline Assembly" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="grammar.html" class="btn btn-neutral float-right" title="Language Grammar" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

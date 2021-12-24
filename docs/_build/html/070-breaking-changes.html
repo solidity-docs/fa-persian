@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solidity v0.7.0 Breaking Changes &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Solidity v0.8.0 Breaking Changes" href="080-breaking-changes.html" />
+    <link rel="prev" title="Solidity v0.6.0 Breaking Changes" href="060-breaking-changes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solidity v0.7.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#silent-changes-of-the-semantics">Silent Changes of the Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changes-to-the-syntax">Changes to the Syntax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inline-assembly">Inline Assembly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#removal-of-unused-or-unsafe-features">Removal of Unused or Unsafe Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mappings-outside-storage">Mappings outside Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-and-events">Functions and Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#expressions">Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#declarations">Declarations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#interface-changes">Interface Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Solidity v0.7.0 Breaking Changes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/070-breaking-changes.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solidity-v0-7-0-breaking-changes">
+<h1>Solidity v0.7.0 Breaking Changes<a class="headerlink" href="#solidity-v0-7-0-breaking-changes" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>This section highlights the main breaking changes introduced in Solidity
+version 0.7.0, along with the reasoning behind the changes and how to update
+affected code.
+For the full list check
+<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.7.0">the release changelog</a>.</p>
+<section id="silent-changes-of-the-semantics">
+<h2>Silent Changes of the Semantics<a class="headerlink" href="#silent-changes-of-the-semantics" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p>Exponentiation and shifts of literals by non-literals (e.g. <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;&lt;</span> <span class="pre">x</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">**</span> <span class="pre">x</span></code>)
+will always use either the type <code class="docutils literal notranslate"><span class="pre">uint256</span></code> (for non-negative literals) or
+<code class="docutils literal notranslate"><span class="pre">int256</span></code> (for negative literals) to perform the operation.
+Previously, the operation was performed in the type of the shift amount / the
+exponent which can be misleading.</p></li>
+</ul>
+</section>
+<section id="changes-to-the-syntax">
+<h2>Changes to the Syntax<a class="headerlink" href="#changes-to-the-syntax" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p>In external function and contract creation calls, Ether and gas is now specified using a new syntax:
+<code class="docutils literal notranslate"><span class="pre">x.f{gas:</span> <span class="pre">10000,</span> <span class="pre">value:</span> <span class="pre">2</span> <span class="pre">ether}(arg1,</span> <span class="pre">arg2)</span></code>.
+The old syntax -- <code class="docutils literal notranslate"><span class="pre">x.f.gas(10000).value(2</span> <span class="pre">ether)(arg1,</span> <span class="pre">arg2)</span></code> -- will cause an error.</p></li>
+<li><p>The global variable <code class="docutils literal notranslate"><span class="pre">now</span></code> is deprecated, <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> should be used instead.
+The single identifier <code class="docutils literal notranslate"><span class="pre">now</span></code> is too generic for a global variable and could give the impression
+that it changes during transaction processing, whereas <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code> correctly
+reflects the fact that it is just a property of the block.</p></li>
+<li><p>NatSpec comments on variables are only allowed for public state variables and not
+for local or internal variables.</p></li>
+<li><p>The token <code class="docutils literal notranslate"><span class="pre">gwei</span></code> is a keyword now (used to specify, e.g. <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">gwei</span></code> as a number)
+and cannot be used as an identifier.</p></li>
+<li><p>String literals now can only contain printable ASCII characters and this also includes a variety of
+escape sequences, such as hexadecimal (<code class="docutils literal notranslate"><span class="pre">\xff</span></code>) and unicode escapes (<code class="docutils literal notranslate"><span class="pre">\u20ac</span></code>).</p></li>
+<li><p>Unicode string literals are supported now to accommodate valid UTF-8 sequences. They are identified
+with the <code class="docutils literal notranslate"><span class="pre">unicode</span></code> prefix: <code class="docutils literal notranslate"><span class="pre">unicode&quot;Hello</span> <span class="pre">😃&quot;</span></code>.</p></li>
+<li><p>State Mutability: The state mutability of functions can now be restricted during inheritance:
+Functions with default state mutability can be overridden by <code class="docutils literal notranslate"><span class="pre">pure</span></code> and <code class="docutils literal notranslate"><span class="pre">view</span></code> functions
+while <code class="docutils literal notranslate"><span class="pre">view</span></code> functions can be overridden by <code class="docutils literal notranslate"><span class="pre">pure</span></code> functions.
+At the same time, public state variables are considered <code class="docutils literal notranslate"><span class="pre">view</span></code> and even <code class="docutils literal notranslate"><span class="pre">pure</span></code>
+if they are constants.</p></li>
+</ul>
+<section id="inline-assembly">
+<h3>Inline Assembly<a class="headerlink" href="#inline-assembly" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>Disallow <code class="docutils literal notranslate"><span class="pre">.</span></code> in user-defined function and variable names in inline assembly.
+It is still valid if you use Solidity in Yul-only mode.</p></li>
+<li><p>Slot and offset of storage pointer variable <code class="docutils literal notranslate"><span class="pre">x</span></code> are accessed via <code class="docutils literal notranslate"><span class="pre">x.slot</span></code>
+and <code class="docutils literal notranslate"><span class="pre">x.offset</span></code> instead of <code class="docutils literal notranslate"><span class="pre">x_slot</span></code> and <code class="docutils literal notranslate"><span class="pre">x_offset</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="removal-of-unused-or-unsafe-features">
+<h2>Removal of Unused or Unsafe Features<a class="headerlink" href="#removal-of-unused-or-unsafe-features" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="mappings-outside-storage">
+<h3>Mappings outside Storage<a class="headerlink" href="#mappings-outside-storage" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>If a struct or array contains a mapping, it can only be used in storage.
+Previously, mapping members were silently skipped in memory, which
+is confusing and error-prone.</p></li>
+<li><p>Assignments to structs or arrays in storage does not work if they contain
+mappings.
+Previously, mappings were silently skipped during the copy operation, which
+is misleading and error-prone.</p></li>
+</ul>
+</section>
+<section id="functions-and-events">
+<h3>Functions and Events<a class="headerlink" href="#functions-and-events" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>Visibility (<code class="docutils literal notranslate"><span class="pre">public</span></code> / <code class="docutils literal notranslate"><span class="pre">internal</span></code>) is not needed for constructors anymore:
+To prevent a contract from being created, it can be marked <code class="docutils literal notranslate"><span class="pre">abstract</span></code>.
+This makes the visibility concept for constructors obsolete.</p></li>
+<li><p>Type Checker: Disallow <code class="docutils literal notranslate"><span class="pre">virtual</span></code> for library functions:
+Since libraries cannot be inherited from, library functions should not be virtual.</p></li>
+<li><p>Multiple events with the same name and parameter types in the same
+inheritance hierarchy are disallowed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">B</span></code> only affects the contract it is mentioned in.
+Previously, the effect was inherited. Now, you have to repeat the <code class="docutils literal notranslate"><span class="pre">using</span></code>
+statement in all derived contracts that make use of the feature.</p></li>
+</ul>
+</section>
+<section id="expressions">
+<h3>Expressions<a class="headerlink" href="#expressions" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>Shifts by signed types are disallowed.
+Previously, shifts by negative amounts were allowed, but reverted at runtime.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">finney</span></code> and <code class="docutils literal notranslate"><span class="pre">szabo</span></code> denominations are removed.
+They are rarely used and do not make the actual amount readily visible. Instead, explicit
+values like <code class="docutils literal notranslate"><span class="pre">1e20</span></code> or the very common <code class="docutils literal notranslate"><span class="pre">gwei</span></code> can be used.</p></li>
+</ul>
+</section>
+<section id="declarations">
+<h3>Declarations<a class="headerlink" href="#declarations" title="پیوند ثابت به این سر مقاله"></a></h3>
+<ul class="simple">
+<li><p>The keyword <code class="docutils literal notranslate"><span class="pre">var</span></code> cannot be used anymore.
+Previously, this keyword would parse but result in a type error and
+a suggestion about which type to use. Now, it results in a parser error.</p></li>
+</ul>
+</section>
+</section>
+<section id="interface-changes">
+<h2>Interface Changes<a class="headerlink" href="#interface-changes" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p>JSON AST: Mark hex string literals with <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">&quot;hexString&quot;</span></code>.</p></li>
+<li><p>JSON AST: Members with value <code class="docutils literal notranslate"><span class="pre">null</span></code> are removed from JSON output.</p></li>
+<li><p>NatSpec: Constructors and functions have consistent userdoc output.</p></li>
+</ul>
+</section>
+<section id="how-to-update-your-code">
+<h2>How to update your code<a class="headerlink" href="#how-to-update-your-code" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section gives detailed instructions on how to update prior code for every breaking change.</p>
+<ul class="simple">
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">x.f.value(...)()</span></code> to <code class="docutils literal notranslate"><span class="pre">x.f{value:</span> <span class="pre">...}()</span></code>. Similarly <code class="docutils literal notranslate"><span class="pre">(new</span> <span class="pre">C).value(...)()</span></code> to
+<code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">C{value:</span> <span class="pre">...}()</span></code> and <code class="docutils literal notranslate"><span class="pre">x.f.gas(...).value(...)()</span></code> to <code class="docutils literal notranslate"><span class="pre">x.f{gas:</span> <span class="pre">...,</span> <span class="pre">value:</span> <span class="pre">...}()</span></code>.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">now</span></code> to <code class="docutils literal notranslate"><span class="pre">block.timestamp</span></code>.</p></li>
+<li><p>Change types of right operand in shift operators to unsigned types. For example change <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">(256</span> <span class="pre">-</span> <span class="pre">y)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;&gt;</span> <span class="pre">uint(256</span> <span class="pre">-</span> <span class="pre">y)</span></code>.</p></li>
+<li><p>Repeat the <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">B</span></code> statements in all derived contracts if needed.</p></li>
+<li><p>Remove the <code class="docutils literal notranslate"><span class="pre">public</span></code> keyword from every constructor.</p></li>
+<li><p>Remove the <code class="docutils literal notranslate"><span class="pre">internal</span></code> keyword from every constructor and add <code class="docutils literal notranslate"><span class="pre">abstract</span></code> to the contract (if not already present).</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">_slot</span></code> and <code class="docutils literal notranslate"><span class="pre">_offset</span></code> suffixes in inline assembly to <code class="docutils literal notranslate"><span class="pre">.slot</span></code> and <code class="docutils literal notranslate"><span class="pre">.offset</span></code>, respectively.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="060-breaking-changes.html" class="btn btn-neutral float-left" title="Solidity v0.6.0 Breaking Changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="080-breaking-changes.html" class="btn btn-neutral float-right" title="Solidity v0.8.0 Breaking Changes" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

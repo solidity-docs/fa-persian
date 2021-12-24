@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سالیدیتی &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="مقدمه‌ای بر قراد‌های هوشمند" href="introduction-to-smart-contracts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="#">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">عبارات و ساختارهای کنترلی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">قراردادها</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>سالیدیتی</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>سالیدیتی<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>سالیدیتی   یک زبان شیء گرا  و سطح بالا  برای پیاده سازی قراردادهای هوشمند  می‌باشد. قرارداد‌های هوشمند، برنامه‌هایی هستند که رفتار حساب‌ها  در داخل حالت اتریوم  را کنترل می‌کنند.</p>
+<p>سالیدیتی یک <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages">زبان آکلادی</a> می‌باشد که از زبان‌هایی مانند سی پلاس پلاس ، پایتون و جاوا اسکریپت تأثیر گرفته و برای هدف قراردادن EVM  یا ماشینِ مجازیِ اتریوم  طراحی شده‌است.</p>
+<p>سالیدیتی از نوع استاتیک   می‌باشد. از ویژگی‌های ارث بری ، کتابخانه‌ها  و انواع نوع‌های پیچیده تعریف شده توسط کاربر  پشتیبانی می‌کند.</p>
+<p>با سالیدیتی می‌توانید قراردادهایی را برای کاربردهایی از قبیل رأی‌گیری ، سرمایه گذاری جمعی ، مزایده کور  و کیف پول‌ با امضای چندگانه  استفاده کنید.</p>
+<p>هنگام استقرار  قرارداد‌ها، باید از آخرین نسخه سالیدیتی منتشر شده استفاده کنید. به این دلیل که تغییرات جدید ، ویژگی‌های جدید  و رفع باگ‌ها  به طور منظم معرفی می‌شوند. ما در حال حاضر از نسخه 0.X برای <a class="reference external" href="https://semver.org/#spec-item-4">نشان دادن این تغییرات سریع</a> استفاده می‌کنیم.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>سالیدیتی به تازگی نسخه 0.8.X را منتشر کرده که تغییرات جدید را معرفی می‌کند. حتماً <a class="reference internal" href="080-breaking-changes.html"><span class="doc">لیست کامل</span></a> را مطالعه کنید.</p>
+</div>
+<p>ایده‌های بهبود سالیدیتی یا این مستند همیشه مورد استقبال قرار میگیرد، برای جزئیات بیشتر <a class="reference internal" href="contributing.html"><span class="doc">راهنمای همکاری</span></a> را مطالعه کنید.</p>
+<section id="id4">
+<h2>شروع<a class="headerlink" href="#id4" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p><strong>1. درک مبانی قراردادهای هوشمند</strong></p>
+<p>اگر با مفهوم قراردادهای هوشمند آشنا هستید، به شما توصیه می‌کنیم که با جستجوی بخش &quot;معرفی قراردادهای هوشمند&quot; شروع به کار کنید، که شامل موارد زیر است:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="introduction-to-smart-contracts.html#simple-smart-contract"><span class="std std-ref">یک مثال ساده از قرارداد هوشمند</span></a> که با سالیدیتی نوشته شده‌است.</p></li>
+<li><p><a class="reference internal" href="introduction-to-smart-contracts.html#blockchain-basics"><span class="std std-ref">مبانی بلاکچین</span></a>.</p></li>
+<li><p><a class="reference internal" href="introduction-to-smart-contracts.html#the-ethereum-virtual-machine"><span class="std std-ref">ماشین مجازی اتریوم</span></a>.</p></li>
+</ul>
+<p><strong>2.    آشنایی با سالیدیتی</strong></p>
+<p>هنگامی که با مبانی اولیه آشنا شدید، توصیه می‌کنیم برای درک مفاهیم اصلی زبان، بخش‌های <a class="reference internal" href="solidity-by-example.html"><span class="doc">&quot;سالیدیتی با مثال&quot;</span></a>
+و &quot;شرح زبان&quot; را بخوانید.</p>
+<p><strong>3.    نصب کامپایلر  سالیدیتی</strong></p>
+<p>روش های مختلفی برای نصب کامپایلر سالیدیتی وجود دارد، به سادگی گزینه مورد نظر خود را انتخاب کنید و مراحل ذکر شده در <a class="reference internal" href="installing-solidity.html#installing-solidity"><span class="std std-ref">صفحه نصب</span></a> را دنبال کنید.</p>
+<div class="admonition hint">
+<p class="admonition-title">راهنمایی</p>
+<p>می‌توانید نمونه‌های کد را مستقیماً در مرورگر خود با <a class="reference external" href="https://remix.ethereum.org">ویرایشگر متن ریمیکس</a> امتحان کنید. ریمیکس یک ویرایشگر متن مبتنی بر مرورگر وب است که به شما امکان می‌دهد، بدون نیاز به نصب سالیدیتی به صورت محلی، قراردادهای هوشمند سالیدیتی را بنویسید، دیپلوی و مدیریت کنید.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>نرم افزار به عنوان نوشته‌ی انسان، می‌تواند باگ داشته باشد. هنگام نوشتن قراردادهای هوشمند خود، باید بهترین شیوه‌های توسعه نرم افزار را دنبال کنید. شیوه‌های توسعه نرم افزار شامل بازبینی ، آزمایش ، حسابرسی  و اثبات صحتِ  کد می‌باشد. کاربران قرارداد هوشمند گاهی اوقات به خودِ کد نسبت به نویسندگان آن‌ها اطمینان بیشتری دارند. بلاکچین‌ها و قراردادهای هوشمند مسائل منحصر به فرد خود را دارند، که باید مراقب آنها باشید. بنابراین قبل از کار بر روی تولید کد، حتماً قسمت  <a class="reference internal" href="security-considerations.html#security-considerations"><span class="std std-ref">ملاحظات امنیتی</span></a> را مطالعه کنید.</p>
+</div>
+<p><strong>4.    یادگیری بیشتر</strong></p>
+<p>اگر می‌خواهید در مورد ساخت برنامه‌های غیرمتمرکز در اتریوم اطلاعات بیشتری کسب کنید، <a class="reference external" href="https://ethereum.org/en/developers/">منابع توسعه دهنده اتریوم</a> می‌توانند به شما در تهیه مستندِ عمومیِ بیشتر در مورد اتریوم و انتخاب گسترده‌ای از آموزش‌ها، ابزارها و چارچوب‌های توسعه کمک کنند.</p>
+<blockquote>
+<div><p>اگر سؤالی دارید، می‌توانید جواب‌ها را جستجو کنید یا از طریق <a class="reference external" href="https://ethereum.stackexchange.com/">Ethereum StackExchange</a>, یا <a class="reference external" href="https://gitter.im/ethereum/solidity/">کانال Gitter</a>  ما بپرسید.</p>
+</div></blockquote>
+</section>
+<section id="translations">
+<span id="id7"></span><h2>ترجمه‌ها<a class="headerlink" href="#translations" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>داوطلبان جامعه سالیدیتی به ترجمه این مستندات به چندین زبان کمک می‌کنند. این‌ مستندات سطوح مختلفی از کامل و بروز بودن را دارند. نسخه انگلیسی به عنوان مرجع می‌باشد.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>We recently set up a new GitHub organization and translation workflow to help streamline the
+community efforts. Please refer to the <a class="reference external" href="https://github.com/solidity-docs/translation-guide">translation guide</a>
+for information on how to contribute to the community translations moving forward.</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://solidity-fr.readthedocs.io">فرانسوی</a> (در حال انجام)</p></li>
+<li><p><a class="reference external" href="https://github.com/damianoazzolini/solidity">ایتالیایی</a> (در حال انجام)</p></li>
+<li><p><a class="reference external" href="https://solidity-jp.readthedocs.io">ژاپنی</a></p></li>
+<li><p><a class="reference external" href="https://solidity-kr.readthedocs.io">کره‌ای</a> (در حال انجام)</p></li>
+<li><p><a class="reference external" href="https://github.com/ethereum/wiki/wiki/%5BRussian%5D-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE-Solidity">روسی</a> (نسبتاً قدیمی)</p></li>
+<li><p><a class="reference external" href="https://learnblockchain.cn/docs/solidity/">چینی</a> (در حال انجام)</p></li>
+<li><p><a class="reference external" href="https://solidity-es.readthedocs.io">اسپانیایی</a></p></li>
+<li><p><a class="reference external" href="https://github.com/denizozzgur/Solidity_TR/blob/master/README.md">ترکی</a> (جزئی)</p></li>
+</ul>
+</section>
+</section>
+<section id="id16">
+<h1>فهرست<a class="headerlink" href="#id16" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p><a class="reference internal" href="genindex.html"><span class="std std-ref">فهرست کلمات</span></a>, <a class="reference internal" href="search.html"><span class="std std-ref">صفحه جستجو</span></a></p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction-to-smart-contracts.html#simple-smart-contract">یک قرارداد هوشمند ساده</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction-to-smart-contracts.html#blockchain-basics">مبانی بلاکچین</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction-to-smart-contracts.html#index-6">ماشین مجازی اتریوم</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id2">نسخه بندی</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id4">ریمیکس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#npm-node-js">npm / Node.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id9">داکر</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id10">بسته‌های لینوکس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id15">بسته‌های مک‌او اس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id16">باینری‌های استاتیک</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#building-from-source">نسخه از منبع</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id27">گزینه‌های CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id28">رشته نسخه  با جزئیات</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing-solidity.html#id29">اطلاعات مهم در مورد نسخه بندی</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="solidity-by-example.html#voting">رای گیری</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solidity-by-example.html#index-1">مزایده کور</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solidity-by-example.html#index-2">خرید امن از راه دور</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solidity-by-example.html#id8">کانال پرداخت خرد</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solidity-by-example.html#index-3">قراردادهای ماژولی</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html#spdx">مشخص کننده‌ی لایسنس  SPDX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html#pragma">پراگماها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html#import">ایمپورت کردن سایر فایل‌های منبع</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-of-source-files.html#index-6">کامنت‌ها</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#structure-state-variables">متغیرهای حالت</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#structure-functions">توابع</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#structure-function-modifiers">توابع اصلاح کننده</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#structure-events">رویدادها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#structure-errors">خطاها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#struct">انواع Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure-of-a-contract.html#enum">انواع Enum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="types.html#value-types">انواع مقدار</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#reference-types">انواع مرجع (Reference Types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#mapping-types">انواع  نگاشت‌ها (Mapping Types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#lvalues">اپراتورهای شامل  LValues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#conversions-between-elementary-types">تبدیل بین نوع‌های اصلی (Conversions between Elementary Types)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#types-conversion-literals">تبدیل بین لیترال‌ها و نوع‌های اصلی</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html#index-0">واحدهای اتر</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html#time-units">واحد‌های زمان (Time Units)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="units-and-global-variables.html#special-variables-and-functions">متغیرها و توابع ویژه (Special Variables and Functions)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">عبارات و ساختارهای کنترلی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#control-structures">ساختارهای کنترلی (Control Structures)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#function-calls">فراخوانی‌های تابع</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#new">ایجاد قراردادها از طریق قرارداد  <code class="docutils literal notranslate"><span class="pre">new</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#id7">ترتیب ارزیابی عبارات</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#assignment">تخصیص (Assignment)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#scoping-and-declarations">محدوده سازی و اعلامیه‌ها  (Scoping and Declarations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#checked-unchecked">محاسبه Checked  یا  Unchecked</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-structures.html#exceptions">مدیریت خطا: ادعا ، درخواست، بازگشت و اکسپشن‌ها (Exceptions)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">قراردادها</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#index-1">ایجاد قراردادها</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#visibility-and-getters">قابلیت مشاهده و گیرنده‌ها (Visibility and Getters)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#function-modifiers">Function Modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#constant-and-immutable-state-variables">Constant and Immutable State Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#errors-and-the-revert-statement">Errors and the Revert Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#inheritance">Inheritance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#abstract-contracts">Abstract Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#interfaces">Interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#libraries">Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html#using-for">Using For</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html#access-to-external-variables-functions-and-libraries">Access to External Variables, Functions and Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html#things-to-avoid">Things to Avoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assembly.html#conventions-in-solidity">Conventions in Solidity</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cheatsheet.html#order-of-precedence-of-operators">Order of Precedence of Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheatsheet.html#global-variables">Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheatsheet.html#function-visibility-specifiers">Function Visibility Specifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheatsheet.html#modifiers">Modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cheatsheet.html#reserved-keywords">Reserved Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using-the-compiler.html#using-the-commandline-compiler">Using the Commandline Compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-the-compiler.html#setting-the-evm-version-to-target">Setting the EVM Version to Target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-the-compiler.html#compiler-input-and-output-json-description">Compiler Input and Output JSON Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-the-compiler.html#compiler-tools">Compiler Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals/layout_in_storage.html#mappings-and-dynamic-arrays">Mappings and Dynamic Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals/layout_in_storage.html#json-output">JSON Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals/layout_in_memory.html#differences-to-layout-in-storage">Differences to Layout in Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals/optimizer.html#benefits-of-optimizing-solidity-code">Benefits of Optimizing Solidity Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals/optimizer.html#differences-between-optimized-and-non-optimized-code">Differences between Optimized and Non-Optimized Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals/optimizer.html#optimizer-parameter-runs">Optimizer Parameter Runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals/optimizer.html#opcode-based-optimizer-module">Opcode-Based Optimizer Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals/optimizer.html#yul-based-optimizer-module">Yul-Based Optimizer Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metadata.html#encoding-of-the-metadata-hash-in-the-bytecode">Encoding of the Metadata Hash in the Bytecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metadata.html#usage-for-automatic-interface-generation-and-natspec">Usage for Automatic Interface Generation and NatSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metadata.html#usage-for-source-code-verification">Usage for Source Code Verification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#basic-design">Basic Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#function-selector">Function Selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#errors">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#json">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abi-spec.html#encoding-of-indexed-event-parameters">Encoding of Indexed Event Parameters</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#semantic-only-changes">Semantic Only Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#semantic-and-syntactic-changes">Semantic and Syntactic Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#explicitness-requirements">Explicitness Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#deprecated-elements">Deprecated Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#interoperability-with-older-contracts">Interoperability With Older Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="050-breaking-changes.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#changes-the-compiler-might-not-warn-about">Changes the Compiler Might not Warn About</a></li>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#explicitness-requirements">Explicitness Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#semantic-and-syntactic-changes">Semantic and Syntactic Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#new-features">New Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#interface-changes">Interface Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="060-breaking-changes.html#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="070-breaking-changes.html#silent-changes-of-the-semantics">Silent Changes of the Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="070-breaking-changes.html#changes-to-the-syntax">Changes to the Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="070-breaking-changes.html#removal-of-unused-or-unsafe-features">Removal of Unused or Unsafe Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="070-breaking-changes.html#interface-changes">Interface Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="070-breaking-changes.html#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="080-breaking-changes.html#silent-changes-of-the-semantics">Silent Changes of the Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="080-breaking-changes.html#new-restrictions">New Restrictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="080-breaking-changes.html#interface-changes">Interface Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="080-breaking-changes.html#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="natspec-format.html#documentation-example">Documentation Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="natspec-format.html#tags">Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="natspec-format.html#documentation-output">Documentation Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security-considerations.html#pitfalls">Pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security-considerations.html#recommendations">Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smtchecker.html#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smtchecker.html#smtchecker-options-and-tuning">SMTChecker Options and Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smtchecker.html#abstraction-and-false-positives">Abstraction and False Positives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smtchecker.html#real-world-assumptions">Real World Assumptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resources.html#general-resources">General Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html#integrated-ethereum-development-environments">Integrated (Ethereum) Development Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html#editor-integrations">Editor Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html#solidity-tools">Solidity Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html#third-party-solidity-parsers-and-grammars">Third-Party Solidity Parsers and Grammars</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#virtual-filesystem">Virtual Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#imports">Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#base-path-and-include-paths">Base Path and Include Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#allowed-paths">Allowed Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#import-remapping">Import Remapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-resolution.html#using-urls-in-imports">Using URLs in imports</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#motivation-and-high-level-description">Motivation and High-level Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#simple-example">Simple Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#stand-alone-usage">Stand-Alone Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#informal-description-of-yul">Informal Description of Yul</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#specification-of-yul">Specification of Yul</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#specification-of-yul-object">Specification of Yul Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#yul-optimizer">Yul Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yul.html#complete-erc20-example">Complete ERC20 Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="style-guide.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style-guide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style-guide.html#order-of-layout">Order of Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style-guide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="style-guide.html#natspec">NatSpec</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="common-patterns.html#withdrawal-from-contracts">Withdrawal from Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common-patterns.html#restricting-access">Restricting Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common-patterns.html#state-machine">State Machine</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#team-calls">Team Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#how-to-report-issues">How to Report Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#workflow-for-pull-requests">Workflow for Pull Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#running-the-compiler-tests">Running the Compiler Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#running-the-fuzzer-via-afl">Running the Fuzzer via AFL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#whiskers">Whiskers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#documentation-style-guide">Documentation Style Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#solidity-language-design">Solidity Language Design</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brand-guide.html#the-solidity-brand">The Solidity Brand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brand-guide.html#solidity-brand-name">Solidity Brand Name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brand-guide.html#solidity-logo-license">Solidity Logo License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brand-guide.html#solidity-logo-guidelines">Solidity Logo Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brand-guide.html#credits">Credits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction-to-smart-contracts.html" class="btn btn-neutral float-right" title="مقدمه‌ای بر قراد‌های هوشمند" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

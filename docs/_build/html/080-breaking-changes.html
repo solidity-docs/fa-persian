@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solidity v0.8.0 Breaking Changes &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="NatSpec Format" href="natspec-format.html" />
+    <link rel="prev" title="Solidity v0.7.0 Breaking Changes" href="070-breaking-changes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solidity v0.8.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#silent-changes-of-the-semantics">Silent Changes of the Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-restrictions">New Restrictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interface-changes">Interface Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Solidity v0.8.0 Breaking Changes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/080-breaking-changes.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solidity-v0-8-0-breaking-changes">
+<h1>Solidity v0.8.0 Breaking Changes<a class="headerlink" href="#solidity-v0-8-0-breaking-changes" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>This section highlights the main breaking changes introduced in Solidity
+version 0.8.0.
+For the full list check
+<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.8.0">the release changelog</a>.</p>
+<section id="silent-changes-of-the-semantics">
+<h2>Silent Changes of the Semantics<a class="headerlink" href="#silent-changes-of-the-semantics" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes where existing code changes its behaviour without
+the compiler notifying you about it.</p>
+<ul>
+<li><p>Arithmetic operations revert on underflow and overflow. You can use <code class="docutils literal notranslate"><span class="pre">unchecked</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> to use
+the previous wrapping behaviour.</p>
+<p>Checks for overflow are very common, so we made them the default to increase readability of code,
+even if it comes at a slight increase of gas costs.</p>
+</li>
+<li><p>ABI coder v2 is activated by default.</p>
+<p>You can choose to use the old behaviour using <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v1;</span></code>.
+The pragma <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">ABIEncoderV2;</span></code> is still valid, but it is deprecated and has no effect.
+If you want to be explicit, please use <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v2;</span></code> instead.</p>
+<p>Note that ABI coder v2 supports more types than v1 and performs more sanity checks on the inputs.
+ABI coder v2 makes some function calls more expensive and it can also make contract calls
+revert that did not revert with ABI coder v1 when they contain data that does not conform to the
+parameter types.</p>
+</li>
+<li><p>Exponentiation is right associative, i.e., the expression <code class="docutils literal notranslate"><span class="pre">a**b**c</span></code> is parsed as <code class="docutils literal notranslate"><span class="pre">a**(b**c)</span></code>.
+Before 0.8.0, it was parsed as <code class="docutils literal notranslate"><span class="pre">(a**b)**c</span></code>.</p>
+<p>This is the common way to parse the exponentiation operator.</p>
+</li>
+<li><p>Failing assertions and other internal checks like division by zero or arithmetic overflow do
+not use the invalid opcode but instead the revert opcode.
+More specifically, they will use error data equal to a function call to <code class="docutils literal notranslate"><span class="pre">Panic(uint256)</span></code> with an error code specific
+to the circumstances.</p>
+<p>This will save gas on errors while it still allows static analysis tools to distinguish
+these situations from a revert on invalid input, like a failing <code class="docutils literal notranslate"><span class="pre">require</span></code>.</p>
+</li>
+<li><p>If a byte array in storage is accessed whose length is encoded incorrectly, a panic is caused.
+A contract cannot get into this situation unless inline assembly is used to modify the raw representation of storage byte arrays.</p></li>
+<li><p>If constants are used in array length expressions, previous versions of Solidity would use arbitrary precision
+in all branches of the evaluation tree. Now, if constant variables are used as intermediate expressions,
+their values will be properly rounded in the same way as when they are used in run-time expressions.</p></li>
+<li><p>The type <code class="docutils literal notranslate"><span class="pre">byte</span></code> has been removed. It was an alias of <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>.</p></li>
+</ul>
+</section>
+<section id="new-restrictions">
+<h2>New Restrictions<a class="headerlink" href="#new-restrictions" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes that might cause existing contracts to not compile anymore.</p>
+<ul>
+<li><p>There are new restrictions related to explicit conversions of literals. The previous behaviour in
+the following cases was likely ambiguous:</p>
+<ol class="arabic simple">
+<li><p>Explicit conversions from negative literals and literals larger than <code class="docutils literal notranslate"><span class="pre">type(uint160).max</span></code> to
+<code class="docutils literal notranslate"><span class="pre">address</span></code> are disallowed.</p></li>
+<li><p>Explicit conversions between literals and an integer type <code class="docutils literal notranslate"><span class="pre">T</span></code> are only allowed if the literal
+lies between <code class="docutils literal notranslate"><span class="pre">type(T).min</span></code> and <code class="docutils literal notranslate"><span class="pre">type(T).max</span></code>. In particular, replace usages of <code class="docutils literal notranslate"><span class="pre">uint(-1)</span></code>
+with <code class="docutils literal notranslate"><span class="pre">type(uint).max</span></code>.</p></li>
+<li><p>Explicit conversions between literals and enums are only allowed if the literal can
+represent a value in the enum.</p></li>
+<li><p>Explicit conversions between literals and <code class="docutils literal notranslate"><span class="pre">address</span></code> type (e.g. <code class="docutils literal notranslate"><span class="pre">address(literal)</span></code>) have the
+type <code class="docutils literal notranslate"><span class="pre">address</span></code> instead of <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>. One can get a payable address type by using an
+explicit conversion, i.e., <code class="docutils literal notranslate"><span class="pre">payable(literal)</span></code>.</p></li>
+</ol>
+</li>
+<li><p><a class="reference internal" href="types.html#address-literals"><span class="std std-ref">Address literals</span></a> have the type <code class="docutils literal notranslate"><span class="pre">address</span></code> instead of <code class="docutils literal notranslate"><span class="pre">address</span>
+<span class="pre">payable</span></code>. They can be converted to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> by using an explicit conversion, e.g.
+<code class="docutils literal notranslate"><span class="pre">payable(0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF)</span></code>.</p></li>
+<li><p>There are new restrictions on explicit type conversions. The conversion is only allowed when there
+is at most one change in sign, width or type-category (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">address</span></code>, <code class="docutils literal notranslate"><span class="pre">bytesNN</span></code>, etc.).
+To perform multiple changes, use multiple conversions.</p>
+<p>Let us use the notation <code class="docutils literal notranslate"><span class="pre">T(S)</span></code> to denote the explicit conversion <code class="docutils literal notranslate"><span class="pre">T(x)</span></code>, where, <code class="docutils literal notranslate"><span class="pre">T</span></code> and
+<code class="docutils literal notranslate"><span class="pre">S</span></code> are types, and <code class="docutils literal notranslate"><span class="pre">x</span></code> is any arbitrary variable of type <code class="docutils literal notranslate"><span class="pre">S</span></code>. An example of such a
+disallowed conversion would be <code class="docutils literal notranslate"><span class="pre">uint16(int8)</span></code> since it changes both width (8 bits to 16 bits)
+and sign (signed integer to unsigned integer). In order to do the conversion, one has to go
+through an intermediate type. In the previous example, this would be <code class="docutils literal notranslate"><span class="pre">uint16(uint8(int8))</span></code> or
+<code class="docutils literal notranslate"><span class="pre">uint16(int16(int8))</span></code>. Note that the two ways to convert will produce different results e.g.,
+for <code class="docutils literal notranslate"><span class="pre">-1</span></code>. The following are some examples of conversions that are disallowed by this rule.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">address(uint)</span></code> and <code class="docutils literal notranslate"><span class="pre">uint(address)</span></code>: converting both type-category and width. Replace this by
+<code class="docutils literal notranslate"><span class="pre">address(uint160(uint))</span></code> and <code class="docutils literal notranslate"><span class="pre">uint(uint160(address))</span></code> respectively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">payable(uint160)</span></code>, <code class="docutils literal notranslate"><span class="pre">payable(bytes20)</span></code> and <code class="docutils literal notranslate"><span class="pre">payable(integer-literal)</span></code>: converting both
+type-category and state-mutability. Replace this by <code class="docutils literal notranslate"><span class="pre">payable(address(uint160))</span></code>,
+<code class="docutils literal notranslate"><span class="pre">payable(address(bytes20))</span></code> and <code class="docutils literal notranslate"><span class="pre">payable(address(integer-literal))</span></code> respectively. Note that
+<code class="docutils literal notranslate"><span class="pre">payable(0)</span></code> is valid and is an exception to the rule.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int80(bytes10)</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes10(int80)</span></code>: converting both type-category and sign. Replace this by
+<code class="docutils literal notranslate"><span class="pre">int80(uint80(bytes10))</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes10(uint80(int80)</span></code> respectively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Contract(uint)</span></code>: converting both type-category and width. Replace this by
+<code class="docutils literal notranslate"><span class="pre">Contract(address(uint160(uint)))</span></code>.</p></li>
+</ul>
+<p>These conversions were disallowed to avoid ambiguity. For example, in the expression <code class="docutils literal notranslate"><span class="pre">uint16</span> <span class="pre">x</span> <span class="pre">=</span>
+<span class="pre">uint16(int8(-1))</span></code>, the value of <code class="docutils literal notranslate"><span class="pre">x</span></code> would depend on whether the sign or the width conversion
+was applied first.</p>
+</li>
+<li><p>Function call options can only be given once, i.e. <code class="docutils literal notranslate"><span class="pre">c.f{gas:</span> <span class="pre">10000}{value:</span> <span class="pre">1}()</span></code> is invalid and has to be changed to <code class="docutils literal notranslate"><span class="pre">c.f{gas:</span> <span class="pre">10000,</span> <span class="pre">value:</span> <span class="pre">1}()</span></code>.</p></li>
+<li><p>The global functions <code class="docutils literal notranslate"><span class="pre">log0</span></code>, <code class="docutils literal notranslate"><span class="pre">log1</span></code>, <code class="docutils literal notranslate"><span class="pre">log2</span></code>, <code class="docutils literal notranslate"><span class="pre">log3</span></code> and <code class="docutils literal notranslate"><span class="pre">log4</span></code> have been removed.</p>
+<p>These are low-level functions that were largely unused. Their behaviour can be accessed from inline assembly.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enum</span></code> definitions cannot contain more than 256 members.</p>
+<p>This will make it safe to assume that the underlying type in the ABI is always <code class="docutils literal notranslate"><span class="pre">uint8</span></code>.</p>
+</li>
+<li><p>Declarations with the name <code class="docutils literal notranslate"><span class="pre">this</span></code>, <code class="docutils literal notranslate"><span class="pre">super</span></code> and <code class="docutils literal notranslate"><span class="pre">_</span></code> are disallowed, with the exception of
+public functions and events. The exception is to make it possible to declare interfaces of contracts
+implemented in languages other than Solidity that do permit such function names.</p></li>
+<li><p>Remove support for the <code class="docutils literal notranslate"><span class="pre">\b</span></code>, <code class="docutils literal notranslate"><span class="pre">\f</span></code>, and <code class="docutils literal notranslate"><span class="pre">\v</span></code> escape sequences in code.
+They can still be inserted via hexadecimal escapes, e.g. <code class="docutils literal notranslate"><span class="pre">\x08</span></code>, <code class="docutils literal notranslate"><span class="pre">\x0c</span></code>, and <code class="docutils literal notranslate"><span class="pre">\x0b</span></code>, respectively.</p></li>
+<li><p>The global variables <code class="docutils literal notranslate"><span class="pre">tx.origin</span></code> and <code class="docutils literal notranslate"><span class="pre">msg.sender</span></code> have the type <code class="docutils literal notranslate"><span class="pre">address</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code>. One can convert them into <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> by using an explicit
+conversion, i.e., <code class="docutils literal notranslate"><span class="pre">payable(tx.origin)</span></code> or <code class="docutils literal notranslate"><span class="pre">payable(msg.sender)</span></code>.</p>
+<p>This change was done since the compiler cannot determine whether or not these addresses
+are payable or not, so it now requires an explicit conversion to make this requirement visible.</p>
+</li>
+<li><p>Explicit conversion into <code class="docutils literal notranslate"><span class="pre">address</span></code> type always returns a non-payable <code class="docutils literal notranslate"><span class="pre">address</span></code> type. In
+particular, the following explicit conversions have the type <code class="docutils literal notranslate"><span class="pre">address</span></code> instead of <code class="docutils literal notranslate"><span class="pre">address</span>
+<span class="pre">payable</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">address(u)</span></code> where <code class="docutils literal notranslate"><span class="pre">u</span></code> is a variable of type <code class="docutils literal notranslate"><span class="pre">uint160</span></code>. One can convert <code class="docutils literal notranslate"><span class="pre">u</span></code>
+into the type <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> by using two explicit conversions, i.e.,
+<code class="docutils literal notranslate"><span class="pre">payable(address(u))</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">address(b)</span></code> where <code class="docutils literal notranslate"><span class="pre">b</span></code> is a variable of type <code class="docutils literal notranslate"><span class="pre">bytes20</span></code>. One can convert <code class="docutils literal notranslate"><span class="pre">b</span></code>
+into the type <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> by using two explicit conversions, i.e.,
+<code class="docutils literal notranslate"><span class="pre">payable(address(b))</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">address(c)</span></code> where <code class="docutils literal notranslate"><span class="pre">c</span></code> is a contract. Previously, the return type of this
+conversion depended on whether the contract can receive Ether (either by having a receive
+function or a payable fallback function). The conversion <code class="docutils literal notranslate"><span class="pre">payable(c)</span></code> has the type <code class="docutils literal notranslate"><span class="pre">address</span>
+<span class="pre">payable</span></code> and is only allowed when the contract <code class="docutils literal notranslate"><span class="pre">c</span></code> can receive Ether. In general, one can
+always convert <code class="docutils literal notranslate"><span class="pre">c</span></code> into the type <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> by using the following explicit
+conversion: <code class="docutils literal notranslate"><span class="pre">payable(address(c))</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">address(this)</span></code> falls under the same category
+as <code class="docutils literal notranslate"><span class="pre">address(c)</span></code> and the same rules apply for it.</p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">chainid</span></code> builtin in inline assembly is now considered <code class="docutils literal notranslate"><span class="pre">view</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pure</span></code>.</p></li>
+<li><p>Unary negation cannot be used on unsigned integers anymore, only on signed integers.</p></li>
+</ul>
+</section>
+<section id="interface-changes">
+<h2>Interface Changes<a class="headerlink" href="#interface-changes" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p>The output of <code class="docutils literal notranslate"><span class="pre">--combined-json</span></code> has changed: JSON fields <code class="docutils literal notranslate"><span class="pre">abi</span></code>, <code class="docutils literal notranslate"><span class="pre">devdoc</span></code>, <code class="docutils literal notranslate"><span class="pre">userdoc</span></code> and
+<code class="docutils literal notranslate"><span class="pre">storage-layout</span></code> are sub-objects now. Before 0.8.0 they used to be serialised as strings.</p></li>
+<li><p>The &quot;legacy AST&quot; has been removed (<code class="docutils literal notranslate"><span class="pre">--ast-json</span></code> on the commandline interface and <code class="docutils literal notranslate"><span class="pre">legacyAST</span></code> for standard JSON).
+Use the &quot;compact AST&quot; (<code class="docutils literal notranslate"><span class="pre">--ast-compact--json</span></code> resp. <code class="docutils literal notranslate"><span class="pre">AST</span></code>) as replacement.</p></li>
+<li><p>The old error reporter (<code class="docutils literal notranslate"><span class="pre">--old-reporter</span></code>) has been removed.</p></li>
+</ul>
+</section>
+<section id="how-to-update-your-code">
+<h2>How to update your code<a class="headerlink" href="#how-to-update-your-code" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p>If you rely on wrapping arithmetic, surround each operation with <code class="docutils literal notranslate"><span class="pre">unchecked</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>.</p></li>
+<li><p>Optional: If you use SafeMath or a similar library, change <code class="docutils literal notranslate"><span class="pre">x.add(y)</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">x.mul(y)</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">y</span></code> etc.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v1;</span></code> if you want to stay with the old ABI coder.</p></li>
+<li><p>Optionally remove <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">ABIEncoderV2</span></code> or <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v2</span></code> since it is redundant.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">byte</span></code> to <code class="docutils literal notranslate"><span class="pre">bytes1</span></code>.</p></li>
+<li><p>Add intermediate explicit type conversions if required.</p></li>
+<li><p>Combine <code class="docutils literal notranslate"><span class="pre">c.f{gas:</span> <span class="pre">10000}{value:</span> <span class="pre">1}()</span></code> to <code class="docutils literal notranslate"><span class="pre">c.f{gas:</span> <span class="pre">10000,</span> <span class="pre">value:</span> <span class="pre">1}()</span></code>.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">msg.sender.transfer(x)</span></code> to <code class="docutils literal notranslate"><span class="pre">payable(msg.sender).transfer(x)</span></code> or use a stored variable of <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> type.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">x**y**z</span></code> to <code class="docutils literal notranslate"><span class="pre">(x**y)**z</span></code>.</p></li>
+<li><p>Use inline assembly as a replacement for <code class="docutils literal notranslate"><span class="pre">log0</span></code>, ..., <code class="docutils literal notranslate"><span class="pre">log4</span></code>.</p></li>
+<li><p>Negate unsigned integers by subtracting them from the maximum value of the type and adding 1 (e.g. <code class="docutils literal notranslate"><span class="pre">type(uint256).max</span> <span class="pre">-</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">1</span></code>, while ensuring that <cite>x</cite> is not zero)</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="070-breaking-changes.html" class="btn btn-neutral float-left" title="Solidity v0.7.0 Breaking Changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="natspec-format.html" class="btn btn-neutral float-right" title="NatSpec Format" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

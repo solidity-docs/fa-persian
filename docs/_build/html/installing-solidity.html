@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نصب کامپایلر سالیدیتی &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="سالیدیتی با مثال" href="solidity-by-example.html" />
+    <link rel="prev" title="مقدمه‌ای بر قراد‌های هوشمند" href="introduction-to-smart-contracts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">نصب کامپایلر سالیدیتی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">نسخه بندی</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">ریمیکس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#npm-node-js">npm / Node.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">داکر</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">بسته‌های لینوکس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">بسته‌های مک‌او اس</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">باینری‌های استاتیک</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-from-source">نسخه از منبع</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">پیش نیازهای – همه‌ی سیستم عامل‌ها</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id19">حداقل نسخه‌های کامپایلر</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">پیش نیازها - مک‌او اس</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">پیش نیازها - ویندوز</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">اسکریپت کمکی وابستگی‌ها</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">مخزن را کلون کنید</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id26">نسخه خط فرمان</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id27">گزینه‌های CMake</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smt">حل کننده‌های  SMT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id28">رشته نسخه  با جزئیات</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id29">اطلاعات مهم در مورد نسخه بندی</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>نصب کامپایلر سالیدیتی</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installing-solidity.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installing-solidity">
+<span id="index-0"></span><span id="id1"></span><h1>نصب کامپایلر سالیدیتی<a class="headerlink" href="#installing-solidity" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="id2">
+<h2>نسخه بندی<a class="headerlink" href="#id2" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>نسخه‌های سالیدیتی از <a class="reference external" href="https://semver.org">نسخه بندی سمننتیکی</a>  پیروی می‌کنند و علاوه بر این نسخه‌ها، <strong>نسخه‌های توسعه شبانه</strong>  نیز در دسترس هستند. کارکردن نسخه‌های نسخه شبانه تضمین نمی‌شود و علی‌رغم همه تلاش‌ها ممکن است تغییرات غیرمستند و یا تغییرات جدید  را شامل شوند. توصیه می‌کنیم از آخرین نسخه استفاده کنید. بسته‌های نصبی زیر از آخرین نسخه استفاده خواهند کرد.</p>
+</section>
+<section id="id4">
+<h2>ریمیکس<a class="headerlink" href="#id4" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p><a href="#id5"><span class="problematic" id="id6">*</span></a>ریمیکس را برای قراردادهای کوچک و برای یادگیری سریع سالیدیتی توصیه می‌کنیم. *</p>
+<p>می‌توانید به صورت آنلاین به <a class="reference external" href="https://remix.ethereum.org/">ریمیکس</a>  دسترسی داشته باشید و نیازی به نصب هیچ چیزی ندارید. اگر می‌خواهید بدون اتصال به اینترنت از آن استفاده کنید، به  <a class="reference external" href="https://github.com/ethereum/remix-live/tree/gh-pages">https://github.com/ethereum/remix-live/tree/gh-pages</a> مراجعه کنید و فایل  <code class="docutils literal notranslate"><span class="pre">zip.</span></code>  را همانطور که در آن صفحه توضیح داده شده بارگیری کنید. ریمیکس همچنین یک گزینه مناسب برای تست نسخه شبانه بدون نصب چندین نسخه سالیدیتی است.</p>
+<p>این صفحه گزینه‌های بیشتر برای نصب نرم افزار کامپایلر سالیدیتی  روی رایانه شما با خط فرمان را توضیح می‌دهد. اگر در حال کار بر روی قرارداد بزرگتر هستید یا به گزینه‌های کامپایل بیشتری نیاز دارید، یک کامپایلر خط فرمان  انتخاب کنید.</p>
+</section>
+<section id="npm-node-js">
+<span id="solcjs"></span><h2>npm / Node.js<a class="headerlink" href="#npm-node-js" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>برای نصب راحت و قابل حمل <code class="docutils literal notranslate"><span class="pre">solcjs</span></code> یک کامپایلر سالیدیتی، از <code class="docutils literal notranslate"><span class="pre">npm</span></code>  استفاده کنید. برنامه <cite>solcjs</cite>  دارای ویژگی‌های  کمتری نسبت به راه‌های دسترسی به کامپایلر است که در این صفحه توضیح داده شده است. مستندات  <a class="reference internal" href="using-the-compiler.html#commandline-compiler"><span class="std std-ref">Using the Commandline Compiler</span></a>  فرض می‌کند که از کامپایلر کامل  <code class="docutils literal notranslate"><span class="pre">solc</span></code> استفاده می‌کنید. استفاده از  <code class="docutils literal notranslate"><span class="pre">solcjs</span></code>   در <a class="reference external" href="https://github.com/ethereum/solc-js">مخزن</a> خود ثبت شده است.</p>
+<p>توجه داشته باشید: پروژه solc-js از C++ <cite>solc</cite> با استفاده از Emscripten مشتق گرفته شده‌است، به این معنی که هر دو از کد منبع کامپایلر یکسانی استفاده می‌کنند. <cite>solc-js</cite>  را می‌توان مستقیماً در پروژه‌های جاوا اسکریپت (مانند ریمیکس) استفاده کرد. لطفاً به مخزن solc-js برای مشاهده دستورات مراجعه کنید.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npm install -g solc
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<blockquote>
+<div><p>خط فرمان اجرایی  <code class="docutils literal notranslate"><span class="pre">solcjs</span></code> نام دارد.</p>
+</div></blockquote>
+<p>گزینه‌های خط فرمان  <code class="docutils literal notranslate"><span class="pre">solcjs</span></code> با  <code class="docutils literal notranslate"><span class="pre">solc</span></code> سازگار نیستند و ابزارها (مانند  <code class="docutils literal notranslate"><span class="pre">geth</span></code>) انتظار دارند رفتار  <code class="docutils literal notranslate"><span class="pre">solc</span></code> با  <code class="docutils literal notranslate"><span class="pre">solcjs</span></code> کار نکند.</p>
+</div>
+</section>
+<section id="id9">
+<h2>داکر<a class="headerlink" href="#id9" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>تصاویر داکر  از نسخه‌های سالیدیتی با استفاده از تصویر <code class="docutils literal notranslate"><span class="pre">solc</span></code>   از سازمان <code class="docutils literal notranslate"><span class="pre">ethereum</span></code>  در دسترس است. از برچسب  <code class="docutils literal notranslate"><span class="pre">stable</span></code>  برای آخرین نسخه منتشر شده و nightly  برای تغییرات احتمالی ناپایدار در شاخه‌ی نسخه استفاده می‌کند.</p>
+<p>تصویر داکر کامپایلر اجرایی را اجرا می‌کند، بنابراین می‌توانید تمام آرگومان‌های کامپایلر را به آن منتقل کنید. به عنوان مثال، دستور زیر نسخه پایدار  تصویر  <code class="docutils literal notranslate"><span class="pre">solc</span></code> را دریافت می‌کند (اگر قبلاً آن را ندارید)، و آن را در یک محفظه جدید اجرا می‌کند و آرگومان <code class="docutils literal notranslate"><span class="pre">help--</span></code> را عبور می‌دهد.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run ethereum/solc:stable --help
+</pre></div>
+</div>
+<p>همچنین می‌توانید نسخه‌هایِ توسعهِ منتشر شده را با برچسب مشخص کنید، به عنوان مثال، برای نسخه 0.5.4.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run ethereum/solc:0.5.4 --help
+</pre></div>
+</div>
+<p>برای استفاده از تصویر داکر برای کامپایل فایل‌های سالیدیتی در دستگاه میزبان، یک پوشه محلی برای ورودی و خروجی نصب کرده و قرارداد کامپایل را مشخص کنید. برای مثال:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -v /local/path:/sources ethereum/solc:stable -o /sources/output --abi --bin /sources/Contract.sol
+</pre></div>
+</div>
+<p>You can also use the standard JSON interface (which is recommended when using the compiler with tooling).
+When using this interface it is not necessary to mount any directories as long as the JSON input is
+self-contained (i.e. it does not refer to any external files that would have to be
+<a class="reference internal" href="path-resolution.html#initial-vfs-content-standard-json-with-import-callback"><span class="std std-ref">loaded by the import callback</span></a>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run ethereum/solc:stable --standard-json &lt; input.json &gt; output.json
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h2>بسته‌های لینوکس<a class="headerlink" href="#id10" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>بسته‌های باینری سالیدیتی در مخزن گیتهاب  <a class="reference external" href="https://github.com/ethereum/solidity/releases">سالیدیتی/ انتشارات</a>  موجود است.</p>
+<p>ما همچنین PPAs برای اوبونتو  داریم، می‌توانید آخرین نسخه پایدار  را با استفاده از دستورات زیر دریافت کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo add-apt-repository ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install solc
+</pre></div>
+</div>
+<p>نسخه شبانه را می‌توان با استفاده از این دستورات زیر نصب کرد:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo add-apt-repository ppa:ethereum/ethereum
+sudo add-apt-repository ppa:ethereum/ethereum-dev
+sudo apt-get update
+sudo apt-get install solc
+</pre></div>
+</div>
+<p>ما همچنین یک <a class="reference external" href="https://snapcraft.io/">بسته اسنپ</a>  را منتشر می‌کنیم که در <a class="reference external" href="https://snapcraft.io/docs/core/install">توزیع‌های پشتیبانی شده لینوکس</a>  قابل نصب است. برای نصب آخرین نسخه پایدار solc:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install solc
+</pre></div>
+</div>
+<p>اگر می‌خواهید آخرین نسخه توسعه دهنده سالیدیتی را با جدیدترین تغییرات آزمایش کنید، لطفاً از موارد زیر استفاده کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install solc --edge
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>اسنپ  <code class="docutils literal notranslate"><span class="pre">solc</span></code> از سختگیری شدید استفاده می‌کند. این حالت امن‌ترین حالت برای بسته‌های فوری است اما با محدودیت‌هایی همراه است، مثلاً شما فقط به فایل‌های موجود در دایرکتوری‌های <code class="docutils literal notranslate"><span class="pre">home/</span></code>   و  <code class="docutils literal notranslate"><span class="pre">media/</span></code>  دسترسی خواهید داشت. برای کسب اطلاعات بیشتر، به <a class="reference external" href="https://snapcraft.io/blog/demystifying-snap-confinement">Demystifying Snap Confinement</a>.  مراجعه کنید.</p>
+</div>
+<p>آرک لینوکس  همچنین دارای بسته‌هایی است، البته محدود به آخرین نسخه توسعه می‌باشد:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pacman -S solidity
+</pre></div>
+</div>
+<p>جنتو لینوکس  دارای <a class="reference external" href="https://overlays.gentoo.org/#ethereum">همپوشانی اتریوم</a>   می‌باشد که حاوی بسته سالیدیتی است. پس از راه اندازی این همپوشانی ،   <code class="docutils literal notranslate"><span class="pre">solc</span></code> را می‌توان در معماری x86_64 توسط فرمان زیر نصب کرد:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>emerge dev-lang/solidity
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h2>بسته‌های مک‌او اس<a class="headerlink" href="#id15" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>ما کامپایلر سالیدیتی را از طریق هوم‌برو  به عنوان نسخهِ ساخته شده از منبع  توزیع می‌کنیم. مخزن‌های از پیش ساخته شده در حال حاضر پشتیبانی نمی‌شوند.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew update
+brew upgrade
+brew tap ethereum/ethereum
+brew install solidity
+</pre></div>
+</div>
+<p>برای نصب جدیدترین نسخه سالیدیتی 0.4.x / 0.5.x می‌توانید به ترتیب از <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">solidity&#64;4</span></code> و  <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">solidity&#64;5</span></code>  استفاده کنید.</p>
+<p>اگر به نسخه خاصی از سالیدیتی نیاز دارید، می‌توانید فرمول هوم‌برو  را مستقیماً از گیتهاب نصب کنید.</p>
+<p>لینک  <a class="reference external" href="https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb">solidity.rb commits on Github</a>  را مشاهده کنید.</p>
+<p>هشِ کامیت‌های  نسخه موردنظر خود را کپی کرده و در دستگاه خود بررسی کنید.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/ethereum/homebrew-ethereum.git
+<span class="nb">cd</span> homebrew-ethereum
+git checkout &lt;your-hash-goes-here&gt;
+</pre></div>
+</div>
+<p>با استفاده از  <code class="docutils literal notranslate"><span class="pre">brew</span></code> آن را نصب کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew unlink solidity
+<span class="c1"># eg. Install 0.4.8</span>
+brew install solidity.rb
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h2>باینری‌های استاتیک<a class="headerlink" href="#id16" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>ما یک مخزن  حاوی نسخه‌های استاتیک  از نسخه‌های کامپایلر قبلی و فعلی را برای همه پلتفرم‌های پشتیبانی شده در <a class="reference external" href="https://github.com/ethereum/solc-bin/">solc-bin</a>  نگهداری می‌کنیم. این مکان همچنین مکانی است که می‌توانید نسخه‌های شبانه  را در آن پیدا کنید.</p>
+<p>مخزن نه تنها راهی سریع و آسان برای کاربران نهایی است تا باینری‌ها را برای استفاده در خارج از جعبه   آماده کنند، بلکه به معنای مناسب بودن با ابزارهای ثالث است:</p>
+<ul class="simple">
+<li><p>محتوا در <a class="reference external" href="https://binaries.soliditylang.org">https://binaries.soliditylang.org</a> قرارداده شده‌است که در آن می‌توان به راحتی از طریق HTTPS بدون احراز هویت، محدودیت سرعت یا نیاز به استفاده از git بارگیری کرد.</p></li>
+<li><p>محتوا با هدرهای صحیح <cite>نوع محتوا</cite>  و  با پیکربندی CORS ارائه می‌شود تا بتواند مستقیماً توسط ابزارهایی که در مرورگر اجرا می‌شوند بارگیری شود.</p></li>
+<li><p>فایل‌های باینری نیازی به نصب یا باز کردن بسته بندی ندارند (به استثنای نسخه‌های قدیمی ویندوز که همراه با DLLهای ضروری هستند).</p></li>
+<li><p>ما برای سطح بالایی از سازگاری با گذشته  تلاش می‌کنیم. فایل‌ها، پس از اضافه شدن، بدون ارائه پیوند  تغییر مسیر در مکان قدیمی حذف یا منتقل نمی‌شوند. همچنین هرگز در محل خود تغییر داده نمی‌شوند و همیشه باید با چک‌سام  اصلی مطابقت داشته باشند. تنها استثناء‌ می‌تواند فایل‌های شکسته یا غیرقابل استفاده باشد که اگر به همین صورت باقی بمانند، می‌توانند بیشتر از فایده باعث آسیب شوند.</p></li>
+<li><ul>
+<li><p>فایل‌ها از طریق HTTP و HTTPS ارائه می‌شوند. تا زمانیکه لیست فایل‌ها را به صورت ایمن (از طریق git ،HTTPS ، IPFS یا به صورت محلی ذخیره کردید) به دست آوردید. و پس از بارگیری، فایل‌های هش باینری را تأیید کنید. لازم نیست از HTTPS برای خود فایل‌های باینری استفاده کنید.</p></li>
+</ul>
+</li>
+</ul>
+<p>همین فایل‌های باینری در بیشتر موارد در <a class="reference external" href="https://github.com/ethereum/solidity/releases">Solidity release page on Github</a>  در گیت‌هاب موجود است. تفاوت در این است که ما به طور کلی نسخه‌های قدیمی را در صفحه انتشار گیتهاب به روز نمی‌کنیم. این بدان معناست که در صورت تغییر شرایط نامگذاری، نام آن‌ها را تغییر نمی‌دهیم و برای پلتفرم‌هایی که در زمان انتشار پشتیبانی نمی‌شوند، نسخه‌‌هایی اضافه نمی‌کنیم. این امر فقط در  <code class="docutils literal notranslate"><span class="pre">solc-bin</span></code> اتفاق می‌افتد.</p>
+<p>مخزن  <code class="docutils literal notranslate"><span class="pre">solc-bin</span></code> شامل چندین دایرکتوری سطح بالا است که هر یک نمایانگر یک پلتفرم واحد می‌باشد. هر یک شامل یک فایل  <code class="docutils literal notranslate"><span class="pre">list.json</span></code>  است که فایل‌های باینری موجود را فهرست می‌کند. برای مثال در  <code class="docutils literal notranslate"><span class="pre">emscripten-wasm32/list.json</span></code>  اطلاعات زیر را در مورد نسخه 0.7.4 خواهید یافت:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.7.4&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;build&quot;</span><span class="p">:</span> <span class="s2">&quot;commit.3f05b770&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;longVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;0.7.4+commit.3f05b770&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;keccak256&quot;</span><span class="p">:</span> <span class="s2">&quot;0x300330ecd127756b824aa13e843cb1f43c473cb22eaf3750d5fb9c99279af8c3&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;sha256&quot;</span><span class="p">:</span> <span class="s2">&quot;0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;urls&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;bzzr://16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dweb:/ipfs/QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>این بدان معناست که:</p>
+<ul class="simple">
+<li><p>شما می‌توانید باینری را در همان فهرست با نام   <a class="reference external" href="https://github.com/ethereum/solc-bin/blob/gh-pages/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js">solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js</a>  پیدا کنید. توجه داشته باشید که فایل ممکن است یک پیوند  باشد و اگر از گیت  برای بارگیری آن استفاده نمی‌کنید یا سیستم فایل شما از پیوند‌ها  پشتیبانی نمی‌کند، باید خودتان آن را حل کنید.</p></li>
+<li><p>باینری نیز در <a class="reference external" href="https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js">https://binaries.soliditylang.org/emscripten-wasm32/solc-emscripten-wasm32-v0.7.4+commit.3f05b770.js</a> قرار داده شده‌است. در این حالت گیت ضروری نمی‌باشد. و پیوندها، یا با ارائه یک کپی از فایل یا با بازگرداندن یک مسیر HTTP به طور شفاف حل  می‌شوند.</p></li>
+<li><p>فایل همچنین در IPFS در <a class="reference external" href="https://gateway.ipfs.io/ipfs/QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS">QmTLs5MuLEWXQkths41HiACoXDiH8zxyqBHGFDRSzVE5CS</a> موجود است.</p></li>
+<li><p>ممکن است فایل در آینده در Swarm با شماره <a class="reference external" href="https://swarm-gateways.net/bzz:/16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1/">16c5f09109c793db99fe35f037c6092b061bd39260ee7a677c8a97f18c955ab1</a> موجود باشد.</p></li>
+<li><p>با مقایسه هش keccak256 آن با <code class="docutils literal notranslate"><span class="pre">0x300330ecd127756b824aa13e843cb1f43c473cb22eaf3750d5fb9c99279af8c3</span></code>  می‌توانید صحت باینری را بررسی کنید. هش را می‌توان در خط فرمان با استفاده از ابزار  <code class="docutils literal notranslate"><span class="pre">keccak256sum</span></code> محاسبه کرد که توسط تابع <a class="reference external" href="https://github.com/maandree/sha3sum">sha3sum</a>  یا  <a class="reference external" href="https://github.com/ethereumjs/ethereumjs-util/blob/master/docs/modules/_hash_.md#const-keccak256">keccak256() function
+from ethereumjs-util</a> در جاوا اسکریپت ارائه شده‌است.</p></li>
+<li><p>همچنین می‌توانید یکپارچگی باینری را با مقایسه هش sha256 آن با <code class="docutils literal notranslate"><span class="pre">0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2</span></code> تأیید کنید.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>به دلیل نیاز به سازگاری زیاد، مخزن حاوی برخی از عناصر قدیمی می‌باشد، اما هنگام نوشتن ابزارهای جدید نباید از آنها استفاده کنید:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>اگر می‌خواهید بهترین عملکرد را داشته باشید، از <code class="docutils literal notranslate"><span class="pre">/emscripten-wasm32</span></code>  (با جایگزینی برای  <code class="docutils literal notranslate"><span class="pre">/emscripten-asmjs</span></code>) به جای  <code class="docutils literal notranslate"><span class="pre">/bin</span></code>  استفاده کنید. ما تا نسخه 0.6.1 فقط فایل‌های باینری asm.js را ارائه می‌دادیم. با شروع 0.6.2، ما به  <a class="reference external" href="https://emscripten.org/docs/compiling/WebAssembly.html">WebAssembly builds</a>  به عملکرد بسیار بهتر روی آوردیم. ما نسخه‌های قدیمی تر را برای wasm بازسازی کرده‌ایم اما فایل‌های اصلی asm.js در <code class="docutils literal notranslate"><span class="pre">bin/</span></code>  باقی می‌مانند. موارد جدید باید در یک فهرست جداگانه قرار داده شوند تا از تصادم نامی جلوگیری شود.</p></li>
+<li><p>اگر می‌خواهید مطمئن شوید که در حال بارگیری wasm یا باینری asm.js هستید،  از  <code class="docutils literal notranslate"><span class="pre">/emscripten-asmjs</span></code>  و  <code class="docutils literal notranslate"><span class="pre">/emscripten-wasm32</span></code>  به جای  <code class="docutils literal notranslate"><span class="pre">/bin</span></code>  و  <code class="docutils literal notranslate"><span class="pre">/wasm</span></code>  استفاده کنید.</p></li>
+<li><p>به جای  <code class="docutils literal notranslate"><span class="pre">list.js</span></code> و  <code class="docutils literal notranslate"><span class="pre">list.txt</span></code> از <code class="docutils literal notranslate"><span class="pre">list.json</span></code>  استفاده کنید. فرمت لیست JSON شامل تمام اطلاعات قدیمی و بیشتر است.</p></li>
+<li><p>به جای  <a class="reference external" href="https://binaries.soliditylang.org">https://binaries.soliditylang.org</a> از  <a class="reference external" href="https://solc-bin.ethereum.org">https://solc-bin.ethereum.org</a> استفاده کنید. برای ساده نگه داشتن مسائل، ما تقریباً همه چیز مربوط به کامپایلر را تحت دامنه جدید   <code class="docutils literal notranslate"><span class="pre">soliditylang.org</span></code> منتقل کردیم و این امر در مورد <code class="docutils literal notranslate"><span class="pre">solc-bin</span></code>  نیز صدق می‌کند. با اینکه دامنه جدید توصیه می‌شود، اما دامنه قبلی هنوز کاملاً پشتیبانی می‌شود و تضمین می‌شود که به همان مکان اشاره می‌کند.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>فایل‌های باینری نیز در <a class="reference external" href="https://ethereum.github.io/solc-bin/">https://ethereum.github.io/solc-bin/</a> در دسترس هستند، اما این صفحه به روز رسانی خود را پس از انتشار نسخه 0.7.2 متوقف کرد، هیچ نسخه جدید یا نسخه شبانه برای هر پلتفرمی دریافت نمی‌کند و ساختار دایرکتوری جدید، از جمله ساختارهای غیر emscripten را ارائه نمی‌دهد.</p>
+<p>اگر از آن استفاده می‌کنید، لطفاً به  <a class="reference external" href="https://binaries.soliditylang.org">https://binaries.soliditylang.org</a> مراجعه کنید، که یک جایگزینی رها کردن  است. این به ما امکان می‌دهد تا به طور شفاف در میزبانی اصلی تغییراتی ایجاد کرده و اختلال را به حداقل برسانیم. بر خلاف دامنه  <code class="docutils literal notranslate"><span class="pre">ethereum.github.io</span></code>  ، که ما هیچ کنترلی بر آن نداریم، کار کردن  <code class="docutils literal notranslate"><span class="pre">binaries.soliditylang.org</span></code>   تضمین می‌شود و در دراز مدت همان URL را حفظ کند.</p>
+</div>
+</section>
+<section id="building-from-source">
+<span id="id17"></span><h2>نسخه از منبع<a class="headerlink" href="#building-from-source" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="id18">
+<h3>پیش نیازهای – همه‌ی سیستم عامل‌ها<a class="headerlink" href="#id18" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>موارد زیر وابستگی‌ها  برای همه نسخه‌های سالیدیتی  می‌باشند:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://cmake.org/download/">CMake</a> (version 3.13+)</p></td>
+<td><p>Cross-platform build file generator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.boost.org">Boost</a> (version 1.77+ on
+Windows, 1.65+ otherwise)</p></td>
+<td><p>C++ libraries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://git-scm.com/download">Git</a></p></td>
+<td><p>Command-line tool for retrieving source code.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Z3Prover/z3">z3</a> (version 4.8+, Optional)</p></td>
+<td><p>For use with SMT checker.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://cvc4.cs.stanford.edu/web/">cvc4</a> (Optional)</p></td>
+<td><p>For use with SMT checker.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>نسخه‌های سالیدیتی قبل از 0.5.10 نمی‌توانند به درستی با نسخه‌های   +Boost 1.70 لینک شوند. یک راه حل ممکن این است که قبل از اجرای دستور cmake برای پیکربندی سالیدیتی، نام
+<code class="docutils literal notranslate"><span class="pre">Boost</span> <span class="pre">install</span> <span class="pre">path&gt;/lib/cmake/Boost-1.70.0&gt;</span></code>
+را به طور موقت تغییر نام دهید.</p>
+<p>با شروع از 0.5.10 لینک کردن برخلاف  +Boost 1.70 باید بدون دخالت دستی کار کند.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The default build configuration requires a specific Z3 version (the latest one at the time the
+code was last updated). Changes introduced between Z3 releases often result in slightly different
+(but still valid) results being returned. Our SMT tests do not account for these differences and
+will likely fail with a different version than the one they were written for. This does not mean
+that a build using a different version is faulty. If you pass <code class="docutils literal notranslate"><span class="pre">-DSTRICT_Z3_VERSION=OFF</span></code> option
+to CMake, you can build with any version that satisfies the requirement given in the table above.
+If you do this, however, please remember to pass the <code class="docutils literal notranslate"><span class="pre">--no-smt</span></code> option to <code class="docutils literal notranslate"><span class="pre">scripts/tests.sh</span></code>
+to skip the SMT tests.</p>
+</div>
+<section id="id19">
+<h4>حداقل نسخه‌های کامپایلر<a class="headerlink" href="#id19" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>کامپایلرهای ++ C زیر و حداقل نسخه‌های آنها می‌توانند پایگاه کد  سالیدیتی را ایجاد کنند:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gcc.gnu.org">GCC+</a>,  ، نسخه 8</p></li>
+<li><p><a class="reference external" href="https://clang.llvm.org/">Clang</a>, version 7+</p></li>
+<li><p><a class="reference external" href="https://visualstudio.microsoft.com/vs/">MSVC</a>, version 2019+</p></li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h3>پیش نیازها - مک‌او اس<a class="headerlink" href="#id20" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>برای نسخه‌های  مک‌او اس، مطمئن شوید که آخرین نسخه <a class="reference external" href="https://developer.apple.com/xcode/download/">Xcode</a> را نصب کرده‌اید. این شامل کامپایلر <a class="reference external" href="https://en.wikipedia.org/wiki/Clang">Clang C++</a>  ،  <a class="reference external" href="https://en.wikipedia.org/wiki/Xcode">Xcode IDE</a>  و سایر ابزارهای توسعه اپل می‌باشد که برای ایجاد برنامه‌های ++ C در OS X مورد نیاز است. اگر برای اولین بار Xcode را نصب می‌کنید یا نسخه جدیدی را نصب کرده‌اید، باید قبل از توسعه، با لایسنس موافقت کنید تا بتوانید با خط فرمان، توسعه‌ها را انجام دهید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo xcodebuild -license accept
+</pre></div>
+</div>
+<p>اسکریپت نسخه OS X ما، از مدیریت بسته <a class="reference external" href="https://brew.sh">هوم‌برو</a>  برای نصب نیازمندیهای خارجی استفاده می‌کند. اگر می‌خواهید دوباره از ابتدا شروع کنید، در اینجا نحوه <a class="reference external" href="https://docs.brew.sh/FAQ#how-do-i-uninstall-homebrew">حذف نصب هوم‌برو</a> ذکر شده‌است.</p>
+</section>
+<section id="id23">
+<h3>پیش نیازها - ویندوز<a class="headerlink" href="#id23" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>شما باید وابستگی‌های زیر را برای نسخه‌های ویندوز برای سالیدیتی نصب کنید:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019">Visual Studio 2019 Build Tools</a></p></td>
+<td><p>C++ compiler</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.visualstudio.com/vs/">Visual Studio 2019</a>  (Optional)</p></td>
+<td><p>C++ compiler and dev environment.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.boost.org">Boost</a> (version 1.77+)</p></td>
+<td><p>C++ libraries.</p></td>
+</tr>
+</tbody>
+</table>
+<p>اگر از قبل یک ویرایشگر  دارید و فقط به کامپایلر و کتابخانه نیاز دارید، می‌توانید ابزارهای نسخه 2019 ویژوال استودیو  را نصب کنید.</p>
+<p>ویژوال استودیو 2019  هم ویرایشگر و هم کامپایلر و کتابخانه‌های لازم را ارائه می‌دهد. بنابراین اگر ویرایشگر ندارید و ترجیح می‌دهید سالیدیتی را توسعه دهید، ویژوال استودیو 2019 ممکن است یک انتخاب برای شما باشد تا همه چیز را به راحتی راه اندازی کنید.</p>
+<p>در اینجا لیستی از اجزایی که باید در ابزارهای نسخه ویژوال استودیو 2019  نصب شود، آورده شده‌است:</p>
+<ul class="simple">
+<li><p>ویژگی های اصلی ++Visual Studio C</p></li>
+<li><p>مجموعه ابزارهای VC++   2019 v141 toolset (x86,x64)</p></li>
+<li><p>CRT SDK ویندوز یونیورسال</p></li>
+<li><p>SDK ویندوز 8.1</p></li>
+<li><p>پشتیبانی از C ++/CLI</p></li>
+</ul>
+</section>
+<section id="id24">
+<h3>اسکریپت کمکی وابستگی‌ها<a class="headerlink" href="#id24" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>ما یک اسکریپت کمکی داریم که می‌توانید از آن برای نصب تمام وابستگی‌های خارجی مورد نیاز در مک‌او اس  ، ویندوز و چندین توزیع لینوکس استفاده کنید.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./scripts/install_deps.sh
+</pre></div>
+</div>
+<p>یا در ویندوز:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>scripts\install_deps.ps1
+</pre></div>
+</div>
+<p>توجه داشته باشید که دستور دوم   <code class="docutils literal notranslate"><span class="pre">boost</span></code> و   <code class="docutils literal notranslate"><span class="pre">cmake</span></code> را در زیر شاخه  <code class="docutils literal notranslate"><span class="pre">deps</span></code> نصب می‌کند، در حالی که دستور قبلی سعی می‌کند وابستگی‌ها را به صورت جهانی نصب کند.</p>
+</section>
+<section id="id25">
+<h3>مخزن را کلون کنید<a class="headerlink" href="#id25" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>برای شبیه سازی کد منبع ، دستور زیر را اجرا کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone --recursive https://github.com/ethereum/solidity.git
+<span class="nb">cd</span> solidity
+</pre></div>
+</div>
+<p>اگر می‌خواهید به نسخه سالیدیتی کمک کنید، باید سالیدیتی را فورک  کنید و فورک شخصی خود را به عنوان ریموت دوم  اضافه کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git remote add personal git@github.com:<span class="o">[</span>username<span class="o">]</span>/solidity.git
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>این روش منجر به نسخه پیش انتشار  می‌شود که به عنوان مثال یک فَلگ  در هر کد بایتی که توسط چنین کامپایلری تولید می‌شود، تنظیم می‌شود. اگر می‌خواهید کامپایلر سالیدیتی منتشر شده را دوباره توسعه دهید، لطفاً از tarball منبع در صفحه انتشار گیتهاب استفاده کنید:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><a class="reference external" href="https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz">https://github.com/ethereum/solidity/releases/download/v0.X.Y/solidity_0.X.Y.tar.gz</a></dt><dd><p>(نه &quot;کد منبع&quot; ارائه شده توسط گیتهاب).</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</section>
+<section id="id26">
+<h3>نسخه خط فرمان<a class="headerlink" href="#id26" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p><strong>قبل از توسعه حتماً وابستگی‌های خارجی را نصب کنید (به قسمت بالا مراجعه کنید).</strong></p>
+<p>پروژه سالیدیتی از CMake برای پیکربندی نسخه استفاده می‌کند. ممکن است بخواهید ccache را برای سرعت بخشیدن به نسخه‌های مکرر نصب کنید. CMake آن را به طور خودکار انتخاب می‌کند. نسخه سالیدیتی در لینوکس، مک‌او اس  و سایر یونیکس‌ها کاملاً مشابه است:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir build
+<span class="nb">cd</span> build
+cmake .. <span class="o">&amp;&amp;</span> make
+</pre></div>
+</div>
+<p>یا حتی در لینوکس و مک‌او اس راحت‌تر، می‌توانید اجرا کنید:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#note: this will install binaries solc and soltest at usr/local/bin</span>
+./scripts/build.sh
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>توسعه BSD باید کار کند، اما توسط تیم سالیدیتی آزمایش نشده است.</p>
+</div>
+<p>و برای ویندوز:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir build
+<span class="nb">cd</span> build
+cmake -G <span class="s2">&quot;Visual Studio 16 2019&quot;</span> ..
+</pre></div>
+</div>
+<p>در صورت تمایل به استفاده از نسخه boost نصب شده توسط اسکریپت  <code class="docutils literal notranslate"><span class="pre">scripts\install_deps.ps1</span></code> ، علاوه بر این باید <code class="docutils literal notranslate"><span class="pre">*-DBoost_DIR=&quot;deps\boost\lib\cmake\Boost-&quot;</span></code> و  <code class="docutils literal notranslate"><span class="pre">-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded</span></code>  را به عنوان آرگومان برای فراخوانی <code class="docutils literal notranslate"><span class="pre">cmake</span></code> ارسال کنید.</p>
+<p>این عمل باید منجر به ایجاد <strong>solidity.sln</strong> در آن نسخه دایرکتوری ‌شود. دو بار کلیک بر روی آن فایل باعث می‌شود تا ویژوال استودیو روشن شود. ما ساخت پیکربندی <strong>انتشار</strong>  را پیشنهاد می‌کنیم، اما بقیه نیز کار می‌کنند.</p>
+<p>از سوی دیگر، می‌توانید برای ویندوز روی خط فرمان  توسعه دهید، مانند این:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake --build . --config Release
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id27">
+<h2>گزینه‌های CMake<a class="headerlink" href="#id27" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>اگر علاقه دارید که چه گزینه‌های CMake در دسترس هستند، <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">..</span> <span class="pre">-LH</span></code> را اجرا کنید.</p>
+<section id="smt">
+<span id="smt-solvers-build"></span><h3>حل کننده‌های  SMT<a class="headerlink" href="#smt" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>سالیدیتی را می‌توان در کنار حل کننده‌های SMT ایجاد کرد و در صورت یافتن آنها در سیستم به طور پیش فرض این کار را انجام می‌دهد. هر حل کننده را می‌توان با گزینه <cite>cmake</cite> غیرفعال کرد.</p>
+<p><em>توجه: در برخی موارد ، این نیز می تواند یک راه حل احتمالی برای خرابی نسخه باشد.</em></p>
+<p>در داخل پوشه build می‌توانید آنها را غیرفعال کنید، زیرا به طور پیش فرض فعال هستند:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># disables only Z3 SMT Solver.</span>
+cmake .. -DUSE_Z3<span class="o">=</span>OFF
+
+<span class="c1"># disables only CVC4 SMT Solver.</span>
+cmake .. -DUSE_CVC4<span class="o">=</span>OFF
+
+<span class="c1"># disables both Z3 and CVC4</span>
+cmake .. -DUSE_CVC4<span class="o">=</span>OFF -DUSE_Z3<span class="o">=</span>OFF
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id28">
+<h2>رشته نسخه  با جزئیات<a class="headerlink" href="#id28" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>رشته نسخه سالیدیتی شامل چهار قسمت است:</p>
+<ul class="simple">
+<li><p>شماره نسخه</p></li>
+<li><p>برچسب پیش از انتشار، معمولاً با  <code class="docutils literal notranslate"><span class="pre">develop.YYYY.MM.DD</span></code> یا  <code class="docutils literal notranslate"><span class="pre">nightly.YYYY.MM.DD</span></code> تنظیم می‌شود.</p></li>
+<li><p>کامیت در قالب  <code class="docutils literal notranslate"><span class="pre">commit.GITHASH</span></code></p></li>
+<li><p>پلتفرم، که دارای تعداد دلخواه موارد است، حاوی جزئیات مربوط به پلتفرم و کامپایلر</p></li>
+</ul>
+<p>اگر تغییرات محلی وجود داشته باشد، کامیت‌ها با <code class="docutils literal notranslate"><span class="pre">mod.</span></code> پسوند داده می‌شود.</p>
+<p>این قطعات طبق نیاز Semver ترکیب می‌شوند، جایی که برچسب پیش از انتشار سالیدیتی برابر است با پیش از انتشار Semver و کامیت سالیدیتی و پلتفرم ترکیبی فراداده توسعه Semver را تشکیل می‌دهند.</p>
+<p>مثال انتشار: <code class="docutils literal notranslate"><span class="pre">0.4.8+commit.60cc1668.Emscripten.clang</span></code></p>
+<p>یک نمونه پیش از انتشار:  <code class="docutils literal notranslate"><span class="pre">0.4.9-nightly.2017.1.17+commit.6ecb4aa3.Emscripten.clang</span></code></p>
+</section>
+<section id="id29">
+<h2>اطلاعات مهم در مورد نسخه بندی<a class="headerlink" href="#id29" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>پس از انتشار، سطح نسخه پَچ   بامپ  ‌شده است، زیرا ما فرض می‌کنیم که فقط تغییرات سطح پَچ دنبال می‌شود. وقتی تغییرات ادغام می‌شوند، نسخه باید با توجه به semver و شدت تغییرات بامپ شود. سرانجام، همیشه نسخه‌ای از نسخه فعلی شبانه منتشر می‌شود، اما بدون تعیین <code class="docutils literal notranslate"><span class="pre">prerelease</span></code> .</p>
+<p>مثال:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>نسخه شبانه  از این پس نسخه 0.4.1 دارد.</p></li>
+<li><p>تغییرات بدون تغییرات جدید  ارائه می شوند-&gt; بدون تغییر در نسخه.</p></li>
+<li><p>یک تغییر جدید  معرفی می‌شود -&gt; نسخه به 0.5.0 افزایش می یابد.</p></li>
+<li><p>نسخه 0.5.0 ساخته شده است.</p></li>
+</ol>
+</div></blockquote>
+<p>این رفتار با <a class="reference internal" href="layout-of-source-files.html#version-pragma"><span class="std std-ref">نسخه پراگما</span></a>  به خوبی کار می‌کند.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction-to-smart-contracts.html" class="btn btn-neutral float-left" title="مقدمه‌ای بر قراد‌های هوشمند" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="solidity-by-example.html" class="btn btn-neutral float-right" title="سالیدیتی با مثال" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

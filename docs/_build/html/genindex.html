@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهرست &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="#" />
+    <link rel="search" title="جستجو" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">عبارات و ساختارهای کنترلی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">قراردادها</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="#">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>فهرست</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">فهرست</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#نماد ها"><strong>نماد ها</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
+ 
+</div>
+<h2 id="نماد ها">نماد ها</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="path-resolution.html#index-8"><strong>--allow-paths</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>
+</li>
+      <li><a href="path-resolution.html#index-7"><strong>--base-path</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>, <a href="using-the-compiler.html#index-3">[2]</a>
+</li>
+      <li><a href="path-resolution.html#index-7"><strong>--include-path</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="using-the-compiler.html#index-2"><strong>--libraries</strong></a>
+</li>
+      <li><a href="using-the-compiler.html#index-2"><strong>--link</strong></a>
+</li>
+      <li><a href="using-the-compiler.html#index-5"><strong>--standard-json</strong></a>, <a href="using-the-compiler.html#index-3">[1]</a>
+</li>
+      <li><a href="path-resolution.html#index-3">&lt;stdin&gt;</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="abi-spec.html#index-0">abi</a>, <a href="units-and-global-variables.html#index-2">[1]</a>, <a href="units-and-global-variables.html#index-3">[2]</a>
+</li>
+      <li><a href="contracts.html#index-22"><strong>abstract contract</strong></a>
+</li>
+      <li>
+    access
+
+      <ul>
+        <li><a href="common-patterns.html#index-1">restricting</a>
+</li>
+      </ul></li>
+      <li><a href="introduction-to-smart-contracts.html#index-7"><strong>account</strong></a>
+</li>
+      <li><a href="cheatsheet.html#index-1">addmod</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-7">address</a>, <a href="types.html#index-5">[1]</a>, <a href="types.html#index-8">[2]</a>
+</li>
+      <li><a href="path-resolution.html#index-8"><strong>allowed paths</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>
+</li>
+      <li><a href="analysing-compilation-output.html#index-0">analyse</a>
+</li>
+      <li><a href="cheatsheet.html#index-3">anonymous</a>
+</li>
+      <li><a href="abi-spec.html#index-0">application binary interface</a>
+</li>
+      <li><a href="types.html#index-16"><strong>array</strong></a>, <a href="contracts.html#index-8">[1]</a>, <a href="types.html#index-15">[2]</a>
+
+      <ul>
+        <li><a href="types.html#index-19"><strong>allocating</strong></a>
+</li>
+        <li><a href="types.html#index-21"><strong>length</strong></a>
+</li>
+        <li><a href="types.html#index-20"><strong>literals</strong></a>
+</li>
+        <li><a href="types.html#index-21"><strong>pop</strong></a>
+</li>
+        <li><a href="types.html#index-21"><strong>push</strong></a>
+</li>
+        <li><a href="types.html#index-22"><strong>slice</strong></a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-8">array of strings</a>
+</li>
+      <li><a href="assembly.html#index-0"><strong>asm</strong></a>, <a href="yul.html#index-0"><strong>[1]</strong></a>, <a href="analysing-compilation-output.html#index-0">[2]</a>
+</li>
+      <li><a href="assembly.html#index-0"><strong>assembly</strong></a>, <a href="yul.html#index-0"><strong>[1]</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.assemblyStatement">assembly-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-8"><strong>assert</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="units-and-global-variables.html#index-5">[2]</a>
+</li>
+      <li><a href="control-structures.html#index-4"><strong>assignment</strong></a>, <a href="types.html#index-26">[1]</a>
+
+      <ul>
+        <li><a href="control-structures.html#index-5"><strong>destructuring</strong></a>
+</li>
+      </ul></li>
+      <li>
+    auction
+
+      <ul>
+        <li><a href="solidity-by-example.html#index-1">blind</a>
+</li>
+        <li><a href="solidity-by-example.html#index-1">open</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">balance</a>, <a href="introduction-to-smart-contracts.html#index-7">[1]</a>, <a href="types.html#index-5">[2]</a>, <a href="units-and-global-variables.html#index-7">[3]</a>
+</li>
+      <li><a href="solidity-by-example.html#index-0">ballot</a>
+</li>
+      <li>
+    base
+
+      <ul>
+        <li><a href="contracts.html#index-20"><strong>constructor</strong></a>
+</li>
+      </ul></li>
+      <li><a href="contracts.html#index-16"><strong>base class</strong></a>
+</li>
+      <li><a href="path-resolution.html#index-7"><strong>base path</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>
+</li>
+      <li><a href="solidity-by-example.html#index-1">blind auction</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-5"><strong>block</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="units-and-global-variables.html#index-2">[2]</a>
+
+      <ul>
+        <li><a href="cheatsheet.html#index-1">number</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+        <li><a href="cheatsheet.html#index-1">timestamp</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.block">block (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-2"><strong>bool</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.booleanLiteral">boolean-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">break</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.breakStatement">break-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="bugs.html#index-0">Bugs</a>
+</li>
+      <li><a href="types.html#index-7">byte array</a>
+</li>
+      <li><a href="types.html#index-17"><strong>bytes</strong></a>, <a href="types.html#index-11">[1]</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-4">bytes members</a>
+</li>
+      <li><a href="types.html#index-18"><strong>bytes-concat</strong></a>
+</li>
+      <li><a href="types.html#index-7">bytes32</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-21"><strong>C3 linearization</strong></a>
+</li>
+      <li><a href="types.html#index-5">call</a>, <a href="units-and-global-variables.html#index-7">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.callArgumentList">call-argument-list (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-24">callcode</a>, <a href="introduction-to-smart-contracts.html#index-13">[1]</a>, <a href="units-and-global-variables.html#index-7">[2]</a>
+</li>
+      <li><a href="types.html#index-27"><strong>cast</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.catchClause">catch-clause (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-7">checked</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">codehash</a>, <a href="units-and-global-variables.html#index-7">[1]</a>
+</li>
+      <li><a href="style-guide.html#index-0">coding style</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-3">coin</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">coinbase</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="using-the-compiler.html#index-0"><strong>commandline compiler</strong></a>
+</li>
+      <li><a href="layout-of-source-files.html#index-6"><strong>comment</strong></a>
+</li>
+      <li><a href="internals/optimizer.html#index-0">common subexpression elimination</a>
+</li>
+      <li><a href="using-the-compiler.html#index-4">compile target</a>
+</li>
+      <li>
+    compiler
+
+      <ul>
+        <li><a href="using-the-compiler.html#index-0">commandline</a>
+</li>
+      </ul></li>
+      <li><a href="contracts.html#index-6"><strong>constant</strong></a>, <a href="cheatsheet.html#index-3">[1]</a>
+</li>
+      <li><a href="internals/optimizer.html#index-0">constant propagation</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.constantVariableDeclaration">constant-variable-declaration (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-19"><strong>constructor</strong></a>, <a href="contracts.html#index-1">[1]</a>
+
+      <ul>
+        <li><a href="contracts.html#index-2">arguments</a>
+</li>
+      </ul></li>
+      <li><a href="grammar.html#a4.SolidityParser.constructorDefinition">constructor-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">continue</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.continueStatement">continue-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-0"><strong>contract</strong></a>, <a href="structure-of-a-contract.html#index-0">[1]</a>
+
+      <ul>
+        <li><a href="contracts.html#index-22"><strong>abstract</strong></a>
+</li>
+        <li><a href="contracts.html#index-16"><strong>base</strong></a>
+</li>
+        <li><a href="contracts.html#index-1"><strong>creation</strong></a>
+</li>
+        <li><a href="contracts.html#index-23"><strong>interface</strong></a>
+</li>
+        <li><a href="solidity-by-example.html#index-3">modular</a>
+</li>
+      </ul></li>
+      <li><a href="introduction-to-smart-contracts.html#index-15">contract creation</a>
+</li>
+      <li><a href="types.html#index-6"><strong>contract type</strong></a>
+</li>
+      <li><a href="metadata.html#index-0">contract verification</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.contractBodyElement">contract-body-element (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.contractDefinition">contract-definition (Antlr4 production rule)</a>
+</li>
+      <li>
+    contracts
+
+      <ul>
+        <li><a href="control-structures.html#index-3">creating</a>
+</li>
+      </ul></li>
+      <li><a href="units-and-global-variables.html#index-9">creationCode</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">cryptography</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+      <li><a href="types.html#index-13">custom type</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">data</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.dataLocation">data-location (Antlr4 production rule)</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-1">days</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-16">deactivate</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.DecimalNumber">decimal-number (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-6">declarations</a>
+</li>
+      <li><a href="control-structures.html#index-6">default value</a>
+</li>
+      <li><a href="contracts.html#index-24">delegatecall</a>, <a href="introduction-to-smart-contracts.html#index-13">[1]</a>, <a href="types.html#index-5">[2]</a>, <a href="units-and-global-variables.html#index-7">[3]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="types.html#index-26"><strong>delete</strong></a>
+</li>
+      <li><a href="contracts.html#index-16"><strong>deriving</strong></a>
+</li>
+      <li><a href="cheatsheet.html#index-1">difficulty</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="path-resolution.html#index-5"><strong>direct import</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.doWhileStatement">do-while-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">do/while</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.DoubleQuotedPrintable">double-quoted-printable (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-8">dynamic array</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">ecrecover</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.elementaryTypeName">elementary-type-name (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">else</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.emitStatement">emit-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.EmptyStringLiteral">empty-string-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-2">encode</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-3">encoding</a>
+</li>
+      <li><a href="structure-of-a-contract.html#index-0">enum</a>, <a href="types.html#index-12">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.enumDefinition">enum-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-15"><strong>error</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.errorDefinition">error-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.errorParameter">error-parameter (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-8"><strong>errors</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.EscapeSequence">escape-sequence (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="solidity-by-example.html#index-2">escrow</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-0">ether</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-6"><strong>ethereum virtual machine</strong></a>
+</li>
+      <li><a href="contracts.html#index-14"><strong>event</strong></a>, <a href="introduction-to-smart-contracts.html#index-2">[1]</a>, <a href="structure-of-a-contract.html#index-0">[2]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.eventDefinition">event-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.eventParameter">event-parameter (Antlr4 production rule)</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-6"><strong>evm</strong></a>
+</li>
+      <li><a href="using-the-compiler.html#index-4"><strong>EVM version</strong></a>
+</li>
+      <li><a href="assembly.html#index-0"><strong>evmasm</strong></a>, <a href="yul.html#index-0"><strong>[1]</strong></a>
+</li>
+      <li><a href="control-structures.html#index-8"><strong>exception</strong></a>
+</li>
+      <li><a href="layout-of-source-files.html#index-3">experimental</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.expression">expression (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.expressionStatement">expression-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-2">external</a>, <a href="contracts.html#index-3">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-12"><strong>fallback function</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.fallbackFunctionDefinition">fallback-function-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-2"><strong>false</strong></a>
+</li>
+      <li><a href="path-resolution.html#index-10">file://</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-5">filesystem path</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-0">finney</a>
+</li>
+      <li><a href="types.html#index-4"><strong>fixed</strong></a>
+</li>
+      <li><a href="types.html#index-4"><strong>fixed point number</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.FixedBytes">fixed-bytes (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">for</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.forStatement">for-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="structure-of-a-contract.html#index-0">function</a>
+
+      <ul>
+        <li><a href="control-structures.html#index-2"><strong>call</strong></a>, <a href="introduction-to-smart-contracts.html#index-12">[1]</a>
+</li>
+        <li><a href="control-structures.html#index-2">external</a>
+</li>
+        <li><a href="contracts.html#index-12">fallback</a>
+</li>
+        <li><a href="contracts.html#index-4"><strong>getter</strong></a>
+</li>
+        <li><a href="control-structures.html#index-2">internal</a>
+</li>
+        <li><a href="contracts.html#index-5"><strong>modifier</strong></a>, <a href="common-patterns.html#index-2">[1]</a>, <a href="common-patterns.html#index-4">[2]</a>, <a href="structure-of-a-contract.html#index-0">[3]</a>
+</li>
+        <li><a href="contracts.html#index-10">pure</a>
+</li>
+        <li><a href="contracts.html#index-11">receive ! receive</a>
+</li>
+        <li><a href="contracts.html#index-9">view</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="control-structures.html#index-0">function parameter</a>
+</li>
+      <li><a href="types.html#index-14"><strong>function type</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.functionDefinition">function-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.functionTypeName">function-type-name (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-7"><strong>functions</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="introduction-to-smart-contracts.html#index-9"><strong>gas</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="units-and-global-variables.html#index-2">[2]</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-9"><strong>gas price</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="units-and-global-variables.html#index-2">[2]</a>
+</li>
+      <li>
+    getter
+
+      <ul>
+        <li><a href="contracts.html#index-4"><strong>function</strong></a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="control-structures.html#index-1">goto</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-0">gwei</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityLexer.HexNumber">hex-number (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.HexString">hex-string (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.hexStringLiteral">hex-string-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="path-resolution.html#index-1"><strong>Host Filesystem Loader</strong></a>
+</li>
+      <li><a href="units-and-global-variables.html#index-1">hours</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityLexer.Identifier">identifier (Antlr4 production rule)</a>, <a href="grammar.html#a4.SolidityParser.identifier">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.identifierPath">identifier-path (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-1">if</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.ifStatement">if-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-4"><strong>import</strong></a>
+
+      <ul>
+        <li><a href="path-resolution.html#index-5">direct</a>
+</li>
+        <li><a href="path-resolution.html#index-4"><strong>path</strong></a>, <a href="layout-of-source-files.html#index-5">[1]</a>
+</li>
+        <li><a href="path-resolution.html#index-6"><strong>relative</strong></a>
+</li>
+        <li><a href="path-resolution.html#index-9"><strong>remapping</strong></a>
+</li>
+      </ul></li>
+      <li><a href="path-resolution.html#index-1"><strong>import callback</strong></a>, <a href="layout-of-source-files.html#index-5">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.importDirective">import-directive (Antlr4 production rule)</a>
+</li>
+      <li><a href="path-resolution.html#index-7"><strong>include paths</strong></a>, <a href="using-the-compiler.html#index-1">[1]</a>
+</li>
+      <li><a href="cheatsheet.html#index-3">indexed</a>
+</li>
+      <li><a href="contracts.html#index-16"><strong>inheritance</strong></a>
+
+      <ul>
+        <li><a href="contracts.html#index-21"><strong>multiple</strong></a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.inheritanceSpecifier">inheritance-specifier (Antlr4 production rule)</a>
+</li>
+      <li>
+    inline
+
+      <ul>
+        <li><a href="types.html#index-20"><strong>arrays</strong></a>
+</li>
+      </ul></li>
+      <li><a href="grammar.html#a4.SolidityParser.inlineArrayExpression">inline-array-expression (Antlr4 production rule)</a>
+</li>
+      <li><a href="installing-solidity.html#index-0"><strong>installing</strong></a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-11"><strong>instruction</strong></a>
+</li>
+      <li><a href="types.html#index-3"><strong>int</strong></a>
+</li>
+      <li><a href="types.html#index-3"><strong>integer</strong></a>
+</li>
+      <li><a href="contracts.html#index-23"><strong>interface contract</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.interfaceDefinition">interface-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-2">internal</a>, <a href="contracts.html#index-3">[1]</a>
+</li>
+      <li><a href="types.html#index-25"><strong>iterable mappings</strong></a>
+</li>
+      <li><a href="yul.html#index-0">iulia</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="yul.html#index-0">julia</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">keccak256</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="types.html#index-21">length</a>
+</li>
+      <li><a href="contracts.html#index-24"><strong>library</strong></a>, <a href="contracts.html#index-27">[1]</a>, <a href="introduction-to-smart-contracts.html#index-13">[2]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.libraryDefinition">library-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-0"><strong>license</strong></a>
+</li>
+      <li><a href="contracts.html#index-21"><strong>linearization</strong></a>
+</li>
+      <li><a href="using-the-compiler.html#index-2"><strong>linker</strong></a>
+</li>
+      <li><a href="types.html#index-10">literal</a>, <a href="types.html#index-11">[1]</a>, <a href="types.html#index-9">[2]</a>
+
+      <ul>
+        <li><a href="types.html#index-8">address</a>
+</li>
+        <li><a href="types.html#index-9">rational</a>
+</li>
+        <li><a href="types.html#index-10">string</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.literal">literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-15">location</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-14">log</a>
+</li>
+      <li><a href="types.html#index-26">lvalue</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="types.html#index-24"><strong>mapping</strong></a>, <a href="internals/layout_in_storage.html#index-0">[1]</a>, <a href="introduction-to-smart-contracts.html#index-1">[2]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.mappingKeyType">mapping-key-type (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.mappingType">mapping-type (Antlr4 production rule)</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-10"><strong>memory</strong></a>, <a href="types.html#index-15">[1]</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-12"><strong>message call</strong></a>
+</li>
+      <li><a href="metadata.html#index-0">metadata</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-1">minutes</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.modifierDefinition">modifier-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.modifierInvocation">modifier-invocation (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-3">modifiers</a>
+</li>
+      <li><a href="solidity-by-example.html#index-3">modular contract</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-4">module</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">msg</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">mulmod</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="layout-of-source-files.html#index-6">natspec</a>
+</li>
+      <li><a href="control-structures.html#index-3"><strong>new</strong></a>, <a href="types.html#index-19">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.NonEmptyStringLiteral">non-empty-string-literal (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">number</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.numberLiteral">number-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.NumberUnit">number-unit (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="solidity-by-example.html#index-1">open auction</a>
+</li>
+      <li><a href="internals/optimizer.html#index-0">optimiser</a>
+</li>
+      <li><a href="internals/optimizer.html#index-0">optimizer</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">origin</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-13"><strong>overload</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.overrideSpecifier">override-specifier (Antlr4 production rule)</a>
+</li>
+      <li>
+    overriding
+
+      <ul>
+        <li><a href="contracts.html#index-17"><strong>function</strong></a>
+</li>
+        <li><a href="contracts.html#index-18"><strong>modifier</strong></a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="units-and-global-variables.html#index-3">packed</a>
+</li>
+      <li><a href="control-structures.html#index-0"><strong>parameter</strong></a>
+
+      <ul>
+        <li><a href="control-structures.html#index-0">function</a>
+</li>
+        <li><a href="control-structures.html#index-0">input</a>
+</li>
+        <li><a href="control-structures.html#index-0">output</a>
+</li>
+      </ul></li>
+      <li><a href="grammar.html#a4.SolidityParser.parameterList">parameter-list (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.path">path (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-3">payable</a>
+</li>
+      <li><a href="types.html#index-21">pop</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="layout-of-source-files.html#index-1"><strong>pragma</strong></a>, <a href="layout-of-source-files.html#index-2"><strong>[1]</strong></a>, <a href="layout-of-source-files.html#index-3"><strong>[2]</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.PragmaToken">pragma-token (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-0">precedence</a>
+</li>
+      <li><a href="cheatsheet.html#index-2">private</a>, <a href="contracts.html#index-3">[1]</a>
+</li>
+      <li><a href="cheatsheet.html#index-2">public</a>, <a href="contracts.html#index-3">[1]</a>
+</li>
+      <li><a href="solidity-by-example.html#index-2">purchase</a>
+</li>
+      <li><a href="cheatsheet.html#index-3">pure</a>
+</li>
+      <li><a href="contracts.html#index-10"><strong>pure function</strong></a>
+</li>
+      <li><a href="types.html#index-21">push</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contracts.html#index-11"><strong>receive ether function</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.receiveFunctionDefinition">receive-function-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-15"><strong>reference type</strong></a>
+</li>
+      <li><a href="path-resolution.html#index-6"><strong>relative import</strong></a>
+</li>
+      <li>
+    remapping
+
+      <ul>
+        <li><a href="path-resolution.html#index-9"><strong>context</strong></a>
+</li>
+        <li><a href="path-resolution.html#index-9"><strong>import</strong></a>
+</li>
+        <li><a href="path-resolution.html#index-9"><strong>prefix</strong></a>
+</li>
+        <li><a href="path-resolution.html#index-9"><strong>target</strong></a>, <a href="path-resolution.html#index-8">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="layout-of-source-files.html#index-5">Remix IDE</a>, <a href="path-resolution.html#index-10">[1]</a>
+</li>
+      <li><a href="solidity-by-example.html#index-2">remote purchase</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="control-structures.html#index-8"><strong>require</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="units-and-global-variables.html#index-5">[2]</a>
+</li>
+      <li><a href="control-structures.html#index-0">return</a>, <a href="control-structures.html#index-1">[1]</a>
+</li>
+      <li><a href="contracts.html#index-8">return array</a>
+</li>
+      <li><a href="contracts.html#index-8">return string</a>
+</li>
+      <li><a href="contracts.html#index-8">return struct</a>
+</li>
+      <li><a href="control-structures.html#index-0">return variable</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.returnStatement">return-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="control-structures.html#index-8"><strong>revert</strong></a>, <a href="cheatsheet.html#index-1">[1]</a>, <a href="contracts.html#index-15">[2]</a>, <a href="units-and-global-variables.html#index-5">[3]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.revertStatement">revert-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">ripemd160</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-9">runtimeCode</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="control-structures.html#index-7"><strong>safe math</strong></a>
+</li>
+      <li><a href="control-structures.html#index-7">safemath</a>
+</li>
+      <li><a href="control-structures.html#index-6"><strong>scoping</strong></a>
+</li>
+      <li><a href="units-and-global-variables.html#index-1">seconds</a>
+</li>
+      <li><a href="abi-spec.html#index-1">selector</a>, <a href="contracts.html#index-26">[1]</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-16">self-destruct</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">selfdestruct</a>, <a href="introduction-to-smart-contracts.html#index-16">[1]</a>, <a href="units-and-global-variables.html#index-8">[2]</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">send</a>, <a href="types.html#index-5">[1]</a>, <a href="units-and-global-variables.html#index-7">[2]</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">sender</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="contracts.html#index-25">set</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">sha256</a>, <a href="units-and-global-variables.html#index-6">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.SignedIntegerType">signed-integer-type (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.SingleQuotedPrintable">single-quoted-printable (Antlr4 production rule)</a>
+</li>
+      <li><a href="using-the-compiler.html#index-0"><strong>solc</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer">SolidityLexer (Antlr4 lexer grammar)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser">SolidityParser (Antlr4 parser grammar)</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-4">source file</a>
+</li>
+      <li><a href="internals/source_mappings.html#index-0">source mappings</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-4">source unit</a>
+</li>
+      <li><a href="path-resolution.html#index-0"><strong>source unit name</strong></a>, <a href="layout-of-source-files.html#index-5">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.sourceUnit">source-unit (Antlr4 production rule)</a>
+</li>
+      <li><a href="layout-of-source-files.html#index-0">spdx</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="introduction-to-smart-contracts.html#index-10"><strong>stack</strong></a>
+</li>
+      <li><a href="path-resolution.html#index-3">standard input</a>
+</li>
+      <li><a href="using-the-compiler.html#index-5"><strong>standard JSON</strong></a>, <a href="path-resolution.html#index-2">[1]</a>
+</li>
+      <li><a href="common-patterns.html#index-3">state machine</a>
+</li>
+      <li><a href="internals/layout_in_storage.html#index-0">state variable</a>, <a href="structure-of-a-contract.html#index-0">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.stateMutability">state-mutability (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.stateVariableDeclaration">state-variable-declaration (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.statement">statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-5">staticcall</a>, <a href="units-and-global-variables.html#index-7">[1]</a>
+</li>
+      <li><a href="path-resolution.html#index-3">stdin</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-10"><strong>storage</strong></a>, <a href="internals/layout_in_storage.html#index-0">[1]</a>, <a href="introduction-to-smart-contracts.html#index-7">[2]</a>, <a href="types.html#index-15">[3]</a>
+</li>
+      <li><a href="types.html#index-17"><strong>string</strong></a>, <a href="contracts.html#index-8">[1]</a>, <a href="types.html#index-10">[2]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.stringLiteral">string-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-23"><strong>struct</strong></a>, <a href="contracts.html#index-8">[1]</a>, <a href="structure-of-a-contract.html#index-0">[2]</a>, <a href="types.html#index-15">[3]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.structDefinition">struct-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.structMember">struct-member (Antlr4 production rule)</a>
+</li>
+      <li><a href="style-guide.html#index-0">style</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-0"><strong>subcurrency</strong></a>
+</li>
+      <li><a href="cheatsheet.html#index-1">super</a>
+</li>
+      <li><a href="control-structures.html#index-1">switch</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.symbolAliases">symbol-aliases (Antlr4 production rule)</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-0">szabo</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">this</a>, <a href="units-and-global-variables.html#index-8">[1]</a>
+</li>
+      <li><a href="control-structures.html#index-8"><strong>throw</strong></a>
+</li>
+      <li><a href="units-and-global-variables.html#index-1">time</a>
+</li>
+      <li><a href="cheatsheet.html#index-1">timestamp</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="introduction-to-smart-contracts.html#index-8"><strong>transaction</strong></a>, <a href="introduction-to-smart-contracts.html#index-4">[1]</a>
+</li>
+      <li><a href="types.html#index-5">transfer</a>, <a href="units-and-global-variables.html#index-7">[1]</a>
+</li>
+      <li><a href="types.html#index-2"><strong>true</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.tryStatement">try-statement (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.tupleExpression">tuple-expression (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-0">type</a>, <a href="units-and-global-variables.html#index-9">[1]</a>
+
+      <ul>
+        <li><a href="types.html#index-6"><strong>contract</strong></a>
+</li>
+        <li><a href="types.html#index-27"><strong>conversion</strong></a>
+</li>
+        <li><a href="types.html#index-14"><strong>function</strong></a>
+</li>
+        <li><a href="types.html#index-15"><strong>reference</strong></a>
+</li>
+        <li><a href="types.html#index-23"><strong>struct</strong></a>
+</li>
+        <li><a href="types.html#index-1"><strong>value</strong></a>
+</li>
+      </ul></li>
+      <li><a href="grammar.html#a4.SolidityParser.typeName">type-name (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="types.html#index-4"><strong>ufixed</strong></a>
+</li>
+      <li><a href="types.html#index-3"><strong>uint</strong></a>
+</li>
+      <li><a href="control-structures.html#index-7">unchecked</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.uncheckedBlock">unchecked-block (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.UnicodeStringLiteral">unicode-string-literal (Antlr4 production rule)</a>, <a href="grammar.html#a4.SolidityParser.unicodeStringLiteral">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityLexer.UnsignedIntegerType">unsigned-integer-type (Antlr4 production rule)</a>
+</li>
+      <li><a href="types.html#index-13"><strong>user defined value type</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.userDefinedValueTypeDefinition">user-defined-value-type-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-27"><strong>using for</strong></a>, <a href="contracts.html#index-25">[1]</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.usingDirective">using-directive (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cheatsheet.html#index-1">value</a>, <a href="units-and-global-variables.html#index-2">[1]</a>
+</li>
+      <li><a href="types.html#index-1"><strong>value type</strong></a>
+</li>
+      <li>
+    variable
+
+      <ul>
+        <li><a href="control-structures.html#index-0">return</a>
+</li>
+      </ul></li>
+      <li><a href="grammar.html#a4.SolidityParser.variableDeclaration">variable-declaration (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.variableDeclarationStatement">variable-declaration-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.variableDeclarationTuple">variable-declaration-tuple (Antlr4 production rule)</a>
+</li>
+      <li><a href="contracts.html#index-8">variably sized array</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="layout-of-source-files.html#index-2">version</a>
+</li>
+      <li><a href="path-resolution.html#index-0"><strong>VFS</strong></a>
+</li>
+      <li><a href="cheatsheet.html#index-3">view</a>
+</li>
+      <li><a href="contracts.html#index-9"><strong>view function</strong></a>
+</li>
+      <li><a href="path-resolution.html#index-0"><strong>virtual filesystem</strong></a>, <a href="layout-of-source-files.html#index-5">[1]</a>
+</li>
+      <li><a href="contracts.html#index-3"><strong>visibility</strong></a>, <a href="cheatsheet.html#index-2">[1]</a>
+
+      <ul>
+        <li><a href="grammar.html#a4.SolidityParser.visibility">(Antlr4 production rule)</a>
+</li>
+      </ul></li>
+      <li><a href="solidity-by-example.html#index-0">voting</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="units-and-global-variables.html#index-1">weeks</a>
+</li>
+      <li><a href="units-and-global-variables.html#index-0">wei</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="control-structures.html#index-1">while</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.whileStatement">while-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="common-patterns.html#index-0">withdrawal</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="units-and-global-variables.html#index-1">years</a>
+</li>
+      <li><a href="yul.html#index-0"><strong>yul</strong></a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulAssignment">yul-assignment (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulBlock">yul-block (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulBoolean">yul-boolean (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.YulDecimalNumber">yul-decimal-number (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.YulEVMBuiltin">yul-evm-builtin (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulExpression">yul-expression (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulForStatement">yul-for-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulFunctionCall">yul-function-call (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grammar.html#a4.SolidityParser.yulFunctionDefinition">yul-function-definition (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.YulHexNumber">yul-hex-number (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.YulIdentifier">yul-identifier (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulIfStatement">yul-if-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulLiteral">yul-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulPath">yul-path (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulStatement">yul-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityLexer.YulStringLiteral">yul-string-literal (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulSwitchStatement">yul-switch-statement (Antlr4 production rule)</a>
+</li>
+      <li><a href="grammar.html#a4.SolidityParser.yulVariableDeclaration">yul-variable-declaration (Antlr4 production rule)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

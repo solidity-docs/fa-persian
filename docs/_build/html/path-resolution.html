@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import Path Resolution &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Yul" href="yul.html" />
+    <link rel="prev" title="Resources" href="resources.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Import Path Resolution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-filesystem">Virtual Filesystem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-callback">Import Callback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-content-of-the-virtual-filesystem">Initial Content of the Virtual Filesystem</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#imports">Imports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#direct-imports">Direct Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relative-imports">Relative Imports</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#base-path-and-include-paths">Base Path and Include Paths</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cli-path-normalization-and-stripping">CLI Path Normalization and Stripping</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#allowed-paths">Allowed Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-remapping">Import Remapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-urls-in-imports">Using URLs in imports</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Import Path Resolution</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/path-resolution.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="import-path-resolution">
+<span id="path-resolution"></span><h1>Import Path Resolution<a class="headerlink" href="#import-path-resolution" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>In order to be able to support reproducible builds on all platforms, the Solidity compiler has to
+abstract away the details of the filesystem where source files are stored.
+Paths used in imports must work the same way everywhere while the command-line interface must be
+able to work with platform-specific paths to provide good user experience.
+This section aims to explain in detail how Solidity reconciles these requirements.</p>
+<section id="virtual-filesystem">
+<span id="index-0"></span><span id="id1"></span><h2>Virtual Filesystem<a class="headerlink" href="#virtual-filesystem" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The compiler maintains an internal database (<em>virtual filesystem</em> or <em>VFS</em> for short) where each
+source unit is assigned a unique <em>source unit name</em> which is an opaque and unstructured identifier.
+When you use the <a class="reference internal" href="layout-of-source-files.html#import"><span class="std std-ref">import statement</span></a>, you specify an <em>import path</em> that references a
+source unit name.</p>
+<section id="import-callback">
+<span id="index-1"></span><span id="id2"></span><h3>Import Callback<a class="headerlink" href="#import-callback" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The VFS is initially populated only with files the compiler has received as input.
+Additional files can be loaded during compilation using an <em>import callback</em>, which is different
+depending on the type of compiler you use (see below).
+If the compiler does not find any source unit name matching the import path in the VFS, it invokes
+the callback, which is responsible for obtaining the source code to be placed under that name.
+An import callback is free to interpret source unit names in an arbitrary way, not just as paths.
+If there is no callback available when one is needed or if it fails to locate the source code,
+compilation fails.</p>
+<p>The command-line compiler provides the <em>Host Filesystem Loader</em> - a rudimentary callback
+that interprets a source unit name as a path in the local filesystem.
+The <a class="reference external" href="https://github.com/ethereum/solc-js">JavaScript interface</a> does not provide any by default,
+but one can be provided by the user.
+This mechanism can be used to obtain source code from locations other then the local filesystem
+(which may not even be accessible, e.g. when the compiler is running in a browser).
+For example the <a class="reference external" href="https://remix.ethereum.org/">Remix IDE</a> provides a versatile callback that
+lets you <a class="reference external" href="https://remix-ide.readthedocs.io/en/latest/import.html">import files from HTTP, IPFS and Swarm URLs or refer directly to packages in NPM registry</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Host Filesystem Loader's file lookup is platform-dependent.
+For example backslashes in a source unit name can be interpreted as directory separators or not
+and the lookup can be case-sensitive or not, depending on the underlying platform.</p>
+<p>For portability it is recommended to avoid using import paths that will work correctly only
+with a specific import callback or only on one platform.
+For example you should always use forward slashes since they work as path separators also on
+platforms that support backslashes.</p>
+</div>
+</section>
+<section id="initial-content-of-the-virtual-filesystem">
+<h3>Initial Content of the Virtual Filesystem<a class="headerlink" href="#initial-content-of-the-virtual-filesystem" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The initial content of the VFS depends on how you invoke the compiler:</p>
+<ol class="arabic">
+<li><p><strong>solc / command-line interface</strong></p>
+<p>When you compile a file using the command-line interface of the compiler, you provide one or
+more paths to files containing Solidity code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc contract.sol /usr/local/dapp-bin/token.sol
+</pre></div>
+</div>
+<p>The source unit name of a file loaded this way is constructed by converting its path to a
+canonical form and, if possible, making it relative to either the base path or one of the
+include paths.
+See <a class="reference internal" href="#cli-path-normalization-and-stripping"><span class="std std-ref">CLI Path Normalization and Stripping</span></a> for
+a detailed description of this process.</p>
+</li>
+<li id="index-2"><p><strong>Standard JSON</strong></p>
+<p>When using the <a class="reference internal" href="using-the-compiler.html#compiler-api"><span class="std std-ref">Standard JSON</span></a> API (via either the <a class="reference external" href="https://github.com/ethereum/solc-js">JavaScript interface</a> or the <code class="docutils literal notranslate"><span class="pre">--standard-json</span></code> command-line option)
+you provide input in JSON format, containing, among other things, the content of all your source
+files:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;language&quot;</span><span class="p">:</span> <span class="s2">&quot;Solidity&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;contract.sol&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;import \&quot;./util.sol\&quot;;\ncontract C {}&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;util.sol&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;library Util {}&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;/usr/local/dapp-bin/token.sol&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;contract Token {}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;settings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;outputSelection&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;*&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;evm.bytecode&quot;</span><span class="p">]}}}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">sources</span></code> dictionary becomes the initial content of the virtual filesystem and its keys
+are used as source unit names.</p>
+</li>
+<li id="initial-vfs-content-standard-json-with-import-callback"><p><strong>Standard JSON (via import callback)</strong></p>
+<p>With Standard JSON it is also possible to tell the compiler to use the import callback to obtain
+the source code:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;language&quot;</span><span class="p">:</span> <span class="s2">&quot;Solidity&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;/usr/local/dapp-bin/token.sol&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;urls&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;/projects/mytoken.sol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;https://example.com/projects/mytoken.sol&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;settings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;outputSelection&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;*&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;evm.bytecode&quot;</span><span class="p">]}}}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If an import callback is available, the compiler will give it the strings specified in
+<code class="docutils literal notranslate"><span class="pre">urls</span></code> one by one, until one is loaded successfully or the end of the list is reached.</p>
+<p>The source unit names are determined the same way as when using <code class="docutils literal notranslate"><span class="pre">content</span></code> - they are keys of
+the <code class="docutils literal notranslate"><span class="pre">sources</span></code> dictionary and the content of <code class="docutils literal notranslate"><span class="pre">urls</span></code> does not affect them in any way.</p>
+</li>
+<li id="index-3"><p><strong>Standard input</strong></p>
+<p>On the command line it is also possible to provide the source by sending it to compiler's
+standard input:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;import &quot;./util.sol&quot;; contract C {}&#39;</span> <span class="p">|</span> solc -
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-</span></code> used as one of the arguments instructs the compiler to place the content of the standard
+input in the virtual filesystem under a special source unit name: <code class="docutils literal notranslate"><span class="pre">&lt;stdin&gt;</span></code>.</p>
+</li>
+</ol>
+<p>Once the VFS is initialized, additional files can still be added to it only through the import
+callback.</p>
+</section>
+</section>
+<section id="imports">
+<span id="index-4"></span><h2>Imports<a class="headerlink" href="#imports" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The import statement specifies an <em>import path</em>.
+Based on how the import path is specified, we can divide imports into two categories:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#direct-imports"><span class="std std-ref">Direct imports</span></a>, where you specify the full source unit name directly.</p></li>
+<li><p><a class="reference internal" href="#relative-imports"><span class="std std-ref">Relative imports</span></a>, where you specify a path starting with <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code>
+to be combined with the source unit name of the importing file.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">contracts/contract.sol</span><a class="headerlink" href="#id9" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIuL21hdGgvbWF0aC5zb2wiOwppbXBvcnQgImNvbnRyYWN0cy90b2tlbnMvdG9rZW4uc29sIjs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./math/math.sol&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;contracts/tokens/token.sol&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>In the above <code class="docutils literal notranslate"><span class="pre">./math/math.sol</span></code> and <code class="docutils literal notranslate"><span class="pre">contracts/tokens/token.sol</span></code> are import paths while the
+source unit names they translate to are <code class="docutils literal notranslate"><span class="pre">contracts/math/math.sol</span></code> and <code class="docutils literal notranslate"><span class="pre">contracts/tokens/token.sol</span></code>
+respectively.</p>
+<section id="direct-imports">
+<span id="index-5"></span><span id="id4"></span><h3>Direct Imports<a class="headerlink" href="#direct-imports" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>An import that does not start with <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code> is a <em>direct import</em>.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIvcHJvamVjdC9saWIvdXRpbC5zb2wiOyAgICAgICAgIC8vIHNvdXJjZSB1bml0IG5hbWU6IC9wcm9qZWN0L2xpYi91dGlsLnNvbAppbXBvcnQgImxpYi91dGlsLnNvbCI7ICAgICAgICAgICAgICAgICAgLy8gc291cmNlIHVuaXQgbmFtZTogbGliL3V0aWwuc29sCmltcG9ydCAiQG9wZW56ZXBwZWxpbi9hZGRyZXNzLnNvbCI7ICAgICAvLyBzb3VyY2UgdW5pdCBuYW1lOiBAb3BlbnplcHBlbGluL2FkZHJlc3Muc29sCmltcG9ydCAiaHR0cHM6Ly9leGFtcGxlLmNvbS90b2tlbi5zb2wiOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiBodHRwczovL2V4YW1wbGUuY29tL3Rva2VuLnNvbA=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;/project/lib/util.sol&quot;</span><span class="p">;</span><span class="w">         </span><span class="c1">// source unit name: /project/lib/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;lib/util.sol&quot;</span><span class="p">;</span><span class="w">                  </span><span class="c1">// source unit name: lib/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;@openzeppelin/address.sol&quot;</span><span class="p">;</span><span class="w">     </span><span class="c1">// source unit name: @openzeppelin/address.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;https://example.com/token.sol&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: https://example.com/token.sol</span>
+</pre></div>
+</div>
+<p>After applying any <a class="reference internal" href="#import-remapping"><span class="std std-ref">import remappings</span></a> the import path simply becomes the
+source unit name.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>A source unit name is just an identifier and even if its value happens to look like a path, it
+is not subject to the normalization rules you would typically expect in a shell.
+Any <code class="docutils literal notranslate"><span class="pre">/./</span></code> or <code class="docutils literal notranslate"><span class="pre">/../</span></code> seguments or sequences of multiple slashes remain a part of it.
+When the source is provided via Standard JSON interface it is entirely possible to associate
+different content with source unit names that would refer to the same file on disk.</p>
+</div>
+<p>When the source is not available in the virtual filesystem, the compiler passes the source unit name
+to the import callback.
+The Host Filesystem Loader will attempt to use it as a path and look up the file on disk.
+At this point the platform-specific normalization rules kick in and names that were considered
+different in the VFS may actually result in the same file being loaded.
+For example <code class="docutils literal notranslate"><span class="pre">/project/lib/math.sol</span></code> and <code class="docutils literal notranslate"><span class="pre">/project/lib/../lib///math.sol</span></code> are considered
+completely different in the VFS even though they refer to the same file on disk.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Even if an import callback ends up loading source code for two different source unit names from
+the same file on disk, the compiler will still see them as separate source units.
+It is the source unit name that matters, not the physical location of the code.</p>
+</div>
+</section>
+<section id="relative-imports">
+<span id="index-6"></span><span id="id5"></span><h3>Relative Imports<a class="headerlink" href="#relative-imports" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>An import starting with <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code> is a <em>relative import</em>.
+Such imports specify a path relative to the source unit name of the importing source unit:</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">/project/lib/math.sol</span><a class="headerlink" href="#id10" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIuL3V0aWwuc29sIiBhcyB1dGlsOyAgICAvLyBzb3VyY2UgdW5pdCBuYW1lOiAvcHJvamVjdC9saWIvdXRpbC5zb2wKaW1wb3J0ICIuLi90b2tlbi5zb2wiIGFzIHRva2VuOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiAvcHJvamVjdC90b2tlbi5zb2w="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./util.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>util<span class="p">;</span><span class="w">    </span><span class="c1">// source unit name: /project/lib/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;../token.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>token<span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: /project/token.sol</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">lib/math.sol</span><a class="headerlink" href="#id11" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIuL3V0aWwuc29sIiBhcyB1dGlsOyAgICAvLyBzb3VyY2UgdW5pdCBuYW1lOiBsaWIvdXRpbC5zb2wKaW1wb3J0ICIuLi90b2tlbi5zb2wiIGFzIHRva2VuOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiB0b2tlbi5zb2w="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./util.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>util<span class="p">;</span><span class="w">    </span><span class="c1">// source unit name: lib/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;../token.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>token<span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: token.sol</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Relative imports <strong>always</strong> start with <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code> so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;util.sol&quot;</span></code>, unlike
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;./util.sol&quot;</span></code>, is a direct import.
+While both paths would be considered relative in the host filesystem, <code class="docutils literal notranslate"><span class="pre">util.sol</span></code> is actually
+absolute in the VFS.</p>
+</div>
+<p>Let us define a <em>path segment</em> as any non-empty part of the path that does not contain a separator
+and is bounded by two path separators.
+A separator is a forward slash or the beginning/end of the string.
+For example in <code class="docutils literal notranslate"><span class="pre">./abc/..//</span></code> there are three path segments: <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">abc</span></code> and <code class="docutils literal notranslate"><span class="pre">..</span></code>.</p>
+<p>The compiler computes a source unit name from the import path in the following way:</p>
+<ol class="arabic">
+<li><p>First a prefix is computed</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Prefix is initialized with the source unit name of the importing source unit.</p></li>
+<li><p>The last path segment with preceding slashes is removed from the prefix.</p></li>
+<li><p>Then, the leading part of the normalized import path, consisting only of <code class="docutils literal notranslate"><span class="pre">/</span></code> and <code class="docutils literal notranslate"><span class="pre">.</span></code>
+characters is considered.
+For every <code class="docutils literal notranslate"><span class="pre">..</span></code> segment found in this part the last path segment with preceding slashes is
+removed from the prefix.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Then the prefix is prepended to the normalized import path.
+If the prefix is non-empty, a single slash is inserted between it and the import path.</p></li>
+</ol>
+<p>The removal of the last path segment with preceding slashes is understood to
+work as follows:</p>
+<ol class="arabic simple">
+<li><p>Everything past the last slash is removed (i.e. <code class="docutils literal notranslate"><span class="pre">a/b//c.sol</span></code> becomes <code class="docutils literal notranslate"><span class="pre">a/b//</span></code>).</p></li>
+<li><p>All trailing slashes are removed (i.e. <code class="docutils literal notranslate"><span class="pre">a/b//</span></code> becomes <code class="docutils literal notranslate"><span class="pre">a/b</span></code>).</p></li>
+</ol>
+<p>The normalization rules are the same as for UNIX paths, namely:</p>
+<ul class="simple">
+<li><p>All the internal <code class="docutils literal notranslate"><span class="pre">.</span></code> segments are removed.</p></li>
+<li><p>Every internal <code class="docutils literal notranslate"><span class="pre">..</span></code> segment backtracks one level up in the hierarchy.</p></li>
+<li><p>Multiple slashes are squashed into a single one.</p></li>
+</ul>
+<p>Note that normalization is performed only on the import path.
+The source unit name of the importing module that is used for the prefix remains unnormalized.
+This ensures that the <code class="docutils literal notranslate"><span class="pre">protocol://</span></code> part does not turn into <code class="docutils literal notranslate"><span class="pre">protocol:/</span></code> if the importing file
+is identified with a URL.</p>
+<p>If your import paths are already normalized, you can expect the above algorithm to produce very
+intuitive results.
+Here are some examples of what you can expect if they are not:</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">lib/src/../contract.sol</span><a class="headerlink" href="#id12" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIuL3V0aWwvLi91dGlsLnNvbCI7ICAgICAgICAgLy8gc291cmNlIHVuaXQgbmFtZTogbGliL3NyYy8uLi91dGlsL3V0aWwuc29sCmltcG9ydCAiLi91dGlsLy91dGlsLnNvbCI7ICAgICAgICAgIC8vIHNvdXJjZSB1bml0IG5hbWU6IGxpYi9zcmMvLi4vdXRpbC91dGlsLnNvbAppbXBvcnQgIi4uL3V0aWwvLi4vYXJyYXkvdXRpbC5zb2wiOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiBsaWIvc3JjL2FycmF5L3V0aWwuc29sCmltcG9ydCAiLi4vLi4vLi8uLi91dGlsLnNvbCI7ICAgICAgIC8vIHNvdXJjZSB1bml0IG5hbWU6IHV0aWwuc29sCmltcG9ydCAiLi4vLi4vLi4vLi8uLi91dGlsLnNvbCI7ICAgIC8vIHNvdXJjZSB1bml0IG5hbWU6IHV0aWwuc29s"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./util/./util.sol&quot;</span><span class="p">;</span><span class="w">         </span><span class="c1">// source unit name: lib/src/../util/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./util//util.sol&quot;</span><span class="p">;</span><span class="w">          </span><span class="c1">// source unit name: lib/src/../util/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;../util/../array/util.sol&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: lib/src/array/util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;../.././../util.sol&quot;</span><span class="p">;</span><span class="w">       </span><span class="c1">// source unit name: util.sol</span>
+<span class="kt">import</span><span class="w"> </span><span class="s2">&quot;../../.././../util.sol&quot;</span><span class="p">;</span><span class="w">    </span><span class="c1">// source unit name: util.sol</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The use of relative imports containing leading <code class="docutils literal notranslate"><span class="pre">..</span></code> segments is not recommended.
+The same effect can be achieved in a more reliable way by using direct imports with
+<a class="reference internal" href="#base-and-include-paths"><span class="std std-ref">base path and include paths</span></a>.</p>
+</div>
+</section>
+</section>
+<section id="base-path-and-include-paths">
+<span id="base-and-include-paths"></span><span id="index-7"></span><h2>Base Path and Include Paths<a class="headerlink" href="#base-path-and-include-paths" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The base path and include paths represent directories that the Host Filesystem Loader will load files from.
+When a source unit name is passed to the loader, it prepends the base path to it and performs a
+filesystem lookup.
+If the lookup does not succeed, the same is done with all directories on the include path list.</p>
+<p>It is recommended to set the base path to the root directory of your project and use include paths to
+specify additional locations that may contain libraries your project depends on.
+This lets you import from these libraries in a uniform way, no matter where they are located in the
+filesystem relative to your project.
+For example, if you use npm to install packages and your contract imports
+<code class="docutils literal notranslate"><span class="pre">&#64;openzeppelin/contracts/utils/Strings.sol</span></code>, you can use these options to tell the compiler that
+the library can be found in one of the npm package directories:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc contract.sol <span class="se">\</span>
+    --base-path . <span class="se">\</span>
+    --include-path node_modules/ <span class="se">\</span>
+    --include-path /usr/local/lib/node_modules/
+</pre></div>
+</div>
+<p>Your contract will compile (with the same exact metadata) no matter whether you install the library
+in the local or global package directory or even directly under your project root.</p>
+<p>By default the base path is empty, which leaves the source unit name unchanged.
+When the source unit name is a relative path, this results in the file being looked up in the
+directory the compiler has been invoked from.
+It is also the only value that results in absolute paths in source unit names being actually
+interpreted as absolute paths on disk.
+If the base path itself is relative, it is interpreted as relative to the current working directory
+of the compiler.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Include paths cannot have empty values and must be used together with a non-empty base path.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Include paths and base path can overlap as long as it does not make import resolution ambiguous.
+For example, you can specify a directory inside base path as an include directory or have an
+include directory that is a subdirectory of another include directory.
+The compiler will only issue an error if the source unit name passed to the Host Filesystem
+Loader represents an existing path when combined with multiple include paths or an include path
+and base path.</p>
+</div>
+<section id="cli-path-normalization-and-stripping">
+<span id="id6"></span><h3>CLI Path Normalization and Stripping<a class="headerlink" href="#cli-path-normalization-and-stripping" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>On the command line the compiler behaves just as you would expect from any other program:
+it accepts paths in a format native to the platform and relative paths are relative to the current
+working directory.
+The source unit names assigned to files whose paths are specified on the command line, however,
+should not change just because the project is being compiled on a different platform or because the
+compiler happens to have been invoked from a different directory.
+To achieve this, paths to source files coming from the command line must be converted to a canonical
+form, and, if possible, made relative to the base path or one of the include paths.</p>
+<p>The normalization rules are as follows:</p>
+<ul class="simple">
+<li><p>If a path is relative, it is made absolute by prepending the current working directory to it.</p></li>
+<li><p>Internal <code class="docutils literal notranslate"><span class="pre">.</span></code> and <code class="docutils literal notranslate"><span class="pre">..</span></code> segments are collapsed.</p></li>
+<li><p>Platform-specific path separators are replaced with forward slashes.</p></li>
+<li><p>Sequences of multiple consecutive path separators are squashed into a single separator (unless
+they are the leading slashes of an <a class="reference external" href="https://en.wikipedia.org/wiki/Path_(computing)#UNC">UNC path</a>).</p></li>
+<li><p>If the path includes a root name (e.g. a drive letter on Windows) and the root is the same as the
+root of the current working directory, the root is replaced with <code class="docutils literal notranslate"><span class="pre">/</span></code>.</p></li>
+<li><p>Symbolic links in the path are <strong>not</strong> resolved.</p>
+<ul>
+<li><p>The only exception is the path to the current working directory prepended to relative paths in
+the process of making them absolute.
+On some platforms the working directory is reported always with symbolic links resolved so for
+consistency the compiler resolves them everywhere.</p></li>
+</ul>
+</li>
+<li><p>The original case of the path is preserved even if the filesystem is case-insensitive but
+<a class="reference external" href="https://en.wikipedia.org/wiki/Case_preservation">case-preserving</a> and the actual case on
+disk is different.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>There are situations where paths cannot be made platform-independent.
+For example on Windows the compiler can avoid using drive letters by referring to the root
+directory of the current drive as <code class="docutils literal notranslate"><span class="pre">/</span></code> but drive letters are still necessary for paths leading
+to other drives.
+You can avoid such situations by ensuring that all the files are available within a single
+directory tree on the same drive.</p>
+</div>
+<p>After normalization the compiler attempts to make the source file path relative.
+It tries the base path first and then the include paths in the order they were given.
+If the base path is empty or not specified, it is treated as if it was equal to the path to the
+current working directory (with all symbolic links resolved).
+The result is accepted only if the normalized directory path is the exact prefix of the normalized
+file path.
+Otherwise the file path remains absolute.
+This makes the conversion unambiguous and ensures that the relative path does not start with <code class="docutils literal notranslate"><span class="pre">../</span></code>.
+The resulting file path becomes the source unit name.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The relative path produced by stripping must remain unique within the base path and include paths.
+For example the compiler will issue an error for the following command if both
+<code class="docutils literal notranslate"><span class="pre">/project/contract.sol</span></code> and <code class="docutils literal notranslate"><span class="pre">/lib/contract.sol</span></code> exist:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc /project/contract.sol --base-path /project --include-path /lib
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Prior to version 0.8.8, CLI path stripping was not performed and the only normalization applied
+was the conversion of path separators.
+When working with older versions of the compiler it is recommended to invoke the compiler from
+the base path and to only use relative paths on the command line.</p>
+</div>
+</section>
+</section>
+<section id="allowed-paths">
+<span id="index-8"></span><span id="id7"></span><h2>Allowed Paths<a class="headerlink" href="#allowed-paths" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>As a security measure, the Host Filesystem Loader will refuse to load files from outside of a few
+locations that are considered safe by default:</p>
+<ul class="simple">
+<li><p>Outside of Standard JSON mode:</p>
+<ul>
+<li><p>The directories containing input files listed on the command line.</p></li>
+<li><p>The directories used as <a class="reference internal" href="#import-remapping"><span class="std std-ref">remapping</span></a> targets.
+If the target is not a directory (i.e does not end with <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">/.</span></code> or <code class="docutils literal notranslate"><span class="pre">/..</span></code>) the directory
+containing the target is used instead.</p></li>
+<li><p>Base path and include paths.</p></li>
+</ul>
+</li>
+<li><p>In Standard JSON mode:</p>
+<ul>
+<li><p>Base path and include paths.</p></li>
+</ul>
+</li>
+</ul>
+<p>Additional directories can be whitelisted using the <code class="docutils literal notranslate"><span class="pre">--allow-paths</span></code> option.
+The option accepts a comma-separated list of paths:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /home/user/project/
+solc token/contract.sol <span class="se">\</span>
+    lib/util.sol<span class="o">=</span>libs/util.sol <span class="se">\</span>
+    --base-path<span class="o">=</span>token/ <span class="se">\</span>
+    --include-path<span class="o">=</span>/lib/ <span class="se">\</span>
+    --allow-paths<span class="o">=</span>../utils/,/tmp/libraries
+</pre></div>
+</div>
+<p>When the compiler is invoked with the command shown above, the Host Filesystem Loader will allow
+importing files from the following directories:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/home/user/project/token/</span></code> (because <code class="docutils literal notranslate"><span class="pre">token/</span></code> contains the input file and also because it is
+the base path),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/lib/</span></code> (because <code class="docutils literal notranslate"><span class="pre">/lib/</span></code> is one of the include paths),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/home/user/project/libs/</span></code> (because <code class="docutils literal notranslate"><span class="pre">libs/</span></code> is a directory containing a remapping target),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/home/user/utils/</span></code> (because of <code class="docutils literal notranslate"><span class="pre">../utils/</span></code> passed to <code class="docutils literal notranslate"><span class="pre">--allow-paths</span></code>),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/tmp/libraries/</span></code> (because of <code class="docutils literal notranslate"><span class="pre">/tmp/libraries</span></code> passed to <code class="docutils literal notranslate"><span class="pre">--allow-paths</span></code>),</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The working directory of the compiler is one of the paths allowed by default only if it
+happens to be the base path (or the base path is not specified or has an empty value).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The compiler does not check if allowed paths actually exist and whether they are directories.
+Non-existent or empty paths are simply ignored.
+If an allowed path matches a file rather than a directory, the file is considered whitelisted, too.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Allowed paths are case-sensitive even if the filesystem is not.
+The case must exactly match the one used in your imports.
+For example <code class="docutils literal notranslate"><span class="pre">--allow-paths</span> <span class="pre">tokens</span></code> will not match <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">&quot;Tokens/IERC20.sol&quot;</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Files and directories only reachable through symbolic links from allowed directories are not
+automatically whitelisted.
+For example if <code class="docutils literal notranslate"><span class="pre">token/contract.sol</span></code> in the example above was actually a symlink pointing at
+<code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> the compiler would refuse to load it unless <code class="docutils literal notranslate"><span class="pre">/etc/</span></code> was one of the allowed
+paths too.</p>
+</div>
+</section>
+<section id="import-remapping">
+<span id="index-9"></span><span id="id8"></span><h2>Import Remapping<a class="headerlink" href="#import-remapping" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Import remapping allows you to redirect imports to a different location in the virtual filesystem.
+The mechanism works by changing the translation between import paths and source unit names.
+For example you can set up a remapping so that any import from the virtual directory
+<code class="docutils literal notranslate"><span class="pre">github.com/ethereum/dapp-bin/library/</span></code> would be seen as an import from <code class="docutils literal notranslate"><span class="pre">dapp-bin/library/</span></code> instead.</p>
+<p>You can limit the scope of a remapping by specifying a <em>context</em>.
+This allows creating remappings that apply only to imports located in a specific library or a specific file.
+Without a context a remapping is applied to every matching import in all the files in the virtual
+filesystem.</p>
+<p>Import remappings have the form of <code class="docutils literal notranslate"><span class="pre">context:prefix=target</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code> must match the beginning of the source unit name of the file containing the import.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prefix</span></code> must match the beginning of the source unit name resulting from the import.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> is the value the prefix is replaced with.</p></li>
+</ul>
+<p>For example, if you clone <a class="reference external" href="https://github.com/ethereum/dapp-bin/">https://github.com/ethereum/dapp-bin/</a> locally to <code class="docutils literal notranslate"><span class="pre">/project/dapp-bin</span></code>
+and run the compiler with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc github.com/ethereum/dapp-bin/<span class="o">=</span>dapp-bin/ --base-path /project source.sol
+</pre></div>
+</div>
+<p>you can use the following in your source file:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICJnaXRodWIuY29tL2V0aGVyZXVtL2RhcHAtYmluL2xpYnJhcnkvbWF0aC5zb2wiOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiBkYXBwLWJpbi9saWJyYXJ5L21hdGguc29s"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;github.com/ethereum/dapp-bin/library/math.sol&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: dapp-bin/library/math.sol</span>
+</pre></div>
+</div>
+<p>The compiler will look for the file in the VFS under <code class="docutils literal notranslate"><span class="pre">dapp-bin/library/math.sol</span></code>.
+If the file is not available there, the source unit name will be passed to the Host Filesystem
+Loader, which will then look in <code class="docutils literal notranslate"><span class="pre">/project/dapp-bin/library/iterable_mapping.sol</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Information about remappings is stored in contract metadata.
+Since the binary produced by the compiler has a hash of the metadata embedded in it, any
+modification to the remappings will result in different bytecode.</p>
+<p>For this reason you should be careful not to include any local information in remapping targets.
+For example if your library is located in <code class="docutils literal notranslate"><span class="pre">/home/user/packages/mymath/math.sol</span></code>, a remapping
+like <code class="docutils literal notranslate"><span class="pre">&#64;math/=/home/user/packages/mymath/</span></code> would result in your home directory being included in
+the metadata.
+To be able to reproduce the same bytecode with such a remapping on a different machine, you
+would need to recreate parts of your local directory structure in the VFS and (if you rely on
+Host Filesystem Loader) also in the host filesystem.</p>
+<p>To avoid having your local directory structure embedded in the metadata, it is recommended to
+designate the directories containing libraries as <em>include paths</em> instead.
+For example, in the example above <code class="docutils literal notranslate"><span class="pre">--include-path</span> <span class="pre">/home/user/packages/</span></code> would let you use
+imports starting with <code class="docutils literal notranslate"><span class="pre">mymath/</span></code>.
+Unlike remapping, the option on its own will not make <code class="docutils literal notranslate"><span class="pre">mymath</span></code> appear as <code class="docutils literal notranslate"><span class="pre">&#64;math</span></code> but this
+can be achieved by creating a symbolic link or renaming the package subdirectory.</p>
+</div>
+<p>As a more complex example, suppose you rely on a module that uses an old version of dapp-bin that
+you checked out to <code class="docutils literal notranslate"><span class="pre">/project/dapp-bin_old</span></code>, then you can run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc module1:github.com/ethereum/dapp-bin/<span class="o">=</span>dapp-bin/ <span class="se">\</span>
+     module2:github.com/ethereum/dapp-bin/<span class="o">=</span>dapp-bin_old/ <span class="se">\</span>
+     --base-path /project <span class="se">\</span>
+     source.sol
+</pre></div>
+</div>
+<p>This means that all imports in <code class="docutils literal notranslate"><span class="pre">module2</span></code> point to the old version but imports in <code class="docutils literal notranslate"><span class="pre">module1</span></code>
+point to the new version.</p>
+<p>Here are the detailed rules governing the behaviour of remappings:</p>
+<ol class="arabic">
+<li><p><strong>Remappings only affect the translation between import paths and source unit names.</strong></p>
+<p>Source unit names added to the VFS in any other way cannot be remapped.
+For example the paths you specify on the command-line and the ones in <code class="docutils literal notranslate"><span class="pre">sources.urls</span></code> in
+Standard JSON are not affected.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc /project/<span class="o">=</span>/contracts/ /project/contract.sol <span class="c1"># source unit name: /project/contract.sol</span>
+</pre></div>
+</div>
+<p>In the example above the compiler will load the source code from <code class="docutils literal notranslate"><span class="pre">/project/contract.sol</span></code> and
+place it under that exact source unit name in the VFS, not under <code class="docutils literal notranslate"><span class="pre">/contract/contract.sol</span></code>.</p>
+</li>
+<li><p><strong>Context and prefix must match source unit names, not import paths.</strong></p>
+<ul>
+<li><p>This means that you cannot remap <code class="docutils literal notranslate"><span class="pre">./</span></code> or <code class="docutils literal notranslate"><span class="pre">../</span></code> directly since they are replaced during
+the translation to source unit name but you can remap the part of the name they are replaced
+with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc ./<span class="o">=</span>a/ /project/<span class="o">=</span>b/ /project/contract.sol <span class="c1"># source unit name: /project/contract.sol</span>
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">/project/contract.sol</span><a class="headerlink" href="#id13" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIuL3V0aWwuc29sIiBhcyB1dGlsOyAvLyBzb3VyY2UgdW5pdCBuYW1lOiBiL3V0aWwuc29s"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;./util.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>util<span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: b/util.sol</span>
+</pre></div>
+</div>
+</div>
+</li>
+<li><p>You cannot remap base path or any other part of the path that is only added internally by an
+import callback:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc /project/<span class="o">=</span>/contracts/ /project/contract.sol --base-path /project <span class="c1"># source unit name: contract.sol</span>
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">/project/contract.sol</span><a class="headerlink" href="#id14" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICJ1dGlsLnNvbCIgYXMgdXRpbDsgLy8gc291cmNlIHVuaXQgbmFtZTogdXRpbC5zb2w="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;util.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>util<span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: util.sol</span>
+</pre></div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Target is inserted directly into the source unit name and does not necessarily have to be a valid path.</strong></p>
+<ul>
+<li><p>It can be anything as long as the import callback can handle it.
+In case of the Host Filesystem Loader this includes also relative paths.
+When using the JavaScript interface you can even use URLs and abstract identifiers if
+your callback can handle them.</p></li>
+<li><p>Remapping happens after relative imports have already been resolved into source unit names.
+This means that targets starting with <code class="docutils literal notranslate"><span class="pre">./</span></code> and <code class="docutils literal notranslate"><span class="pre">../</span></code> have no special meaning and are
+relative to the base path rather than to the location of the source file.</p></li>
+<li><p>Remapping targets are not normalized so <code class="docutils literal notranslate"><span class="pre">&#64;root/=./a/b//</span></code> will remap <code class="docutils literal notranslate"><span class="pre">&#64;root/contract.sol</span></code>
+to <code class="docutils literal notranslate"><span class="pre">./a/b//contract.sol</span></code> and not <code class="docutils literal notranslate"><span class="pre">a/b/contract.sol</span></code>.</p></li>
+<li><p>If the target does not end with a slash, the compiler will not add one automatically:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc /project/<span class="o">=</span>/contracts /project/contract.sol <span class="c1"># source unit name: /project/contract.sol</span>
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">/project/contract.sol</span><a class="headerlink" href="#id15" title="پیوند ثابت به این کد"></a></div>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICIvcHJvamVjdC91dGlsLnNvbCIgYXMgdXRpbDsgLy8gc291cmNlIHVuaXQgbmFtZTogL2NvbnRyYWN0c3V0aWwuc29s"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;/project/util.sol&quot;</span><span class="w"> </span>as<span class="w"> </span>util<span class="p">;</span><span class="w"> </span><span class="c1">// source unit name: /contractsutil.sol</span>
+</pre></div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Context and prefix are patterns and matches must be exact.</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a//b=c</span></code> will not match <code class="docutils literal notranslate"><span class="pre">a/b</span></code>.</p></li>
+<li><p>source unit names are not normalized so <code class="docutils literal notranslate"><span class="pre">a/b=c</span></code> will not match <code class="docutils literal notranslate"><span class="pre">a//b</span></code> either.</p></li>
+<li><p>Parts of file and directory names can match as well.
+<code class="docutils literal notranslate"><span class="pre">/newProject/con:/new=old</span></code> will match <code class="docutils literal notranslate"><span class="pre">/newProject/contract.sol</span></code> and remap it to
+<code class="docutils literal notranslate"><span class="pre">oldProject/contract.sol</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>At most one remapping is applied to a single import.</strong></p>
+<ul class="simple">
+<li><p>If multiple remappings match the same source unit name, the one with the longest matching
+prefix is chosen.</p></li>
+<li><p>If prefixes are identical, the one specified last wins.</p></li>
+<li><p>Remappings do not work on other remappings. For example <code class="docutils literal notranslate"><span class="pre">a=b</span> <span class="pre">b=c</span> <span class="pre">c=d</span></code> will not result in <code class="docutils literal notranslate"><span class="pre">a</span></code>
+being remapped to <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Prefix cannot be empty but context and target are optional.</strong></p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">target</span></code> is the empty string, <code class="docutils literal notranslate"><span class="pre">prefix</span></code> is simply removed from import paths.</p></li>
+<li><p>Empty <code class="docutils literal notranslate"><span class="pre">context</span></code> means that the remapping applies to all imports in all source units.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="using-urls-in-imports">
+<span id="index-10"></span><h2>Using URLs in imports<a class="headerlink" href="#using-urls-in-imports" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Most URL prefixes such as <code class="docutils literal notranslate"><span class="pre">https://</span></code> or <code class="docutils literal notranslate"><span class="pre">data://</span></code> have no special meaning in import paths.
+The only exception is <code class="docutils literal notranslate"><span class="pre">file://</span></code> which is stripped from source unit names by the Host Filesystem
+Loader.</p>
+<p>When compiling locally you can use import remapping to replace the protocol and domain part with a
+local path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>solc :https://github.com/ethereum/dapp-bin<span class="o">=</span>/usr/local/dapp-bin contract.sol
+</pre></div>
+</div>
+<p>Note the leading <code class="docutils literal notranslate"><span class="pre">:</span></code>, which is necessary when the remapping context is empty.
+Otherwise the <code class="docutils literal notranslate"><span class="pre">https:</span></code> part would be interpreted by the compiler as the context.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resources.html" class="btn btn-neutral float-left" title="Resources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="yul.html" class="btn btn-neutral float-right" title="Yul" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

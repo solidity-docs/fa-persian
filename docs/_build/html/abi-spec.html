@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contract ABI Specification &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Solidity v0.5.0 Breaking Changes" href="050-breaking-changes.html" />
+    <link rel="prev" title="Contract Metadata" href="metadata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contract ABI Specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-design">Basic Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-selector">Function Selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#argument-encoding">Argument Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#types">Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mapping-solidity-to-abi-types">Mapping Solidity to ABI types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#design-criteria-for-the-encoding">Design Criteria for the Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#formal-specification-of-the-encoding">Formal Specification of the Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-selector-and-argument-encoding">Function Selector and Argument Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-of-dynamic-types">Use of Dynamic Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#json">JSON</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#handling-tuple-types">Handling tuple types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#strict-encoding-mode">Strict Encoding Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#non-standard-packed-mode">Non-standard Packed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#encoding-of-indexed-event-parameters">Encoding of Indexed Event Parameters</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Contract ABI Specification</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/abi-spec.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contract-abi-specification">
+<span id="abi"></span><span id="index-0"></span><h1>Contract ABI Specification<a class="headerlink" href="#contract-abi-specification" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="basic-design">
+<h2>Basic Design<a class="headerlink" href="#basic-design" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The Contract Application Binary Interface (ABI) is the standard way to interact with contracts in the Ethereum ecosystem, both
+from outside the blockchain and for contract-to-contract interaction. Data is encoded according to its type,
+as described in this specification. The encoding is not self describing and thus requires a schema in order to decode.</p>
+<p>We assume the interface functions of a contract are strongly typed, known at compilation time and static.
+We assume that all contracts will have the interface definitions of any contracts they call available at compile-time.</p>
+<p>This specification does not address contracts whose interface is dynamic or otherwise known only at run-time.</p>
+<span class="target" id="abi-function-selector"></span></section>
+<section id="function-selector">
+<span id="index-1"></span><h2>Function Selector<a class="headerlink" href="#function-selector" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The first four bytes of the call data for a function call specifies the function to be called. It is the
+first (left, high-order in big-endian) four bytes of the Keccak-256 hash of the signature of
+the function. The signature is defined as the canonical expression of the basic prototype without data
+location specifier, i.e.
+the function name with the parenthesised list of parameter types. Parameter types are split by a single
+comma - no spaces are used.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The return type of a function is not part of this signature. In
+<a class="reference internal" href="contracts.html#overload-function"><span class="std std-ref">Solidity's function overloading</span></a> return types are not considered.
+The reason is to keep function call resolution context-independent.
+The <a class="reference internal" href="#abi-json"><span class="std std-ref">JSON description of the ABI</span></a> however contains both inputs and outputs.</p>
+</div>
+</section>
+<section id="argument-encoding">
+<h2>Argument Encoding<a class="headerlink" href="#argument-encoding" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Starting from the fifth byte, the encoded arguments follow. This encoding is also used in
+other places, e.g. the return values and also event arguments are encoded in the same way,
+without the four bytes specifying the function.</p>
+</section>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The following elementary types exist:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>: unsigned integer type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code>. e.g. <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: two's complement signed integer type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">address</span></code>: equivalent to <code class="docutils literal notranslate"><span class="pre">uint160</span></code>, except for the assumed interpretation and language typing.
+For computing the function selector, <code class="docutils literal notranslate"><span class="pre">address</span></code> is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>: synonyms for <code class="docutils literal notranslate"><span class="pre">uint256</span></code>, <code class="docutils literal notranslate"><span class="pre">int256</span></code> respectively. For computing the function
+selector, <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">int256</span></code> have to be used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bool</span></code>: equivalent to <code class="docutils literal notranslate"><span class="pre">uint8</span></code> restricted to the values 0 and 1. For computing the function selector, <code class="docutils literal notranslate"><span class="pre">bool</span></code> is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>: signed fixed-point decimal number of <code class="docutils literal notranslate"><span class="pre">M</span></code> bits, <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">&lt;=</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">256</span></code>,
+<code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">%</span> <span class="pre">8</span> <span class="pre">==</span> <span class="pre">0</span></code>, and <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">80</span></code>, which denotes the value <code class="docutils literal notranslate"><span class="pre">v</span></code> as <code class="docutils literal notranslate"><span class="pre">v</span> <span class="pre">/</span> <span class="pre">(10</span> <span class="pre">**</span> <span class="pre">N)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>: unsigned variant of <code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed</span></code>, <code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: synonyms for <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code>, <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> respectively. For
+computing the function selector, <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> and <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> have to be used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>: binary type of <code class="docutils literal notranslate"><span class="pre">M</span></code> bytes, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">M</span> <span class="pre">&lt;=</span> <span class="pre">32</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">function</span></code>: an address (20 bytes) followed by a function selector (4 bytes). Encoded identical to <code class="docutils literal notranslate"><span class="pre">bytes24</span></code>.</p></li>
+</ul>
+<p>The following (fixed-size) array type exists:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[M]</span></code>: a fixed-length array of <code class="docutils literal notranslate"><span class="pre">M</span></code> elements, <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code>, of the given type.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>While this ABI specification can express fixed-length arrays with zero elements, they're not supported by the compiler.</p>
+</div>
+</li>
+</ul>
+<p>The following non-fixed-size types exist:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code>: dynamic sized byte sequence.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code>: dynamic sized unicode string assumed to be UTF-8 encoded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;[]</span></code>: a variable-length array of elements of the given type.</p></li>
+</ul>
+<p>Types can be combined to a tuple by enclosing them inside parentheses, separated by commas:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">(T1,T2,...,Tn)</span></code>: tuple consisting of the types <code class="docutils literal notranslate"><span class="pre">T1</span></code>, ..., <code class="docutils literal notranslate"><span class="pre">Tn</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p>It is possible to form tuples of tuples, arrays of tuples and so on. It is also possible to form zero-tuples (where <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">==</span> <span class="pre">0</span></code>).</p>
+<section id="mapping-solidity-to-abi-types">
+<h3>Mapping Solidity to ABI types<a class="headerlink" href="#mapping-solidity-to-abi-types" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Solidity supports all the types presented above with the same names with the
+exception of tuples. On the other hand, some Solidity types are not supported
+by the ABI. The following table shows on the left column Solidity types that
+are not part of the ABI, and on the right column the ABI types that represent
+them.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Solidity</p></th>
+<th class="head"><p>ABI</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="types.html#address"><span class="std std-ref">address payable</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">address</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="contracts.html#contracts"><span class="std std-ref">contract</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">address</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="types.html#enums"><span class="std std-ref">enum</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uint8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="types.html#user-defined-value-types"><span class="std std-ref">user defined value types</span></a></p></td>
+<td><p>its underlying value type</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="types.html#structs"><span class="std std-ref">struct</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Before version <code class="docutils literal notranslate"><span class="pre">0.8.0</span></code> enums could have more than 256 members and were represented by the
+smallest integer type just big enough to hold the value of any member.</p>
+</div>
+</section>
+</section>
+<section id="design-criteria-for-the-encoding">
+<h2>Design Criteria for the Encoding<a class="headerlink" href="#design-criteria-for-the-encoding" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The encoding is designed to have the following properties, which are especially useful if some arguments are nested arrays:</p>
+<ol class="arabic simple">
+<li><p>The number of reads necessary to access a value is at most the depth of the value
+inside the argument array structure, i.e. four reads are needed to retrieve <code class="docutils literal notranslate"><span class="pre">a_i[k][l][r]</span></code>. In a
+previous version of the ABI, the number of reads scaled linearly with the total number of dynamic
+parameters in the worst case.</p></li>
+<li><p>The data of a variable or array element is not interleaved with other data and it is
+relocatable, i.e. it only uses relative &quot;addresses&quot;.</p></li>
+</ol>
+</section>
+<section id="formal-specification-of-the-encoding">
+<h2>Formal Specification of the Encoding<a class="headerlink" href="#formal-specification-of-the-encoding" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>We distinguish static and dynamic types. Static types are encoded in-place and dynamic types are
+encoded at a separately allocated location after the current block.</p>
+<p><strong>Definition:</strong> The following types are called &quot;dynamic&quot;:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T[]</span></code> for any <code class="docutils literal notranslate"><span class="pre">T</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T[k]</span></code> for any dynamic <code class="docutils literal notranslate"><span class="pre">T</span></code> and any <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(T1,...,Tk)</span></code> if <code class="docutils literal notranslate"><span class="pre">Ti</span></code> is dynamic for some <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">k</span></code></p></li>
+</ul>
+<p>All other types are called &quot;static&quot;.</p>
+<p><strong>Definition:</strong> <code class="docutils literal notranslate"><span class="pre">len(a)</span></code> is the number of bytes in a binary string <code class="docutils literal notranslate"><span class="pre">a</span></code>.
+The type of <code class="docutils literal notranslate"><span class="pre">len(a)</span></code> is assumed to be <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p>
+<p>We define <code class="docutils literal notranslate"><span class="pre">enc</span></code>, the actual encoding, as a mapping of values of the ABI types to binary strings such
+that <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> depends on the value of <code class="docutils literal notranslate"><span class="pre">X</span></code> if and only if the type of <code class="docutils literal notranslate"><span class="pre">X</span></code> is dynamic.</p>
+<p><strong>Definition:</strong> For any ABI value <code class="docutils literal notranslate"><span class="pre">X</span></code>, we recursively define <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code>, depending
+on the type of <code class="docutils literal notranslate"><span class="pre">X</span></code> being</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(T1,...,Tk)</span></code> for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> and any types <code class="docutils literal notranslate"><span class="pre">T1</span></code>, ..., <code class="docutils literal notranslate"><span class="pre">Tk</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">head(X(1))</span> <span class="pre">...</span> <span class="pre">head(X(k))</span> <span class="pre">tail(X(1))</span> <span class="pre">...</span> <span class="pre">tail(X(k))</span></code></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">=</span> <span class="pre">(X(1),</span> <span class="pre">...,</span> <span class="pre">X(k))</span></code> and
+<code class="docutils literal notranslate"><span class="pre">head</span></code> and <code class="docutils literal notranslate"><span class="pre">tail</span></code> are defined for <code class="docutils literal notranslate"><span class="pre">Ti</span></code> as follows:</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">Ti</span></code> is static:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">head(X(i))</span> <span class="pre">=</span> <span class="pre">enc(X(i))</span></code> and <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></code> (the empty string)</p>
+</div></blockquote>
+<p>otherwise, i.e. if <code class="docutils literal notranslate"><span class="pre">Ti</span></code> is dynamic:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">head(X(i))</span> <span class="pre">=</span> <span class="pre">enc(len(</span> <span class="pre">head(X(1))</span> <span class="pre">...</span> <span class="pre">head(X(k))</span> <span class="pre">tail(X(1))</span> <span class="pre">...</span> <span class="pre">tail(X(i-1))</span> <span class="pre">))</span></code>
+<code class="docutils literal notranslate"><span class="pre">tail(X(i))</span> <span class="pre">=</span> <span class="pre">enc(X(i))</span></code></p>
+</div></blockquote>
+<p>Note that in the dynamic case, <code class="docutils literal notranslate"><span class="pre">head(X(i))</span></code> is well-defined since the lengths of
+the head parts only depend on the types and not the values. The value of <code class="docutils literal notranslate"><span class="pre">head(X(i))</span></code> is the offset
+of the beginning of <code class="docutils literal notranslate"><span class="pre">tail(X(i))</span></code> relative to the start of <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code>.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T[k]</span></code> for any <code class="docutils literal notranslate"><span class="pre">T</span></code> and <code class="docutils literal notranslate"><span class="pre">k</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc((X[0],</span> <span class="pre">...,</span> <span class="pre">X[k-1]))</span></code></p>
+<p>i.e. it is encoded as if it were a tuple with <code class="docutils literal notranslate"><span class="pre">k</span></code> elements
+of the same type.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T[]</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span></code> has <code class="docutils literal notranslate"><span class="pre">k</span></code> elements (<code class="docutils literal notranslate"><span class="pre">k</span></code> is assumed to be of type <code class="docutils literal notranslate"><span class="pre">uint256</span></code>):</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">enc([X[0],</span> <span class="pre">...,</span> <span class="pre">X[k-1]])</span></code></p>
+<p>i.e. it is encoded as if it were an array of static size <code class="docutils literal notranslate"><span class="pre">k</span></code>, prefixed with
+the number of elements.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code>, of length <code class="docutils literal notranslate"><span class="pre">k</span></code> (which is assumed to be of type <code class="docutils literal notranslate"><span class="pre">uint256</span></code>):</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(k)</span> <span class="pre">pad_right(X)</span></code>, i.e. the number of bytes is encoded as a
+<code class="docutils literal notranslate"><span class="pre">uint256</span></code> followed by the actual value of <code class="docutils literal notranslate"><span class="pre">X</span></code> as a byte sequence, followed by
+the minimum number of zero-bytes such that <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> is a multiple of 32.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">enc(X)</span> <span class="pre">=</span> <span class="pre">enc(enc_utf8(X))</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">X</span></code> is UTF-8 encoded and this value is interpreted
+as of <code class="docutils literal notranslate"><span class="pre">bytes</span></code> type and encoded further. Note that the length used in this subsequent
+encoding is the number of bytes of the UTF-8 encoded string, not its number of characters.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the big-endian encoding of <code class="docutils literal notranslate"><span class="pre">X</span></code>, padded on the higher-order
+(left) side with zero-bytes such that the length is 32 bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">address</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">uint160</span></code> case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the big-endian two's complement encoding of <code class="docutils literal notranslate"><span class="pre">X</span></code>, padded on the higher-order (left) side with <code class="docutils literal notranslate"><span class="pre">0xff</span></code> bytes for negative <code class="docutils literal notranslate"><span class="pre">X</span></code> and with zero-bytes for non-negative <code class="docutils literal notranslate"><span class="pre">X</span></code> such that the length is 32 bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bool</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">uint8</span></code> case, where <code class="docutils literal notranslate"><span class="pre">1</span></code> is used for <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">0</span></code> for <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is <code class="docutils literal notranslate"><span class="pre">enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> is interpreted as a <code class="docutils literal notranslate"><span class="pre">int256</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">fixed128x18</span></code> case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ufixed&lt;M&gt;x&lt;N&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is <code class="docutils literal notranslate"><span class="pre">enc(X</span> <span class="pre">*</span> <span class="pre">10**N)</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">10**N</span></code> is interpreted as a <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ufixed</span></code>: as in the <code class="docutils literal notranslate"><span class="pre">ufixed128x18</span></code> case</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes&lt;M&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">enc(X)</span></code> is the sequence of bytes in <code class="docutils literal notranslate"><span class="pre">X</span></code> padded with trailing zero-bytes to a length of 32 bytes.</p></li>
+</ul>
+<p>Note that for any <code class="docutils literal notranslate"><span class="pre">X</span></code>, <code class="docutils literal notranslate"><span class="pre">len(enc(X))</span></code> is a multiple of 32.</p>
+</section>
+<section id="function-selector-and-argument-encoding">
+<h2>Function Selector and Argument Encoding<a class="headerlink" href="#function-selector-and-argument-encoding" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>All in all, a call to the function <code class="docutils literal notranslate"><span class="pre">f</span></code> with parameters <code class="docutils literal notranslate"><span class="pre">a_1,</span> <span class="pre">...,</span> <span class="pre">a_n</span></code> is encoded as</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">function_selector(f)</span> <span class="pre">enc((a_1,</span> <span class="pre">...,</span> <span class="pre">a_n))</span></code></p>
+</div></blockquote>
+<p>and the return values <code class="docutils literal notranslate"><span class="pre">v_1,</span> <span class="pre">...,</span> <span class="pre">v_k</span></code> of <code class="docutils literal notranslate"><span class="pre">f</span></code> are encoded as</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">enc((v_1,</span> <span class="pre">...,</span> <span class="pre">v_k))</span></code></p>
+</div></blockquote>
+<p>i.e. the values are combined into a tuple and encoded.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Given the contract:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjE2IDwwLjkuMDsKCmNvbnRyYWN0IEZvbyB7CiAgICBmdW5jdGlvbiBiYXIoYnl0ZXMzWzJdIG1lbW9yeSkgcHVibGljIHB1cmUge30KICAgIGZ1bmN0aW9uIGJheih1aW50MzIgeCwgYm9vbCB5KSBwdWJsaWMgcHVyZSByZXR1cm5zIChib29sIHIpIHsgciA9IHggPiAzMiB8fCB5OyB9CiAgICBmdW5jdGlvbiBzYW0oYnl0ZXMgbWVtb3J5LCBib29sLCB1aW50W10gbWVtb3J5KSBwdWJsaWMgcHVyZSB7fQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.4.16</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">bar</span><span class="p">(</span>bytes3<span class="p">[</span><span class="m m-Decimal">2</span><span class="p">]</span><span class="w"> </span><span class="kt">memory</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">baz</span><span class="p">(</span><span class="kt">uint32</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nv">y</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="nv">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>r<span class="w"> </span><span class="o">=</span><span class="w"> </span>x<span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m m-Decimal">32</span><span class="w"> </span><span class="err">||</span><span class="w"> </span>y<span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">sam</span><span class="p">(</span><span class="kt">bytes</span><span class="w"> </span><span class="nv">memory</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span><span class="kt">memory</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Thus for our <code class="docutils literal notranslate"><span class="pre">Foo</span></code> example if we wanted to call <code class="docutils literal notranslate"><span class="pre">baz</span></code> with the parameters <code class="docutils literal notranslate"><span class="pre">69</span></code> and
+<code class="docutils literal notranslate"><span class="pre">true</span></code>, we would pass 68 bytes total, which can be broken down into:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0xcdcd77c0</span></code>: the Method ID. This is derived as the first 4 bytes of the Keccak hash of
+the ASCII form of the signature <code class="docutils literal notranslate"><span class="pre">baz(uint32,bool)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000045</span></code>: the first parameter,
+a uint32 value <code class="docutils literal notranslate"><span class="pre">69</span></code> padded to 32 bytes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the second parameter - boolean
+<code class="docutils literal notranslate"><span class="pre">true</span></code>, padded to 32 bytes</p></li>
+</ul>
+<p>In total:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001
+</pre></div>
+</div>
+<p>It returns a single <code class="docutils literal notranslate"><span class="pre">bool</span></code>. If, for example, it were to return <code class="docutils literal notranslate"><span class="pre">false</span></code>, its output would be
+the single byte array <code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000000</span></code>, a single bool.</p>
+<p>If we wanted to call <code class="docutils literal notranslate"><span class="pre">bar</span></code> with the argument <code class="docutils literal notranslate"><span class="pre">[&quot;abc&quot;,</span> <span class="pre">&quot;def&quot;]</span></code>, we would pass 68 bytes total, broken down into:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0xfce353f6</span></code>: the Method ID. This is derived from the signature <code class="docutils literal notranslate"><span class="pre">bar(bytes3[2])</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x6162630000000000000000000000000000000000000000000000000000000000</span></code>: the first part of the first
+parameter, a <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> value <code class="docutils literal notranslate"><span class="pre">&quot;abc&quot;</span></code> (left-aligned).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x6465660000000000000000000000000000000000000000000000000000000000</span></code>: the second part of the first
+parameter, a <code class="docutils literal notranslate"><span class="pre">bytes3</span></code> value <code class="docutils literal notranslate"><span class="pre">&quot;def&quot;</span></code> (left-aligned).</p></li>
+</ul>
+<p>In total:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xfce353f661626300000000000000000000000000000000000000000000000000000000006465660000000000000000000000000000000000000000000000000000000000
+</pre></div>
+</div>
+<p>If we wanted to call <code class="docutils literal notranslate"><span class="pre">sam</span></code> with the arguments <code class="docutils literal notranslate"><span class="pre">&quot;dave&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">[1,2,3]</span></code>, we would
+pass 292 bytes total, broken down into:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0xa5643bf2</span></code>: the Method ID. This is derived from the signature <code class="docutils literal notranslate"><span class="pre">sam(bytes,bool,uint256[])</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">uint</span></code> is replaced with its canonical representation <code class="docutils literal notranslate"><span class="pre">uint256</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code>: the location of the data part of the first parameter (dynamic type), measured in bytes from the start of the arguments block. In this case, <code class="docutils literal notranslate"><span class="pre">0x60</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the second parameter: boolean true.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>: the location of the data part of the third parameter (dynamic type), measured in bytes. In this case, <code class="docutils literal notranslate"><span class="pre">0xa0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000004</span></code>: the data part of the first argument, it starts with the length of the byte array in elements, in this case, 4.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x6461766500000000000000000000000000000000000000000000000000000000</span></code>: the contents of the first argument: the UTF-8 (equal to ASCII in this case) encoding of <code class="docutils literal notranslate"><span class="pre">&quot;dave&quot;</span></code>, padded on the right to 32 bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: the data part of the third argument, it starts with the length of the array in elements, in this case, 3.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code>: the first entry of the third parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code>: the second entry of the third parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code>: the third entry of the third parameter.</p></li>
+</ul>
+<p>In total:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xa5643bf20000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000464617665000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003
+</pre></div>
+</div>
+</section>
+<section id="use-of-dynamic-types">
+<h2>Use of Dynamic Types<a class="headerlink" href="#use-of-dynamic-types" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>A call to a function with the signature <code class="docutils literal notranslate"><span class="pre">f(uint,uint32[],bytes10,bytes)</span></code> with values
+<code class="docutils literal notranslate"><span class="pre">(0x123,</span> <span class="pre">[0x456,</span> <span class="pre">0x789],</span> <span class="pre">&quot;1234567890&quot;,</span> <span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;)</span></code> is encoded in the following way:</p>
+<p>We take the first four bytes of <code class="docutils literal notranslate"><span class="pre">sha3(&quot;f(uint256,uint32[],bytes10,bytes)&quot;)</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">0x8be65246</span></code>.
+Then we encode the head parts of all four arguments. For the static types <code class="docutils literal notranslate"><span class="pre">uint256</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes10</span></code>,
+these are directly the values we want to pass, whereas for the dynamic types <code class="docutils literal notranslate"><span class="pre">uint32[]</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes</span></code>,
+we use the offset in bytes to the start of their data area, measured from the start of the value
+encoding (i.e. not counting the first four bytes containing the hash of the function signature). These are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000123</span></code> (<code class="docutils literal notranslate"><span class="pre">0x123</span></code> padded to 32 bytes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000080</span></code> (offset to start of data part of second parameter, 4*32 bytes, exactly the size of the head part)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x3132333435363738393000000000000000000000000000000000000000000000</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;1234567890&quot;</span></code> padded to 32 bytes on the right)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x00000000000000000000000000000000000000000000000000000000000000e0</span></code> (offset to start of data part of fourth parameter = offset to start of data part of first dynamic parameter + size of data part of first dynamic parameter = 4*32 + 3*32 (see below))</p></li>
+</ul>
+<p>After this, the data part of the first dynamic argument, <code class="docutils literal notranslate"><span class="pre">[0x456,</span> <span class="pre">0x789]</span></code> follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements of the array, 2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000456</span></code> (first element)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000789</span></code> (second element)</p></li>
+</ul>
+<p>Finally, we encode the data part of the second dynamic argument, <code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x000000000000000000000000000000000000000000000000000000000000000d</span></code> (number of elements (bytes in this case): 13)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x48656c6c6f2c20776f726c642100000000000000000000000000000000000000</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;Hello,</span> <span class="pre">world!&quot;</span></code> padded to 32 bytes on the right)</p></li>
+</ul>
+<p>All together, the encoding is (newline after function selector and each 32-bytes for clarity):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0x8be65246
+  0000000000000000000000000000000000000000000000000000000000000123
+  0000000000000000000000000000000000000000000000000000000000000080
+  3132333435363738393000000000000000000000000000000000000000000000
+  00000000000000000000000000000000000000000000000000000000000000e0
+  0000000000000000000000000000000000000000000000000000000000000002
+  0000000000000000000000000000000000000000000000000000000000000456
+  0000000000000000000000000000000000000000000000000000000000000789
+  000000000000000000000000000000000000000000000000000000000000000d
+  48656c6c6f2c20776f726c642100000000000000000000000000000000000000
+</pre></div>
+</div>
+<p>Let us apply the same principle to encode the data for a function with a signature <code class="docutils literal notranslate"><span class="pre">g(uint[][],string[])</span></code>
+with values <code class="docutils literal notranslate"><span class="pre">([[1,</span> <span class="pre">2],</span> <span class="pre">[3]],</span> <span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;])</span></code> but start from the most atomic parts of the encoding:</p>
+<p>First we encode the length and data of the first embedded dynamic array <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements in the first array, 2; the elements themselves are <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (first element)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (second element)</p></li>
+</ul>
+<p>Then we encode the length and data of the second embedded dynamic array <code class="docutils literal notranslate"><span class="pre">[3]</span></code> of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000001</span></code> (number of elements in the second array, 1; the element is <code class="docutils literal notranslate"><span class="pre">3</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (first element)</p></li>
+</ul>
+<p>Then we need to find the offsets <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> for their respective dynamic arrays <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> and <code class="docutils literal notranslate"><span class="pre">[3]</span></code>.
+To calculate the offsets we can take a look at the encoded data of the first root array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code>
+enumerating each line in the encoding:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - a                                                                - offset of [1, 2]
+1 - b                                                                - offset of [3]
+2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
+3 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
+4 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
+5 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
+6 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
+</pre></div>
+</div>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">a</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code> which is line
+2 (64 bytes); thus <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000040</span></code>.</p>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">b</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[3]</span></code> which is line 5 (160 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>.</p>
+<p>Then we encode the embedded strings of the second root array:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x6f6e650000000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x74776f0000000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000005</span></code> (number of characters in word <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x7468726565000000000000000000000000000000000000000000000000000000</span></code> (utf8 representation of word <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</p></li>
+</ul>
+<p>In parallel to the first root array, since strings are dynamic elements we need to find their offsets <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code> and <code class="docutils literal notranslate"><span class="pre">e</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0 - c                                                                - offset for &quot;one&quot;
+1 - d                                                                - offset for &quot;two&quot;
+2 - e                                                                - offset for &quot;three&quot;
+3 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;one&quot;
+4 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of &quot;one&quot;
+5 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;two&quot;
+6 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of &quot;two&quot;
+7 - 0000000000000000000000000000000000000000000000000000000000000005 - count for &quot;three&quot;
+8 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of &quot;three&quot;
+</pre></div>
+</div>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">c</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code> which is line 3 (96 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000060</span></code>.</p>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">d</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> which is line 5 (160 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000a0</span></code>.</p>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">e</span></code> points to the start of the content of the string <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code> which is line 7 (224 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">e</span> <span class="pre">=</span> <span class="pre">0x00000000000000000000000000000000000000000000000000000000000000e0</span></code>.</p>
+<p>Note that the encodings of the embedded elements of the root arrays are not dependent on each other
+and have the same encodings for a function with a signature <code class="docutils literal notranslate"><span class="pre">g(string[],uint[][])</span></code>.</p>
+<p>Then we encode the length of the first root array:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000002</span></code> (number of elements in the first root array, 2; the elements themselves are <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code>  and <code class="docutils literal notranslate"><span class="pre">[3]</span></code>)</p></li>
+</ul>
+<p>Then we encode the length of the second root array:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0x0000000000000000000000000000000000000000000000000000000000000003</span></code> (number of strings in the second root array, 3; the strings themselves are <code class="docutils literal notranslate"><span class="pre">&quot;one&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;two&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;three&quot;</span></code>)</p></li>
+</ul>
+<p>Finally we find the offsets <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code> for their respective root dynamic arrays <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> and
+<code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;]</span></code>, and assemble parts in the correct order:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0x2289b18c                                                            - function signature
+ 0 - f                                                                - offset of [[1, 2], [3]]
+ 1 - g                                                                - offset of [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
+ 2 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [[1, 2], [3]]
+ 3 - 0000000000000000000000000000000000000000000000000000000000000040 - offset of [1, 2]
+ 4 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset of [3]
+ 5 - 0000000000000000000000000000000000000000000000000000000000000002 - count for [1, 2]
+ 6 - 0000000000000000000000000000000000000000000000000000000000000001 - encoding of 1
+ 7 - 0000000000000000000000000000000000000000000000000000000000000002 - encoding of 2
+ 8 - 0000000000000000000000000000000000000000000000000000000000000001 - count for [3]
+ 9 - 0000000000000000000000000000000000000000000000000000000000000003 - encoding of 3
+10 - 0000000000000000000000000000000000000000000000000000000000000003 - count for [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
+11 - 0000000000000000000000000000000000000000000000000000000000000060 - offset for &quot;one&quot;
+12 - 00000000000000000000000000000000000000000000000000000000000000a0 - offset for &quot;two&quot;
+13 - 00000000000000000000000000000000000000000000000000000000000000e0 - offset for &quot;three&quot;
+14 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;one&quot;
+15 - 6f6e650000000000000000000000000000000000000000000000000000000000 - encoding of &quot;one&quot;
+16 - 0000000000000000000000000000000000000000000000000000000000000003 - count for &quot;two&quot;
+17 - 74776f0000000000000000000000000000000000000000000000000000000000 - encoding of &quot;two&quot;
+18 - 0000000000000000000000000000000000000000000000000000000000000005 - count for &quot;three&quot;
+19 - 7468726565000000000000000000000000000000000000000000000000000000 - encoding of &quot;three&quot;
+</pre></div>
+</div>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">f</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3]]</span></code> which is line 2 (64 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000040</span></code>.</p>
+<p>Offset <code class="docutils literal notranslate"><span class="pre">g</span></code> points to the start of the content of the array <code class="docutils literal notranslate"><span class="pre">[&quot;one&quot;,</span> <span class="pre">&quot;two&quot;,</span> <span class="pre">&quot;three&quot;]</span></code> which is line 10 (320 bytes);
+thus <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">=</span> <span class="pre">0x0000000000000000000000000000000000000000000000000000000000000140</span></code>.</p>
+</section>
+<section id="events">
+<span id="abi-events"></span><h2>Events<a class="headerlink" href="#events" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Events are an abstraction of the Ethereum logging/event-watching protocol. Log entries provide the contract's
+address, a series of up to four topics and some arbitrary length binary data. Events leverage the existing function
+ABI in order to interpret this (together with an interface spec) as a properly typed structure.</p>
+<p>Given an event name and series of event parameters, we split them into two sub-series: those which are indexed and
+those which are not.
+Those which are indexed, which may number up to 3 (for non-anonymous events) or 4 (for anonymous ones), are used
+alongside the Keccak hash of the event signature to form the topics of the log entry.
+Those which are not indexed form the byte array of the event.</p>
+<p>In effect, a log entry using this ABI is described as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">address</span></code>: the address of the contract (intrinsically provided by Ethereum);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">topics[0]</span></code>: <code class="docutils literal notranslate"><span class="pre">keccak(EVENT_NAME+&quot;(&quot;+EVENT_ARGS.map(canonical_type_of).join(&quot;,&quot;)+&quot;)&quot;)</span></code> (<code class="docutils literal notranslate"><span class="pre">canonical_type_of</span></code>
+is a function that simply returns the canonical type of a given argument, e.g. for <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">indexed</span> <span class="pre">foo</span></code>, it would
+return <code class="docutils literal notranslate"><span class="pre">uint256</span></code>). This value is only present in <code class="docutils literal notranslate"><span class="pre">topics[0]</span></code> if the event is not declared as <code class="docutils literal notranslate"><span class="pre">anonymous</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">topics[n]</span></code>: <code class="docutils literal notranslate"><span class="pre">abi_encode(EVENT_INDEXED_ARGS[n</span> <span class="pre">-</span> <span class="pre">1])</span></code> if the event is not declared as <code class="docutils literal notranslate"><span class="pre">anonymous</span></code>
+or <code class="docutils literal notranslate"><span class="pre">abi_encode(EVENT_INDEXED_ARGS[n])</span></code> if it is (<code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> is the series of <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code> that
+are indexed);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: ABI encoding of <code class="docutils literal notranslate"><span class="pre">EVENT_NON_INDEXED_ARGS</span></code> (<code class="docutils literal notranslate"><span class="pre">EVENT_NON_INDEXED_ARGS</span></code> is the series of <code class="docutils literal notranslate"><span class="pre">EVENT_ARGS</span></code>
+that are not indexed, <code class="docutils literal notranslate"><span class="pre">abi_encode</span></code> is the ABI encoding function used for returning a series of typed values
+from a function, as described above).</p></li>
+</ul>
+<p>For all types of length at most 32 bytes, the <code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> array contains
+the value directly, padded or sign-extended (for signed integers) to 32 bytes, just as for regular ABI encoding.
+However, for all &quot;complex&quot; types or types of dynamic length, including all arrays, <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and structs,
+<code class="docutils literal notranslate"><span class="pre">EVENT_INDEXED_ARGS</span></code> will contain the <em>Keccak hash</em> of a special in-place encoded value
+(see <a class="reference internal" href="#indexed-event-encoding"><span class="std std-ref">Encoding of Indexed Event Parameters</span></a>), rather than the encoded value directly.
+This allows applications to efficiently query for values of dynamic-length types
+(by setting the hash of the encoded value as the topic), but leaves applications unable
+to decode indexed values they have not queried for. For dynamic-length types,
+application developers face a trade-off between fast search for predetermined values
+(if the argument is indexed) and legibility of arbitrary values (which requires that
+the arguments not be indexed). Developers may overcome this tradeoff and achieve both
+efficient search and arbitrary legibility by defining events with two arguments — one
+indexed, one not — intended to hold the same value.</p>
+</section>
+<section id="errors">
+<span id="abi-errors"></span><h2>Errors<a class="headerlink" href="#errors" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>In case of a failure inside a contract, the contract can use a special opcode to abort execution and revert
+all state changes. In addition to these effects, descriptive data can be returned to the caller.
+This descriptive data is the encoding of an error and its arguments in the same way as data for a function
+call.</p>
+<p>As an example, let us consider the following contract whose <code class="docutils literal notranslate"><span class="pre">transfer</span></code> function always
+reverts with a custom error of &quot;insufficient balance&quot;:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCmNvbnRyYWN0IFRlc3RUb2tlbiB7CiAgICBlcnJvciBJbnN1ZmZpY2llbnRCYWxhbmNlKHVpbnQyNTYgYXZhaWxhYmxlLCB1aW50MjU2IHJlcXVpcmVkKTsKICAgIGZ1bmN0aW9uIHRyYW5zZmVyKGFkZHJlc3MgLyp0byovLCB1aW50IGFtb3VudCkgcHVibGljIHB1cmUgewogICAgICAgIHJldmVydCBJbnN1ZmZpY2llbnRCYWxhbmNlKDAsIGFtb3VudCk7CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">TestToken</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span>error<span class="w"> </span>InsufficientBalance<span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">available</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">required</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">transfer</span><span class="p">(</span><span class="kt">address</span><span class="w"> </span><span class="cm">/*to*/</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>revert<span class="w"> </span>InsufficientBalance<span class="p">(</span><span class="m m-Decimal">0</span><span class="p">,</span><span class="w"> </span>amount<span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The return data would be encoded in the same way as the function call
+<code class="docutils literal notranslate"><span class="pre">InsufficientBalance(0,</span> <span class="pre">amount)</span></code> to the function <code class="docutils literal notranslate"><span class="pre">InsufficientBalance(uint256,uint256)</span></code>,
+i.e. <code class="docutils literal notranslate"><span class="pre">0xcf479181</span></code>, <code class="docutils literal notranslate"><span class="pre">uint256(0)</span></code>, <code class="docutils literal notranslate"><span class="pre">uint256(amount)</span></code>.</p>
+<p>The error selectors <code class="docutils literal notranslate"><span class="pre">0x00000000</span></code> and <code class="docutils literal notranslate"><span class="pre">0xffffffff</span></code> are reserved for future use.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>Never trust error data.
+The error data by default bubbles up through the chain of external calls, which
+means that a contract may receive an error not defined in any of the contracts
+it calls directly.
+Furthermore, any contract can fake any error by returning data that matches
+an error signature, even if the error is not defined anywhere.</p>
+</div>
+</section>
+<section id="json">
+<span id="abi-json"></span><h2>JSON<a class="headerlink" href="#json" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>The JSON format for a contract's interface is given by an array of function, event and error descriptions.
+A function description is a JSON object with the fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;function&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;constructor&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;receive&quot;</span></code> (the <a class="reference internal" href="contracts.html#receive-ether-function"><span class="std std-ref">&quot;receive Ether&quot; function</span></a>) or <code class="docutils literal notranslate"><span class="pre">&quot;fallback&quot;</span></code> (the <a class="reference internal" href="contracts.html#fallback-function"><span class="std std-ref">&quot;default&quot; function</span></a>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the function;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: an array of objects, each of which contains:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: the canonical type of the parameter (more below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">components</span></code>: used for tuple types (more below).</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">outputs</span></code>: an array of objects similar to <code class="docutils literal notranslate"><span class="pre">inputs</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stateMutability</span></code>: a string with one of the following values: <code class="docutils literal notranslate"><span class="pre">pure</span></code> (<a class="reference internal" href="contracts.html#pure-functions"><span class="std std-ref">specified to not read
+blockchain state</span></a>), <code class="docutils literal notranslate"><span class="pre">view</span></code> (<a class="reference internal" href="contracts.html#view-functions"><span class="std std-ref">specified to not modify the blockchain
+state</span></a>), <code class="docutils literal notranslate"><span class="pre">nonpayable</span></code> (function does not accept Ether - the default) and <code class="docutils literal notranslate"><span class="pre">payable</span></code> (function accepts Ether).</p></li>
+</ul>
+<p>Constructor and fallback function never have <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">outputs</span></code>. Fallback function doesn't have <code class="docutils literal notranslate"><span class="pre">inputs</span></code> either.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>Sending non-zero Ether to non-payable function will revert the transaction.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>The state mutability <code class="docutils literal notranslate"><span class="pre">nonpayable</span></code> is reflected in Solidity by not specifying
+a state mutability modifier at all.</p>
+</div>
+<p>An event description is a JSON object with fairly similar fields:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: always <code class="docutils literal notranslate"><span class="pre">&quot;event&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: an array of objects, each of which contains:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: the canonical type of the parameter (more below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">components</span></code>: used for tuple types (more below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indexed</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the field is part of the log's topics, <code class="docutils literal notranslate"><span class="pre">false</span></code> if it one of the log's data segment.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">anonymous</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the event was declared as <code class="docutils literal notranslate"><span class="pre">anonymous</span></code>.</p></li>
+</ul>
+<p>Errors look as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: always <code class="docutils literal notranslate"><span class="pre">&quot;error&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inputs</span></code>: an array of objects, each of which contains:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: the name of the parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: the canonical type of the parameter (more below).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">components</span></code>: used for tuple types (more below).</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>There can be multiple errors with the same name and even with identical signature
+in the JSON array, for example if the errors originate from different
+files in the smart contract or are referenced from another smart contract.
+For the ABI, only the name of the error itself is relevant and not where it is
+defined.</p>
+</div>
+<p>For example,</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5IF4wLjguNDsKCgpjb250cmFjdCBUZXN0IHsKICAgIGNvbnN0cnVjdG9yKCkgeyBiID0gaGV4IjEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyIjsgfQogICAgZXZlbnQgRXZlbnQodWludCBpbmRleGVkIGEsIGJ5dGVzMzIgYik7CiAgICBldmVudCBFdmVudDIodWludCBpbmRleGVkIGEsIGJ5dGVzMzIgYik7CiAgICBlcnJvciBJbnN1ZmZpY2llbnRCYWxhbmNlKHVpbnQyNTYgYXZhaWxhYmxlLCB1aW50MjU2IHJlcXVpcmVkKTsKICAgIGZ1bmN0aW9uIGZvbyh1aW50IGEpIHB1YmxpYyB7IGVtaXQgRXZlbnQoYSwgYik7IH0KICAgIGJ5dGVzMzIgYjsKfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">^</span><span class="k">0.8.4</span><span class="p">;</span><span class="w"></span>
+
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Test</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>b<span class="w"> </span><span class="o">=</span><span class="w"> </span>hex<span class="s2">&quot;12345678901234567890123456789012&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Event</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>a<span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">b</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">event</span><span class="w"> </span><span class="nv">Event2</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">indexed</span><span class="w"> </span>a<span class="p">,</span><span class="w"> </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">b</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>error<span class="w"> </span>InsufficientBalance<span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">available</span><span class="p">,</span><span class="w"> </span><span class="kt">uint256</span><span class="w"> </span><span class="nv">required</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">foo</span><span class="p">(</span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>emit<span class="w"> </span>Event<span class="p">(</span>a<span class="p">,</span><span class="w"> </span>b<span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bytes32</span><span class="w"> </span><span class="nv">b</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>would result in the JSON:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span>
+<span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
+<span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;available&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">},{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;required&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">}],</span>
+<span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;InsufficientBalance&quot;</span>
+<span class="p">},</span> <span class="p">{</span>
+<span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;event&quot;</span><span class="p">,</span>
+<span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">},{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;bytes32&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">}],</span>
+<span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Event&quot;</span>
+<span class="p">},</span> <span class="p">{</span>
+<span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;event&quot;</span><span class="p">,</span>
+<span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">},{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;bytes32&quot;</span><span class="p">,</span><span class="nt">&quot;indexed&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">}],</span>
+<span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Event2&quot;</span>
+<span class="p">},</span> <span class="p">{</span>
+<span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;function&quot;</span><span class="p">,</span>
+<span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;uint256&quot;</span><span class="p">}],</span>
+<span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="nt">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<section id="handling-tuple-types">
+<h3>Handling tuple types<a class="headerlink" href="#handling-tuple-types" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Despite that names are intentionally not part of the ABI encoding they do make a lot of sense to be included
+in the JSON to enable displaying it to the end user. The structure is nested in the following way:</p>
+<p>An object with members <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code> and potentially <code class="docutils literal notranslate"><span class="pre">components</span></code> describes a typed variable.
+The canonical type is determined until a tuple type is reached and the string description up
+to that point is stored in <code class="docutils literal notranslate"><span class="pre">type</span></code> prefix with the word <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, i.e. it will be <code class="docutils literal notranslate"><span class="pre">tuple</span></code> followed by
+a sequence of <code class="docutils literal notranslate"><span class="pre">[]</span></code> and <code class="docutils literal notranslate"><span class="pre">[k]</span></code> with
+integers <code class="docutils literal notranslate"><span class="pre">k</span></code>. The components of the tuple are then stored in the member <code class="docutils literal notranslate"><span class="pre">components</span></code>,
+which is of array type and has the same structure as the top-level object except that
+<code class="docutils literal notranslate"><span class="pre">indexed</span></code> is not allowed there.</p>
+<p>As an example, the code</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC43LjUgPDAuOS4wOwpwcmFnbWEgYWJpY29kZXIgdjI7Cgpjb250cmFjdCBUZXN0IHsKICAgIHN0cnVjdCBTIHsgdWludCBhOyB1aW50W10gYjsgVFtdIGM7IH0KICAgIHN0cnVjdCBUIHsgdWludCB4OyB1aW50IHk7IH0KICAgIGZ1bmN0aW9uIGYoUyBtZW1vcnksIFQgbWVtb3J5LCB1aW50KSBwdWJsaWMgcHVyZSB7fQogICAgZnVuY3Rpb24gZygpIHB1YmxpYyBwdXJlIHJldHVybnMgKFMgbWVtb3J5LCBUIG1lbW9yeSwgdWludCkge30KfQ=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// SPDX-License-Identifier: GPL-3.0</span>
+<span class="k">pragma solidity</span><span class="w"> </span><span class="o">&gt;=</span><span class="k">0.7.5</span><span class="w"> </span><span class="o">&lt;</span><span class="k">0.9.0</span><span class="p">;</span><span class="w"></span>
+pragma<span class="w"> </span>abicoder<span class="w"> </span>v2<span class="p">;</span><span class="w"></span>
+
+<span class="k">contract</span><span class="w"> </span><span class="ni">Test</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">S</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">a</span><span class="p">;</span><span class="w"> </span><span class="kt">uint</span><span class="p">[]</span><span class="w"> </span>b<span class="p">;</span><span class="w"> </span>T<span class="p">[]</span><span class="w"> </span>c<span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">struct</span><span class="w"> </span><span class="nv">T</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">x</span><span class="p">;</span><span class="w"> </span><span class="kt">uint</span><span class="w"> </span><span class="nv">y</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">f</span><span class="p">(</span>S<span class="w"> </span><span class="kt">memory</span><span class="p">,</span><span class="w"> </span>T<span class="w"> </span><span class="kt">memory</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">g</span><span class="p">()</span><span class="w"> </span><span class="kt">public</span><span class="w"> </span>pure<span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span>S<span class="w"> </span><span class="kt">memory</span><span class="p">,</span><span class="w"> </span>T<span class="w"> </span><span class="kt">memory</span><span class="p">,</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>would result in the JSON:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tuple&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;components&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256[]&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tuple[]&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;components&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="p">{</span>
+                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+              <span class="p">},</span>
+              <span class="p">{</span>
+                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+              <span class="p">}</span>
+            <span class="p">]</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;t&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tuple&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;components&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uint256&quot;</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">[]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="strict-encoding-mode">
+<span id="abi-packed-mode"></span><h2>Strict Encoding Mode<a class="headerlink" href="#strict-encoding-mode" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Strict encoding mode is the mode that leads to exactly the same encoding as defined in the formal specification above.
+This means offsets have to be as small as possible while still not creating overlaps in the data areas and thus no gaps are
+allowed.</p>
+<p>Usually, ABI decoders are written in a straightforward way just following offset pointers, but some decoders
+might enforce strict mode. The Solidity ABI decoder currently does not enforce strict mode, but the encoder
+always creates data in strict mode.</p>
+</section>
+<section id="non-standard-packed-mode">
+<h2>Non-standard Packed Mode<a class="headerlink" href="#non-standard-packed-mode" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Through <code class="docutils literal notranslate"><span class="pre">abi.encodePacked()</span></code>, Solidity supports a non-standard packed mode where:</p>
+<ul class="simple">
+<li><p>types shorter than 32 bytes are neither zero padded nor sign extended and</p></li>
+<li><p>dynamic types are encoded in-place and without the length.</p></li>
+<li><p>array elements are padded, but still encoded in-place</p></li>
+</ul>
+<p>Furthermore, structs as well as nested arrays are not supported.</p>
+<p>As an example, the encoding of <code class="docutils literal notranslate"><span class="pre">int16(-1),</span> <span class="pre">bytes1(0x42),</span> <span class="pre">uint16(0x03),</span> <span class="pre">string(&quot;Hello,</span> <span class="pre">world!&quot;)</span></code> results in:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0xffff42000348656c6c6f2c20776f726c6421
+  ^^^^                                 int16(-1)
+      ^^                               bytes1(0x42)
+        ^^^^                           uint16(0x03)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^ string(&quot;Hello, world!&quot;) without a length field
+</pre></div>
+</div>
+<p>More specifically:</p>
+<ul class="simple">
+<li><p>During the encoding, everything is encoded in-place. This means that there is
+no distinction between head and tail, as in the ABI encoding, and the length
+of an array is not encoded.</p></li>
+<li><p>The direct arguments of <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> are encoded without padding,
+as long as they are not arrays (or <code class="docutils literal notranslate"><span class="pre">string</span></code> or <code class="docutils literal notranslate"><span class="pre">bytes</span></code>).</p></li>
+<li><p>The encoding of an array is the concatenation of the
+encoding of its elements <strong>with</strong> padding.</p></li>
+<li><p>Dynamically-sized types like <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">bytes</span></code> or <code class="docutils literal notranslate"><span class="pre">uint[]</span></code> are encoded
+without their length field.</p></li>
+<li><p>The encoding of <code class="docutils literal notranslate"><span class="pre">string</span></code> or <code class="docutils literal notranslate"><span class="pre">bytes</span></code> does not apply padding at the end
+unless it is part of an array or struct (then it is padded to a multiple of
+32 bytes).</p></li>
+</ul>
+<p>In general, the encoding is ambiguous as soon as there are two dynamically-sized elements,
+because of the missing length field.</p>
+<p>If padding is needed, explicit type conversions can be used: <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(uint16(0x12))</span> <span class="pre">==</span> <span class="pre">hex&quot;0012&quot;</span></code>.</p>
+<p>Since packed encoding is not used when calling functions, there is no special support
+for prepending a function selector. Since the encoding is ambiguous, there is no decoding function.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>If you use <code class="docutils literal notranslate"><span class="pre">keccak256(abi.encodePacked(a,</span> <span class="pre">b))</span></code> and both <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> are dynamic types,
+it is easy to craft collisions in the hash value by moving parts of <code class="docutils literal notranslate"><span class="pre">a</span></code> into <code class="docutils literal notranslate"><span class="pre">b</span></code> and
+vice-versa. More specifically, <code class="docutils literal notranslate"><span class="pre">abi.encodePacked(&quot;a&quot;,</span> <span class="pre">&quot;bc&quot;)</span> <span class="pre">==</span> <span class="pre">abi.encodePacked(&quot;ab&quot;,</span> <span class="pre">&quot;c&quot;)</span></code>.
+If you use <code class="docutils literal notranslate"><span class="pre">abi.encodePacked</span></code> for signatures, authentication or data integrity, make
+sure to always use the same types and check that at most one of them is dynamic.
+Unless there is a compelling reason, <code class="docutils literal notranslate"><span class="pre">abi.encode</span></code> should be preferred.</p>
+</div>
+</section>
+<section id="encoding-of-indexed-event-parameters">
+<span id="indexed-event-encoding"></span><h2>Encoding of Indexed Event Parameters<a class="headerlink" href="#encoding-of-indexed-event-parameters" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>Indexed event parameters that are not value types, i.e. arrays and structs are not
+stored directly but instead a keccak256-hash of an encoding is stored. This encoding
+is defined as follows:</p>
+<ul class="simple">
+<li><p>the encoding of a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code> value is just the string contents
+without any padding or length prefix.</p></li>
+<li><p>the encoding of a struct is the concatenation of the encoding of its members,
+always padded to a multiple of 32 bytes (even <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>).</p></li>
+<li><p>the encoding of an array (both dynamically- and statically-sized) is
+the concatenation of the encoding of its elements, always padded to a multiple
+of 32 bytes (even <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>) and without any length prefix</p></li>
+</ul>
+<p>In the above, as usual, a negative number is padded by sign extension and not zero padded.
+<code class="docutils literal notranslate"><span class="pre">bytesNN</span></code> types are padded on the right while <code class="docutils literal notranslate"><span class="pre">uintNN</span></code> / <code class="docutils literal notranslate"><span class="pre">intNN</span></code> are padded on the left.</p>
+<div class="admonition warning">
+<p class="admonition-title">هشدار</p>
+<p>The encoding of a struct is ambiguous if it contains more than one dynamically-sized
+array. Because of that, always re-check the event data and do not rely on the search result
+based on the indexed parameters alone.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metadata.html" class="btn btn-neutral float-left" title="Contract Metadata" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="050-breaking-changes.html" class="btn btn-neutral float-right" title="Solidity v0.5.0 Breaking Changes" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

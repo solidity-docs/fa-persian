@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>چیدمان یک فایل منبع سالیدیتی &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="ساختار قرارداد" href="structure-of-a-contract.html" />
+    <link rel="prev" title="سالیدیتی با مثال" href="solidity-by-example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">چیدمان یک فایل منبع سالیدیتی</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spdx">مشخص کننده‌ی لایسنس  SPDX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pragma">پراگماها</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-pragma">نسخه پراگما</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#abi-coder-pragma">ABI Coder Pragma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experimental-pragma">پراگما آزمایشی</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#abiencoderv2">ABIEncoderV2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smtc">کنترل کننده SMTC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#import">ایمپورت کردن سایر فایل‌های منبع</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#index-5">ایمپورت مسیر‌ها</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#index-6">کامنت‌ها</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>چیدمان یک فایل منبع سالیدیتی</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/layout-of-source-files.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>چیدمان یک فایل منبع سالیدیتی<a class="headerlink" href="#id1" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>فایل‌های منبع  می‌توانند حاوی تعداد دلخواهی از <a class="reference internal" href="structure-of-a-contract.html#contract-structure"><span class="std std-ref">تعاریف قرارداد</span></a>  ، دستور‌های ایمپورت ، دستور‌های <a class="reference internal" href="#pragma"><span class="std std-ref">pragma directives</span></a>  ، <a class="reference internal" href="types.html#structs"><span class="std std-ref">struct</span></a> ، <a class="reference internal" href="types.html#enums"><span class="std std-ref">enum</span></a>  ، <a class="reference internal" href="contracts.html#functions"><span class="std std-ref">توابع</span></a>  ، <a class="reference internal" href="contracts.html#errors"><span class="std std-ref">خطا</span></a>،  تعاریف <a class="reference internal" href="contracts.html#constants"><span class="std std-ref">متغیر ثابت</span></a> باشند.</p>
+<section id="spdx">
+<span id="index-0"></span><h2>مشخص کننده‌ی لایسنس  SPDX<a class="headerlink" href="#spdx" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>در صورت در دسترس بودن کد منبع ، اعتماد به قرارداد هوشمند می‌تواند بهتر ایجاد شود. از آنجا که در دسترس قرار دادن کد منبع همیشه مشکلات حقوقی مربوط به حق چاپ را تحت تأثیر قرار می دهد، کامپایلر سالیدیتی استفاده از  <a class="reference external" href="https://spdx.org">مشخص کنندهِ لایسنس SPDX</a>  قابلِ خوانده شدن توسطِ ماشین را ترغیب می‌کند. هر فایل منبع باید با یک کامنت که نشان دهد لایسنس آن است شروع شود:</p>
+<p><code class="docutils literal notranslate"><span class="pre">//</span> <span class="pre">SPDX-License-Identifier:</span> <span class="pre">MIT</span></code></p>
+<p>کامپایلر تأیید نمی‌کند که مجوز بخشی از  <a class="reference external" href="https://spdx.org/licenses/">لیستی</a>   است که توسط SPDX مجاز است، اما رشته ارائه شده در <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">فرداداده بایت‌کد</span></a> را شامل می‌شود.</p>
+<blockquote>
+<div><p>اگر نمی‌خواهید مجوزی را تعیین نکنید یا اگر کد منبع، منبع باز نیست؛ لطفاً از مقدار ویژه  <a href="#id4"><span class="problematic" id="id5">``</span></a>UNLICENSED``استفاده کنید.</p>
+</div></blockquote>
+<p>البته ارائه این کامنت شما را از سایر تعهدات مربوط به صدور لایسنس مانند نیاز به ذکر مجوز خاص در هِدر هر فایل منبع یا دارنده اصلی حق چاپ خلاص نمی کند.</p>
+<p>کامنت توسط کامپایلر در هر کجای فایل در سطح فایل شناسایی می‌شود، اما توصیه می‌شود آن را در بالای فایل قرار دهید.</p>
+<p>اطلاعات بیشتر در مورد نحوه استفاده از مشخص کننده لایسنس SPDX را می‌توانید در  <a class="reference external" href="https://spdx.org/ids-how">وب سایت  SPDX</a>  بیابید.</p>
+</section>
+<section id="pragma">
+<span id="index-1"></span><span id="id7"></span><h2>پراگماها<a class="headerlink" href="#pragma" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>کلمه کلیدی  <code class="docutils literal notranslate"><span class="pre">pragma</span></code> یا پراگما برای فعال کردن برخی از ویژگی‌های کامپایلر یا بررسی‌ها استفاده می‌شود. یک دستورالعمل پراگما همیشه محلی برای یک فایل منبع است، بنابراین اگر می‌خواهید آن را در کل پروژه خود فعال کنید، باید پراگما را به تمام فایل‌های خود اضافه کنید. اگر فایل‌ دیگری را  <a class="reference internal" href="#import"><span class="std std-ref">ایمپورت</span></a>  کنید، پراگمای آن فایل به طور خودکار در فایل وارد شده اعمال نمی‌شود.</p>
+<section id="version-pragma">
+<span id="index-2"></span><span id="id8"></span><h3>نسخه پراگما<a class="headerlink" href="#version-pragma" title="پیوند ثابت به این سر مقاله"></a></h3>
+<blockquote>
+<div><p>فایل‌های منبع را می‌توان (و باید) با یک نسخه ، نسخه بندی کرد تا کامپایل با نسخه‌های کامپایلر آتی را رد کند که ممکن است تغییرات ناسازگار را معرفی کند. ما سعی می‌کنیم این موارد را به حداقل برسانیم و آنها را به گونه ای معرفی کنیم که تغییر در سِمَنتیک‌ها  نیاز به تغییرسینتکس  داشته باشد، اما این امر همیشه امکان پذیر نیست. به همین دلیل، همیشه ایده خوبی است که حداقل برای نسخه‌هایی که شامل تغییرات خراب کننده هستند، از تغییرات جدید  استفاده کنید. این نسخه‌ها همیشه نسخه‌هایی از فرم <code class="docutils literal notranslate"><span class="pre">x.0.0</span></code> یا <code class="docutils literal notranslate"><span class="pre">x.0.0</span></code> دارند.</p>
+</div></blockquote>
+<p>نسخه پراگما به شرح زیر استفاده می شود:  <code class="docutils literal notranslate"><span class="pre">;pragma</span> <span class="pre">solidity</span> <span class="pre">^0.5.2</span></code></p>
+<p>یک فایل منبع با خط بالا با یک کامپایلر جدیدتر از نسخه 0.5.2 کامپایل نمی‌شود و همچنین در یک کامپایلر که از نسخه 0.6.0 شروع می‌شود کار نمی‌کند (این شرط دوم با استفاده از  <code class="docutils literal notranslate"><span class="pre">^</span></code> اضافه می‌شود). از آنجا که تا قبل از نسخه  <code class="docutils literal notranslate"><span class="pre">0.6.0</span></code> هیچ تغییر جدید  ایجاد نخواهد شد، می‌توانید مطمئن باشید که کد شما به همان روشی که شما در نظر داشتید، کامپایل می‌شود. نسخه دقیق کامپایلر ثبت نشده است، بنابراین انتشار  رفع خطا  همچنان امکان پذیر است.</p>
+<p>می‌توان قوانین پیچیده‌تری را برای نسخه کامپایلر تعیین کرد، اینها از همان سینتکسی  استفاده می‌کنند که توسط <a class="reference external" href="https://docs.npmjs.com/cli/v6/using-npm/semver">npm</a>  استفاده می‌شود.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>با استفاده از نسخه pragma نسخه کامپایلر <em>تغییر نمی‌کند</em>. همچنین ویژگی‌های کامپایلر را <em>فعال یا غیرفعال نمی‌کند</em>. این فقط به کامپایلر دستور می‌دهد که بررسی کند آیا نسخه آن با نسخه مورد نیاز پراگما مطابقت دارد یا خیر. اگر مطابقت نداشته باشد، کامپایلر خطایی را صادر می‌کند.</p>
+</div>
+</section>
+<section id="abi-coder-pragma">
+<h3>ABI Coder Pragma<a class="headerlink" href="#abi-coder-pragma" title="پیوند ثابت به این سر مقاله"></a></h3>
+<blockquote>
+<div><p>با استفاده از  <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v1</span></code>  یا <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v2</span></code>  می‌توانید از بین دو پیاده سازی رمزگذار  و رمزگشای  ABI یکی را انتخاب کنید.</p>
+</div></blockquote>
+<p>رمزگذار جدید ABI (v2) قادر به رمزگذاری و رمزگشایی آرایه‌ها و structهای دلخواه تو در تو است. ممکن است کد بهینه کمتری تولید کند و به اندازه رمزگذار قدیمی تست نشده باشد، اما از نظر سالیدیتی نسخه 0.6.0 غیر آزمایشی محسوب می‌شود. شما هنوز هم باید با استفاده از  <code class="docutils literal notranslate"><span class="pre">;pragma</span> <span class="pre">abicoder</span> <span class="pre">v2</span></code>  آن را صریحاً فعال کنید. در سالیدیتی نسخه 0.8.0 به طور پیش فرض فعال می‌شود، گزینه‌ای برای انتخاب کدگذار قدیمی با استفاده از  <code class="docutils literal notranslate"><span class="pre">;pragma</span> <span class="pre">abicoder</span> <span class="pre">v1</span></code> وجود دارد.</p>
+<p>مجموعه نوع‌های  پشتیبانی شده توسط رمزگذار جدید یک مجموعه فوق العاده دقیق از نوع‌های پشتیبانی شده توسط رمزگذار قدیمی است. قراردادهایی که از آن استفاده می‌کنند می‌توانند با قراردادهایی که بدون محدودیت نیستند ارتباط برقرار کنند. بازگشت  فقط تا زمانی امکان پذیر است که قرارداد غیر <code class="docutils literal notranslate"><span class="pre">abicoder</span> <span class="pre">v2</span></code>  سعی در فراخوانی‌هایی نداشته باشد که نیاز به انواع رمزگشایی داشته باشند که فقط توسط رمزگذار جدید پشتیبانی می‌شوند. کامپایلر می‌تواند این مورد را تشخیص دهد و خطایی ایجاد کند. فعال کردن <code class="docutils literal notranslate"><span class="pre">abicoder</span> <span class="pre">v2</span></code>  قرارداد برای اینکه خطا برطرف شود، کافی است.</p>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>این پراگما برای همه کدهای تعریف شده در فایل در جایی که فعال شده‌است اعمال می‌شود، صرف نظر از اینکه سرانجام این کد به کجا ختم می‌شود. این بدان معناست که قراردادی که فایل منبع آن برای کامپایل با کدگذار ABI v1 انتخاب شده‌است، همچنان می‌تواند حاوی کدی باشد که با به ارث بردن رمزگذار جدید از قرارداد دیگر، از رمزگذار جدید استفاده کند. این درصورتی مجاز است که نوع‌های جدید فقط در داخل استفاده شوند و در امضاهای تابع خارجی نباشند.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>تا سالیدیتی نسخه 0.7.4، می‌توان با استفاده از <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">experimental</span> <span class="pre">ABIEncoderV2</span></code> ، رمزگذار ABI v2 را انتخاب کرد، اما صریحاً رمزگذار v1 را نمی‌توان انتخاب کرد زیرا پیش فرض بود.</p>
+</div>
+</section>
+<section id="experimental-pragma">
+<span id="index-3"></span><span id="id9"></span><h3>پراگما آزمایشی<a class="headerlink" href="#experimental-pragma" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>پراگما دوم ، پراگما آزمایشی است. می‌توانند برای فعال کردن ویژگی‌های کامپایلر یا زبان استفاده شوند که هنوز به طور پیش فرض فعال نشده‌اند. پراگماهای آزمایشی زیر در حال حاضر پشتیبانی می‌شوند:</p>
+<section id="abiencoderv2">
+<h4>ABIEncoderV2<a class="headerlink" href="#abiencoderv2" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>از آنجا که رمزگذار ABI v2 دیگر آزمایشی محسوب نمی‌شود، می‌توان از طریق سالیدیتی نسخه 0.7.4 از طریق  <code class="docutils literal notranslate"><span class="pre">pragma</span> <span class="pre">abicoder</span> <span class="pre">v2</span></code> آن را انتخاب کرد (لطفاً به قسمت بالا مراجعه کنید).</p>
+</section>
+<section id="smtc">
+<span id="smt-checker"></span><h4>کنترل کننده SMTC<a class="headerlink" href="#smtc" title="پیوند ثابت به این سر مقاله"></a></h4>
+<p>این مؤلفه  باید در هنگام ساخت کامپایلر سالیدیتی فعال شود و بنابراین در تمام باینری‌های سالیدیتی در دسترس نیست.  <a class="reference internal" href="installing-solidity.html#smt-solvers-build"><span class="std std-ref">دستورالعمل‌های نسخه</span></a>  ،  نحوه فعال سازی این گزینه را توضیح می‌دهند. برای نسخه‌های اوبنتو  PPA در اکثر نسخه‌ها فعال شده، اما برای تصویر‌های داکر ، باینری‌های ویندوز  یا باینری‌های لینوکس نسخه ایستا ، فعال نیست. اگر یک حلال کننده  SMT را به صورت محلی نصب کرده باشید و solc-js را از طریق گره (نه از طریق مرورگر) اجرا کنید، می‌تواند از طریق  <a class="reference external" href="https://github.com/ethereum/solc-js#example-usage-with-smtsolver-callback">smtCallback</a>    برای solc-js فعال شود.</p>
+<p>اگر  <code class="docutils literal notranslate"><span class="pre">;pragma</span> <span class="pre">experimental</span> <span class="pre">SMTChecker</span></code>  استفاده می‌کنید، <a class="reference internal" href="smtchecker.html#formal-verification"><span class="std std-ref">هشدارهای ایمنی</span></a>   بیشتری دریافت می‌کنید که با پرس و جو از یک حل کننده SMT بدست می‌آیند.</p>
+<p>این مولفه هنوز از تمام ویژگی‌های زبان سالیدیتی پشتیبانی نمی‌کند و احتمالاً هشدارهای زیادی را در بر داشته باشد. در صورت گزارش ویژگی‌های پشتیبانی نشده، ممکن است تجزیه و تحلیل کاملاً مناسب نباشد.</p>
+</section>
+</section>
+</section>
+<section id="import">
+<span id="index-4"></span><span id="id10"></span><h2>ایمپورت کردن سایر فایل‌های منبع<a class="headerlink" href="#import" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><p>سینتکس و سمنتیک</p>
+</div></blockquote>
+<hr class="docutils" />
+<p>سالیدیتی برای کمک به ماژولی بودن کد شما که مشابه آنچه در جاوا اسکریپت در دسترس است (از ES6 به بعد)، از دستورات ایمپورت   پشتیبانی می‌کند. با این حال، سالیدیتی مفهوم  <a class="reference external" href="https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#Description">اکسپورت به صورت پیشفرش</a> را پشتیبانی نمی‌کند.</p>
+<p>در سطح جهانی، می‌توانید از دستورات ایمپور  به شکل زیر استفاده کنید:</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICJmaWxlbmFtZSI7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;filename&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">filename</span></code> part is called an <em>import path</em>.</p>
+<p>این عبارت تمام نمادهای جهانی را از &quot; filename &quot; (و نمادهای وارد شده در آنجا) به دامنه جهانی فعلی ایمپورت می‌کند (متفاوت از ES6 اما برای سازگاری سالیدیتی با گذشته ). این فرم، برای استفاده توصیه نمی‌شود. زیرا به طور غیر قابل پیش بینی فضای نام را آلوده می‌کند. اگر موارد سطح بالای جدید را به داخل &quot;namename&quot; اضافه کنید، به طور خودکار در همه فایل‌هایی که از این &quot;Filename&quot; ایمپورت می‌شوند ظاهر می‌شوند. بهتر است نمادهای مشخص را به طور صریح وارد کنید.</p>
+<blockquote>
+<div><p>مثال زیر یک نماد جهانی   <code class="docutils literal notranslate"><span class="pre">symbolName</span></code> ایجاد می‌کند که اعضای آن همه نمادهای جهانی از  <code class="docutils literal notranslate"><span class="pre">&quot;filename&quot;</span></code> هستند:</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICogYXMgc3ltYm9sTmFtZSBmcm9tICJmaWxlbmFtZSI7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>as<span class="w"> </span>symbolName<span class="w"> </span>from<span class="w"> </span><span class="s2">&quot;filename&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>که منجر به در دسترس بودن همه نمادهای جهانی در قالب  <code class="docutils literal notranslate"><span class="pre">symbolName.symbol</span></code> می‌شود.</p>
+<blockquote>
+<div><p>گونه‌ای از این سینتکس که بخشی از ES6 نیست، اما احتمالاً قابل استفاده باشد:</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0ICJmaWxlbmFtZSIgYXMgc3ltYm9sTmFtZTs="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="s2">&quot;filename&quot;</span><span class="w"> </span>as<span class="w"> </span>symbolName<span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>که معادل  <code class="docutils literal notranslate"><span class="pre">&quot;;import</span> <span class="pre">*</span> <span class="pre">as</span> <span class="pre">symbolName</span> <span class="pre">from</span> <span class="pre">&quot;filename</span></code>  است.</p>
+<blockquote>
+<div><p>در صورت تصادم نامگذاری، می‌توانید هنگام ایمپورت کردن، نمادها را تغییر نام دهید. به عنوان مثال، کد زیر نمادهای جهانی جدید  <code class="docutils literal notranslate"><span class="pre">alias</span></code> و  <code class="docutils literal notranslate"><span class="pre">symbol2</span></code> را ایجاد می‌کند که به ترتیب از داخل  <code class="docutils literal notranslate"><span class="pre">&quot;filename&quot;</span></code> به  <code class="docutils literal notranslate"><span class="pre">symbol1</span></code> و  <code class="docutils literal notranslate"><span class="pre">symbol2</span></code> مراجعه می‌کند.</p>
+</div></blockquote>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=aW1wb3J0IHtzeW1ib2wxIGFzIGFsaWFzLCBzeW1ib2wyfSBmcm9tICJmaWxlbmFtZSI7"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="kt">import</span><span class="w"> </span><span class="p">{</span>symbol1<span class="w"> </span>as<span class="w"> </span>alias<span class="p">,</span><span class="w"> </span>symbol2<span class="p">}</span><span class="w"> </span>from<span class="w"> </span><span class="s2">&quot;filename&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="index-5">
+<span id="id12"></span><h3>ایمپورت مسیر‌ها<a class="headerlink" href="#index-5" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>در موارد فوق،  filename همیشه به عنوان مسیری که با  / به عنوان جدا کننده دایرکتوری و  . به عنوان دایرکتوری فعلی  و  .. به عنوان دایرکتوری والد، رفتار می‌کند. زمانی که    .یا  .. با یک کاراکتر به جز  / دنبال شود، به عنوان پوشه اصلی یا والدین در نظر گرفته نمی‌شود. همه نام مسیرها به عنوان مسیرهای کامل برخورد می‌شوند مگر اینکه با دایرکتوری فعلی   . یا دایرکتوری والدین  .. شروع شوند.</p>
+<p>In order to be able to support reproducible builds on all platforms, the Solidity compiler has to
+abstract away the details of the filesystem where source files are stored.
+For this reason import paths do not refer directly to files in the host filesystem.
+Instead the compiler maintains an internal database (<em>virtual filesystem</em> or <em>VFS</em> for short) where
+each source unit is assigned a unique <em>source unit name</em> which is an opaque and unstructured identifier.
+The import path specified in an import statement is translated into a source unit name and used to
+find the corresponding source unit in this database.</p>
+<p>Using the <a class="reference internal" href="using-the-compiler.html#compiler-api"><span class="std std-ref">Standard JSON</span></a> API it is possible to directly provide the names and
+content of all the source files as a part of the compiler input.
+In this case source unit names are truly arbitrary.
+If, however, you want the compiler to automatically find and load source code into the VFS, your
+source unit names need to be structured in a way that makes it possible for an <a class="reference internal" href="path-resolution.html#import-callback"><span class="std std-ref">import callback</span></a> to locate them.
+When using the command-line compiler the default import callback supports only loading source code
+from the host filesystem, which means that your source unit names must be paths.
+Some environments provide custom callbacks that are more versatile.
+For example the <a class="reference external" href="https://remix.ethereum.org/">Remix IDE</a> provides one that
+lets you <a class="reference external" href="https://remix-ide.readthedocs.io/en/latest/import.html">import files from HTTP, IPFS and Swarm URLs or refer directly to packages in NPM registry</a>.</p>
+<p>For a complete description of the virtual filesystem and the path resolution logic used by the
+compiler see <a class="reference internal" href="path-resolution.html#path-resolution"><span class="std std-ref">Path Resolution</span></a>.</p>
+</section>
+</section>
+<section id="index-6">
+<span id="id13"></span><h2>کامنت‌ها<a class="headerlink" href="#index-6" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>کامنت‌های تک خطی (<code class="docutils literal notranslate"><span class="pre">//</span></code>) و کامنت‌های چند خطی  (<code class="docutils literal notranslate"><span class="pre">/*...*/</span></code>)امکان پذیر است.</p>
+<p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gVGhpcyBpcyBhIHNpbmdsZS1saW5lIGNvbW1lbnQuCgovKgpUaGlzIGlzIGEKbXVsdGktbGluZSBjb21tZW50LgoqLw=="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
+<div class="highlight-solidity notranslate"><div class="highlight"><pre><span></span><span class="c1">// This is a single-line comment.</span>
+
+<span class="cm">/*</span>
+<span class="cm">This is a</span>
+<span class="cm">multi-line comment.</span>
+<span class="cm">*/</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">توجه</p>
+<p>یک کامنت تک خطی توسط هر پایان دهنده خط unicode (LF ، VF ، FF ، CR ، NEL ، LS یا PS) در رمزگذاری UTF-8 خاتمه می‌یابد. ترمیناتور  بعد از کامنت هنوز بخشی از کد منبع است، بنابراین اگر یک نماد ASCII نباشد (اینها NEL ، LS و PS هستند)، منجر به خطای تجزیه می‌شود.</p>
+</div>
+<p>علاوه بر این، نوع دیگری از کامنت به نام کامنت NatSpec وجود دارد که در <a class="reference internal" href="style-guide.html#style-guide-natspec"><span class="std std-ref">راهنمای استایل</span></a>  به تفصیل آورده شده است. آنها با یک اسلش سه گانه  (<code class="docutils literal notranslate"><span class="pre">///</span></code>) یا یک بلاک ستاره دوتایی  (<code class="docutils literal notranslate"><span class="pre">/**</span> <span class="pre">...</span> <span class="pre">*/</span></code>) نوشته می‌شوند و باید مستقیماً بالاتر از دستورات یا دستورات تابع استفاده شوند.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="solidity-by-example.html" class="btn btn-neutral float-left" title="سالیدیتی با مثال" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="structure-of-a-contract.html" class="btn btn-neutral float-right" title="ساختار قرارداد" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

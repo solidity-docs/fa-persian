@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solidity v0.6.0 Breaking Changes &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Solidity v0.7.0 Breaking Changes" href="070-breaking-changes.html" />
+    <link rel="prev" title="Solidity v0.5.0 Breaking Changes" href="050-breaking-changes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solidity v0.6.0 Breaking Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changes-the-compiler-might-not-warn-about">Changes the Compiler Might not Warn About</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explicitness-requirements">Explicitness Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#semantic-and-syntactic-changes">Semantic and Syntactic Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interface-changes">Interface Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new-error-reporter">New Error Reporter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metadata-hash-options">Metadata Hash Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yul-optimizer">Yul Optimizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-api-changes">C API Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-update-your-code">How to update your code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Solidity v0.6.0 Breaking Changes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/060-breaking-changes.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solidity-v0-6-0-breaking-changes">
+<h1>Solidity v0.6.0 Breaking Changes<a class="headerlink" href="#solidity-v0-6-0-breaking-changes" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p>This section highlights the main breaking changes introduced in Solidity
+version 0.6.0, along with the reasoning behind the changes and how to update
+affected code.
+For the full list check
+<a class="reference external" href="https://github.com/ethereum/solidity/releases/tag/v0.6.0">the release changelog</a>.</p>
+<section id="changes-the-compiler-might-not-warn-about">
+<h2>Changes the Compiler Might not Warn About<a class="headerlink" href="#changes-the-compiler-might-not-warn-about" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes where the behaviour of your code might
+change without the compiler telling you about it.</p>
+<ul class="simple">
+<li><p>The resulting type of an exponentiation is the type of the base. It used to be the smallest type
+that can hold both the type of the base and the type of the exponent, as with symmetric
+operations. Additionally, signed types are allowed for the base of the exponentiation.</p></li>
+</ul>
+</section>
+<section id="explicitness-requirements">
+<h2>Explicitness Requirements<a class="headerlink" href="#explicitness-requirements" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes where the code now needs to be more explicit,
+but the semantics do not change.
+For most of the topics the compiler will provide suggestions.</p>
+<ul class="simple">
+<li><p>Functions can now only be overridden when they are either marked with the
+<code class="docutils literal notranslate"><span class="pre">virtual</span></code> keyword or defined in an interface. Functions without
+implementation outside an interface have to be marked <code class="docutils literal notranslate"><span class="pre">virtual</span></code>.
+When overriding a function or modifier, the new keyword <code class="docutils literal notranslate"><span class="pre">override</span></code>
+must be used. When overriding a function or modifier defined in multiple
+parallel bases, all bases must be listed in parentheses after the keyword
+like so: <code class="docutils literal notranslate"><span class="pre">override(Base1,</span> <span class="pre">Base2)</span></code>.</p></li>
+<li><p>Member-access to <code class="docutils literal notranslate"><span class="pre">length</span></code> of arrays is now always read-only, even for storage arrays. It is no
+longer possible to resize storage arrays by assigning a new value to their length. Use <code class="docutils literal notranslate"><span class="pre">push()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">push(value)</span></code> or <code class="docutils literal notranslate"><span class="pre">pop()</span></code> instead, or assign a full array, which will of course overwrite the existing content.
+The reason behind this is to prevent storage collisions of gigantic
+storage arrays.</p></li>
+<li><p>The new keyword <code class="docutils literal notranslate"><span class="pre">abstract</span></code> can be used to mark contracts as abstract. It has to be used
+if a contract does not implement all its functions. Abstract contracts cannot be created using the <code class="docutils literal notranslate"><span class="pre">new</span></code> operator,
+and it is not possible to generate bytecode for them during compilation.</p></li>
+<li><p>Libraries have to implement all their functions, not only the internal ones.</p></li>
+<li><p>The names of variables declared in inline assembly may no longer end in <code class="docutils literal notranslate"><span class="pre">_slot</span></code> or <code class="docutils literal notranslate"><span class="pre">_offset</span></code>.</p></li>
+<li><p>Variable declarations in inline assembly may no longer shadow any declaration outside the inline assembly block.
+If the name contains a dot, its prefix up to the dot may not conflict with any declaration outside the inline
+assembly block.</p></li>
+<li><p>State variable shadowing is now disallowed.  A derived contract can only
+declare a state variable <code class="docutils literal notranslate"><span class="pre">x</span></code>, if there is no visible state variable with
+the same name in any of its bases.</p></li>
+</ul>
+</section>
+<section id="semantic-and-syntactic-changes">
+<h2>Semantic and Syntactic Changes<a class="headerlink" href="#semantic-and-syntactic-changes" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes where you have to modify your code
+and it does something else afterwards.</p>
+<ul class="simple">
+<li><p>Conversions from external function types to <code class="docutils literal notranslate"><span class="pre">address</span></code> are now disallowed. Instead external
+function types have a member called <code class="docutils literal notranslate"><span class="pre">address</span></code>, similar to the existing <code class="docutils literal notranslate"><span class="pre">selector</span></code> member.</p></li>
+<li><p>The function <code class="docutils literal notranslate"><span class="pre">push(value)</span></code> for dynamic storage arrays does not return the new length anymore (it returns nothing).</p></li>
+<li><p>The unnamed function commonly referred to as &quot;fallback function&quot; was split up into a new
+fallback function that is defined using the <code class="docutils literal notranslate"><span class="pre">fallback</span></code> keyword and a receive ether function
+defined using the <code class="docutils literal notranslate"><span class="pre">receive</span></code> keyword.</p>
+<ul>
+<li><p>If present, the receive ether function is called whenever the call data is empty (whether
+or not ether is received). This function is implicitly <code class="docutils literal notranslate"><span class="pre">payable</span></code>.</p></li>
+<li><p>The new fallback function is called when no other function matches (if the receive ether
+function does not exist then this includes calls with empty call data).
+You can make this function <code class="docutils literal notranslate"><span class="pre">payable</span></code> or not. If it is not <code class="docutils literal notranslate"><span class="pre">payable</span></code> then transactions
+not matching any other function which send value will revert. You should only need to
+implement the new fallback function if you are following an upgrade or proxy pattern.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists things that were not possible prior to Solidity 0.6.0
+or were more difficult to achieve.</p>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="control-structures.html#try-catch"><span class="std std-ref">try/catch statement</span></a> allows you to react on failed external calls.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">struct</span></code> and <code class="docutils literal notranslate"><span class="pre">enum</span></code> types can be declared at file level.</p></li>
+<li><p>Array slices can be used for calldata arrays, for example <code class="docutils literal notranslate"><span class="pre">abi.decode(msg.data[4:],</span> <span class="pre">(uint,</span> <span class="pre">uint))</span></code>
+is a low-level way to decode the function call payload.</p></li>
+<li><p>Natspec supports multiple return parameters in developer documentation, enforcing the same naming check as <code class="docutils literal notranslate"><span class="pre">&#64;param</span></code>.</p></li>
+<li><p>Yul and Inline Assembly have a new statement called <code class="docutils literal notranslate"><span class="pre">leave</span></code> that exits the current function.</p></li>
+<li><p>Conversions from <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">payable</span></code> are now possible via <code class="docutils literal notranslate"><span class="pre">payable(x)</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">x</span></code> must be of type <code class="docutils literal notranslate"><span class="pre">address</span></code>.</p></li>
+</ul>
+</section>
+<section id="interface-changes">
+<h2>Interface Changes<a class="headerlink" href="#interface-changes" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section lists changes that are unrelated to the language itself, but that have an effect on the interfaces of
+the compiler. These may change the way how you use the compiler on the command line, how you use its programmable
+interface, or how you analyze the output produced by it.</p>
+<section id="new-error-reporter">
+<h3>New Error Reporter<a class="headerlink" href="#new-error-reporter" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>A new error reporter was introduced, which aims at producing more accessible error messages on the command line.
+It is enabled by default, but passing <code class="docutils literal notranslate"><span class="pre">--old-reporter</span></code> falls back to the the deprecated old error reporter.</p>
+</section>
+<section id="metadata-hash-options">
+<h3>Metadata Hash Options<a class="headerlink" href="#metadata-hash-options" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The compiler now appends the <a class="reference external" href="https://ipfs.io/">IPFS</a> hash of the metadata file to the end of the bytecode by default
+(for details, see documentation on <a class="reference internal" href="metadata.html"><span class="doc">contract metadata</span></a>). Before 0.6.0, the compiler appended the
+<a class="reference external" href="https://ethersphere.github.io/swarm-home/">Swarm</a> hash by default, and in order to still support this behaviour,
+the new command line option <code class="docutils literal notranslate"><span class="pre">--metadata-hash</span></code> was introduced. It allows you to select the hash to be produced and
+appended, by passing either <code class="docutils literal notranslate"><span class="pre">ipfs</span></code> or <code class="docutils literal notranslate"><span class="pre">swarm</span></code> as value to the <code class="docutils literal notranslate"><span class="pre">--metadata-hash</span></code> command line option.
+Passing the value <code class="docutils literal notranslate"><span class="pre">none</span></code> completely removes the hash.</p>
+<p>These changes can also be used via the <a class="reference internal" href="using-the-compiler.html#compiler-api"><span class="std std-ref">Standard JSON Interface</span></a> and effect the metadata JSON generated by the compiler.</p>
+<p>The recommended way to read the metadata is to read the last two bytes to determine the length of the CBOR encoding
+and perform a proper decoding on that data block as explained in the <a class="reference internal" href="metadata.html#encoding-of-the-metadata-hash-in-the-bytecode"><span class="std std-ref">metadata section</span></a>.</p>
+</section>
+<section id="yul-optimizer">
+<h3>Yul Optimizer<a class="headerlink" href="#yul-optimizer" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>Together with the legacy bytecode optimizer, the <a class="reference internal" href="yul.html"><span class="doc">Yul</span></a> optimizer is now enabled by default when you call the compiler
+with <code class="docutils literal notranslate"><span class="pre">--optimize</span></code>. It can be disabled by calling the compiler with <code class="docutils literal notranslate"><span class="pre">--no-optimize-yul</span></code>.
+This mostly affects code that uses ABI coder v2.</p>
+</section>
+<section id="c-api-changes">
+<h3>C API Changes<a class="headerlink" href="#c-api-changes" title="پیوند ثابت به این سر مقاله"></a></h3>
+<p>The client code that uses the C API of <code class="docutils literal notranslate"><span class="pre">libsolc</span></code> is now in control of the memory used by the compiler. To make
+this change consistent, <code class="docutils literal notranslate"><span class="pre">solidity_free</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">solidity_reset</span></code>, the functions <code class="docutils literal notranslate"><span class="pre">solidity_alloc</span></code> and
+<code class="docutils literal notranslate"><span class="pre">solidity_free</span></code> were added and <code class="docutils literal notranslate"><span class="pre">solidity_compile</span></code> now returns a string that must be explicitly freed via
+<code class="docutils literal notranslate"><span class="pre">solidity_free()</span></code>.</p>
+</section>
+</section>
+<section id="how-to-update-your-code">
+<h2>How to update your code<a class="headerlink" href="#how-to-update-your-code" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>This section gives detailed instructions on how to update prior code for every breaking change.</p>
+<ul class="simple">
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">address(f)</span></code> to <code class="docutils literal notranslate"><span class="pre">f.address</span></code> for <code class="docutils literal notranslate"><span class="pre">f</span></code> being of external function type.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">()</span> <span class="pre">external</span> <span class="pre">[payable]</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> by either <code class="docutils literal notranslate"><span class="pre">receive()</span> <span class="pre">external</span> <span class="pre">payable</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fallback()</span> <span class="pre">external</span> <span class="pre">[payable]</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> or both. Prefer
+using a <code class="docutils literal notranslate"><span class="pre">receive</span></code> function only, whenever possible.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">uint</span> <span class="pre">length</span> <span class="pre">=</span> <span class="pre">array.push(value)</span></code> to <code class="docutils literal notranslate"><span class="pre">array.push(value);</span></code>. The new length can be
+accessed via <code class="docutils literal notranslate"><span class="pre">array.length</span></code>.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">array.length++</span></code> to <code class="docutils literal notranslate"><span class="pre">array.push()</span></code> to increase, and use <code class="docutils literal notranslate"><span class="pre">pop()</span></code> to decrease
+the length of a storage array.</p></li>
+<li><p>For every named return parameter in a function's <code class="docutils literal notranslate"><span class="pre">&#64;dev</span></code> documentation define a <code class="docutils literal notranslate"><span class="pre">&#64;return</span></code>
+entry which contains the parameter's name as the first word. E.g. if you have function <code class="docutils literal notranslate"><span class="pre">f()</span></code> defined
+like <code class="docutils literal notranslate"><span class="pre">function</span> <span class="pre">f()</span> <span class="pre">public</span> <span class="pre">returns</span> <span class="pre">(uint</span> <span class="pre">value)</span></code> and a <code class="docutils literal notranslate"><span class="pre">&#64;dev</span></code> annotating it, document its return
+parameters like so: <code class="docutils literal notranslate"><span class="pre">&#64;return</span> <span class="pre">value</span> <span class="pre">The</span> <span class="pre">return</span> <span class="pre">value.</span></code>. You can mix named and un-named return parameters
+documentation so long as the notices are in the order they appear in the tuple return type.</p></li>
+<li><p>Choose unique identifiers for variable declarations in inline assembly that do not conflict
+with declarations outside the inline assembly block.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">virtual</span></code> to every non-interface function you intend to override. Add <code class="docutils literal notranslate"><span class="pre">virtual</span></code>
+to all functions without implementation outside interfaces. For single inheritance, add
+<code class="docutils literal notranslate"><span class="pre">override</span></code> to every overriding function. For multiple inheritance, add <code class="docutils literal notranslate"><span class="pre">override(A,</span> <span class="pre">B,</span> <span class="pre">..)</span></code>,
+where you list all contracts that define the overridden function in the parentheses. When
+multiple bases define the same function, the inheriting contract must override all conflicting functions.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="050-breaking-changes.html" class="btn btn-neutral float-left" title="Solidity v0.5.0 Breaking Changes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="070-breaking-changes.html" class="btn btn-neutral float-right" title="Solidity v0.7.0 Breaking Changes" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

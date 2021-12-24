@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fa" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resources &mdash; مستندات Solidity0.8.4</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/toggle.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="_static/js/toggle.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="فهرست" href="genindex.html" />
+    <link rel="search" title="جستجو" href="search.html" />
+    <link rel="next" title="Import Path Resolution" href="path-resolution.html" />
+    <link rel="prev" title="SMTChecker and Formal Verification" href="smtchecker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #65afff" >
+            <a href="index.html">
+            <img src="_static/logo.svg" class="logo" alt="آرم"/>
+          </a>
+              <div class="version">
+                0.8.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="جستجوی مستندات" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">مبانی</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction-to-smart-contracts.html">مقدمه‌ای بر قراد‌های هوشمند</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing-solidity.html">نصب کامپایلر سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solidity-by-example.html">سالیدیتی با مثال</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">توضیحات زبان</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembly.html">Inline Assembly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grammar.html">Language Grammar</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">کامپایلر</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="using-the-compiler.html">Using the Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysing-compilation-output.html">Analysing the Compiler Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_storage.html">Layout of State Variables in Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_memory.html">Layout in Memory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/layout_in_calldata.html">Layout of Call Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/variable_cleanup.html">Cleaning Up Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/source_mappings.html">Source Mappings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals/optimizer.html">The Optimizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Contract Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abi-spec.html">Contract ABI Specification</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Material</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="050-breaking-changes.html">Solidity v0.5.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="060-breaking-changes.html">Solidity v0.6.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-breaking-changes.html">Solidity v0.7.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-breaking-changes.html">Solidity v0.8.0 Breaking Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natspec-format.html">NatSpec Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smtchecker.html">SMTChecker and Formal Verification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-resources">General Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integrated-ethereum-development-environments">Integrated (Ethereum) Development Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#editor-integrations">Editor Integrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solidity-tools">Solidity Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#third-party-solidity-parsers-and-grammars">Third-Party Solidity Parsers and Grammars</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="path-resolution.html">Import Path Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yul.html">Yul</a></li>
+<li class="toctree-l1"><a class="reference internal" href="style-guide.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-patterns.html">Common Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bugs.html">List of Known Bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brand-guide.html">Solidity Brand Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language-influences.html">Language Influences</a></li>
+</ul>
+
+    <ul>
+        <li>
+            <a href="genindex.html">Keyword Index</a>
+        </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #65afff" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solidity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Resources</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/resources.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="resources">
+<h1>Resources<a class="headerlink" href="#resources" title="پیوند ثابت به این سر مقاله"></a></h1>
+<section id="general-resources">
+<h2>General Resources<a class="headerlink" href="#general-resources" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ethereum.org/en/developers/">Ethereum.org Developer Portal</a></p></li>
+<li><p><a class="reference external" href="https://ethereum.stackexchange.com/">Ethereum StackExchange</a></p></li>
+<li><p><a class="reference external" href="https://soliditylang.org/">Solidity Portal</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ethereum/solidity/blob/develop/Changelog.md">Solidity Changelog</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ethereum/solidity/">Solidity Source Code on GitHub</a></p></li>
+<li><p><a class="reference external" href="https://matrix.to/#/#ethereum_solidity:gitter.im">Solidity Language Users Chat</a></p></li>
+<li><p><a class="reference external" href="https://matrix.to/#/#ethereum_solidity-dev:gitter.im">Solidity Compiler Developers Chat</a></p></li>
+<li><p><a class="reference external" href="https://github.com/bkrem/awesome-solidity">Awesome Solidity</a></p></li>
+<li><p><a class="reference external" href="https://solidity-by-example.org/">Solidity by Example</a></p></li>
+</ul>
+</section>
+<section id="integrated-ethereum-development-environments">
+<h2>Integrated (Ethereum) Development Environments<a class="headerlink" href="#integrated-ethereum-development-environments" title="پیوند ثابت به این سر مقاله"></a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://eth-brownie.readthedocs.io/en/stable/">Brownie</a></dt><dd><p>Python-based development and testing framework for smart contracts targeting the Ethereum Virtual Machine.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://dapp.tools/">Dapp</a></dt><dd><p>Tool for building, testing and deploying smart contracts from the command line.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://framework.embarklabs.io/">Embark</a></dt><dd><p>Developer platform for building and deploying decentralized applications.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://hardhat.org/">Hardhat</a></dt><dd><p>Ethereum development environment with local Ethereum network, debugging features and plugin ecosystem.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://remix.ethereum.org/">Remix</a></dt><dd><p>Browser-based IDE with integrated compiler and Solidity runtime environment without server-side components.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/austintgriffith/scaffold-eth">Scaffold-ETH</a></dt><dd><p>Ethereum development stack focused on fast product iterations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://www.trufflesuite.com/truffle">Truffle</a></dt><dd><p>Ethereum development framework.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</section>
+<section id="editor-integrations">
+<h2>Editor Integrations<a class="headerlink" href="#editor-integrations" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul>
+<li><p>Atom</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/0mkara/etheratom">Etheratom</a></dt><dd><p>Plugin for the Atom editor that features syntax highlighting, compilation and a runtime environment (Backend node &amp; VM compatible).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://atom.io/packages/linter-solidity">Atom Solidity Linter</a></dt><dd><p>Plugin for the Atom editor that provides Solidity linting.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://atom.io/packages/linter-solium">Atom Solium Linter</a></dt><dd><p>Configurable Solidity linter for Atom using Solium (now Ethlint) as a base.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Emacs</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/ethereum/emacs-solidity/">Emacs Solidity</a></dt><dd><p>Plugin for the Emacs editor providing syntax highlighting and compilation error reporting.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>IntelliJ</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://plugins.jetbrains.com/plugin/9475-intellij-solidity">IntelliJ IDEA plugin</a></dt><dd><p>Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Sublime</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://packagecontrol.io/packages/Ethereum/">Package for SublimeText - Solidity language syntax</a></dt><dd><p>Solidity syntax highlighting for SublimeText editor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Vim</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/tomlion/vim-solidity/">Vim Solidity</a></dt><dd><p>Plugin for the Vim editor providing syntax highlighting.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/vim-syntastic/syntastic">Vim Syntastic</a></dt><dd><p>Plugin for the Vim editor providing compile checking.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Visual Studio Code</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/">Visual Studio Code extension</a></dt><dd><p>Solidity plugin for Microsoft Visual Studio Code that includes syntax highlighting and the Solidity compiler.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="solidity-tools">
+<h2>Solidity Tools<a class="headerlink" href="#solidity-tools" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://gist.github.com/chriseth/8f533d133fa0c15b0d6eaf3ec502c82b">ABI to Solidity interface converter</a></dt><dd><p>A script for generating contract interfaces from the ABI of a smart contract.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/gnidan/abi-to-sol">abi-to-sol</a></dt><dd><p>Tool to generate Solidity interface source from a given ABI JSON.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/DigixGlobal/doxity">Doxity</a></dt><dd><p>Documentation Generator for Solidity.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/duaraghav8/Ethlint">Ethlint</a></dt><dd><p>Linter to identify and fix style and security issues in Solidity.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/Arachnid/evmdis">evmdis</a></dt><dd><p>EVM Disassembler that performs static analysis on the bytecode to provide a higher level of abstraction than raw EVM operations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/ethereum/evmlab/">EVM Lab</a></dt><dd><p>Rich tool package to interact with the EVM. Includes a VM, Etherchain API, and a trace-viewer with gas cost display.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/dapphub/dapptools/tree/master/src/hevm#readme">hevm</a></dt><dd><p>EVM debugger and symbolic execution engine.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/clemlak/leafleth">leafleth</a></dt><dd><p>A documentation generator for Solidity smart-contracts.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://piet.slock.it/">PIET</a></dt><dd><p>A tool to develop, audit and use Solidity smart contracts through a simple graphical interface.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://www.npmjs.com/package/sol2uml">sol2uml</a></dt><dd><p>Unified Modeling Language (UML) class diagram generator for Solidity contracts.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/crytic/solc-select">solc-select</a></dt><dd><p>A script to quickly switch between Solidity compiler versions.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/prettier-solidity/prettier-plugin-solidity">Solidity prettier plugin</a></dt><dd><p>A Prettier Plugin for Solidity.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/raineorshine/solidity-repl">Solidity REPL</a></dt><dd><p>Try Solidity instantly with a command-line Solidity console.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/raineorshine/solgraph">solgraph</a></dt><dd><p>Visualize Solidity control flow and highlight potential security vulnerabilities.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/protofire/solhint">Solhint</a></dt><dd><p>Solidity linter that provides security, style guide and best practice rules for smart contract validation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/ConsenSys/surya/">Sūrya</a></dt><dd><p>Utility tool for smart contract systems, offering a number of visual outputs and information about the contracts' structure. Also supports querying the function call graph.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/agroce/universalmutator">Universal Mutator</a></dt><dd><p>A tool for mutation generation, with configurable rules and support for Solidity and Vyper.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="third-party-solidity-parsers-and-grammars">
+<h2>Third-Party Solidity Parsers and Grammars<a class="headerlink" href="#third-party-solidity-parsers-and-grammars" title="پیوند ثابت به این سر مقاله"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference external" href="https://github.com/solidity-parser/parser">Solidity Parser for JavaScript</a></dt><dd><p>A Solidity parser for JS built on top of a robust ANTLR4 grammar.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="smtchecker.html" class="btn btn-neutral float-left" title="SMTChecker and Formal Verification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="path-resolution.html" class="btn btn-neutral float-right" title="Import Path Resolution" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; حق نشر2016-2021, Ethereum.</p>
+  </div>
+
+  ساخته شده با <a href="https://www.sphinx-doc.org/">Sphinx</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">پوسته</a>
+    تهیّه شده با <a href="https://readthedocs.org">Read the Docs</a>.
+  
+    <p>
+        <a href="credits-and-attribution.html">Credits and attribution</a>.
+    </p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book fa-element"> RTD </span>
+
+    <span class="fa fa-element">
+    <input class="container_toggle" type="checkbox" id="switch" name="mode">
+    <label for="switch"></label>
+    </span>
+
+    <span class="fa fa-v fa-element"> v:  <span class="fa fa-caret-down"></span></span>
+
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>نگارش‌ها</dt> 
+        </dl>
+        <dl>
+            <dt>بارگیری‌ها</dt> 
+        </dl>
+        <dl>
+            
+            <dt>درباره‌ی خواندن مستندات</dt>
+            <dd>
+                <a href="///projects//?fromdocs=">صفحه خانگی پروژه</a>
+            </dd>
+            <dd>
+                <a href="///builds//?fromdocs=">ساخت‌ها</a>
+            </dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
