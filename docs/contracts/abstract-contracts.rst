@@ -3,15 +3,17 @@
 .. _abstract-contract:
 
 ******************
-Abstract Contracts
+قراردادهای انتزاعی (Abstract Contracts)
 ******************
 
-Contracts need to be marked as abstract when at least one of their functions is not implemented.
-Contracts may be marked as abstract even though all functions are implemented.
+زمانی که حداقل یکی از توابع قرارداد‌ها اجرا نشود، باید قراردادها به صورت انتزاعی علامت گذاری شوند. ممکن 
+است قراردادها بصورت انتزاعی علامت گذاری شوند حتی اگر همه توابع اجرا شوند.
 
-This can be done by using the ``abstract`` keyword as shown in the following example. Note that this contract needs to be
-defined as abstract, because the function ``utterance()`` was defined, but no implementation was
-provided (no implementation body ``{ }`` was given).
+
+این را می‌توان با استفاده از کلمه کلیدی ``abstract`` همانطور که در مثال زیر نشان داده شده است، انجام داد. 
+توجه داشته باشید که این قرارداد باید بصورت انتزاعی تعریف شود، زیرا تابع ``()utterance`` تعریف شده 
+است، اما پیاده سازی ارائه نشده است (هیچ پیاده سازی ``{ }``   body داده نشده است):
+
 
 .. code-block:: solidity
 
@@ -22,8 +24,10 @@ provided (no implementation body ``{ }`` was given).
         function utterance() public virtual returns (bytes32);
     }
 
-Such abstract contracts can not be instantiated directly. This is also true, if an abstract contract itself does implement
-all defined functions. The usage of an abstract contract as a base class is shown in the following example:
+چنین قراردادهای انتزاعی را نمی‌توان مستقیماً به عنوان نمونه معرفی کرد. اگر یک قرارداد انتزاعی خود تمام توابع 
+تعریف شده را اجرا کند، این نیز صادق است. در مثال زیر استفاده از یک قرارداد انتزاعی به عنوان کلاس پایه 
+نشان داده شده است:
+
 
 .. code-block:: solidity
 
@@ -38,32 +42,39 @@ all defined functions. The usage of an abstract contract as a base class is show
         function utterance() public pure override returns (bytes32) { return "miaow"; }
     }
 
-If a contract inherits from an abstract contract and does not implement all non-implemented
-functions by overriding, it needs to be marked as abstract as well.
+اگر یک قرارداد از یک قرارداد انتزاعی ارث برده‌ باشد و تمام توابع اجرا نشده را با overriding اجرا ‌نکند، باید به 
+عنوان انتزاعی نیز مشخص شود.
 
-Note that a function without implementation is different from
-a :ref:`Function Type <function_types>` even though their syntax looks very similar.
 
-Example of function without implementation (a function declaration):
+توجه داشته باشید که یک تابع بدون اجرا با :ref:`Function Type <function_types>` متفاوت است، اگرچه سینتکس آنها بسیار شبیه به هم باشد.
+
+
+
+
+
+مثال تابع بدون اجرا (اعلان تابع):
+
+
 
 .. code-block:: solidity
 
     function foo(address) external returns (address);
 
-Example of a declaration of a variable whose type is a function type:
+مثال اعلان متغیری که نوع آن تابع است:
+
 
 .. code-block:: solidity
 
     function(address) external returns (address) foo;
 
-Abstract contracts decouple the definition of a contract from its
-implementation providing better extensibility and self-documentation and
-facilitating patterns like the `Template method <https://en.wikipedia.org/wiki/Template_method_pattern>`_ and removing code duplication.
-Abstract contracts are useful in the same way that defining methods
-in an interface is useful. It is a way for the designer of the
-abstract contract to say "any child of mine must implement this method".
+قراردادهای انتزاعی تعریف یک قرارداد را از اجرای آن جدا می‌کنند که باعث توسعه و مستندسازی بهتر و تسهیل 
+الگوهایی مانند  `Template method <https://en.wikipedia.org/wiki/Template_method_pattern>`_  و حذف موارد تکراری می‌شود. قراردادهای انتزاعی به همان شیوه‌ای 
+مفید هستند که تعریف method‌ها در یک رابط مفید است. این شیوه‌ای است که طراحِ قراردادِ انتزاعی می‌گوید 
+"هر فرزند من باید این روش را اجرا کند".
+
+
 
 .. note::
 
-  Abstract contracts cannot override an implemented virtual function with an
-  unimplemented one.
+قراردادهای انتزاعی نمی‌توانند یک تابع مجازی پیاده سازی شده را با یک تابع پیاده سازی نشده override کنند.
+
