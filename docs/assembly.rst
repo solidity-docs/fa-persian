@@ -1,15 +1,21 @@
 .. _inline-assembly:
 
 ###############
-Inline Assembly
+مونتاژ داخلی (Inline Assembly)
 ###############
 
 .. index:: ! assembly, ! asm, ! evmasm
 
 
+می‌توانید دستورات سالیدیتی را با اسمبلی درون خطی به زبانی نزدیک به ماشین مجازی اتریوم جا دهید. این به 
+شما کنترل دقیق‌تری می‌دهد، که به ویژه هنگامی که با نوشتن کتابخانه‌ها زبان را تقویت می‌کنید مفید است.
+
 You can interleave Solidity statements with inline assembly in a language close
 to the one of the Ethereum virtual machine. This gives you more fine-grained control,
 which is especially useful when you are enhancing the language by writing libraries.
+
+زبانی که برای مونتاژ خطی در سالیدیتی استفاده می‌شود Yul نام دارد و در بخش مخصوص خود مستند شده 
+است. این بخش فقط نحوه ارتباط کد مونتاژ درون خطی با کد سالیدیتی را پوشش می‌دهد.
 
 The language used for inline assembly in Solidity is called :ref:`Yul <yul>`
 and it is documented in its own section. This section will only cover
@@ -17,22 +23,38 @@ how the inline assembly code can interface with the surrounding Solidity code.
 
 
 .. warning::
+
+    مونتاژ داخلی راهی برای دسترسی به ماشین مجازی اتریوم در سطح پایین است. مونتاژ داخلی چندین ویژگی 
+    ایمنی مهم و بررسی سالیدیتی را دور می‌زند. شما فقط باید از آن برای وظایفی که به آن نیاز دارند استفاده کنید 
+    و فقط در صورت اطمینان از استفاده از آن.
+
     Inline assembly is a way to access the Ethereum Virtual Machine
     at a low level. This bypasses several important safety
     features and checks of Solidity. You should only use it for
     tasks that need it, and only if you are confident with using it.
 
+یک بلوک مونتاژ درون خطی با assembly { ... } مشخص می‌شود، جایی که کد داخل آکولاد ها به زبان Yul 
+کد است.
 
 An inline assembly block is marked by ``assembly { ... }``, where the code inside
 the curly braces is code in the :ref:`Yul <yul>` language.
 
+کد مونتاژ درون خطی می‌تواند به متغیرهای سالیدیتی محلی دسترسی پیدا کند که در زیر توضیح داده شده است.
+
 The inline assembly code can access local Solidity variables as explained below.
+
+بلوک‌های مختلف مونتاژ درون خطی هیچ نامی ندارند، به عنوان مثال نمی‌توان یک تابع Yul را فراخوانی کرد یا 
+به یک متغیر Yul که در یک بلوک مونتاژ داخلی متفاوت تعریف شده است دسترسی پیدا کرد.
 
 Different inline assembly blocks share no namespace, i.e. it is not possible
 to call a Yul function or access a Yul variable defined in a different inline assembly block.
 
-Example
+مثال
 -------
+
+مثال زیر کد کتابخانه‌ای را برای دسترسی به کد قرارداد دیگر و بارگذاری آن در متغیر bytes ارائه می‌دهد. این 
+امر با " plain Solidity" امکان پذیر نیست و ایده این است که کتابخانه‌های مونتاژ چندبار مصرف می‌توانند زبان 
+سالیدیتی را بدون تغییر کامپایلر تقویت کنند.
 
 The following example provides library code to access the code of another contract and
 load it into a ``bytes`` variable. This is possible with "plain Solidity" too, by using
@@ -61,6 +83,8 @@ Solidity language without a compiler change.
             }
         }
     }
+
+مونتاژ داخلی در مواردی که بهینه ساز قادر به تولید کد کارآمد نباشد، مفید است، به عنوان مثال:
 
 Inline assembly is also beneficial in cases where the optimizer fails to produce
 efficient code, for example:
@@ -118,13 +142,14 @@ efficient code, for example:
 
 
 
-Access to External Variables, Functions and Libraries
+دسترسی به متغیرها، توابع و کتابخانه‌های خارجی
 -----------------------------------------------------
 
-You can access Solidity variables and other identifiers by using their name.
+با استفاده از نام متغیرهای سالیدیتی و سایر identifier ها می‌توانید به آنها دسترسی پیدا کنید.
 
-Local variables of value type are directly usable in inline assembly.
-They can both be read and assigned to.
+
+متغیرهای محلی از نوع ارزش به طور مستقیم در اسمبلی درون خطی قابل استفاده هستند.
+
 
 Local variables that refer to memory evaluate to the address of the variable in memory not the value itself.
 Such variables can also be assigned to, but note that an assignment will only change the pointer and not the data
@@ -156,6 +181,7 @@ Both values are can be assigned to. For example:
             }
         }
     }
+
 
 For dynamic calldata arrays, you can access
 their calldata offset (in bytes) and length (number of elements) using ``x.offset`` and ``x.length``.
@@ -209,12 +235,18 @@ Since Solidity 0.6.0 the name of a inline assembly variable may not
 shadow any declaration visible in the scope of the inline assembly block
 (including variable, contract and function declarations).
 
+
 Since Solidity 0.7.0, variables and functions declared inside the
 inline assembly block may not contain ``.``, but using ``.`` is
 valid to access Solidity variables from outside the inline assembly block.
 
-Things to Avoid
+مواردی که باید از آنها اجتناب کرد
 ---------------
+
+اسمبلی داخلی ممکن است ظاهری کاملاً سطح بالا داشته باشد، اما در واقع سطح بسیار پایینی دارد. فراخوانی‌های 
+تابع، حلقه‌ها، if ها و سوئیچ ها با قوانین بازنویسی ساده تبدیل می‌شوند و پس از آن، تنها کاری که اسمبلی برای 
+شما انجام می‌دهد، مرتب سازی مجدد آپکدهای سبک تابعی، شمارش ارتفاع پشته برای دسترسی متغیرها و حذف 
+اسلات‌های پشته برای متغیرهای مونتاژ محلی است. وقتی به انتهای بلوک آنها رسید.
 
 Inline assembly might have a quite high-level look, but it actually is extremely
 low-level. Function calls, loops, ifs and switches are converted by simple
@@ -225,25 +257,24 @@ of their block is reached.
 
 .. _conventions-in-solidity:
 
-Conventions in Solidity
+کنوانسیون‌ها در سالیدیتی (Conventions in Solidity)
 -----------------------
 
-In contrast to EVM assembly, Solidity has types which are narrower than 256 bits,
-e.g. ``uint24``. For efficiency, most arithmetic operations ignore the fact that
-types can be shorter than 256
-bits, and the higher-order bits are cleaned when necessary,
-i.e., shortly before they are written to memory or before comparisons are performed.
-This means that if you access such a variable
-from within inline assembly, you might have to manually clean the higher-order bits
-first.
 
-Solidity manages memory in the following way. There is a "free memory pointer"
-at position ``0x40`` in memory. If you want to allocate memory, use the memory
-starting from where this pointer points at and update it.
-There is no guarantee that the memory has not been used before and thus
-you cannot assume that its contents are zero bytes.
-There is no built-in mechanism to release or free allocated memory.
-Here is an assembly snippet you can use for allocating memory that follows the process outlined above
+بر خلاف اسمبلیEVM ، سالیدیتی دارای انواع کوتاه‌تر از 256 بیت است، به عنوان مثال ``uint24`` .برای کارآیی، اکثر عملیات حسابی این واقعیت را نادیده می‌گیرند که نوع آنها می‌تواند کوتاه‌تر از 256 بیت باشد 
+ و بیت‌های مرتبه بالاتر در صورت لزوم پاک می‌شوند، یعنی کمی قبل از اینکه در مِمُوری نوشته شوند یا قبل از 
+ مقایسه کردن. این بدان معناست که اگر از داخل اسمبلی درون خطی به چنین متغیری دسترسی پیدا کنید، 
+ ممکن است لازم باشد ابتدا بیت‌های مرتبه بالاتر را به صورت دستی پاک کنید.
+
+
+
+سالیدیتی مِمُوری را به روش زیر مدیریت می‌کند. یک "اشاره‌گر مِمُوری آزاد" در موقعیت ``0x40`` در مِمُوری وجود 
+دارد. اگر می‌خواهید مِمُوری را تخصیص دهید، از جایی که این اشاره‌گر به آن اشاره میکند، استفاده کنید و آن را 
+به روز کنید. هیچ تضمینی وجود ندارد که حافظه قبلاً استفاده نشده‌است و بنابراین نمی‌توانید فرض کنید که 
+محتویات آن صفر بایت است. هیچ مکانیزم داخلی برای آزادسازی یا پاکسازی مِمُوریِ اختصاص داده شده وجود 
+ندارد. در اینجا یک قطعه اسمبلی وجود دارد که می‌توانید برای تخصیص مِمُوری از فرایند ذکر شده در بالا استفاده 
+کنید:
+
 
 .. code-block:: yul
 
@@ -252,19 +283,19 @@ Here is an assembly snippet you can use for allocating memory that follows the p
       mstore(0x40, add(pos, length))
     }
 
-The first 64 bytes of memory can be used as "scratch space" for short-term
-allocation. The 32 bytes after the free memory pointer (i.e., starting at ``0x60``)
-are meant to be zero permanently and is used as the initial value for
-empty dynamic memory arrays.
-This means that the allocatable memory starts at ``0x80``, which is the initial value
-of the free memory pointer.
+64 بایت اول مِمُوری می‌تواند به عنوان "فضای scratch" برای تخصیص کوتاه مدت استفاده شود. 32 بایت پس 
+از اشاره‌گر مِمُوری آزاد (یعنی از ``0x60`` شروع می‌شود) به طور دائم صفر است و به عنوان مقدار اولیه برای آرایه‌های 
+مِمُوری پویای خالی استفاده می‌شود. این بدان معناست که حافظه قابل تخصیص از ``0x80`` شروع می‌شود که مقدار 
+اولیه نشانگر حافظه آزاد است.
 
-Elements in memory arrays in Solidity always occupy multiples of 32 bytes (this is
-even true for ``bytes1[]``, but not for ``bytes`` and ``string``). Multi-dimensional memory
-arrays are pointers to memory arrays. The length of a dynamic array is stored at the
-first slot of the array and followed by the array elements.
+عناصر موجود در آرایه‌های مِمُوری در سالیدیتی همیشه مضرب 32 بایت را اشغال می‌کنند (این حتی برای ``[]byte`` 
+صادق است، اما برای ``bytes`` و ``string`` صادق نیست). آرایه‌های مِمُوری چند بعدی اشاره‌گرهایی به آرایه‌های مِمُوری 
+هستند. طول یک آرایه پویا در اولین اسلات آرایه ذخیره می‌شود و سپس عناصر آرایه دنبال می‌شود.
+
 
 .. warning::
-    Statically-sized memory arrays do not have a length field, but it might be added later
-    to allow better convertibility between statically- and dynamically-sized arrays, so
-    do not rely on this.
+
+    آرایه‌های مِمُوری با اندازه استاتیک دارای length field نیستند، اما ممکن است بعداً اضافه شوند تا قابلیت تبدیل 
+    بهتری بین آرایه‌های اندازه استاتیک و پویا ایجاد شود، بنابراین به این موضوع اتکا نکنید.
+
+   
