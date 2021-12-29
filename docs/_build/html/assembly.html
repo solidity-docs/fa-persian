@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inline Assembly &mdash; مستندات Solidity0.8.4</title>
+  <title>مونتاژ داخلی (Inline Assembly) &mdash; مستندات Solidity0.8.4</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/a4_railroad_diagram.css" type="text/css" />
@@ -24,7 +24,7 @@
     <link rel="index" title="فهرست" href="genindex.html" />
     <link rel="search" title="جستجو" href="search.html" />
     <link rel="next" title="Cheatsheet" href="cheatsheet.html" />
-    <link rel="prev" title="Contracts" href="contracts.html" /> 
+    <link rel="prev" title="قراردادها" href="contracts.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,14 +58,14 @@
 <li class="toctree-l1"><a class="reference internal" href="layout-of-source-files.html">چیدمان یک فایل منبع سالیدیتی</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure-of-a-contract.html">ساختار قرارداد</a></li>
 <li class="toctree-l1"><a class="reference internal" href="types.html">انواع</a></li>
-<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">Units and Globally Available Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-structures.html">Expressions and Control Structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contracts.html">Contracts</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Inline Assembly</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#access-to-external-variables-functions-and-libraries">Access to External Variables, Functions and Libraries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#things-to-avoid">Things to Avoid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#conventions-in-solidity">Conventions in Solidity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units-and-global-variables.html">واحدها و متغیرهای موجود در سطح جهانی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-structures.html">عبارات و ساختارهای کنترلی</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contracts.html">قراردادها</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">مونتاژ داخلی (Inline Assembly)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">مثال</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">دسترسی به متغیرها، توابع و کتابخانه‌های خارجی</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">مواردی که باید از آنها اجتناب کرد</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conventions-in-solidity">کنوانسیون‌ها در سالیدیتی (Conventions in Solidity)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Cheatsheet</a></li>
@@ -127,7 +127,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Inline Assembly</li>
+      <li>مونتاژ داخلی (Inline Assembly)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/assembly.rst.txt" rel="nofollow"> نمایش متن منبع صفحه</a>
       </li>
@@ -138,27 +138,42 @@
            <div itemprop="articleBody">
              
   <section id="inline-assembly">
-<span id="id1"></span><h1>Inline Assembly<a class="headerlink" href="#inline-assembly" title="پیوند ثابت به این سر مقاله"></a></h1>
-<p id="index-0">You can interleave Solidity statements with inline assembly in a language close
+<span id="id1"></span><h1>مونتاژ داخلی (Inline Assembly)<a class="headerlink" href="#inline-assembly" title="پیوند ثابت به این سر مقاله"></a></h1>
+<p id="index-0">می‌توانید دستورات سالیدیتی را با اسمبلی درون خطی به زبانی نزدیک به ماشین مجازی اتریوم جا دهید. این به
+شما کنترل دقیق‌تری می‌دهد، که به ویژه هنگامی که با نوشتن کتابخانه‌ها زبان را تقویت می‌کنید مفید است.</p>
+<p>You can interleave Solidity statements with inline assembly in a language close
 to the one of the Ethereum virtual machine. This gives you more fine-grained control,
 which is especially useful when you are enhancing the language by writing libraries.</p>
+<p>زبانی که برای مونتاژ خطی در سالیدیتی استفاده می‌شود Yul نام دارد و در بخش مخصوص خود مستند شده
+است. این بخش فقط نحوه ارتباط کد مونتاژ درون خطی با کد سالیدیتی را پوشش می‌دهد.</p>
 <p>The language used for inline assembly in Solidity is called <a class="reference internal" href="yul.html#yul"><span class="std std-ref">Yul</span></a>
 and it is documented in its own section. This section will only cover
 how the inline assembly code can interface with the surrounding Solidity code.</p>
 <div class="admonition warning">
 <p class="admonition-title">هشدار</p>
+<p>مونتاژ داخلی راهی برای دسترسی به ماشین مجازی اتریوم در سطح پایین است. مونتاژ داخلی چندین ویژگی
+ایمنی مهم و بررسی سالیدیتی را دور می‌زند. شما فقط باید از آن برای وظایفی که به آن نیاز دارند استفاده کنید
+و فقط در صورت اطمینان از استفاده از آن.</p>
 <p>Inline assembly is a way to access the Ethereum Virtual Machine
 at a low level. This bypasses several important safety
 features and checks of Solidity. You should only use it for
 tasks that need it, and only if you are confident with using it.</p>
 </div>
+<p>یک بلوک مونتاژ درون خطی با assembly { ... } مشخص می‌شود، جایی که کد داخل آکولاد ها به زبان Yul
+کد است.</p>
 <p>An inline assembly block is marked by <code class="docutils literal notranslate"><span class="pre">assembly</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>, where the code inside
 the curly braces is code in the <a class="reference internal" href="yul.html#yul"><span class="std std-ref">Yul</span></a> language.</p>
+<p>کد مونتاژ درون خطی می‌تواند به متغیرهای سالیدیتی محلی دسترسی پیدا کند که در زیر توضیح داده شده است.</p>
 <p>The inline assembly code can access local Solidity variables as explained below.</p>
+<p>بلوک‌های مختلف مونتاژ درون خطی هیچ نامی ندارند، به عنوان مثال نمی‌توان یک تابع Yul را فراخوانی کرد یا
+به یک متغیر Yul که در یک بلوک مونتاژ داخلی متفاوت تعریف شده است دسترسی پیدا کرد.</p>
 <p>Different inline assembly blocks share no namespace, i.e. it is not possible
 to call a Yul function or access a Yul variable defined in a different inline assembly block.</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="id2">
+<h2>مثال<a class="headerlink" href="#id2" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>مثال زیر کد کتابخانه‌ای را برای دسترسی به کد قرارداد دیگر و بارگذاری آن در متغیر bytes ارائه می‌دهد. این
+امر با &quot; plain Solidity&quot; امکان پذیر نیست و ایده این است که کتابخانه‌های مونتاژ چندبار مصرف می‌توانند زبان
+سالیدیتی را بدون تغییر کامپایلر تقویت کنند.</p>
 <p>The following example provides library code to access the code of another contract and
 load it into a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> variable. This is possible with &quot;plain Solidity&quot; too, by using
 <code class="docutils literal notranslate"><span class="pre">&lt;address&gt;.code</span></code>. But the point here is that reusable assembly libraries can enhance the
@@ -186,6 +201,7 @@ Solidity language without a compiler change.</p>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+<p>مونتاژ داخلی در مواردی که بهینه ساز قادر به تولید کد کارآمد نباشد، مفید است، به عنوان مثال:</p>
 <p>Inline assembly is also beneficial in cases where the optimizer fails to produce
 efficient code, for example:</p>
 <p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=solidity&amp;version=0.8.4&amp;code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0zLjAKcHJhZ21hIHNvbGlkaXR5ID49MC40LjE2IDwwLjkuMDsKCgpsaWJyYXJ5IFZlY3RvclN1bSB7CiAgICAvLyBUaGlzIGZ1bmN0aW9uIGlzIGxlc3MgZWZmaWNpZW50IGJlY2F1c2UgdGhlIG9wdGltaXplciBjdXJyZW50bHkgZmFpbHMgdG8KICAgIC8vIHJlbW92ZSB0aGUgYm91bmRzIGNoZWNrcyBpbiBhcnJheSBhY2Nlc3MuCiAgICBmdW5jdGlvbiBzdW1Tb2xpZGl0eSh1aW50W10gbWVtb3J5IF9kYXRhKSBwdWJsaWMgcHVyZSByZXR1cm5zICh1aW50IHN1bSkgewogICAgICAgIGZvciAodWludCBpID0gMDsgaSA8IF9kYXRhLmxlbmd0aDsgKytpKQogICAgICAgICAgICBzdW0gKz0gX2RhdGFbaV07CiAgICB9CgogICAgLy8gV2Uga25vdyB0aGF0IHdlIG9ubHkgYWNjZXNzIHRoZSBhcnJheSBpbiBib3VuZHMsIHNvIHdlIGNhbiBhdm9pZCB0aGUgY2hlY2suCiAgICAvLyAweDIwIG5lZWRzIHRvIGJlIGFkZGVkIHRvIGFuIGFycmF5IGJlY2F1c2UgdGhlIGZpcnN0IHNsb3QgY29udGFpbnMgdGhlCiAgICAvLyBhcnJheSBsZW5ndGguCiAgICBmdW5jdGlvbiBzdW1Bc20odWludFtdIG1lbW9yeSBfZGF0YSkgcHVibGljIHB1cmUgcmV0dXJucyAodWludCBzdW0pIHsKICAgICAgICBmb3IgKHVpbnQgaSA9IDA7IGkgPCBfZGF0YS5sZW5ndGg7ICsraSkgewogICAgICAgICAgICBhc3NlbWJseSB7CiAgICAgICAgICAgICAgICBzdW0gOj0gYWRkKHN1bSwgbWxvYWQoYWRkKGFkZChfZGF0YSwgMHgyMCksIG11bChpLCAweDIwKSkpKQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIC8vIFNhbWUgYXMgYWJvdmUsIGJ1dCBhY2NvbXBsaXNoIHRoZSBlbnRpcmUgY29kZSB3aXRoaW4gaW5saW5lIGFzc2VtYmx5LgogICAgZnVuY3Rpb24gc3VtUHVyZUFzbSh1aW50W10gbWVtb3J5IF9kYXRhKSBwdWJsaWMgcHVyZSByZXR1cm5zICh1aW50IHN1bSkgewogICAgICAgIGFzc2VtYmx5IHsKICAgICAgICAgICAgLy8gTG9hZCB0aGUgbGVuZ3RoIChmaXJzdCAzMiBieXRlcykKICAgICAgICAgICAgbGV0IGxlbiA6PSBtbG9hZChfZGF0YSkKCiAgICAgICAgICAgIC8vIFNraXAgb3ZlciB0aGUgbGVuZ3RoIGZpZWxkLgogICAgICAgICAgICAvLwogICAgICAgICAgICAvLyBLZWVwIHRlbXBvcmFyeSB2YXJpYWJsZSBzbyBpdCBjYW4gYmUgaW5jcmVtZW50ZWQgaW4gcGxhY2UuCiAgICAgICAgICAgIC8vCiAgICAgICAgICAgIC8vIE5PVEU6IGluY3JlbWVudGluZyBfZGF0YSB3b3VsZCByZXN1bHQgaW4gYW4gdW51c2FibGUKICAgICAgICAgICAgLy8gICAgICAgX2RhdGEgdmFyaWFibGUgYWZ0ZXIgdGhpcyBhc3NlbWJseSBibG9jawogICAgICAgICAgICBsZXQgZGF0YSA6PSBhZGQoX2RhdGEsIDB4MjApCgogICAgICAgICAgICAvLyBJdGVyYXRlIHVudGlsIHRoZSBib3VuZCBpcyBub3QgbWV0LgogICAgICAgICAgICBmb3IKICAgICAgICAgICAgICAgIHsgbGV0IGVuZCA6PSBhZGQoZGF0YSwgbXVsKGxlbiwgMHgyMCkpIH0KICAgICAgICAgICAgICAgIGx0KGRhdGEsIGVuZCkKICAgICAgICAgICAgICAgIHsgZGF0YSA6PSBhZGQoZGF0YSwgMHgyMCkgfQogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICBzdW0gOj0gYWRkKHN1bSwgbWxvYWQoZGF0YSkpCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cn0="><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
@@ -240,11 +256,10 @@ efficient code, for example:</p>
 </pre></div>
 </div>
 </section>
-<section id="access-to-external-variables-functions-and-libraries">
-<h2>Access to External Variables, Functions and Libraries<a class="headerlink" href="#access-to-external-variables-functions-and-libraries" title="پیوند ثابت به این سر مقاله"></a></h2>
-<p>You can access Solidity variables and other identifiers by using their name.</p>
-<p>Local variables of value type are directly usable in inline assembly.
-They can both be read and assigned to.</p>
+<section id="id3">
+<h2>دسترسی به متغیرها، توابع و کتابخانه‌های خارجی<a class="headerlink" href="#id3" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>با استفاده از نام متغیرهای سالیدیتی و سایر identifier ها می‌توانید به آنها دسترسی پیدا کنید.</p>
+<p>متغیرهای محلی از نوع ارزش به طور مستقیم در اسمبلی درون خطی قابل استفاده هستند.</p>
 <p>Local variables that refer to memory evaluate to the address of the variable in memory not the value itself.
 Such variables can also be assigned to, but note that an assignment will only change the pointer and not the data
 and that it is your responsibility to respect Solidity's memory management.
@@ -322,8 +337,12 @@ shadow any declaration visible in the scope of the inline assembly block
 inline assembly block may not contain <code class="docutils literal notranslate"><span class="pre">.</span></code>, but using <code class="docutils literal notranslate"><span class="pre">.</span></code> is
 valid to access Solidity variables from outside the inline assembly block.</p>
 </section>
-<section id="things-to-avoid">
-<h2>Things to Avoid<a class="headerlink" href="#things-to-avoid" title="پیوند ثابت به این سر مقاله"></a></h2>
+<section id="id4">
+<h2>مواردی که باید از آنها اجتناب کرد<a class="headerlink" href="#id4" title="پیوند ثابت به این سر مقاله"></a></h2>
+<p>اسمبلی داخلی ممکن است ظاهری کاملاً سطح بالا داشته باشد، اما در واقع سطح بسیار پایینی دارد. فراخوانی‌های
+تابع، حلقه‌ها، if ها و سوئیچ ها با قوانین بازنویسی ساده تبدیل می‌شوند و پس از آن، تنها کاری که اسمبلی برای
+شما انجام می‌دهد، مرتب سازی مجدد آپکدهای سبک تابعی، شمارش ارتفاع پشته برای دسترسی متغیرها و حذف
+اسلات‌های پشته برای متغیرهای مونتاژ محلی است. وقتی به انتهای بلوک آنها رسید.</p>
 <p>Inline assembly might have a quite high-level look, but it actually is extremely
 low-level. Function calls, loops, ifs and switches are converted by simple
 rewriting rules and after that, the only thing the assembler does for you is re-arranging
@@ -332,22 +351,19 @@ variable access and removing stack slots for assembly-local variables when the e
 of their block is reached.</p>
 </section>
 <section id="conventions-in-solidity">
-<span id="id2"></span><h2>Conventions in Solidity<a class="headerlink" href="#conventions-in-solidity" title="پیوند ثابت به این سر مقاله"></a></h2>
-<p>In contrast to EVM assembly, Solidity has types which are narrower than 256 bits,
-e.g. <code class="docutils literal notranslate"><span class="pre">uint24</span></code>. For efficiency, most arithmetic operations ignore the fact that
-types can be shorter than 256
-bits, and the higher-order bits are cleaned when necessary,
-i.e., shortly before they are written to memory or before comparisons are performed.
-This means that if you access such a variable
-from within inline assembly, you might have to manually clean the higher-order bits
-first.</p>
-<p>Solidity manages memory in the following way. There is a &quot;free memory pointer&quot;
-at position <code class="docutils literal notranslate"><span class="pre">0x40</span></code> in memory. If you want to allocate memory, use the memory
-starting from where this pointer points at and update it.
-There is no guarantee that the memory has not been used before and thus
-you cannot assume that its contents are zero bytes.
-There is no built-in mechanism to release or free allocated memory.
-Here is an assembly snippet you can use for allocating memory that follows the process outlined above</p>
+<span id="id5"></span><h2>کنوانسیون‌ها در سالیدیتی (Conventions in Solidity)<a class="headerlink" href="#conventions-in-solidity" title="پیوند ثابت به این سر مقاله"></a></h2>
+<dl class="simple">
+<dt>بر خلاف اسمبلیEVM ، سالیدیتی دارای انواع کوتاه‌تر از 256 بیت است، به عنوان مثال <code class="docutils literal notranslate"><span class="pre">uint24</span></code> .برای کارآیی، اکثر عملیات حسابی این واقعیت را نادیده می‌گیرند که نوع آنها می‌تواند کوتاه‌تر از 256 بیت باشد</dt><dd><p>و بیت‌های مرتبه بالاتر در صورت لزوم پاک می‌شوند، یعنی کمی قبل از اینکه در مِمُوری نوشته شوند یا قبل از
+مقایسه کردن. این بدان معناست که اگر از داخل اسمبلی درون خطی به چنین متغیری دسترسی پیدا کنید،
+ممکن است لازم باشد ابتدا بیت‌های مرتبه بالاتر را به صورت دستی پاک کنید.</p>
+</dd>
+</dl>
+<p>سالیدیتی مِمُوری را به روش زیر مدیریت می‌کند. یک &quot;اشاره‌گر مِمُوری آزاد&quot; در موقعیت <code class="docutils literal notranslate"><span class="pre">0x40</span></code> در مِمُوری وجود
+دارد. اگر می‌خواهید مِمُوری را تخصیص دهید، از جایی که این اشاره‌گر به آن اشاره میکند، استفاده کنید و آن را
+به روز کنید. هیچ تضمینی وجود ندارد که حافظه قبلاً استفاده نشده‌است و بنابراین نمی‌توانید فرض کنید که
+محتویات آن صفر بایت است. هیچ مکانیزم داخلی برای آزادسازی یا پاکسازی مِمُوریِ اختصاص داده شده وجود
+ندارد. در اینجا یک قطعه اسمبلی وجود دارد که می‌توانید برای تخصیص مِمُوری از فرایند ذکر شده در بالا استفاده
+کنید:</p>
 <p class="remix-link-container"><a class="remix-link reference external" href="https://remix.ethereum.org/?language=yul&amp;version=0.8.4&amp;code=ZnVuY3Rpb24gYWxsb2NhdGUobGVuZ3RoKSAtPiBwb3MgewogIHBvcyA6PSBtbG9hZCgweDQwKQogIG1zdG9yZSgweDQwLCBhZGQocG9zLCBsZW5ndGgpKQp9"><span class="link-icon"></span><span class="link-text">open in Remix</span></a></p>
 <div class="highlight-yul notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">allocate</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pos</span> <span class="p">{</span>
   <span class="n">pos</span> <span class="o">:=</span> <span class="nf">mload</span><span class="p">(</span><span class="mh">0x40</span><span class="p">)</span>
@@ -355,21 +371,17 @@ Here is an assembly snippet you can use for allocating memory that follows the p
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The first 64 bytes of memory can be used as &quot;scratch space&quot; for short-term
-allocation. The 32 bytes after the free memory pointer (i.e., starting at <code class="docutils literal notranslate"><span class="pre">0x60</span></code>)
-are meant to be zero permanently and is used as the initial value for
-empty dynamic memory arrays.
-This means that the allocatable memory starts at <code class="docutils literal notranslate"><span class="pre">0x80</span></code>, which is the initial value
-of the free memory pointer.</p>
-<p>Elements in memory arrays in Solidity always occupy multiples of 32 bytes (this is
-even true for <code class="docutils literal notranslate"><span class="pre">bytes1[]</span></code>, but not for <code class="docutils literal notranslate"><span class="pre">bytes</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>). Multi-dimensional memory
-arrays are pointers to memory arrays. The length of a dynamic array is stored at the
-first slot of the array and followed by the array elements.</p>
+<p>64 بایت اول مِمُوری می‌تواند به عنوان &quot;فضای scratch&quot; برای تخصیص کوتاه مدت استفاده شود. 32 بایت پس
+از اشاره‌گر مِمُوری آزاد (یعنی از <code class="docutils literal notranslate"><span class="pre">0x60</span></code> شروع می‌شود) به طور دائم صفر است و به عنوان مقدار اولیه برای آرایه‌های
+مِمُوری پویای خالی استفاده می‌شود. این بدان معناست که حافظه قابل تخصیص از <code class="docutils literal notranslate"><span class="pre">0x80</span></code> شروع می‌شود که مقدار
+اولیه نشانگر حافظه آزاد است.</p>
+<p>عناصر موجود در آرایه‌های مِمُوری در سالیدیتی همیشه مضرب 32 بایت را اشغال می‌کنند (این حتی برای <code class="docutils literal notranslate"><span class="pre">[]byte</span></code>
+صادق است، اما برای <code class="docutils literal notranslate"><span class="pre">bytes</span></code> و <code class="docutils literal notranslate"><span class="pre">string</span></code> صادق نیست). آرایه‌های مِمُوری چند بعدی اشاره‌گرهایی به آرایه‌های مِمُوری
+هستند. طول یک آرایه پویا در اولین اسلات آرایه ذخیره می‌شود و سپس عناصر آرایه دنبال می‌شود.</p>
 <div class="admonition warning">
 <p class="admonition-title">هشدار</p>
-<p>Statically-sized memory arrays do not have a length field, but it might be added later
-to allow better convertibility between statically- and dynamically-sized arrays, so
-do not rely on this.</p>
+<p>آرایه‌های مِمُوری با اندازه استاتیک دارای length field نیستند، اما ممکن است بعداً اضافه شوند تا قابلیت تبدیل
+بهتری بین آرایه‌های اندازه استاتیک و پویا ایجاد شود، بنابراین به این موضوع اتکا نکنید.</p>
 </div>
 </section>
 </section>
@@ -378,7 +390,7 @@ do not rely on this.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="contracts.html" class="btn btn-neutral float-left" title="Contracts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
+        <a href="contracts.html" class="btn btn-neutral float-left" title="قراردادها" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> پیشین</a>
         <a href="cheatsheet.html" class="btn btn-neutral float-right" title="Cheatsheet" accesskey="n" rel="next">بعدی <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
