@@ -49,8 +49,11 @@
     چین قابل مشاهده است.
 
 
-مشخص کننده میدان دید پس از نوع متغیر وضعیت و در توابع بین لیست پارامتر ها و لیست
-پارامتر های بازگشتی می آید.
+
+
+The visibility specifier is given after the type for
+state variables and between parameter list and
+return parameter list for functions.
 
 
 
@@ -65,9 +68,10 @@
         uint public data;
     }
 
-در مثال زیر، ``D`` ، می تواند ``()c.getData`` برای گرفتن مقدار ``data`` در وضعیت ذخیره سازی
-فراخوانی کند، اما نمی تواند ``f``  را فراخوانی کند. قرارداد ``E`` از ``C`` گرفته شده است پس می تواند
-``compute`` را فراخوانی کند.
+
+In the following example, ``D``, can call ``c.getData()`` to retrieve the value of
+``data`` in state storage, but is not able to call ``f``. Contract ``E`` is derived from
+``C`` and, thus, can call ``compute``.
 
 
 .. code-block:: solidity
@@ -105,14 +109,15 @@
 .. index:: ! getter;function, ! function;getter
 .. _getter-functions:
 
-توابع گیرنده (Getter Functions)
+Getter Functions
 ================
 
-
-کامپایلر بصورت اتوماتیک توابع گیرنده برای تمامی متغیر های وضعیت **عمومی** می سازد. در
-قرارداد ارائه شده زیر، کامپایلر یک تابعی بنام ``data`` تولید خواهد کرد که پارامتر ورودی نخواهد
-داشت و یک ``uint`` ، مقدار متغیر وضعیت ``data`` را بر خواهد گردانید. متغیر های وضعیت می
-توانند هنگام تعریف مقدار دهی اولیه نیز شوند.
+The compiler automatically creates getter functions for
+all **public** state variables. For the contract given below, the compiler will
+generate a function called ``data`` that does not take any
+arguments and returns a ``uint``, the value of the state
+variable ``data``. State variables can be initialized
+when they are declared.
 
 
 
@@ -132,9 +137,10 @@
         }
     }
 
-توابع گیرنده دید خارجی دارند. اگر به نماد(symbol) به طور داخلی دسترسی پیدا شود( مثل :
-بدون استفاده از ``.this`` ) آن را به عنوان یک متغیر وضعیت می پندارد. اگر به طور خارجی
-دسترسی پیدا شود آن را به عنوان یک تابع می پندارد.
+The getter functions have external visibility. If the
+symbol is accessed internally (i.e. without ``this.``),
+it evaluates to a state variable.  If it is accessed externally
+(i.e. with ``this.``), it evaluates to a function.
 
 
 .. code-block:: solidity
@@ -150,12 +156,12 @@
         }
     }
 
-
-اگر شما آرایه ای از متغیر های وضعیت از نوع ``public`` دارید، شما قادر خواهید بود که فقط یک
-عنصر از آرایه را توسط تابع گیرنده تولید شده بر گردانید. این مکانیزم(سازوکار) بوجود آمده تا
-از هزینه بالای گاز هنگام برگرداندن کل آرایه جلوگیری کند. شما می توانید با مشخص کردن
-ورودی  عنصر مورد نیاز خود از آرایه بازگردانید، برای مثال ``myArray(0)`` . اگر شما می خواهید کل
-آرایه را در یک فراخوانی بازگردانید نیاز مند نوشتن یک تابع هستید به عنوان مثال:
+If you have a ``public`` state variable of array type, then you can only retrieve
+single elements of the array via the generated getter function. This mechanism
+exists to avoid high gas costs when returning an entire array. You can use
+arguments to specify which individual element to return, for example
+``myArray(0)``. If you want to return an entire array in one call, then you need
+to write a function, for example:
 
 
 .. code-block:: solidity
@@ -180,11 +186,8 @@
         }
     }
 
-
-حالا شما می توانید از ``()getArray`` جهت گرفتن کل آرایه، بجای استفاده از ``myArray(i)`` که یک
-عنصر به ازای هر فراخوانی باز می گرداند ، استفاده کنید. 
-
-
+Now you can use ``getArray()`` to retrieve the entire array, instead of
+``myArray(i)``, which returns a single element per call.
 
 The next example is more complex:
 
@@ -205,11 +208,9 @@ The next example is more complex:
         mapping (uint => mapping(bool => Data[])) public data;
     }
 
-این تابعی به شکل زیر ایجاد می کند.
-نگاشت و آرایه‌ها (به استثنای آرایه‌های بایت) در struct حذف می‌شوند
-، زیرا هیچ راه مناسبی برای انتخاب اعضای struct به صورت جداگانه یا ارائه کلیدی برای نگاشت وجود ندارد:
-
-
+It generates a function of the following form. The mapping and arrays (with the
+exception of byte arrays) in the struct are omitted because there is no good way
+to select individual struct members or provide a key for the mapping:
 
 .. code-block:: solidity
 
