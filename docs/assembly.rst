@@ -10,16 +10,11 @@
 می‌توانید دستورات سالیدیتی را با اسمبلی درون خطی به زبانی نزدیک به ماشین مجازی اتریوم جا دهید. این به 
 شما کنترل دقیق‌تری می‌دهد، که به ویژه هنگامی که با نوشتن کتابخانه‌ها زبان را تقویت می‌کنید مفید است.
 
-You can interleave Solidity statements with inline assembly in a language close
-to the one of the Ethereum virtual machine. This gives you more fine-grained control,
-which is especially useful when you are enhancing the language by writing libraries.
 
-زبانی که برای مونتاژ خطی در سالیدیتی استفاده می‌شود Yul نام دارد و در بخش مخصوص خود مستند شده 
+زبانی که برای مونتاژ خطی در سالیدیتی استفاده می‌شود :ref:`Yul <yul>` نام دارد و در بخش مخصوص خود مستند شده 
 است. این بخش فقط نحوه ارتباط کد مونتاژ درون خطی با کد سالیدیتی را پوشش می‌دهد.
 
-The language used for inline assembly in Solidity is called :ref:`Yul <yul>`
-and it is documented in its own section. This section will only cover
-how the inline assembly code can interface with the surrounding Solidity code.
+
 
 
 .. warning::
@@ -28,40 +23,28 @@ how the inline assembly code can interface with the surrounding Solidity code.
     ایمنی مهم و بررسی سالیدیتی را دور می‌زند. شما فقط باید از آن برای وظایفی که به آن نیاز دارند استفاده کنید 
     و فقط در صورت اطمینان از استفاده از آن.
 
-    Inline assembly is a way to access the Ethereum Virtual Machine
-    at a low level. This bypasses several important safety
-    features and checks of Solidity. You should only use it for
-    tasks that need it, and only if you are confident with using it.
-
-یک بلوک مونتاژ درون خطی با assembly { ... } مشخص می‌شود، جایی که کد داخل آکولاد ها به زبان Yul 
+یک بلوک مونتاژ درون خطی با ``{ ... } assembly`` مشخص می‌شود، جایی که کد داخل آکولاد ها به زبان :ref:`Yul <yul>` 
 کد است.
 
-An inline assembly block is marked by ``assembly { ... }``, where the code inside
-the curly braces is code in the :ref:`Yul <yul>` language.
+
 
 کد مونتاژ درون خطی می‌تواند به متغیرهای سالیدیتی محلی دسترسی پیدا کند که در زیر توضیح داده شده است.
 
-The inline assembly code can access local Solidity variables as explained below.
+
 
 بلوک‌های مختلف مونتاژ درون خطی هیچ نامی ندارند، به عنوان مثال نمی‌توان یک تابع Yul را فراخوانی کرد یا 
 به یک متغیر Yul که در یک بلوک مونتاژ داخلی متفاوت تعریف شده است دسترسی پیدا کرد.
 
-Different inline assembly blocks share no namespace, i.e. it is not possible
-to call a Yul function or access a Yul variable defined in a different inline assembly block.
 
 مثال
 -------
 
-مثال زیر کد کتابخانه‌ای را برای دسترسی به کد قرارداد دیگر و بارگذاری آن در متغیر bytes ارائه می‌دهد. این 
-امر با " plain Solidity" امکان پذیر نیست و ایده این است که کتابخانه‌های مونتاژ چندبار مصرف می‌توانند زبان 
-سالیدیتی را بدون تغییر کامپایلر تقویت کنند.
+مثال زیر کد کتابخانه‌ای را برای دسترسی به کد قرارداد دیگر و بارگذاری آن در متغیر  ``bytes`` ارائه می‌دهد. این امر با استفاده 
+از  ``<address>.code`` با "Plain Solidity" نیز امکان پذیر است. اما نکته اینجاست که کتابخانه‌های اسمبلی قابل استفاده مجدد 
+می‌توانند زبان سالیدیتی را بدون تغییر کامپایلر افزایش دهند.
 
-The following example provides library code to access the code of another contract and
-load it into a ``bytes`` variable. This is possible with "plain Solidity" too, by using
-``<address>.code``. But the point here is that reusable assembly libraries can enhance the
-Solidity language without a compiler change.
 
-.. code-block:: solidity
+.. code::
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.4.16 <0.9.0;
@@ -86,10 +69,8 @@ Solidity language without a compiler change.
 
 مونتاژ داخلی در مواردی که بهینه ساز قادر به تولید کد کارآمد نباشد، مفید است، به عنوان مثال:
 
-Inline assembly is also beneficial in cases where the optimizer fails to produce
-efficient code, for example:
 
-.. code-block:: solidity
+.. code::
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.4.16 <0.9.0;
@@ -151,59 +132,30 @@ efficient code, for example:
 متغیرهای محلی از نوع ارزش به طور مستقیم در اسمبلی درون خطی قابل استفاده هستند.
 
 
-Local variables that refer to memory evaluate to the address of the variable in memory not the value itself.
-Such variables can also be assigned to, but note that an assignment will only change the pointer and not the data
-and that it is your responsibility to respect Solidity's memory management.
-See :ref:`Conventions in Solidity <conventions-in-solidity>`.
+متغیرهای محلی که به مِمُوری اشاره می‌کنند به آدرس متغیر موجود در مِمُوری ارزیابی می‌شوند نه خود مقدار. چنین متغیرهایی را 
+می‌توان به آن‌ها نیز اختصاص داد، اما توجه داشته باشید که یک انتساب فقط نشانگر را تغییر می‌دهد و نه داده‌ها را و این مسئولیت 
+شماست که به مدیریت مِمُوری سالیدیتی توجه کنید. قسمت :ref:`Conventions in Solidity <conventions-in-solidity>` را مشاهده کنید.
 
-Similarly, local variables that refer to statically-sized calldata arrays or calldata structs
-evaluate to the address of the variable in calldata, not the value itself.
-The variable can also be assigned a new offset, but note that no validation to ensure that
-the variable will not point beyond ``calldatasize()`` is performed.
+به طور مشابه، متغیرهای محلی که به آرایه‌های calldata با اندازه استاتیک یا ساختارهای calldata اشاره می‌کنند، به آدرس 
+متغیر در calldata، نه خود مقدار، ارزیابی می‌شوند. همچنین می‌توان یک آفست جدید به متغیر اختصاص داد، اما توجه داشته 
+باشید که هیچ اعتبارسنجی برای اطمینان از اینکه متغیر فراتر از ``()calldatasize`` قرار نمی‌گیرد، انجام نمی‌شود.
 
-For external function pointers the address and the function selector can be
-accessed using ``x.address`` and ``x.selector``.
-The selector consists of four right-aligned bytes.
-Both values are can be assigned to. For example:
+برای آرایه‌های calldata پویا، می‌توانید با استفاده از ``x.offset`` و ``x.length`` به offset call data (بر حسب بایت) و 
+طول (تعداد عناصر) آنها دسترسی داشته باشید. هر دو عبارت را نیز می‌توان به آن اختصاص داد، اما در مورد حالت استاتیک، هیچ 
+اعتبارسنجی برای اطمینان از اینکه ناحیه داده حاصل در محدوده ``() calldatasize``  است انجام نمی شود.
 
-.. code-block:: solidity
-    :force:
+برای متغیرهای storage  محلی یا متغیرهای حالت، یک شناسه Yul کافی نیست، زیرا آنها لزوماً یک اسلات storage  
+کامل را اشغال نمی‌کنند. بنابراین، " address" آنها از یک اسلات و یک بایت آفست در داخل آن اسلات تشکیل شده است. برای 
+بازیابی اسلاتی که متغیر ``x`` به آن اشاره می کند، از ``x.slot`` و برای بازیابی بایت آفست از ``x.offset`` استفاده می‌کنید. استفاده از ``x`` 
+خود منجر به خطا می‌شود.
 
-    // SPDX-License-Identifier: GPL-3.0
-    pragma solidity >=0.8.10 <0.9.0;
+شما همچنین می‌توانید به بخش ``slot.`` یک اشاره گر متغیر storage  محلی اختصاص دهید. برای اینها (structها، آرایه‌ها یا 
+mappingها)، قسمت ``offset.`` همیشه صفر است. با این حال، نمی‌توان به قسمت ``slot.`` یا ``offset.`` یک متغیر حالت اختصاص داد.
 
-    contract C {
-        // Assigns a new selector and address to the return variable @fun
-        function combineToFunctionPointer(address newAddress, uint newSelector) public pure returns (function() external fun) {
-            assembly {
-                fun.selector := newSelector
-                fun.address  := newAddress
-            }
-        }
-    }
+متغیرهای سالیدیتی محلی برای اختصاص دادن (assignments) در دسترس هستند، به عنوان مثال:
 
 
-For dynamic calldata arrays, you can access
-their calldata offset (in bytes) and length (number of elements) using ``x.offset`` and ``x.length``.
-Both expressions can also be assigned to, but as for the static case, no validation will be performed
-to ensure that the resulting data area is within the bounds of ``calldatasize()``.
-
-For local storage variables or state variables, a single Yul identifier
-is not sufficient, since they do not necessarily occupy a single full storage slot.
-Therefore, their "address" is composed of a slot and a byte-offset
-inside that slot. To retrieve the slot pointed to by the variable ``x``, you
-use ``x.slot``, and to retrieve the byte-offset you use ``x.offset``.
-Using ``x`` itself will result in an error.
-
-You can also assign to the ``.slot`` part of a local storage variable pointer.
-For these (structs, arrays or mappings), the ``.offset`` part is always zero.
-It is not possible to assign to the ``.slot`` or ``.offset`` part of a state variable,
-though.
-
-Local Solidity variables are available for assignments, for example:
-
-.. code-block:: solidity
-    :force:
+.. code::
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
@@ -219,26 +171,24 @@ Local Solidity variables are available for assignments, for example:
         }
     }
 
+
 .. warning::
-    If you access variables of a type that spans less than 256 bits
-    (for example ``uint64``, ``address``, or ``bytes16``),
-    you cannot make any assumptions about bits not part of the
-    encoding of the type. Especially, do not assume them to be zero.
-    To be safe, always clear the data properly before you use it
-    in a context where this is important:
-    ``uint32 x = f(); assembly { x := and(x, 0xffffffff) /* now use x */ }``
-    To clean signed types, you can use the ``signextend`` opcode:
-    ``assembly { signextend(<num_bytes_of_x_minus_one>, x) }``
+
+    اگر به متغیرهایی از نوعی دسترسی داشته باشید که کمتر از 256 بیت را شامل می‌شود (به عنوان 
+    مثال  ``uint64`` ،  ``address`` یا  ``bytes16`` )، نمی‌توانید هیچ فرضی در مورد بیت‌هایی که بخشی از کدگذاری آن نوع نیستند، داشته 
+    باشید. به خصوص، آنها را صفر فرض نکنید. برای ایمن بودن، همیشه قبل از استفاده از آن در زمینه‌ای که مهم است، داده‌ها را به 
+    درستی پاک کنید: از  ``uint32 x = f(); assembly { x := and(x, 0xffffffff) /* now use x */ }`` برای پاک 
+    کردن signed typeها استفاده کنید،  می‌توانید از آپکد ``signextend``  استفاده کنید: ``assembly { signextend(<num_bytes_of_x_minus_one>, x) }``
 
 
-Since Solidity 0.6.0 the name of a inline assembly variable may not
-shadow any declaration visible in the scope of the inline assembly block
-(including variable, contract and function declarations).
+از نسخه  0.6.0  سالیدیتی نام یک متغیر اسمبلی درون خطی ممکن است هیچ اعلان قابل مشاهده در محدوده بلوک اسمبلی درون 
+خطی (شامل اعلان‌های متغیر، قرارداد و تابع) را تحت الشعاع قرار ندهد.
 
 
-Since Solidity 0.7.0, variables and functions declared inside the
-inline assembly block may not contain ``.``, but using ``.`` is
-valid to access Solidity variables from outside the inline assembly block.
+  از  نسخه 0.7.0 سالیدیتی، متغیرها و توابع اعلام شده در داخل بلوک اسمبلی درون خطی ممکن است حاوی  ``.`` نباشند، اما 
+  از  ``.`` برای دسترسی به متغیرهای سالیدیتی از خارج از بلوک اسمبلی درون خطی معتبر است.
+
+
 
 مواردی که باید از آنها اجتناب کرد
 ---------------
@@ -248,12 +198,6 @@ valid to access Solidity variables from outside the inline assembly block.
 شما انجام می‌دهد، مرتب سازی مجدد آپکدهای سبک تابعی، شمارش ارتفاع پشته برای دسترسی متغیرها و حذف 
 اسلات‌های پشته برای متغیرهای مونتاژ محلی است. وقتی به انتهای بلوک آنها رسید.
 
-Inline assembly might have a quite high-level look, but it actually is extremely
-low-level. Function calls, loops, ifs and switches are converted by simple
-rewriting rules and after that, the only thing the assembler does for you is re-arranging
-functional-style opcodes, counting stack height for
-variable access and removing stack slots for assembly-local variables when the end
-of their block is reached.
 
 .. _conventions-in-solidity:
 
