@@ -2,52 +2,60 @@
 .. index: memory layout
 
 ****************
-Layout in Memory
+چیدمان در مِمُوری (Layout in Memory)
 ****************
 
-Solidity reserves four 32-byte slots, with specific byte ranges (inclusive of endpoints) being used as follows:
+سالیدیتی چهار اسلات 32 بایتی را رزرو کرده که از محدوده‌های خاص (شامل نقاط پایانی) به شرح زیر استفاده شده:
 
-- ``0x00`` - ``0x3f`` (64 bytes): scratch space for hashing methods
-- ``0x40`` - ``0x5f`` (32 bytes): currently allocated memory size (aka. free memory pointer)
-- ``0x60`` - ``0x7f`` (32 bytes): zero slot
+- ``0x00`` - ``0x3f`` آ(64 bytes): فضای Scratch برای متدهای هش کردن
+- ``0x40`` - ``0x5f`` آ(32 bytes): اندازه مِمُوری فعلی اختصاص داده شده (معروف به نشانگر حافظه آزاد )
+- ``0x60`` - ``0x7f`` آ(32 bytes): اسلات صفر
 
-Scratch space can be used between statements (i.e. within inline assembly). The zero slot
-is used as initial value for dynamic memory arrays and should never be written to
-(the free memory pointer points to ``0x80`` initially).
+فضای Scratch را می‌توان بین دستورات (به عنوان مثال در اسمبلی درون خطی) استفاده کرد. اسلات صفر به 
+عنوان مقدار اولیه برای آرایه‌های مِمُوری داینامیک استفاده می‌شود و هرگز نباید روی آن نوشته شود (اشاره‌گر 
+مِمُوری آزاد در ابتدا به ``0x80`` اشاره می‌کند).
 
-Solidity always places new objects at the free memory pointer and
-memory is never freed (this might change in the future).
 
-Elements in memory arrays in Solidity always occupy multiples of 32 bytes (this
-is even true for ``bytes1[]``, but not for ``bytes`` and ``string``).
-Multi-dimensional memory arrays are pointers to memory arrays. The length of a
-dynamic array is stored at the first slot of the array and followed by the array
-elements.
+سالیدیتی همیشه آبجکت‌های جدید را در نشانگر مِمُوری آزاد قرار می‌دهد و مِمُوری هرگز آزاد نمی‌شود (این 
+ممکن است در آینده تغییر کند).
+
+
+
+اِلمان‌های موجود در آرایه‌های مِمُوری در سالیدیتی همیشه مضربی از 32 بایت را اشغال می‌کنند (این حتی 
+برای  ``[]bytes1`` صدق میکند، اما برای ``bytes`` و  ``string`` صادق نمی‌باشد  ). آرایه‌های مِمُوری چند 
+بعدی نشانگر آرایه‌های مِمُوری هستند. طول یک آرایه داینامیک در اولین اسلات آرایه و به دنبال آن اِلمان‌های 
+آرایه ذخیره می‌شود.
+
+
+
 
 .. warning::
-  There are some operations in Solidity that need a temporary memory area
-  larger than 64 bytes and therefore will not fit into the scratch space.
-  They will be placed where the free memory points to, but given their
-  short lifetime, the pointer is not updated. The memory may or may not
-  be zeroed out. Because of this, one should not expect the free memory
-  to point to zeroed out memory.
 
-  While it may seem like a good idea to use ``msize`` to arrive at a
-  definitely zeroed out memory area, using such a pointer non-temporarily
-  without updating the free memory pointer can have unexpected results.
+  برخی از عملیات در سالیدیتی وجود دارد که به فضای مِمُوری موقت بزرگتر از 64 بایت نیاز دارند و بنابراین در 
+  فضای اسکرچ قرار نمی‌گیرند. آنها در جایی قرار می‌گیرند که مِمُوری آزاد به آن اشاره می‌کند، اما با توجه به 
+  عمر کوتاه آنها، اشاره‌گر به روز نمی‌شود. مِمُوری ممکن است صفر شود یا صفر نشود. به همین دلیل، نباید 
+  انتظار داشت که مِمُوری آزاد به مِمُوری صفر اشاره کند.
 
 
-Differences to Layout in Storage
+
+  اگرچه ممکن است استفاده از  ``msize`` برای رسیدن به یک فضای مِمُوری کاملاً صفر شده ایده خوبی به نظر 
+  برسد، استفاده از چنین اشاره‌گری به‌طور غیرموقت و بدون به‌روزرسانی نشانگر مِمُوری آزاد می‌تواند نتایج 
+  غیرمنتظره‌ای داشته باشد.
+  
+
+
+تفاوت چیدمان در Storage
 ================================
 
-As described above the layout in memory is different from the layout in
-:ref:`storage<storage-inplace-encoding>`. Below there are some examples.
+همانطور که در بالا توضیح داده شد، چیدمان در مِمُوری با چیدمان در :ref:`storage<storage-inplace-encoding>` متفاوت است. در زیر چند 
+مثال وجود دارد.
 
-Example for Difference in Arrays
+
+مثالی برای تفاوت در آرایه‌ها
 --------------------------------
 
-The following array occupies 32 bytes (1 slot) in storage, but 128
-bytes (4 items with 32 bytes each) in memory.
+آرایه زیر 32 بایت (1 اسلات) در storage اشغال می‌کند، اما 128 بایت (4 آیتم هر کدام با 32 بایت) در مِمُوری اشغال می‌کند.
+
 
 .. code-block:: solidity
 
@@ -55,11 +63,10 @@ bytes (4 items with 32 bytes each) in memory.
 
 
 
-Example for Difference in Struct Layout
+مثالی برای تفاوت در چیدمان Struct
 ---------------------------------------
-
-The following struct occupies 96 bytes (3 slots of 32 bytes) in storage,
-but 128 bytes (4 items with 32 bytes each) in memory.
+ساختار زیر 96 بایت (3 اسلات 32 بایتی) در storage اشغال می‌کند، اما 128 بایت (4 آیتم هر کدام با 32 
+بایت) در مِمُوری اشغال می‌کند.
 
 
 .. code-block:: solidity
