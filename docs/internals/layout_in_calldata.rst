@@ -2,15 +2,15 @@
 .. index: calldata layout
 
 *******************
-Layout of Call Data
+چیدمانِ Call Data
 *******************
 
-The input data for a function call is assumed to be in the format defined by the :ref:`ABI
-specification <ABI>`. Among others, the ABI specification requires arguments to be padded to multiples of 32
-bytes. The internal function calls use a different convention.
+داده‌های ورودی برای فراخوانی تابع به فرمت تعریف شده توسط مشخصات :ref:`ABI specification <ABI>` فرض می‌شود. از جمله، مشخصات 
+ABI به آرگومان‌ها نیاز دارد که به مضرب 32 بایت اضافه شوند. فراخوانی‌های تابع داخلی از یک قرارداد متفاوت 
+استفاده می‌کنند.
 
-Arguments for the constructor of a contract are directly appended at the end of the
-contract's code, also in ABI encoding. The constructor will access them through a hard-coded offset, and
-not by using the ``codesize`` opcode, since this of course changes when appending
-data to the code.
+
+آرگومان‌های constructor یک قرارداد مستقیماً در انتهای کد قرارداد و همچنین در رمزگذاری ABI اضافه 
+می‌شوند. constructor از طریق یک آفست hard-coded، و نه با استفاده از آپکد  ``codesize`` ، به 
+آنها دسترسی خواهد داشت، البته بخاطر این موضوع هنگام اضافه کردن داده‌ها به کد تغییر می‌کند.
 
