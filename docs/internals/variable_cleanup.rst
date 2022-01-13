@@ -1,34 +1,28 @@
 .. index: variable cleanup
 
 *********************
-Cleaning Up Variables
+پاکسازی متغیرها
 *********************
 
-When a value is shorter than 256 bit, in some cases the remaining bits
-must be cleaned.
-The Solidity compiler is designed to clean such remaining bits before any operations
-that might be adversely affected by the potential garbage in the remaining bits.
-For example, before writing a value to  memory, the remaining bits need
-to be cleared because the memory contents can be used for computing
-hashes or sent as the data of a message call.  Similarly, before
-storing a value in the storage, the remaining bits need to be cleaned
-because otherwise the garbled value can be observed.
+وقتی value کوتاهتر از 256 بیت است، در برخی موارد بیت‌های باقی مانده باید پاک شوند. کامپایلر سالیدیتی 
+برای پاکسازی این بیت‌های باقی‌مانده قبل از هر عملیاتی طراحی شده است که ممکن است توسط پتانسیل 
+garbage در بیت‌های باقی‌مانده تأثیر منفی بگذارد. به عنوان مثال، قبل از نوشتن یک value در مِمُوری، 
+بیت‌های باقیمانده باید پاک شوند، زیرا محتویات مِمُوری را می‌توان برای محاسبه هش استفاده کرد یا به عنوان 
+داده یک کال مسیج (message call) ارسال کرد. به طور مشابه، قبل از ذخیره یک value در storage، 
+بیت‌های باقی مانده باید پاک شوند زیرا در غیر این صورت می‌توان  garbled value را مشاهده کرد.
 
-Note that access via inline assembly is not considered such an operation:
-If you use inline assembly to access Solidity variables
-shorter than 256 bits, the compiler does not guarantee that
-the value is properly cleaned up.
+توجه داشته باشید که دسترسی از طریق اسمبلی درون خطی چنین عملیاتی در نظر گرفته نمی‌شود: اگر از 
+اسمبلی درون خطی برای دسترسی به متغیرهای سالیدیتی کوتاهتر از ۲۵۶ بیت استفاده می‌کنید، کامپایلر 
+تضمین نمی‌کند که مقدار به درستی پاک شده است.
 
-Moreover, we do not clean the bits if the immediately
-following operation is not affected.  For instance, since any non-zero
-value is considered ``true`` by ``JUMPI`` instruction, we do not clean
-the boolean values before they are used as the condition for
-``JUMPI``.
+علاوه بر این، اگر بلافاصله عملیات بعدی تحت تأثیر قرار نگیرد، بیت‌ها را پاک نمی‌کنیم. به عنوان مثال، از 
+آنجایی که هر مقدار غیر صفر توسط دستور ``JUMPI`` به صورت ``true``  در نظر گرفته می‌شود، ما مقادیر بولی را 
+قبل از استفاده به عنوان شرط ``JUMPI`` پاک نمی‌کنیم.
 
-In addition to the design principle above, the Solidity compiler
-cleans input data when it is loaded onto the stack.
+علاوه بر اصل طراحی بالا، کامپایلر سالیدیتی داده‌های ورودی را هنگامی که روی پشته (stack) بارگذاری می‌شوند، پاک می‌کند.
 
-Different types have different rules for cleaning up invalid values:
+تایپ‌های مختلف قوانین متفاوتی برای پاکسازی مقادیر نامعتبر دارند:
+
 
 +---------------+---------------+-------------------+
 |Type           |Valid Values   |Invalid Values Mean|
