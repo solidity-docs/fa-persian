@@ -1,70 +1,74 @@
 .. index:: source mappings
 
 ***************
-Source Mappings
+Mappingهای سورس
 ***************
 
-As part of the AST output, the compiler provides the range of the source
-code that is represented by the respective node in the AST. This can be
-used for various purposes ranging from static analysis tools that report
-errors based on the AST and debugging tools that highlight local variables
-and their uses.
+به عنوان بخشی از خروجی AST، کامپایلر محدوده سورس‌کد را ارائه می‌دهد که توسط گره مربوطه در AST 
+نشان داده می‌شود. این می‌تواند برای اهداف مختلفی استفاده شود از جمله ابزارهای آنالیز استاتیک که خطاها را 
+بر اساس AST گزارش می‌کنند و ابزارهای اشکال زدایی  که متغیرهای محلی و کاربردهای آنها را برجسته می‌کنند.
 
-Furthermore, the compiler can also generate a mapping from the bytecode
-to the range in the source code that generated the instruction. This is again
-important for static analysis tools that operate on bytecode level and
-for displaying the current position in the source code inside a debugger
-or for breakpoint handling. This mapping also contains other information,
-like the jump type and the modifier depth (see below).
 
-Both kinds of source mappings use integer identifiers to refer to source files.
-The identifier of a source file is stored in
-``output['sources'][sourceName]['id']`` where ``output`` is the output of the
-standard-json compiler interface parsed as JSON.
-For some utility routines, the compiler generates "internal" source files
-that are not part of the original input but are referenced from the source
-mappings. These source files together with their identifiers can be
-obtained via ``output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']``.
+
+علاوه بر این، کامپایلر همچنین می‌تواند یک mapping از بایت‌کد به محدوده سورس کدی که دستور را ایجاد 
+کرده است، ایجاد کند. این دوباره برای ابزارهای آنالیز استاتیک که در سطح بایت‌کد کار می‌کنند و برای نمایش 
+موقعیت فعلی در سورس‌کد در داخل یک دیباگر  یا برای رسیدگی به نقطه شکست مهم است. این mapping 
+همچنین حاوی اطلاعات دیگری مانند تایپ jump  و عمق اصلاح کننده (modifier) است (به قسمت زیر 
+مراجعه کنید).
+
+
+
+هر دو تایپ mappingهای سورس از مشخص کننده‌های اینتیجر برای ارجاع به سورس فایل‌ استفاده می‌کنند. 
+مشخص کننده یک سورس فایل در ``output['sources'][sourceName]['id']`` ذخیره می‌شود، جایی 
+که  ``output`` خروجی اینترفیس کامپایلر استاندارد-json است که به‌عنوان JSON تجزیه می‌شود. برای برخی از 
+روتین‌های کاربردی، کامپایلر سورس فایل‌های «داخلی(internal)» را تولید می‌کند که بخشی از ورودی اصلی 
+نیستند، اما از mappingهای سورس ارجاع داده می‌شوند. این سورس فایل‌های همراه با مشخص کنندهایشان 
+را می‌توان از طریق خروجی 
+``output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources']`` به دست 
+آورد.
+
+
 
 .. note ::
-    In the case of instructions that are not associated with any particular source file,
-    the source mapping assigns an integer identifier of ``-1``. This may happen for
-    bytecode sections stemming from compiler-generated inline assembly statements.
 
-The source mappings inside the AST use the following
-notation:
+    در مورد دستورالعمل‌هایی که با هیچ سورس فایل خاصی مرتبط نیستند، سورس  mapping یک مشخص 
+    کننده عدد اینتیجر   ``1-`` را اختصاص می‌دهد. این ممکن است برای بخش‌های بایت‌کد ناشی از دستورات 
+    اسمبلی درون خطی تولید شده توسط کامپایلر اتفاق بیفتد.
+
+سورس mapping در داخل AST از نشانه گذاری زیر استفاده می‌کند:
+
 
 ``s:l:f``
 
-Where ``s`` is the byte-offset to the start of the range in the source file,
-``l`` is the length of the source range in bytes and ``f`` is the source
-index mentioned above.
+در جایی که  ``s`` مقدار بایت آفست شروع محدوده در سورس فایل است،  ``l`` طول محدوده سورس بر حسب بایت 
+و  ``f`` ایندکس سورس ذکر شده در بالا است.
 
-The encoding in the source mapping for the bytecode is more complicated:
-It is a list of ``s:l:f:j:m`` separated by ``;``. Each of these
-elements corresponds to an instruction, i.e. you cannot use the byte offset
-but have to use the instruction offset (push instructions are longer than a single byte).
-The fields ``s``, ``l`` and ``f`` are as above. ``j`` can be either
-``i``, ``o`` or ``-`` signifying whether a jump instruction goes into a
-function, returns from a function or is a regular jump as part of e.g. a loop.
-The last field, ``m``, is an integer that denotes the "modifier depth". This depth
-is increased whenever the placeholder statement (``_``) is entered in a modifier
-and decreased when it is left again. This allows debuggers to track tricky cases
-like the same modifier being used twice or multiple placeholder statements being
-used in a single modifier.
 
-In order to compress these source mappings especially for bytecode, the
-following rules are used:
+رمزگذاری در سورس mapping برای بایت‌کد پیچیده‌تر است: این لیستی از   ``s:l:f:j:m``  است که با  ``;`` از 
+هم جدا شده‌است. هر یک از این اِلمان مربوط به یک دستورالعمل است، یعنی شما نمی‌توانید از آفست بایت 
+استفاده کنید اما باید از آفست دستورالعمل استفاده کنید (دستورالعمل‌های push طولانی‌تر از یک بایت هستند). 
+فیلدهای  ``s`` ، ``l``  و  ``f`` مانند بالا هستند. ``j``  می‌تواند  ``i`` ،  ``o`` یا  ``-`` باشد که نشان می‌دهد آیا دستور push 
+به یک تابع می‌رود، از یک تابع برمی‌گردد یا یک push منظم به عنوان بخشی از، برای مثال یک حلقه باشد. 
+آخرین فیلد،  ``m`` ، یک اینتیجر است که "عمق modifier " را نشان می‌دهد. هر زمان که (``_``) placeholder 
+statement  در یک modifier وارد شود، این عمق افزایش می‌یابد و با رها کردن مجدد آن کاهش 
+می‌یابد. این به دیباگرها اجازه می‌دهد موارد پیچیده را ردیابی کنند، مانند modifierای که دو بار استفاده 
+می‌شود یا چندین  placeholder statements در یک modifier واحد استفاده می‌شود.
 
-- If a field is empty, the value of the preceding element is used.
-- If a ``:`` is missing, all following fields are considered empty.
 
-This means the following source mappings represent the same information:
+برای فشرده سازی این سورس mappingهای بخصوص برای بایت‌کد، از قوانین زیر استفاده می‌شود:
 
-``1:2:1;1:9:1;2:1:2;2:1:2;2:1:2``
 
-``1:2:1;:9;2:1:2;;``
 
-Important to note is that when the :ref:`verbatim <yul-verbatim>` builtin is used,
-the source mappings will be invalid: The builtin is considered a single
-instruction instead of potentially multiple.
+-	اگر یک فیلد خالی باشد، از value اِلمان قبلی استفاده می‌شود.
+-	اگر یک  ``:`` وجود نداشته باشد، تمام فیلدهای بعدی خالی در نظر گرفته می‌شوند.
+
+
+این بدان معنی است که سورس mapping زیر همان اطلاعات را نشان می‌دهد:
+
+
+``2:1:2;2:1:2;2:1:2;1:9:1;1:2:1``
+
+``;;2:1:2;9:;1:2:1``
+
+نکته مهم این است که وقتی از   :ref:`verbatim <yul-verbatim>` builtin استفاده ‌شود، mapping سورس نامعتبر خواهد بود: 
+builtin به جای چندتایی یک دستور واحد در نظر گرفته می‌شود.
