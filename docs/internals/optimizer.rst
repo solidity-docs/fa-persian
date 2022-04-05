@@ -8,7 +8,7 @@
 کامپایلر سالیدیتی از دو ماژول بهینه ساز مختلف استفاده می‌کند: بهینه ساز « old» که در سطح آپکد عمل 
 می‌کند و بهینه ساز « new» که بر روی کد Yul IR کار می‌کند.
 
-بهینه ساز مبتنی بر آپکد، مجموعه ای از `قوانین ساده سازی <https://github.com/ethereum/solidity/blob/develop/libevmasm/RuleList.h>`_ را برای کدهای عملیاتی اعمال می‌کند. همچنین 
+بهینه ساز مبتنی بر آپکد، مجموعه ای از `قوانین ساده سازی <https://github.com/ethereum/solidity/blob/develop/libevmasm/RuleList.h>`_ را برای آپکدها اعمال می‌کند. همچنین 
 مجموعه کدهای مساوی را ترکیب کرده و کدهای استفاده نشده را حذف می‌کند.
 
 بهینه ساز مبتنی بر Yul بسیار قدرتمندتر است، زیرا می‌تواند در فراخوانی توابع کار کند. به عنوان مثال، 
@@ -145,18 +145,6 @@ JUMP را می‌توان از ورودی‌ها محاسبه کرد)، باید
 شرایط آن به یک ثابت ارزیابی می‌شود، آن را به یک ``JUMP`` بدون قید و شرط تبدیل می‌کند.
 
 
-As the last step, the code in each block is re-generated. The optimizer creates
-a dependency graph from the expressions on the stack at the end of the block,
-and it drops every operation that is not part of this graph. It generates code
-that applies the modifications to memory and storage in the order they were
-made in the original code (dropping modifications which were found not to be
-needed). Finally, it generates all values that are required to be on the
-stack in the correct place.
-
-These steps are applied to each basic block and the newly generated code
-is used as replacement if it is smaller. If a basic block is split at a
-``JUMPI`` and during the analysis, the condition evaluates to a constant,
-the ``JUMPI`` is replaced based on the value of the constant. Thus code like
 
 .. code-block:: solidity
 
@@ -176,17 +164,18 @@ simplifies to this:
 
 Simple Inlining
 ---------------
+از نسخه 0.8.2 سالیدیتی، مرحله بهینه‌ساز دیگری وجود دارد که با کپی از این دستورالعمل‌ها، جهش‌های 
+خاصی را به بلوک‌های حاوی دستورالعمل‌های "ساده یا "simple که با "jump" ختم می‌شوند، جایگزین 
+می‌کند و مربوط به توابع ساده و کوچک سالیدیتی یا Yul است. به طور خاص، دنباله ``PUSHTAG(tag) JUMP`` 
+ ممکن است جایگزین شود، هر زمان که ``JUMP``  به عنوان پرش "into" یک تابع علامت گذاری شد و 
+پشت ``tag`` یک بلوک اساسی وجود دارد (همانطور که در بالا برای 
+"CommonSubexpressionEliminator" توضیح داده شد) که به ``JUMP``  دیگری ختم می شود. به 
+عنوان پرش "خارج از" یک تابع مشخص شده است.
 
-Since Solidity version 0.8.2, there is another optimizer step that replaces certain
-jumps to blocks containing "simple" instructions ending with a "jump" by a copy of these instructions.
-This corresponds to inlining of simple, small Solidity or Yul functions. In particular, the sequence
-``PUSHTAG(tag) JUMP`` may be replaced, whenever the ``JUMP`` is marked as jump "into" a
-function and behind ``tag`` there is a basic block (as described above for the
-"CommonSubexpressionEliminator") that ends in another ``JUMP`` which is marked as a jump
-"out of" a function.
 
-In particular, consider the following prototypical example of assembly generated for a
-call to an internal Solidity function:
+به طور خاص، نمونه اولیه زیر را در نظر بگیرید از اسمبلی که برای فراخوانی تابع سالیدیتی به صورت داخلی 
+یا internal ایجاد شده است:
+
 
 .. code-block:: text
 
@@ -200,8 +189,8 @@ call to an internal Solidity function:
       ...body of function f...
       jump      // out
 
-As long as the body of the function is a continuous basic block, the "Inliner" can replace ``tag_f jump`` by
-the block at ``tag_f`` resulting in:
+تا زمانی که بدنه تابع یک بلوک پایه پیوسته است، "Inliner" می تواند جایگزین ``tag_f jump`` با بلوک در 
+``tag_f`` شود که منجر به موارد زیر می شود:
 
 .. code-block:: text
 
@@ -215,8 +204,9 @@ the block at ``tag_f`` resulting in:
       ...body of function f...
       jump      // out
 
-Now ideally, the other optimizer steps described above will result in the return tag push being moved
-towards the remaining jump resulting in:
+اکنون در حالت ایده‌آل، سایر مراحل بهینه‌ساز که در بالا توضیح داده شد باعث می‌شود که tag push 
+برگشتی به سمت  jump  باقی‌مانده حرکت کند و در نتیجه:
+
 
 .. code-block:: text
 
@@ -230,52 +220,54 @@ towards the remaining jump resulting in:
       ...body of function f...
       jump      // out
 
-In this situation the "PeepholeOptimizer" will remove the return jump. Ideally, all of this can be done
-for all references to ``tag_f`` leaving it unused, s.t. it can be removed, yielding:
+در این وضعیت "PeepholeOptimizer" پرش برگشت را حذف می کند. در حالت ایده‌آل، همه این 
+کارها را می‌توان برای همه ارجاع‌ها به ``tag_f``  انجام داد و آن را بدون استفاده گذاشت، s.t. می توان آن را 
+حذف کرد و نتیجه داد:
 
 .. code-block:: text
 
     ...body of function f...
     ...opcodes after call to f...
 
-So the call to function ``f`` is inlined and the original definition of ``f`` can be removed.
-
-Inlining like this is attempted, whenever a heuristics suggests that inlining is cheaper over the lifetime of a
-contract than not inlining. This heuristics depends on the size of the function body, the
-number of other references to its tag (approximating the number of calls to the function) and
-the expected number of executions of the contract (the global optimizer parameter "runs").
+بنابراین فراخوانی تابع ``f`` به صورت خطی است و می توان تعریف اصلی ``f`` را حذف کرد.
 
 
-Yul-Based Optimizer Module
+
+هر زمان که یک اکتشافی نشان می‌دهد که درون‌خط‌سازی در طول عمر قرارداد ارزان‌تر از inlining نیست، 
+تلاش می‌شود. این اکتشاف به اندازه بدنه تابع، تعداد ارجاعات دیگر به تگ آن (تقریباً تعداد تماس‌های تابع) 
+و تعداد مورد انتظار اجرای قرارداد (پارامتر بهینه‌ساز جهانی «اجرا می‌شود») بستگی دارد.
+
+
+3.20.5 ماژول بهینه ساز مبتنی بر Yul
 ==========================
 
-The Yul-based optimizer consists of several stages and components that all transform
-the AST in a semantically equivalent way. The goal is to end up either with code
-that is shorter or at least only marginally longer but will allow further
-optimization steps.
+بهینه ساز مبتنی بر Yul از چندین مرحله و اجزا تشکیل شده است که همگی AST را به روشی معادل 
+معنایی تبدیل می کنند. هدف این است که در نهایت کدهای کوتاه‌تر یا حداقل کمی طولانی‌تر داشته باشیم، 
+اما مراحل بهینه‌سازی بیشتری را ممکن می‌سازد.
+
 
 .. warning::
 
-    Since the optimizer is under heavy development, the information here might be outdated.
-    If you rely on a certain functionality, please reach out to the team directly.
+    از آنجایی که بهینه ساز در حال توسعه شدید است، ممکن است اطلاعات اینجا قدیمی باشد. اگر به عملکرد 
+    خاصی متکی هستید، لطفاً مستقیماً با تیم تماس بگیرید.
 
-The optimizer currently follows a purely greedy strategy and does not do any
-backtracking.
+بهینه ساز در حال حاضر از یک استراتژی پیروی می کند و هیچ عقبگردی انجام نمی دهد. 
 
-All components of the Yul-based optimizer module are explained below.
-The following transformation steps are the main components:
 
-- SSA Transform
-- Common Subexpression Eliminator
-- Expression Simplifier
-- Redundant Assign Eliminator
-- Full Inliner
+تمام اجزای ماژول بهینه ساز مبتنی بر Yul در زیر توضیح داده شده است. مراحل تبدیل زیر اجزای اصلی هستند:
 
-Optimizer Steps
+- تبدیل SSA
+- حذف کننده Subexpression مشترک
+- ساده کننده بیان
+- مازاد تخصیص حذف
+-  Inliner کامل
+
+مراحل بهینه ساز
 ---------------
 
-This is a list of all steps the Yul-based optimizer sorted alphabetically. You can find more information
-on the individual steps and their sequence below.
+این لیستی از تمام مراحلی است که بهینه ساز مبتنی بر Yul بر اساس حروف الفبا مرتب شده است. در زیر 
+می توانید اطلاعات بیشتری در مورد تک تک مراحل و ترتیب آنها بیابید.
+
 
 - :ref:`block-flattener`.
 - :ref:`circular-reference-pruner`.
@@ -309,89 +301,92 @@ on the individual steps and their sequence below.
 - :ref:`unused-pruner`.
 - :ref:`var-decl-initializer`.
 
-Selecting Optimizations
+انتخاب بهینه سازی ها
 -----------------------
 
-By default the optimizer applies its predefined sequence of optimization steps to
-the generated assembly. You can override this sequence and supply your own using
-the ``--yul-optimizations`` option:
+به طور پیش فرض بهینه ساز دنباله از پیش تعریف شده مراحل بهینه سازی خود را برای مجموعه تولید 
+شده اعمال می کند. شما می توانید این دنباله را override کنید و با استفاده از گزینه ``--yul-optimizations`` خود را عرضه کنید:
+
 
 .. code-block:: bash
 
     solc --optimize --ir-optimized --yul-optimizations 'dhfoD[xarrscLMcCTU]uljmul'
 
-The sequence inside ``[...]`` will be applied multiple times in a loop until the Yul code
-remains unchanged or until the maximum number of rounds (currently 12) has been reached.
 
-Available abbreviations are listed in the `Yul optimizer docs <yul.rst#optimization-step-sequence>`_.
+دنباله داخل  ``[...]`` چندین بار در یک حلقه اعمال می شود تا زمانی که کد Yul بدون تغییر باقی بماند یا تا 
+زمانی که به حداکثر تعداد دور (در حال حاضر 12) برسد. اختصارات موجود در اسناد یا همان بخش `داکیومنت  بهینه ساز Yul <yul.rst#optimization-step-sequence>`_ لیست شده است.
 
-Preprocessing
+پیش پردازش(Preprocessing)
 -------------
+اجزای پیش‌پردازش، تبدیل‌هایی را انجام می‌دهند تا برنامه را به یک فرم معمولی خاص تبدیل کنند که کار 
+با آن آسان‌تر باشد. این فرم معمولی در طول بقیه مراحل بهینه سازی حفظ می شود.
 
-The preprocessing components perform transformations to get the program
-into a certain normal form that is easier to work with. This normal
-form is kept during the rest of the optimization process.
 
 .. _disambiguator:
 
-Disambiguator
+ابهام‌زدا(Disambiguator)
 ^^^^^^^^^^^^^
-
-The disambiguator takes an AST and returns a fresh copy where all identifiers have
-unique names in the input AST. This is a prerequisite for all other optimizer stages.
-One of the benefits is that identifier lookup does not need to take scopes into account
-which simplifies the analysis needed for other steps.
-
-All subsequent stages have the property that all names stay unique. This means if
-a new identifier needs to be introduced, a new unique name is generated.
+ابهام‌زدا یک AST می‌گیرد و یک کپی تازه برمی‌گرداند که در آن همه شناسه‌ها دارای نام‌های منحصربه‌فرد 
+در ورودی AST هستند. این یک پیش نیاز برای تمام مراحل دیگر بهینه ساز است. یکی از مزایا این است که 
+جستجوی شناسه نیازی به در نظر گرفتن دامنه ها ندارد که تجزیه و تحلیل مورد نیاز برای مراحل دیگر را 
+ساده می کند. تمام مراحل بعدی این ویژگی را دارند که همه نام ها منحصر به فرد می مانند. این بدان معنی 
+است که اگر یک شناسه جدید نیاز به معرفی داشته باشد، یک نام منحصر به فرد جدید تولید می شود.
 
 .. _function-hoister:
 
 FunctionHoister
 ^^^^^^^^^^^^^^^
+hoister یا بالابر تابع تمام تعاریف تابع را به انتهای بالاترین بلوک منتقل می کند. تا زمانی که پس از 
+مرحله ابهام‌زدایی انجام شود، این تبدیل از نظر معنایی معادل است. دلیل آن این است که انتقال یک تعریف 
+به یک بلوک سطح بالاتر نمی تواند دید آن را کاهش دهد و نمی توان به متغیرهای تعریف شده در یک تابع 
+متفاوت اشاره کرد.
 
-The function hoister moves all function definitions to the end of the topmost block. This is
-a semantically equivalent transformation as long as it is performed after the
-disambiguation stage. The reason is that moving a definition to a higher-level block cannot decrease
-its visibility and it is impossible to reference variables defined in a different function.
+مزیت این مرحله این است که تعاریف تابع را می توان آسانتر جستجو کرد و توابع را می توان به صورت مجزا 
+و بدون نیاز به عبور کامل از AST بهینه کرد.
 
-The benefit of this stage is that function definitions can be looked up more easily
-and functions can be optimized in isolation without having to traverse the AST completely.
 
 .. _function-grouper:
 
 FunctionGrouper
 ^^^^^^^^^^^^^^^
+گروه‌گر یا grouper تابع باید بعد از ابهام‌زدا و بالابر عملکرد اعمال شود. تأثیر آن این است که تمام عناصر 
+برتر که تعاریف تابع نیستند به یک بلوک واحد منتقل می شوند که اولین عبارت بلوک ریشه یا root است. 
 
-The function grouper has to be applied after the disambiguator and the function hoister.
-Its effect is that all topmost elements that are not function definitions are moved
-into a single block which is the first statement of the root block.
 
-After this step, a program has the following normal form:
+پس از این مرحله، یک برنامه به شکل عادی زیر است:
+
 
 .. code-block:: text
 
     { I F... }
 
+جایی که  ``I`` یک بلوک (بالقوه خالی) است که هیچ تعریف تابعی (حتی بازگشتی) ندارد و ``F`` لیستی از تعاریف 
+تابع است به طوری که هیچ تابعی دارای تعریف تابع نیست. 
+
+
+
 Where ``I`` is a (potentially empty) block that does not contain any function definitions (not even recursively)
 and ``F`` is a list of function definitions such that no function contains a function definition.
 
-The benefit of this stage is that we always know where the list of function begins.
+
+مزیت این مرحله این است که ما همیشه می‌دانیم لیست توابع از کجا شروع می شود.
+
 
 .. _for-loop-condition-into-body:
 
 ForLoopConditionIntoBody
 ^^^^^^^^^^^^^^^^^^^^^^^^
+این تبدیل شرایط تکرار حلقه یک حلقه for را به بدنه حلقه منتقل می کند. ما به این تبدیل نیاز داریم زیرا 
+:ref:`expression-splitter` برای عبارات شرط تکرار (``C`` در مثال زیر) اعمال نمی شود.
 
-This transformation moves the loop-iteration condition of a for-loop into loop body.
-We need this transformation because :ref:`expression-splitter` will not
-apply to iteration condition expressions (the ``C`` in the following example).
 
 .. code-block:: text
 
     for { Init... } C { Post... } {
         Body...
     }
+
+تبدیل می شود به
 
 is transformed to
 
@@ -402,16 +397,16 @@ is transformed to
         Body...
     }
 
-This transformation can also be useful when paired with ``LoopInvariantCodeMotion``, since
-invariants in the loop-invariant conditions can then be taken outside the loop.
+این تبدیل زمانی که با ``LoopInvariantCodeMotion`` جفت می‌شود نیز می‌تواند مفید باشد، زیرا 
+متغیرهای موجود در شرایط loopinvariant می‌توانند خارج از حلقه گرفته شوند.
+
 
 .. _for-loop-init-rewriter:
 
 ForLoopInitRewriter
 ^^^^^^^^^^^^^^^^^^^
+این تبدیل، بخش اولیه یک حلقه for را به قبل از حلقه منتقل می کند:
 
-This transformation moves the initialization part of a for-loop to before
-the loop:
 
 .. code-block:: text
 
@@ -419,7 +414,9 @@ the loop:
         Body...
     }
 
-is transformed to
+تبدیل می شود به
+
+
 
 .. code-block:: text
 
@@ -430,31 +427,34 @@ is transformed to
         }
     }
 
-This eases the rest of the optimization process because we can ignore
-the complicated scoping rules of the for loop initialisation block.
+این کار بقیه فرآیند بهینه‌سازی را آسان می‌کند، زیرا می‌توانیم قوانین محدوده‌بندی پیچیده بلوک اولیه‌ 
+حلقه for را نادیده بگیریم.
+
 
 .. _var-decl-initializer:
 
 VarDeclInitializer
 ^^^^^^^^^^^^^^^^^^
-This step rewrites variable declarations so that all of them are initialized.
-Declarations like ``let x, y`` are split into multiple declaration statements.
 
-Only supports initializing with the zero literal for now.
+مرحله اعلان های متغیر را بازنویسی می کند تا همه آنها مقداردهی اولیه شوند. اعلان هایی مانند ``let x, y`` 
+به چند عبارت اعلان تقسیم می شوند. 
 
-Pseudo-SSA Transformation
+
+در حال حاضر فقط از مقداردهی اولیه با حرف صفر پشتیبانی می‌کند.
+
+
+تبدیل شبه SSA (Pseudo-SSA Transformation)
 -------------------------
 
-The purpose of this components is to get the program into a longer form,
-so that other components can more easily work with it. The final representation
-will be similar to a static-single-assignment (SSA) form, with the difference
-that it does not make use of explicit "phi" functions which combines the values
-from different branches of control flow because such a feature does not exist
-in the Yul language. Instead, when control flow merges, if a variable is re-assigned
-in one of the branches, a new SSA variable is declared to hold its current value,
-so that the following expressions still only need to reference SSA variables.
+هدف از این کامپوننت ها این است که برنامه را به شکل طولانی تری درآورد تا سایر اجزا بتوانند راحت تر با 
+آن کار کنند. نمایش نهایی شبیه یک فرم تخصیص تک استاتیک (SSA) خواهد بود، با این تفاوت که از 
+توابع صریح "phi" استفاده نمی کند که مقادیر شاخه های مختلف جریان کنترل را ترکیب می کند زیرا 
+چنین ویژگی در آن وجود ندارد. زبان Yul در عوض، هنگامی که جریان کنترل ادغام می شود، اگر یک 
+متغیر دوباره در یکی از شاخه ها تخصیص داده شود، یک متغیر SSA جدید برای حفظ مقدار فعلی خود 
+اعلام می شود، به طوری که عبارات زیر هنوز فقط به متغیرهای SSA نیاز دارند. 
 
-An example transformation is the following:
+
+یک نمونه تبدیل به شرح زیر است:
 
 .. code-block:: yul
 
@@ -468,9 +468,8 @@ An example transformation is the following:
         sstore(a, add(b, 0x20))
     }
 
+هنگامی که تمام مراحل تبدیل زیر اعمال می شود، برنامه به شکل زیر خواهد بود:
 
-When all the following transformation steps are applied, the program will look
-as follows:
 
 .. code-block:: yul
 
@@ -497,30 +496,34 @@ as follows:
         sstore(a_13, _8)
     }
 
-Note that the only variable that is re-assigned in this snippet is ``b``.
-This re-assignment cannot be avoided because ``b`` has different values
-depending on the control flow. All other variables never change their
-value once they are defined. The advantage of this property is that
-variables can be freely moved around and references to them
-can be exchanged by their initial value (and vice-versa),
-as long as these values are still valid in the new context.
+توجه داشته باشید که تنها متغیری که در این قطعه دوباره تخصیص داده شده است ``b`` است. از این تخصیص 
+مجدد نمی توان اجتناب کرد زیرا ``b`` بسته به جریان کنترل مقادیر متفاوتی دارد. همه متغیرهای دیگر پس از 
+تعریف، هرگز مقدار خود را تغییر نمی دهند. مزیت این ویژگی این است که متغیرها را می توان آزادانه جابجا 
+کرد و ارجاع به آنها را می توان با مقدار اولیه آنها رد و بدل کرد (و بالعکس)، تا زمانی که این مقادیر هنوز در زمینه جدید معتبر هستند. 
 
-Of course, the code here is far from being optimized. To the contrary, it is much
-longer. The hope is that this code will be easier to work with and furthermore,
-there are optimizer steps that undo these changes and make the code more
-compact again at the end.
+
+البته کدهای اینجا با بهینه سازی فاصله زیادی دارد، برعکس، بسیار طولانی تر است. امید این است که کار با 
+این کد آسان‌تر باشد و علاوه بر این، مراحل بهینه‌سازی وجود دارد که این تغییرات را خنثی می‌کند و در 
+پایان دوباره کد را فشرده‌تر می‌کند.
+
 
 .. _expression-splitter:
 
 ExpressionSplitter
 ^^^^^^^^^^^^^^^^^^
 
+عبارت تقسیم‌کننده عباراتی مانند ``add(mload(0x123), mul(mload(0x456), 0x20))`` را به 
+دنباله‌ای از اعلان‌های متغیرهای منحصربه‌فرد تبدیل می‌کند که به عبارت‌های فرعی آن عبارت اختصاص 
+داده می‌شود، به طوری که هر فراخوانی تابع فقط دارای متغیرهایی به عنوان آرگومان است. 
+
+
 The expression splitter turns expressions like ``add(mload(0x123), mul(mload(0x456), 0x20))``
 into a sequence of declarations of unique variables that are assigned sub-expressions
 of that expression so that each function call has only variables or literals
 as arguments.
 
-The above would be transformed into
+موارد فوق تبدیل به
+
 
 .. code-block:: yul
 
@@ -531,33 +534,37 @@ The above would be transformed into
         let z := add(_3, _2)
     }
 
-Note that this transformation does not change the order of opcodes or function calls.
+توجه داشته باشید که این تبدیل ترتیب آپکدها یا فراخوانی تابع را تغییر نمی دهد. 
 
-It is not applied to loop iteration-condition, because the loop control flow does not allow
-this "outlining" of the inner expressions in all cases. We can sidestep this limitation by applying
-:ref:`for-loop-condition-into-body` to move the iteration condition into loop body.
 
-The final program should be in a form such that (with the exception of loop conditions)
-function calls cannot appear nested inside expressions
-and all function call arguments have to be literals or variables.
 
-The benefits of this form are that it is much easier to re-order the sequence of opcodes
-and it is also easier to perform function call inlining. Furthermore, it is simpler
-to replace individual parts of expressions or re-organize the "expression tree".
-The drawback is that such code is much harder to read for humans.
+برای شرط تکرار حلقه اعمال نمی شود، زیرا جریان کنترل حلقه اجازه این "طرح بندی" عبارات داخلی را 
+در همه موارد نمی دهد. ما می‌توانیم با اعمال :ref:`for-loop-condition-into-body` برای انتقال شرط تکرار 
+به بدنه حلقه، این محدودیت را کنار بگذاریم.
+
+
+برنامه نهایی باید به شکلی باشد که (به استثنای شرایط حلقه) فراخوانی های تابع نتوانند به صورت تودرتو 
+در داخل عبارات ظاهر شوند و همه آرگومان های فراخوانی تابع باید متغیر باشند. 
+
+مزایای این فرم این است که مرتب کردن ترتیب آپکدها بسیار آسان تر است و همچنین انجام 
+فراخوانی توابع درون خطی آسان تر است. علاوه بر این، جایگزین کردن بخش‌های جداگانه عبارات یا 
+سازماندهی مجدد «درخت بیان(expression tree) ساده‌تر است. اشکال این است که خواندن چنین 
+کدی برای انسان بسیار سخت تر است.
 
 .. _SSA-transform:
 
 SSATransform
 ^^^^^^^^^^^^
 
-This stage tries to replace repeated assignments to
-existing variables by declarations of new variables as much as
-possible.
-The reassignments are still there, but all references to the
-reassigned variables are replaced by the newly declared variables.
+این مرحله سعی می‌کند تا حد امکان جایگزین انتساب‌های مکرر به متغیرهای موجود با اعلان‌های متغیرهای 
+جدید شود. تخصیص مجدد هنوز وجود دارد، اما همه ارجاعات به متغیرهای تخصیص مجدد با متغیرهای 
+جدید اعلام شده جایگزین می شوند.
 
-Example:
+
+
+مثال:
+
+
 
 .. code-block:: yul
 
@@ -567,7 +574,9 @@ Example:
         a := 3
     }
 
-is transformed to
+تبدیل می شود به
+
+
 
 .. code-block:: yul
 
@@ -579,40 +588,37 @@ is transformed to
         a := a_3
     }
 
-Exact semantics:
 
-For any variable ``a`` that is assigned to somewhere in the code
-(variables that are declared with value and never re-assigned
-are not modified) perform the following transforms:
+معناشناسی دقیق (Exact semantics):
 
-- replace ``let a := v`` by ``let a_i := v   let a := a_i``
-- replace ``a := v`` by ``let a_i := v   a := a_i`` where ``i`` is a number such that ``a_i`` is yet unused.
+برای هر متغیر ``a`` که به جایی از کد اختصاص داده شده است (متغیرهایی که با مقدار اعلان می شوند و 
+هرگز دوباره تخصیص داده نمی شوند، تغییر نمی کنند) تبدیل های زیر را انجام دهید:
 
-Furthermore, always record the current value of ``i`` used for ``a`` and replace each
-reference to ``a`` by ``a_i``.
-The current value mapping is cleared for a variable ``a`` at the end of each block
-in which it was assigned to and at the end of the for loop init block if it is assigned
-inside the for loop body or post block.
-If a variable's value is cleared according to the rule above and the variable is declared outside
-the block, a new SSA variable will be created at the location where control flow joins,
-this includes the beginning of loop post/body block and the location right after
-If/Switch/ForLoop/Block statement.
+- جایگذین کنید ``let a := v`` با ``let a_i := v   let a := a_i``
+- جایگذین کنید ``a := v`` با ``let a_i := v   a := a_i`` زمانی که ``i`` یک عددی مانند این   ``a_i`` هنوز استفاده نشده باشد.
 
-After this stage, the Redundant Assign Eliminator is recommended to remove the unnecessary
-intermediate assignments.
+علاوه بر این، همیشه مقدار فعلی ``i`` استفاده شده برای ``a``  را ثبت کنید و هر ارجاع به ``a``  را با ``a_i`` جایگزین 
+کنید. mapping مقدار فعلی برای متغیر ``a``  در انتهای هر بلوکی که در آن به آن اختصاص داده شده است 
+می‌شود. اگر مقدار یک متغیر طبق قانون بالا پاک شود و متغیر خارج از بلوک اعلام شود، یک متغیر SSA 
+جدید در محلی که جریان کنترل به آن می پیوندد ایجاد می شود که شامل ابتدای حلقه پست/بلوک بدنه و 
+مکان عبارت If/Switch/ForLoop/Blockبلافاصله بعد از آن است. 
 
-This stage provides best results if the Expression Splitter and the Common Subexpression Eliminator
-are run right before it, because then it does not generate excessive amounts of variables.
-On the other hand, the Common Subexpression Eliminator could be more efficient if run after the
-SSA transform.
+
+پس از این مرحله، Redundant Assign Eliminator برای حذف تکالیف غیر ضروری میانی توصیه می‌شود.
+
+اگر Expression Splitter و Common Subexpression Eliminator درست قبل از آن اجرا شوند، 
+این مرحله بهترین نتایج را ارائه می دهد، زیرا در این صورت مقادیر زیادی متغیر تولید نمی کند. از سوی 
+دیگر، Common Subexpression Eliminator اگر بعد از تبدیل SSA اجرا شود، می تواند کارآمدتر 
+باشد.
+
 
 .. _redundant-assign-eliminator:
 
 RedundantAssignEliminator
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The SSA transform always generates an assignment of the form ``a := a_i``, even though
-these might be unnecessary in many cases, like the following example:
+تبدیل SSA همیشه یک انتساب به شکل ``a := a_i`` ایجاد می کند، حتی اگر اینها در بسیاری از موارد غیر 
+ضروری باشند، مانند مثال زیر:
 
 .. code-block:: yul
 
@@ -623,7 +629,7 @@ these might be unnecessary in many cases, like the following example:
         sstore(a, 1)
     }
 
-The SSA transform converts this snippet to the following:
+تبدیل SSA این قطعه را به شکل زیر تبدیل می کند:
 
 .. code-block:: yul
 
@@ -637,9 +643,9 @@ The SSA transform converts this snippet to the following:
         sstore(a_3, 1)
     }
 
-The Redundant Assign Eliminator removes all the three assignments to ``a``, because
-the value of ``a`` is not used and thus turn this
-snippet into strict SSA form:
+Redundant Assign Eliminator هر سه تخصیص به ``a`` را حذف می‌کند، زیرا از مقدار ``a`` استفاده 
+نمی‌شود و بنابراین این قطعه را به فرم SSA تبدیل می‌کند:
+
 
 .. code-block:: yul
 
@@ -650,45 +656,42 @@ snippet into strict SSA form:
         sstore(a_3, 1)
     }
 
-Of course the intricate parts of determining whether an assignment is redundant or not
-are connected to joining control flow.
+البته بخش های پیچیده تعیین اینکه آیا یک تخصیص اضافی است یا نه به جریان کنترل متصل است.
 
-The component works as follows in detail:
 
-The AST is traversed twice: in an information gathering step and in the
-actual removal step. During information gathering, we maintain a
-mapping from assignment statements to the three states
-"unused", "undecided" and "used" which signifies whether the assigned
-value will be used later by a reference to the variable.
+کامپوننت با جزئیات به شرح زیر عمل می کند:
 
-When an assignment is visited, it is added to the mapping in the "undecided" state
-(see remark about for loops below) and every other assignment to the same variable
-that is still in the "undecided" state is changed to "unused".
-When a variable is referenced, the state of any assignment to that variable still
-in the "undecided" state is changed to "used".
+AST دو بار عبور می کند: در مرحله جمع آوری اطلاعات و در مرحله حذف واقعی. در طول جمع‌آوری 
+اطلاعات، ما یک mapping از گزاره‌های تخصیص به سه حالت «استفاده نشده»، «تصمیم‌نشده» و 
+«استفاده شده» را حفظ می‌کنیم که نشان می‌دهد آیا مقدار تخصیص‌یافته بعداً با ارجاع به متغیر مورد 
+استفاده قرار می‌گیرد یا خیر.
 
-At points where control flow splits, a copy
-of the mapping is handed over to each branch. At points where control flow
-joins, the two mappings coming from the two branches are combined in the following way:
-Statements that are only in one mapping or have the same state are used unchanged.
-Conflicting values are resolved in the following way:
+
+هنگامی که یک انتساب بازدید می شود، در حالت "تصمیم نشده" به mapping اضافه می شود (به نکته 
+در مورد حلقه های زیر مراجعه کنید) و هر تخصیص دیگری به همان متغیری که هنوز در حالت "تصمیم 
+نشده" است به "unused" تغییر می یابد. هنگامی که یک متغیر ارجاع داده می شود، وضعیت هر انتساب 
+به آن متغیر هنوز در حالت "تصمیم نشده" به "استفاده شده" تغییر می کند. در نقاطی که جریان کنترل 
+تقسیم می شود، یک نسخه از mapping  به هر شاخه تحویل داده می شود. در نقاطی که جریان کنترل به 
+هم می پیوندد، دو mapping حاصل از دو شاخه به روش زیر ترکیب می شوند: عباراتی که فقط در یک 
+mapping هستند یا حالت یکسانی دارند، بدون تغییر استفاده می شوند. مقادیر متناقض به روش زیر حل 
+می شوند:
+
 
 - "unused", "undecided" -> "undecided"
 - "unused", "used" -> "used"
 - "undecided, "used" -> "used"
 
-For for-loops, the condition, body and post-part are visited twice, taking
-the joining control-flow at the condition into account.
-In other words, we create three control flow paths: Zero runs of the loop,
-one run and two runs and then combine them at the end.
+برای حلقه‌های for، شرط، بدنه و پس‌پارت(post-part) دو بار بازدید می‌شوند و جریان کنترل اتصال در 
+شرایط را در نظر می‌گیرند. به عبارت دیگر، ما سه مسیر جریان کنترلی ایجاد می کنیم: صفر اجرای حلقه، 
+یک اجرا و دو اجرا و سپس آنها را در پایان ترکیب می کنیم. شبیه سازی اجرای سوم یا حتی بیشتر غیر 
+ضروری است که به صورت زیر قابل مشاهده است:
 
-Simulating a third run or even more is unnecessary, which can be seen as follows:
 
-A state of an assignment at the beginning of the iteration will deterministically
-result in a state of that assignment at the end of the iteration. Let this
-state mapping function be called ``f``. The combination of the three different
-states ``unused``, ``undecided`` and ``used`` as explained above is the ``max``
-operation where ``unused = 0``, ``undecided = 1`` and ``used = 2``.
+وضعیت یک تکلیف در ابتدای تکرار به طور قطعی منجر به وضعیت آن تخصیص در پایان تکرار می شود. 
+اجازه دهید این تابع mapping حالت ``f`` نامیده شود. ترکیبی از سه حالت مختلف ``unused``، ``undecided`` 
+و ``used``  همانطور که در بالا توضیح داده شد ``max`` عملیاتی است که در آن ``unused = 0``، 
+``undecided = 1`` و ``used = 2`` است. 
+
 
 The proper way would be to compute
 
@@ -696,132 +699,139 @@ The proper way would be to compute
 
     max(s, f(s), f(f(s)), f(f(f(s))), ...)
 
-as state after the loop. Since ``f`` just has a range of three different values,
-iterating it has to reach a cycle after at most three iterations,
-and thus ``f(f(f(s)))`` has to equal one of ``s``, ``f(s)``, or ``f(f(s))``
-and thus
+روش صحیح محاسبه حالت بعد از حلقه خواهد بود. از آنجایی که f فقط دارای محدوده ای از سه مقدار 
+مختلف است، تکرار آن باید حداکثر پس از سه بار تکرار به یک چرخه برسد و بنابراین ``f(f(f(s)))`` باید برابر با 
+یکی از ``s``، ``f(s)`` یا ``f(f(s))`` باشد  و بنابراین
+
+
 
 .. code-block:: none
 
     max(s, f(s), f(f(s))) = max(s, f(s), f(f(s)), f(f(f(s))), ...).
 
-In summary, running the loop at most twice is enough because there are only three
-different states.
+ به طور خلاصه، اجرای حلقه حداکثر دو بار کافی است زیرا فقط سه حالت مختلف وجود دارد.
 
-For switch statements that have a "default"-case, there is no control-flow
-part that skips the switch.
 
-When a variable goes out of scope, all statements still in the "undecided"
-state are changed to "unused", unless the variable is the return
-parameter of a function - there, the state changes to "used".
+برای عبارات سوئیچ که دارای حالت "پیش فرض" هستند، هیچ بخش کنترل جریانی وجود ندارد که سوئیچ 
+را رد کند. 
 
-In the second traversal, all assignments that are in the "unused" state are removed.
+هنگامی که متغیری از محدوده خارج می شود، تمام عباراتی که هنوز در حالت "تصمیم نشده" هستند به 
+"unused" تغییر می کنند، مگر اینکه متغیر پارامتر بازگشتی یک تابع باشد - در آنجا، وضعیت به 
+"استفاده شده" تغییر می کند. 
 
-This step is usually run right after the SSA transform to complete
-the generation of the pseudo-SSA.
 
-Tools
+در پیمایش دوم، تمام تکالیفی که در حالت "استفاده نشده" هستند حذف می شوند.
+
+ این مرحله معمولاً درست پس از تبدیل SSA برای تکمیل تولید شبه SSA اجرا می شود.
+ 
+ابزارها
 -----
 
-Movability
+قابلیت جابجایی (Movability)
 ^^^^^^^^^^
+قابل انتقال بودن ویژگی یک عبارت است. تقریباً به این معنی است که عبارت عاری از عوارض جانبی است و 
+ارزیابی آن فقط به مقادیر متغیرها و وضعیت ثابت تماس محیط بستگی دارد. اکثر عبارات قابل انتقال هستند.
+قسمت های زیر یک عبارت را غیر قابل انتقال می کنند:
 
-Movability is a property of an expression. It roughly means that the expression
-is side-effect free and its evaluation only depends on the values of variables
-and the call-constant state of the environment. Most expressions are movable.
-The following parts make an expression non-movable:
 
-- function calls (might be relaxed in the future if all statements in the function are movable)
-- opcodes that (can) have side-effects (like ``call`` or ``selfdestruct``)
-- opcodes that read or write memory, storage or external state information
-- opcodes that depend on the current PC, memory size or returndata size
+- فراخوانی های تابع (اگر همه دستورات در تابع قابل انتقال باشند، ممکن است در آینده راحت تر شوند)
+- کدهایی که (می توانند) دارای اثرات جانبی باشند (مانند ``call`` یا ``selfdestruct``)
+- کدهای باز که اطلاعات حافظه، ذخیره سازی یا وضعیت خارجی را می خوانند یا می نویسند
+-  آپکدها که به رایانه فعلی، اندازه حافظه یا اندازه داده بازگشتی بستگی دارد
+
+
 
 DataflowAnalyzer
 ^^^^^^^^^^^^^^^^
 
-The Dataflow Analyzer is not an optimizer step itself but is used as a tool
-by other components. While traversing the AST, it tracks the current value of
-each variable, as long as that value is a movable expression.
-It records the variables that are part of the expression
-that is currently assigned to each other variable. Upon each assignment to
-a variable ``a``, the current stored value of ``a`` is updated and
-all stored values of all variables ``b`` are cleared whenever ``a`` is part
-of the currently stored expression for ``b``.
+Dataflow Analyzer به خودی خود یک مرحله بهینه ساز نیست بلکه به عنوان ابزاری توسط اجزای 
+دیگر استفاده می شود. هنگام عبور از AST، مقدار فعلی هر متغیر را تا زمانی که آن مقدار یک عبارت 
+قابل انتقال باشد، ردیابی می کند. متغیرهایی را که بخشی از عبارتی هستند که در حال حاضر به یک متغیر 
+دیگر اختصاص داده شده اند را ثبت می کند. پس از هر انتساب به یک متغیر  ``a``، مقدار ذخیره شده فعلی  ``a`` 
+به روز می شود و هر زمان که  ``a`` بخشی از عبارت ذخیره شده فعلی برای ``b`` باشد، همه مقادیر ذخیره شده 
+همه متغیرهای ``b`` پاک می شوند.
 
-At control-flow joins, knowledge about variables is cleared if they have or would be assigned
-in any of the control-flow paths. For instance, upon entering a
-for loop, all variables are cleared that will be assigned during the
-body or the post block.
+در اتصالات جریان-کنترل، اگر متغیرها در هر یک از مسیرهای جریان-کنترل تخصیص داده شوند، دانش در 
+مورد متغیرها پاک می شود. به عنوان مثال، با وارد کردن یک حلقه for، همه متغیرهایی که در طول بدنه یا 
+بلوک پست اختصاص داده می شوند، پاک می شوند.
 
-Expression-Scale Simplifications
+
+ساده سازی بیان مقیاس (Expression-Scale Simplifications)
 --------------------------------
 
-These simplification passes change expressions and replace them by equivalent
-and hopefully simpler expressions.
+این پاس‌های ساده‌سازی، عبارات را تغییر می‌دهند و آن‌ها را با عبارات معادل و امیدواریم ساده‌تر جایگزین 
+می‌کنند.
+
 
 .. _common-subexpression-eliminator:
 
 CommonSubexpressionEliminator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+این مرحله از DataflowAnalyzer استفاده می‌کند و عبارات فرعی را جایگزین می‌کند که از نظر نحوی 
+با مقدار فعلی یک متغیر مطابقت دارند، با ارجاع به آن متغیر. این یک تبدیل معادل است زیرا چنین عبارات 
+فرعی باید قابل انتقال باشند.
 
-This step uses the Dataflow Analyzer and replaces subexpressions that
-syntactically match the current value of a variable by a reference to
-that variable. This is an equivalence transform because such subexpressions have
-to be movable.
 
-All subexpressions that are identifiers themselves are replaced by their
-current value if the value is an identifier.
 
-The combination of the two rules above allow to compute a local value
-numbering, which means that if two variables have the same
-value, one of them will always be unused. The Unused Pruner or the
-Redundant Assign Eliminator will then be able to fully eliminate such
-variables.
+اگر مقدار یک شناسه باشد، تمام عبارات فرعی که خود شناسه هستند، با مقدار فعلی آنها جایگزین می 
+شوند.
 
-This step is especially efficient if the expression splitter is run
-before. If the code is in pseudo-SSA form,
-the values of variables are available for a longer time and thus we
-have a higher chance of expressions to be replaceable.
+ترکیب دو قانون فوق به شما امکان می دهد تا یک عدد محلی را محاسبه کنید، به این معنی که اگر دو 
+متغیر دارای مقدار یکسان باشند، یکی از آنها همیشه استفاده نمی شود. استفاده نشده یا حذف کننده 
+تخصیص اضافی می توانند چنین متغیرهایی را به طور کامل حذف کنند.
 
-The expression simplifier will be able to perform better replacements
-if the common subexpression eliminator was run right before it.
+
+این مرحله به ویژه در صورتی کارآمد است که عبارت splitter قبلا اجرا شده باشد. اگر کد به شکل شبه 
+SSA باشد، مقادیر متغیرها برای مدت زمان بیشتری در دسترس هستند و بنابراین شانس بیشتری برای 
+جایگزینی عبارات داریم.
+
+
+
+در صورتی که حذف کننده عبارات فرعی رایج درست قبل از آن اجرا شود، ساده‌کننده عبارت می‌تواند 
+جایگزین‌های بهتری را انجام دهد.
+
 
 .. _expression-simplifier:
 
-Expression Simplifier
+ساده کننده بیان (Expression Simplifier)
 ^^^^^^^^^^^^^^^^^^^^^
+Simplifier Expression از Dataflow Analyzer استفاده می کند و از لیستی از تبدیل های معادل 
+در عباراتی مانند  ``X + 0 -> X``  برای ساده کردن کد استفاده می کند.
 
-The Expression Simplifier uses the Dataflow Analyzer and makes use
-of a list of equivalence transforms on expressions like ``X + 0 -> X``
-to simplify the code.
 
-It tries to match patterns like ``X + 0`` on each subexpression.
-During the matching procedure, it resolves variables to their currently
-assigned expressions to be able to match more deeply nested patterns
-even when the code is in pseudo-SSA form.
 
-Some of the patterns like ``X - X -> 0`` can only be applied as long
-as the expression ``X`` is movable, because otherwise it would remove its potential side-effects.
-Since variable references are always movable, even if their current
-value might not be, the Expression Simplifier is again more powerful
-in split or pseudo-SSA form.
+سعی می کند الگوهایی مانند    ``X + 0`` را در هر زیر عبارت مطابقت دهد. در طول رویه تطبیق، متغیرها را به 
+عبارات اختصاص داده شده فعلی آنها حل می کند تا بتواند الگوهای تودرتو عمیق تری را حتی زمانی که کد 
+به شکل شبه SSA است مطابقت دهد.
+
+
+
+برخی از الگوها مانند ``X - X -> 0``  را فقط تا زمانی می توان اعمال کرد که عبارت ``X``
+ قابل انتقال باشد، زیرا در 
+غیر این صورت عوارض جانبی احتمالی آن را از بین می برد. از آنجایی که مراجع متغیر همیشه قابل 
+جابجایی هستند، حتی اگر مقدار فعلی آن‌ها نباشد، ساده‌کننده بیان مجدداً در قالب تقسیم یا شبه SSA 
+قدرتمندتر است.
+
 
 .. _literal-rematerialiser:
 
 LiteralRematerialiser
 ^^^^^^^^^^^^^^^^^^^^^
 
-To be documented.
+مستند شود.
 
 .. _load-resolver:
 
 LoadResolver
 ^^^^^^^^^^^^
+مرحله بهینه سازی که عبارات نوع ``sload(x)`` و ``mload(x)`` را با مقداری که در حال حاضر در ذخیره سازی 
+ذخیره می شود جایگزین می کند. حافظه، در صورت شناخته شدن.
 
-Optimisation stage that replaces expressions of type ``sload(x)`` and ``mload(x)`` by the value
-currently stored in storage resp. memory, if known.
+اگر کد به شکل SSA باشد بهترین کار را دارد.
 
 Works best if the code is in SSA form.
+
+پیش نیاز: Disambiguator، ForLoopInitRewriter.
 
 Prerequisite: Disambiguator, ForLoopInitRewriter.
 
@@ -829,19 +839,24 @@ Prerequisite: Disambiguator, ForLoopInitRewriter.
 
 ReasoningBasedSimplifier
 ^^^^^^^^^^^^^^^^^^^^^^^^
+این بهینه ساز از حل کننده های SMT برای بررسی ثابت بودن شرایط ``if`` استفاده می کند.
 
-This optimizer uses SMT solvers to check whether ``if`` conditions are constant.
+- اگر ``constraints AND condition`` UNSAT باشد، این شرط هرگز درست نیست و کل بدن را می توان برداشت.
 
-- If ``constraints AND condition`` is UNSAT, the condition is never true and the whole body can be removed.
-- If ``constraints AND NOT condition`` is UNSAT, the condition is always true and can be replaced by ``1``.
+-  اگر ``constraints AND NOT condition`` UNSAT باشد، شرط همیشه درست است و می تواند با 1 
+جایگزین شود.
 
-The simplifications above can only be applied if the condition is movable.
 
-It is only effective on the EVM dialect, but safe to use on other dialects.
+ساده‌سازی‌های بالا فقط در صورتی قابل اعمال هستند که شرط قابل انتقال باشد.
 
-Prerequisite: Disambiguator, SSATransform.
 
-Statement-Scale Simplifications
+ این فقط در EVM موثر است، اما برای استفاده در گویش های دیگر بی خطر است.
+ 
+  پیش نیاز: 
+Disambiguator، SSATtransform.
+
+
+بیانیه-مقیاس ساده سازی
 -------------------------------
 
 .. _circular-reference-pruner:
@@ -849,126 +864,151 @@ Statement-Scale Simplifications
 CircularReferencesPruner
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-This stage removes functions that call each other but are
-neither externally referenced nor referenced from the outermost context.
+این مرحله توابعی را حذف می کند که یکدیگر را فراخوانی می کنند اما نه ارجاع خارجی دارند و نه از بیرونی 
+ترین زمینه ارجاع می شوند.
+
 
 .. _conditional-simplifier:
 
-ConditionalSimplifier
+ساده کننده شرطی
 ^^^^^^^^^^^^^^^^^^^^^
+اگر بتوان مقدار را از طریق جریان کنترل تعیین کرد، ساده‌کننده شرطی، انتساب‌ها را به متغیرهای شرط 
+وارد می‌کند.
 
-The Conditional Simplifier inserts assignments to condition variables if the value can be determined
-from the control-flow.
+فرم SSA را از بین می برد.
 
-Destroys SSA form.
 
-Currently, this tool is very limited, mostly because we do not yet have support
-for boolean types. Since conditions only check for expressions being nonzero,
-we cannot assign a specific value.
 
-Current features:
+در حال حاضر، این ابزار بسیار محدود است، بیشتر به این دلیل که ما هنوز از انواع Boolean پشتیبانی 
+نمی کنیم. از آنجایی که شرایط فقط غیر صفر بودن عبارات را بررسی می کنند، نمی توانیم مقدار خاصی را 
+تعیین کنیم.
 
-- switch cases: insert "<condition> := <caseLabel>"
-- after if statement with terminating control-flow, insert "<condition> := 0"
 
-Future features:
+ویژگی های فعلی:
 
-- allow replacements by "1"
-- take termination of user-defined functions into account
 
-Works best with SSA form and if dead code removal has run before.
+-	موارد سوئیچ: "<condition> := <caseLabel>" را وارد کنید
+-	بعد از دستور if با کنترل جریان پایان دهنده، "<condition> := 0" را درج کنید ویژگی های 
 
-Prerequisite: Disambiguator.
+
+
+ویژگی‌های آتی:
+
+-	اجازه جایگزینی با "1"
+-	خاتمه عملکردهای تعریف شده توسط کاربر را در نظر بگیرید 
+
+
+با فرم SSA و اگر حذف کد مرده قبلاً اجرا شده باشد بهترین کار را می کند. 
+
+
+
+پیش نیاز: Disambiguator.
+
+
 
 .. _conditional-unsimplifier:
 
 ConditionalUnsimplifier
 ^^^^^^^^^^^^^^^^^^^^^^^
+معکوس ساده کننده شرطی.
 
-Reverse of Conditional Simplifier.
 
 .. _control-flow-simplifier:
 
 ControlFlowSimplifier
 ^^^^^^^^^^^^^^^^^^^^^
+چندین ساختار کنترل جریان را ساده می کند:
 
-Simplifies several control-flow structures:
 
-- replace if with empty body with pop(condition)
-- remove empty default switch case
-- remove empty switch case if no default case exists
-- replace switch with no cases with pop(expression)
-- turn switch with single case into if
-- replace switch with only default case with pop(expression) and body
-- replace switch with const expr with matching case body
-- replace ``for`` with terminating control flow and without other break/continue by ``if``
-- remove ``leave`` at the end of a function.
+- اگر با بدنه خالی با pop(شرط) جایگزین شود
+- بخش سوئیچ پیش فرض خالی را بردارید
+- اگر مورد پیش فرض وجود نداشته باشد، مورد سوئیچ خالی را حذف کنید
+- تعویض سوئیچ بدون قاب با pop(expression)
+- سوئیچ تک کیس را به if تبدیل کنید
+- سوئیچ را تنها با حالت پیش فرض با pop(expression) و بدنه جایگزین کنید
+- سوئیچ را با const expr با بدنه مورد منطبق جایگزین کنید
+- ``for`` را با جریان کنترل خاتمه دهنده و بدون شکست دیگر جایگزین کنید/با ``if`` ادامه دهید
+- حذف ``leave`` در پایان یک تابع.
 
-None of these operations depend on the data flow. The StructuralSimplifier
-performs similar tasks that do depend on data flow.
 
-The ControlFlowSimplifier does record the presence or absence of ``break``
-and ``continue`` statements during its traversal.
 
-Prerequisite: Disambiguator, FunctionHoister, ForLoopInitRewriter.
-Important: Introduces EVM opcodes and thus can only be used on EVM code for now.
+هیچ یک از این عملیات به جریان داده بستگی ندارد. StructuralSimplifier وظایف مشابهی را انجام 
+می‌دهد که به جریان داده بستگی دارد.
+
+
+ControlFlowSimplifier وجود یا عدم وجود ``break`` و عبارات  ``continue`` را در طول پیمایش ثبت می کند.
+
+
+پیش نیاز: Disambiguator، FunctionHoister، ForLoopInitRewriter. 
+
+
+
+مهم: کدهای EVM را معرفی می کند و بنابراین فعلاً فقط می تواند در کد EVM استفاده شود.
+
 
 .. _dead-code-eliminator:
 
 DeadCodeEliminator
 ^^^^^^^^^^^^^^^^^^
+این مرحله بهینه سازی کدهای غیرقابل دسترسی را حذف می کند.
 
-This optimization stage removes unreachable code.
 
-Unreachable code is any code within a block which is preceded by a
-leave, return, invalid, break, continue, selfdestruct or revert.
+کد غیرقابل دسترسی به هر کدی در یک بلوک گفته می‌شود که قبل از آن ترک، بازگشت، نامعتبر، شکست، 
+ادامه، خود تخریب یا بازگردانی وجود دارد.
 
-Function definitions are retained as they might be called by earlier
-code and thus are considered reachable.
 
-Because variables declared in a for loop's init block have their scope extended to the loop body,
-we require ForLoopInitRewriter to run before this step.
 
-Prerequisite: ForLoopInitRewriter, Function Hoister, Function Grouper
+تعاریف تابع همانطور که ممکن است با کد قبلی فراخوانی شوند حفظ می شوند و بنابراین قابل دسترسی در 
+نظر گرفته می شوند.
+
+
+از آنجایی که متغیرهای اعلام شده در بلوک اولیه حلقه for، دامنه آنها تا بدنه حلقه گسترش یافته است، ما قبل از این مرحله 
+به اجرای ForLoopInitRewriter نیاز داریم.
+
+
+پیش نیاز: ForLoopInitRewriter، Function Hoister، Function Grouper
+
+
 
 .. _unused-pruner:
 
 UnusedPruner
 ^^^^^^^^^^^^
 
-This step removes the definitions of all functions that are never referenced.
+این مرحله تعاریف همه توابعی را که هرگز به آنها ارجاع داده نمی شود حذف می کند. 
+همچنین اعلان متغیرهایی را که هرگز ارجاع داده نمی شوند حذف می کند. اگر اعلان مقداری را اختصاص 
+دهد که قابل انتقال نیست، عبارت حفظ می شود، اما مقدار آن کنار گذاشته می شود.
+تمام عبارات عبارت قابل انتقال (عباراتی که اختصاص داده نشده اند) حذف می شوند.
 
-It also removes the declaration of variables that are never referenced.
-If the declaration assigns a value that is not movable, the expression is retained,
-but its value is discarded.
 
-All movable expression statements (expressions that are not assigned) are removed.
 
 .. _structural-simplifier:
 
-StructuralSimplifier
+ساده ساز ساختاری
 ^^^^^^^^^^^^^^^^^^^^
 
-This is a general step that performs various kinds of simplifications on
-a structural level:
+این یک مرحله کلی است که انواع مختلفی از ساده سازی ها را در سطح ساختاری انجام می دهد:
 
-- replace if statement with empty body by ``pop(condition)``
-- replace if statement with true condition by its body
-- remove if statement with false condition
-- turn switch with single case into if
-- replace switch with only default case by ``pop(expression)`` and body
-- replace switch with literal expression by matching case body
-- replace for loop with false condition by its initialization part
+- دستور if را با متن خالی با ``pop(condition)`` جایگزین کنید
+- دستور if را با شرط true با بدنه آن جایگزین کنید
+- دستور if را با شرط نادرست حذف کنید
+- سوئیچ تک کیس را به if تبدیل کنید
+- سوئیچ را تنها با حالت پیش فرض بوسیله ``pop(expression)`` و بدنه جایگزین کنید
+- با تطبیق بدنه حروف، کلید را با عبارت لیترال جایگزین کنید
+- حلقه را با شرط false با قسمت اولیه آن جایگزین کنید
 
-This component uses the Dataflow Analyzer.
+این کامپوننت از Dataflow Analyzer استفاده می کند.
 
 .. _block-flattener:
 
 BlockFlattener
 ^^^^^^^^^^^^^^
 
-This stage eliminates nested blocks by inserting the statement in the
-inner block at the appropriate place in the outer block:
+این مرحله بلوک های تودرتو را با درج عبارت در بلوک داخلی در محل مناسب بلوک بیرونی حذف می کند. 
+به FunctionGrouper بستگی دارد و بیرونی ترین بلوک را برای حفظ فرم تولید شده توسط 
+FunctionGrouper صاف نمی کند.
+
+
 
 .. code-block:: yul
 
@@ -979,8 +1019,8 @@ inner block at the appropriate place in the outer block:
             mstore(x, y)
         }
     }
+تبدیل می شود به
 
-is transformed to
 
 .. code-block:: yul
 
@@ -990,22 +1030,23 @@ is transformed to
         mstore(x, y)
     }
 
-As long as the code is disambiguated, this does not cause a problem because
-the scopes of variables can only grow.
+تا زمانی که کد مبهم باشد، این مشکلی ایجاد نمی کند زیرا دامنه متغیرها فقط می تواند رشد کند.
+
 
 .. _loop-invariant-code-motion:
 
 LoopInvariantCodeMotion
 ^^^^^^^^^^^^^^^^^^^^^^^
-This optimization moves movable SSA variable declarations outside the loop.
 
-Only statements at the top level in a loop's body or post block are considered, i.e variable
-declarations inside conditional branches will not be moved out of the loop.
+این بهینه سازی اعلان های متغیر SSA قابل انتقال را به خارج از حلقه منتقل می کند.
 
-Requirements:
+فقط عبارات در سطح بالا در بدنه حلقه یا بلوک پست در نظر گرفته می شوند، یعنی اعلان های متغیر در 
+شاخه های شرطی از حلقه خارج نمی شوند.
 
-- The Disambiguator, ForLoopInitRewriter and FunctionHoister must be run upfront.
-- Expression splitter and SSA transform should be run upfront to obtain better result.
+الزامات:
+
+- Disambiguator، ForLoopInitRewriter و FunctionHoister باید از قبل اجرا شوند.
+- تقسیم بیان و تبدیل SSA باید از قبل اجرا شوند تا نتیجه بهتری بدست آید.
 
 
 Function-Level Optimizations
@@ -1013,14 +1054,16 @@ Function-Level Optimizations
 
 .. _function-specializer:
 
-FunctionSpecializer
+بهینه سازی در سطح عملکرد
 ^^^^^^^^^^^^^^^^^^^
 
-This step specializes the function with its literal arguments.
+این مرحله تابع را با آرگومان های لیترال آن تخصصی می کند.
 
-If a function, say, ``function f(a, b) { sstore (a, b) }``, is called with literal arguments, for
-example, ``f(x, 5)``, where ``x`` is an identifier, it could be specialized by creating a new
-function ``f_1`` that takes only one argument, i.e.,
+
+اگر یک تابع، مثلاً، تابع ``function f(a, b) { sstore (a, b) }``  با آرگومان های لیترال فراخوانی شود، به عنوان 
+مثال،  ``f(x, 5)``، که در آن ``x`` یک شناسه است، می توان آن را با ایجاد تخصصی کرد. یک تابع جدید ``f_1`` که 
+فقط یک آرگومان می گیرد، به عنوان مثال،
+
 
 .. code-block:: yul
 
@@ -1029,156 +1072,160 @@ function ``f_1`` that takes only one argument, i.e.,
         sstore(a_1, b_1)
     }
 
-Other optimization steps will be able to make more simplifications to the function. The
-optimization step is mainly useful for functions that would not be inlined.
+سایر مراحل بهینه سازی قادر خواهند بود تا عملکرد را ساده تر کنند. مرحله بهینه سازی عمدتاً برای توابعی 
+مفید است که درون خطی نیستند.
 
-Prerequisites: Disambiguator, FunctionHoister
+پیش نیازها: Disambiguator، FunctionHoister LiteralRematerialiser به عنوان یک پیش 
+نیاز توصیه می شود، حتی اگر برای صحت لازم نباشد.
 
-LiteralRematerialiser is recommended as a prerequisite, even though it's not required for
-correctness.
+
 
 .. _unused-function-parameter-pruner:
 
 UnusedFunctionParameterPruner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This step removes unused parameters in a function.
+این مرحله پارامترهای استفاده نشده در یک تابع را حذف می کند. 
 
-If a parameter is unused, like ``c`` and ``y`` in, ``function f(a,b,c) -> x, y { x := div(a,b) }``, we
-remove the parameter and create a new "linking" function as follows:
+اگر پارامتری مانند ``c`` و ``y`` در   ``function f(a,b,c) -> x, y { x := div(a,b) }``   استفاده نشده باشد، پارامتر را حذف 
+کرده و یک تابع "پیوند یا linking" جدید ایجاد می کنیم. به شرح زیر است:
+
 
 .. code-block:: yul
 
     function f(a,b) -> x { x := div(a,b) }
     function f2(a,b,c) -> x, y { x := f(a,b) }
 
-and replace all references to ``f`` by ``f2``.
-The inliner should be run afterwards to make sure that all references to ``f2`` are replaced by
-``f``.
+و همه ارجاع به ``f`` را با ``f2`` جایگزین کنید. پس از آن خط داخلی باید اجرا شود تا مطمئن شوید که تمام 
+ارجاعات به ``f2`` با ``f`` جایگزین شده است.
 
-Prerequisites: Disambiguator, FunctionHoister, LiteralRematerialiser.
 
-The step LiteralRematerialiser is not required for correctness. It helps deal with cases such as:
-``function f(x) -> y { revert(y, y} }`` where the literal ``y`` will be replaced by its value ``0``,
-allowing us to rewrite the function.
+پیش نیازها: ابهام زدا، FunctionHoister، LiteralRematerialiser.
+
+مرحله LiteralRematerialiser برای درستی مورد نیاز نیست. این کمک می کند تا با مواردی مانند: 
+
+ ``function f(x) -> y { revert(y, y} }`` که در آن ``y`` لیترال با مقدار ``0`` جایگزین شود، به ما اجازه می دهد 
+تا تابع را بازنویسی کنیم.
+
 
 .. _equivalent-function-combiner:
 
 EquivalentFunctionCombiner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+اگر دو تابع از نظر نحوی معادل باشند، در حالی که اجازه تغییر نام متغیر را می دهند، اما هیچ گونه ترتیب 
+مجددی را نمی دهند، هر ارجاعی به یکی از توابع با دیگری جایگزین می شود.
 
-If two functions are syntactically equivalent, while allowing variable
-renaming but not any re-ordering, then any reference to one of the
-functions is replaced by the other.
-
-The actual removal of the function is performed by the Unused Pruner.
+حذف واقعی عملکرد توسط هرس استفاده نشده انجام می شود.
 
 
-Function Inlining
+
+
+Inlining تابع (Function Inlining)
 -----------------
 
 .. _expression-inliner:
 
 ExpressionInliner
 ^^^^^^^^^^^^^^^^^
+این جزء از بهینه ساز، توابع محدود شده را با توابع درون خطی انجام می دهد که می توانند در داخل عبارات 
+تابعی قرار بگیرند، یعنی توابعی که:
 
-This component of the optimizer performs restricted function inlining by inlining functions that can be
-inlined inside functional expressions, i.e. functions that:
 
-- return a single value.
-- have a body like ``r := <functional expression>``.
-- neither reference themselves nor ``r`` in the right hand side.
+- یک مقدار واحد را برگردانید.
+- بدنه‌ای مانند    ``r := <functional expression>``    داشته باشید.
+- نه خود و نه ``r``  را در سمت راست ارجاع دهید.
 
-Furthermore, for all parameters, all of the following need to be true:
 
-- The argument is movable.
-- The parameter is either referenced less than twice in the function body, or the argument is rather cheap
-  ("cost" of at most 1, like a constant up to 0xff).
+علاوه بر این، برای همه پارامترها، تمام موارد زیر باید درست باشد:
 
-Example: The function to be inlined has the form of ``function f(...) -> r { r := E }`` where
-``E`` is an expression that does not reference ``r`` and all arguments in the function call are movable expressions.
+- آرگومان قابل انتقال است.
+- پارامتر یا کمتر از دو بار در بدنه تابع ارجاع داده می شود، یا آرگومان نسبتاً ارزان است ("هزینه" حداکثر 1، مانند ثابت تا 0xff).
 
-The result of this inlining is always a single expression.
 
-This component can only be used on sources with unique names.
+ مثال: تابعی که قرار است درون خطی شود به شکل تابع ``function f(...) -> r { r := E }`` است که در آن ``E`` عبارتی 
+است که به ``r`` ارجاع نمی دهد و همه آرگومان های فراخوانی تابع عبارت های قابل انتقال هستند. 
+
+نتیجه این خط بندی همیشه یک عبارت واحد است.
+
+این مؤلفه فقط در منابعی با نام های منحصر به فرد قابل استفاده است.
 
 .. _full-inliner:
 
 FullInliner
 ^^^^^^^^^^^
 
-The Full Inliner replaces certain calls of certain functions
-by the function's body. This is not very helpful in most cases, because
-it just increases the code size but does not have a benefit. Furthermore,
-code is usually very expensive and we would often rather have shorter
-code than more efficient code. In same cases, though, inlining a function
-can have positive effects on subsequent optimizer steps. This is the case
-if one of the function arguments is a constant, for example.
-
-During inlining, a heuristic is used to tell if the function call
-should be inlined or not.
-The current heuristic does not inline into "large" functions unless
-the called function is tiny. Functions that are only used once
-are inlined, as well as medium-sized functions, while function
-calls with constant arguments allow slightly larger functions.
+Full Inliner جایگزین تماس های خاصی از عملکردهای خاص توسط بدنه عملکرد می شود که در اکثر 
+موارد خیلی مفید نیست، زیرا فقط اندازه کد را افزایش می دهد اما فایده ای ندارد. علاوه بر این، کد معمولاً 
+بسیار گران است و ما اغلب ترجیح می‌دهیم کد کوتاه‌تری داشته باشیم تا کد کارآمدتر. اگرچه در موارد 
+مشابه، درون‌سازی یک تابع می‌تواند اثرات مثبتی بر مراحل بهینه‌ساز بعدی داشته باشد. این در صورتی است 
+که مثلا یکی از آرگومان های تابع ثابت باشد.
 
 
-In the future, we may include a backtracking component
-that, instead of inlining a function right away, only specializes it,
-which means that a copy of the function is generated where
-a certain parameter is always replaced by a constant. After that,
-we can run the optimizer on this specialized function. If it
-results in heavy gains, the specialized function is kept,
-otherwise the original function is used instead.
 
-Cleanup
+
+در طول Inline، از یک اکتشافی برای تشخیص اینکه آیا فراخوانی تابع باید خطی باشد یا نه استفاده 
+می‌شود. اکتشافی فعلی در توابع "بزرگ" قرار نمی گیرد مگر اینکه تابع فراخوانی شده کوچک باشد. توابعی 
+که فقط یک بار استفاده می شوند به صورت خطی هستند و همچنین توابع با اندازه متوسط، در حالی که 
+فراخوانی تابع با آرگومان های ثابت امکان توابع کمی بزرگتر را می دهد.
+
+
+
+در آینده، ممکن است یک مؤلفه Backtracking را اضافه کنیم که به‌جای اینکه یک تابع را فوراً درون خط 
+قرار دهد، فقط آن را تخصصی می‌کند، به این معنی که یک کپی از تابع در جایی تولید می‌شود که یک 
+پارامتر خاص همیشه با یک ثابت جایگزین می‌شود.
+پس از آن، می توانیم بهینه ساز را روی این تابع تخصصی اجرا کنیم. اگر منجر به سودهای سنگین شود، 
+عملکرد تخصصی حفظ می شود، در غیر این صورت عملکرد اصلی به جای آن استفاده می شود.
+
+
+
+
+پاک کردن(Cleanup)
 -------
+پاکسازی در پایان اجرای بهینه ساز انجام می شود. سعی می کند عبارات تقسیم شده را دوباره به عبارات 
+عمیق تو در تو ترکیب کند و همچنین "کامپایل پذیری" را برای ماشین ها با حذف متغیرها تا حد امکان 
+بهبود می بخشد.
 
-The cleanup is performed at the end of the optimizer run. It tries
-to combine split expressions into deeply nested ones again and also
-improves the "compilability" for stack machines by eliminating
-variables as much as possible.
 
 .. _expression-joiner:
 
 ExpressionJoiner
 ^^^^^^^^^^^^^^^^
+این عمل مخالف عبارت splitter است. دنباله ای از اعلان های متغیر که دقیقاً یک مرجع دارند را به یک 
+عبارت پیچیده تبدیل می کند. این مرحله به طور کامل ترتیب فراخوانی های تابع و اجرای آپکدها 
+را حفظ می کند. از هیچ اطلاعاتی در مورد قابلیت جابجایی آپکدها استفاده نمی کند. اگر انتقال 
+مقدار یک متغیر به محل استفاده آن ترتیب فراخوانی هر تابع یا اجرای کد عملیاتی را تغییر دهد، تبدیل انجام 
+نمی‌شود.
 
-This is the opposite operation of the expression splitter. It turns a sequence of
-variable declarations that have exactly one reference into a complex expression.
-This stage fully preserves the order of function calls and opcode executions.
-It does not make use of any information concerning the commutativity of the opcodes;
-if moving the value of a variable to its place of use would change the order
-of any function call or opcode execution, the transformation is not performed.
 
-Note that the component will not move the assigned value of a variable assignment
-or a variable that is referenced more than once.
+توجه داشته باشید که کامپوننت مقدار تخصیص داده شده یک انتساب متغیر را که بیش از یک بار به آن 
+ارجاع داده شده است، جابه جا نمی کند.
 
-The snippet ``let x := add(0, 2) let y := mul(x, mload(2))`` is not transformed,
-because it would cause the order of the call to the opcodes ``add`` and
-``mload`` to be swapped - even though this would not make a difference
-because ``add`` is movable.
 
-When reordering opcodes like that, variable references and literals are ignored.
-Because of that, the snippet ``let x := add(0, 2) let y := mul(x, 3)`` is
-transformed to ``let y := mul(add(0, 2), 3)``, even though the ``add`` opcode
-would be executed after the evaluation of the literal ``3``.
+قطعه ``let x := add(0, 2) let y := mul(x, mload(2))``  تبدیل نمی شود، زیرا باعث می شود ترتیب 
+فراخوانی به آپکدها ``add`` و ``mload`` مبادله شود - حتی اگر این تفاوتی ایجاد نمی کند زیرا ``add`` 
+قابل انتقال است. 
+
+
+هنگام مرتب کردن مجدد آپکدها  مانند آن، ارجاعات متغیر و لیترال ها نادیده گرفته می شوند. به همین دلیل، 
+قطعه    ``let x := add(0, 2) let y := mul(x, 3)``  به ``let y := mul(add(0, 2), 3)`` تبدیل می‌شود، حتی اگر 
+ آپکد   ``add`` پس از ارزیابی لیترال   ``3`` اجرا شود.
+
+
 
 .. _SSA-reverser:
 
 SSAReverser
 ^^^^^^^^^^^
 
-This is a tiny step that helps in reversing the effects of the SSA transform
-if it is combined with the Common Subexpression Eliminator and the
-Unused Pruner.
+این یک گام کوچک است که در صورت ترکیب شدن با Common Subexpression Eliminator و 
+Unused Pruner به معکوس کردن اثرات تبدیل SSA کمک می کند. 
 
-The SSA form we generate is detrimental to code generation on the EVM and
-WebAssembly alike because it generates many local variables. It would
-be better to just re-use existing variables with assignments instead of
-fresh variable declarations.
+فرم SSA که تولید می کنیم برای تولید کد در EVM و WebAssembly به طور یکسان مضر است زیرا 
+متغیرهای محلی زیادی تولید می کند. بهتر است فقط از متغیرهای موجود با انتساب به جای اعلان متغیرهای 
+تازه استفاده مجدد شود.
 
-The SSA transform rewrites
+ تبدیل SSA بازنویسی می کند.
+
 
 .. code-block:: yul
 
@@ -1195,10 +1242,12 @@ to
     let a_2 := calldataload(0x20)
     a := a_2
 
-The problem is that instead of ``a``, the variable ``a_1`` is used
-whenever ``a`` was referenced. The SSA transform changes statements
-of this form by just swapping out the declaration and the assignment. The above
-snippet is turned into
+
+
+مشکل این است که به جای ``a`` ، هر زمان که ``a`` ارجاع داده شد از متغیر ``a_1`` استفاده می شود. تبدیل SSA
+عبارات این فرم را تنها با تعویض اعلان و تخصیص تغییر می دهد. قطعه بالا تبدیل شده است
+
+
 
 .. code-block:: yul
 
@@ -1208,56 +1257,54 @@ snippet is turned into
     a := calldataload(0x20)
     let a_2 := a
 
-This is a very simple equivalence transform, but when we now run the
-Common Subexpression Eliminator, it will replace all occurrences of ``a_1``
-by ``a`` (until ``a`` is re-assigned). The Unused Pruner will then
-eliminate the variable ``a_1`` altogether and thus fully reverse the
-SSA transform.
+
+
+این یک تبدیل هم ارزی بسیار ساده است، اما وقتی اکنون حذف کننده مشترک Subexpression را اجرا
+ می کنیم، همه رخدادهای ``a_1``   را با    ``a``  جایگزین می کند (تا زمانی که  ``a``  دوباره اختصاص داده شود). سپس 
+Pruner استفاده نشده متغیر   ``a_1``   را به طور کلی حذف می کند و بنابراین تبدیل SSA را کاملاً معکوس می 
+کند.
+
 
 .. _stack-compressor:
 
 StackCompressor
 ^^^^^^^^^^^^^^^
 
-One problem that makes code generation for the Ethereum Virtual Machine
-hard is the fact that there is a hard limit of 16 slots for reaching
-down the expression stack. This more or less translates to a limit
-of 16 local variables. The stack compressor takes Yul code and
-compiles it to EVM bytecode. Whenever the stack difference is too
-large, it records the function this happened in.
+یکی از مشکلاتی که تولید کد برای ماشین مجازی اتریوم را سخت می کند، این واقعیت است که محدودیت 
+سختی از 16 اسلات برای رسیدن به stack عبارت وجود دارد. این کم و بیش به محدودیت 16 متغیر محلی 
+ترجمه می شود. کمپرسور stack کد Yul را می گیرد و آن را به بایت کد EVM کامپایل می کند. هر زمان 
+که اختلاف stack خیلی زیاد باشد، عملکردی که در آن اتفاق افتاده را ثبت می کند.
 
-For each function that caused such a problem, the Rematerialiser
-is called with a special request to aggressively eliminate specific
-variables sorted by the cost of their values.
+برای هر تابعی که چنین مشکلی را ایجاد می کند، Rematerialiser با یک درخواست خاص فراخوانی می 
+شود تا متغیرهای خاصی را که بر اساس هزینه مقادیر آنها مرتب شده اند، حذف کند.
 
-On failure, this procedure is repeated multiple times.
+ در صورت شکست، این روش چندین بار تکرار می شود.
+
 
 .. _rematerialiser:
 
 Rematerialiser
 ^^^^^^^^^^^^^^
 
-The rematerialisation stage tries to replace variable references by the expression that
-was last assigned to the variable. This is of course only beneficial if this expression
-is comparatively cheap to evaluate. Furthermore, it is only semantically equivalent if
-the value of the expression did not change between the point of assignment and the
-point of use. The main benefit of this stage is that it can save stack slots if it
-leads to a variable being eliminated completely (see below), but it can also
-save a DUP opcode on the EVM if the expression is very cheap.
+مرحله مادی‌سازی یا ematerialisation مجدد سعی می‌کند تا ارجاعات متغیر را با عبارتی که آخرین بار 
+به متغیر اختصاص داده شده است، جایگزین کند.
+البته این تنها زمانی مفید است که ارزیابی این عبارت نسبتاً ارزان باشد. علاوه بر این، تنها زمانی معادل معنایی 
+است که مقدار عبارت بین نقطه تخصیص و نقطه استفاده تغییر نکرده باشد. مزیت اصلی این مرحله این است 
+که اگر منجر به حذف کامل یک متغیر شود، می‌تواند اسلات‌های stack را ذخیره کند (پایین را ببینید)، اما 
+اگر عبارت بسیار ارزان باشد، می‌تواند یک اپکد DUP را نیز در EVM ذخیره کند.
 
-The Rematerialiser uses the Dataflow Analyzer to track the current values of variables,
-which are always movable.
-If the value is very cheap or the variable was explicitly requested to be eliminated,
-the variable reference is replaced by its current value.
+Rematerialiser از Dataflow Analyzer برای ردیابی مقادیر جاری متغیرها استفاده می کند که 
+همیشه قابل انتقال هستند. اگر مقدار بسیار ارزان باشد یا به صراحت از متغیر درخواست شده باشد که حذف 
+شود، مرجع متغیر با مقدار فعلی آن جایگزین می شود.
+
 
 .. _for-loop-condition-out-of-body:
 
 ForLoopConditionOutOfBody
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Reverses the transformation of ForLoopConditionIntoBody.
+ تبدیل ForLoopConditionIntoBody را معکوس می کند. برای هر  ``c``   قابل انتقال، تبدیل می شود 
 
-For any movable ``c``, it turns
 
 .. code-block:: none
 
@@ -1266,7 +1313,7 @@ For any movable ``c``, it turns
     ...
     }
 
-into
+به
 
 .. code-block:: none
 
@@ -1274,7 +1321,7 @@ into
     ...
     }
 
-and it turns
+و تبدیل می شود
 
 .. code-block:: none
 
@@ -1283,7 +1330,7 @@ and it turns
     ...
     }
 
-into
+به
 
 .. code-block:: none
 
@@ -1291,16 +1338,17 @@ into
     ...
     }
 
-The LiteralRematerialiser should be run before this step.
+LiteralRematerialiser باید قبل از این مرحله اجرا شود.
 
 
-WebAssembly specific
+
+وب اسمبلی خاص
 --------------------
 
-MainFunction
+عملکرد اصلی
 ^^^^^^^^^^^^
 
-Changes the topmost block to be a function with a specific name ("main") which has no
-inputs nor outputs.
+بالاترین بلوک را به تابعی با نام خاص ("main") تغییر می دهد که ورودی و خروجی ندارد.
 
-Depends on the Function Grouper.
+ بستگی به Function Grouper دارد.
+
