@@ -1,35 +1,33 @@
 .. _metadata:
 
 #################
-Contract Metadata
+فراداده قرارداد (Contract Metadata)
 #################
 
 .. index:: metadata, contract verification
 
-The Solidity compiler automatically generates a JSON file, the contract
-metadata, that contains information about the compiled contract. You can use
-this file to query the compiler version, the sources used, the ABI and NatSpec
-documentation to more safely interact with the contract and verify its source
-code.
+کامپایلر سالیدیتی به طور خودکار یک فایل JSON، فراداده قرارداد، که حاوی اطلاعاتی درباره قرارداد کامپایل 
+شده است، تولید می کند. می توانید از این فایل برای query یا جستجو از نسخه کامپایلر، منابع استفاده 
+شده، اسناد ABI و NatSpec برای تعامل ایمن تر با قرارداد و تأیید کد منبع آن استفاده کنید.
 
-The compiler appends by default the IPFS hash of the metadata file to the end
-of the bytecode (for details, see below) of each contract, so that you can
-retrieve the file in an authenticated way without having to resort to a
-centralized data provider. The other available options are the Swarm hash and
-not appending the metadata hash to the bytecode.  These can be configured via
-the :ref:`Standard JSON Interface<compiler-api>`.
+کامپایلر به طور پیش‌فرض هش IPFS فایل فراداده را به انتهای بایت کد (برای جزئیات، در زیر ببینید) هر 
+قرارداد اضافه می‌کند، به طوری که می‌توانید فایل را به روشی احراز هویت شده و بدون نیاز به اتصال به یک 
+ارائه‌دهنده داده متمرکز بازیابی کنید. گزینه های دیگر موجود عبارتند از هش Swarm و عدم الحاق هش 
+ابرداده به بایت کد. این میتواند با :ref:`Standard JSON Interface<compiler-api>` پیکربندی شود.
 
-You have to publish the metadata file to IPFS, Swarm, or another service so
-that others can access it. You create the file by using the ``solc --metadata``
-command that generates a file called ``ContractName_meta.json``. It contains
-IPFS and Swarm references to the source code, so you have to upload all source
-files and the metadata file.
 
-The metadata file has the following format. The example below is presented in a
-human-readable way. Properly formatted metadata should use quotes correctly,
-reduce whitespace to a minimum and sort the keys of all objects to arrive at a
-unique formatting. Comments are not permitted and used here only for
-explanatory purposes.
+شما باید فایل فراداده را در IPFS، سوارم(Swarm) یا سرویس دیگری منتشر کنید تا دیگران بتوانند به آن 
+دسترسی داشته باشند. شما فایل را با استفاده از دستور ``solc --metadata`` ایجاد می کنید که فایلی به نام 
+``ContractName_meta.json`` تولید می کند. این شامل IPFS و ارجاعات Swarm به کد منبع است، 
+بنابراین شما باید تمام فایل های منبع و فایل فراداده را آپلود کنید.
+
+
+
+فایل فراداده دارای فرمت زیر است. مثال زیر به روشی قابل خواندن برای انسان ارائه شده است. فراداده هایی 
+که به درستی قالب بندی شده اند باید از نقل قول ها به درستی استفاده کنند، فضای خالی را به حداقل 
+برسانند و کلیدهای همه اشیاء را مرتب کنند تا به یک قالب بندی منحصر به فرد برسند. نظرات در اینجا فقط 
+برای اهداف توضیحی مجاز نیست و استفاده می شود.
+
 
 .. code-block:: javascript
 
@@ -125,29 +123,32 @@ explanatory purposes.
     }
 
 .. warning::
-  Since the bytecode of the resulting contract contains the metadata hash by default, any
-  change to the metadata might result in a change of the bytecode. This includes
-  changes to a filename or path, and since the metadata includes a hash of all the
-  sources used, a single whitespace change results in different metadata, and
-  different bytecode.
+
+      از آنجایی که بایت کد قرارداد حاصل به طور پیش‌فرض حاوی هش ابرداده است، هر تغییری در ابرداده ممکن 
+      است منجر به تغییر بایت کد شود که شامل تغییرات در نام فایل یا مسیر است و از آنجایی که فراداده شامل
+      هش از تمام منابع استفاده شده است، یک تغییر فضای خالی منجر به ابرداده های مختلف و کد بایت متفاوت 
+      می شود.
+
 
 .. note::
-    The ABI definition above has no fixed order. It can change with compiler versions.
-    Starting from Solidity version 0.5.12, though, the array maintains a certain
-    order.
+      
+          تعریف ABI در بالا ترتیب ثابتی ندارد. می تواند با نسخه های کامپایلر تغییر کند. با شروع از سالیدیتی نسخه  0.5.12، هر چند، آرایه نظم خاصی را حفظ می کند.
+
+      
 
 .. _encoding-of-the-metadata-hash-in-the-bytecode:
 
-Encoding of the Metadata Hash in the Bytecode
+رمزگذاری هش فراداده در بایت کد
 =============================================
+از آنجایی که ممکن است در آینده از روش‌های دیگری برای بازیابی فایل فراداده پشتیبانی کنیم، مپینگ 
+``{"ipfs": <IPFS hash>, "solc": <compiler version>}`` به‌صورت کدگذاری `CBOR <https://tools.ietf.org/html/rfc7049>`_ ذخیره می‌شود. 
+از آنجایی که مپینگ ممکن است حاوی کلیدهای بیشتری باشد (به زیر مراجعه کنید) و پیدا کردن ابتدای آن 
+رمزگذاری آسان نیست، طول آن در یک رمزگذاری دو بایتی بیگ اندیان(big-endian) اضافه می شود.
+نسخه فعلی کامپایلر سالیدیتی معمولا موارد زیر را به انتهای بایت کد مستقر شده اضافه می کند، بنابراین 
+برای بازیابی داده ها، می توان انتهای بایت کد مستقر شده را بررسی کرد تا با آن الگو مطابقت داشته باشد و 
+از هش IPFS برای بازیابی فایل استفاده کرد.
 
-Because we might support other ways to retrieve the metadata file in the future,
-the mapping ``{"ipfs": <IPFS hash>, "solc": <compiler version>}`` is stored
-`CBOR <https://tools.ietf.org/html/rfc7049>`_-encoded. Since the mapping might
-contain more keys (see below) and the beginning of that
-encoding is not easy to find, its length is added in a two-byte big-endian
-encoding. The current version of the Solidity compiler usually adds the following
-to the end of the deployed bytecode
+
 
 .. code-block:: text
 
@@ -156,56 +157,48 @@ to the end of the deployed bytecode
     0x64 's' 'o' 'l' 'c' 0x43 <3 byte version encoding>
     0x00 0x33
 
-So in order to retrieve the data, the end of the deployed bytecode can be checked
-to match that pattern and use the IPFS hash to retrieve the file.
+در حالی که بیلدهای انتشار solc از کدگذاری 3 بایتی نسخه همانطور که در بالا نشان داده شده است (هر 
+کدام یک بایت برای شماره نسخه اصلی، فرعی و وصله) استفاده می کنند، نسخه های پیش از انتشار از یک 
+رشته نسخه کامل شامل هش commit و تاریخ ساخت استفاده می کنند.
 
-Whereas release builds of solc use a 3 byte encoding of the version as shown
-above (one byte each for major, minor and patch version number), prerelease builds
-will instead use a complete version string including commit hash and build date.
 
 .. note::
-  The CBOR mapping can also contain other keys, so it is better to fully
-  decode the data instead of relying on it starting with ``0xa264``.
-  For example, if any experimental features that affect code generation
-  are used, the mapping will also contain ``"experimental": true``.
+
+    مپینگ CBOR می‌تواند حاوی کلیدهای دیگری نیز باشد، بنابراین بهتر است به جای اینکه با ``0xa264`` 
+      شروع کنید، داده‌ها را به طور کامل رمزگشایی کنید. به عنوان مثال، اگر از هر ویژگی آزمایشی که بر تولید 
+      کد تأثیر می گذارد استفاده شود، مپینگ نیز حاوی ``"experimental": true`` . می باشد.
+
 
 .. note::
-  The compiler currently uses the IPFS hash of the metadata by default, but
-  it may also use the bzzr1 hash or some other hash in the future, so do
-  not rely on this sequence to start with ``0xa2 0x64 'i' 'p' 'f' 's'``.  We
-  might also add additional data to this CBOR structure, so the best option
-  is to use a proper CBOR parser.
+
+    توجه: کامپایلر در حال حاضر از هش IPFS فراداده استفاده می کند، اما ممکن است در آینده از هش bzzr1   یا هش دیگری نیز استفاده کند، بنابراین برای شروع با ``0xa2 0x64 'i' 'p' 'f' 's'`` به این دنباله اعتماد نکنید . ما همچنین ممکن است داده های اضافی را به این ساختار CBOR اضافه کنیم، بنابراین بهترین گزینه استفادهاز تجزیه کننده CBOR مناسب است.
 
 
-Usage for Automatic Interface Generation and NatSpec
+استفاده برای تولید رابط خودکار و NatSpec
 ====================================================
 
-The metadata is used in the following way: A component that wants to interact
-with a contract (e.g. Mist or any wallet) retrieves the code of the contract,
-from that the IPFS/Swarm hash of a file which is then retrieved.  That file
-is JSON-decoded into a structure like above.
+فراداده به روش زیر استفاده می شود: مؤلفه ای که می خواهد با یک قرارداد تعامل داشته باشد (مثلاً Mist 
+یا هر کیف پول) کد قرارداد را بازیابی می کند، از آن هش IPFS/Swarm یک فایل که سپس بازیابی می 
+شود. آن فایل با JSON در ساختاری مانند بالا رمزگشایی می شود.
 
-The component can then use the ABI to automatically generate a rudimentary
-user interface for the contract.
 
-Furthermore, the wallet can use the NatSpec user documentation to display a confirmation message to the user
-whenever they interact with the contract, together with requesting
-authorization for the transaction signature.
+سپس این مؤلفه می تواند از ABI برای ایجاد خودکار یک رابط کاربری ابتدایی برای قرارداد استفاده کند.
 
-For additional information, read :doc:`Ethereum Natural Language Specification (NatSpec) format <natspec-format>`.
+علاوه بر این، کیف پول می‌تواند از اسناد کاربر theNatSpec برای نمایش یک پیام تأیید برای کاربر در زمان 
+تعامل با قرارداد، همراه با درخواست مجوز برای امضای تراکنش استفاده کند. برای اطلاعات بیشتر، فرمت 
+مشخصات  :doc:`Ethereum Natural Language Specification (NatSpec) format <natspec-format>` را بخوانید.
 
-Usage for Source Code Verification
+
+
+استفاده برای تأیید کد منبع
 ==================================
+به منظور تأیید کامپایل، منابع را می توان از IPFS/Swarm از طریق پیوند موجود در فایل فراداده بازیابی 
+کرد. کامپایلر نسخه صحیح (که به عنوان بخشی از کامپایلرهای "رسمی" بررسی شده است) با تنظیمات 
+مشخص شده روی آن ورودی فراخوانی می شود. بایت کد به دست آمده با داده های تراکنش ایجاد یا داده 
+های آپکد ``CREATE`` مقایسه می شود که به طور خودکار ابرداده را تأیید می کند زیرا هش آن بخشی از بایت 
+کد است. داده های اضافی مربوط به داده های ورودی سازنده است که باید با توجه به رابط رمزگشایی شده و 
+به کاربر ارائه شود. در مخزن `sourcify <https://github.com/ethereum/sourcify>`_
+(`npm package <https://www.npmjs.com/package/source-verify>`_)  می توانید کد نمونه ای را مشاهده کنید که نحوه 
+استفاده از این ویژگی را نشان می دهد.
 
-In order to verify the compilation, sources can be retrieved from IPFS/Swarm
-via the link in the metadata file.
-The compiler of the correct version (which is checked to be part of the "official" compilers)
-is invoked on that input with the specified settings. The resulting
-bytecode is compared to the data of the creation transaction or ``CREATE`` opcode data.
-This automatically verifies the metadata since its hash is part of the bytecode.
-Excess data corresponds to the constructor input data, which should be decoded
-according to the interface and presented to the user.
 
-In the repository `sourcify <https://github.com/ethereum/sourcify>`_
-(`npm package <https://www.npmjs.com/package/source-verify>`_) you can see
-example code that shows how to use this feature.
