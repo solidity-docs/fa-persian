@@ -1,0 +1,13 @@
+# Build Sphinx docs in formats like HTML or PDF
+/docs/_build
+
+# robots.txt is generated automatically by docs.sh
+/docs/_static/robots.txt
+
+# Precompiled Python bytecode
+__pycache__
+*.pyc
+
+# OS-specific local cache files
+.DS_Store
+Thumbs.db
