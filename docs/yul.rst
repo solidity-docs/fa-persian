@@ -166,7 +166,7 @@ Inside a code block, the following elements can be used
 - if statements, e.g. ``if lt(a, b) { sstore(0, 1) }``
 - switch statements, e.g. ``switch mload(0) case 0 { revert() } default { mstore(0, 1) }``
 - for loops, e.g. ``for { let i := 0} lt(i, 10) { i := add(i, 1) } { mstore(i, 7) }``
-- function definitions, e.g. ``function f(a, b) -> c { c := add(a, b) }```
+- function definitions, e.g. ``function f(a, b) -> c { c := add(a, b) }``
 
 Multiple syntactical elements can follow each other simply separated by
 whitespace, i.e. there is no terminating ``;`` or newline required.
@@ -541,10 +541,24 @@ evaluate to zero values.
 
 In all other situations, expressions have to evaluate to exactly one value.
 
-The ``continue`` and ``break`` statements can only be used inside loop bodies
-and have to be in the same function as the loop (or both have to be at the
-top level). The ``continue`` and ``break`` statements cannot be used
-in other parts of a loop, not even when it is scoped inside a second loop's body.
+A ``continue`` or ``break`` statement can only be used inside the body of a for-loop, as follows.
+Consider the innermost loop that contains the statement.
+The loop and the statement must be in the same function, or both must be at the top level.
+The statement must be in the loop's body block;
+it cannot be in the loop's initialization block or update block.
+It is worth emphasizing that this restriction applies just
+to the innermost loop that contains the ``continue`` or ``break`` statement:
+this innermost loop, and therefore the ``continue`` or ``break`` statement,
+may appear anywhere in an outer loop, possibly in an outer loop's initialization block or update block.
+For example, the following is legal,
+because the ``break`` occurs in the body block of the inner loop,
+despite also occurring in the update block of the outer loop:
+
+.. code-block:: yul
+
+    for {} true { for {} true {} { break } }
+    {
+    }
 
 The condition part of the for-loop has to evaluate to exactly one value.
 
@@ -649,10 +663,10 @@ We will use a destructuring notation for the AST nodes.
     E(G, L, <var_1, ..., var_n := rhs>: Assignment) =
         let G1, L1, v1, ..., vn = E(G, L, rhs)
         let L2 be a copy of L1 where L2[$var_i] = vi for i = 1, ..., n
-        G, L2, regular
+        G1, L2, regular
     E(G, L, <for { i1, ..., in } condition post body>: ForLoop) =
         if n >= 1:
-            let G1, L, mode = E(G, L, i1, ..., in)
+            let G1, L1, mode = E(G, L, i1, ..., in)
             // mode has to be regular or leave due to the syntactic restrictions
             if mode is leave then
                 G1, L1 restricted to variables of L, leave
@@ -672,7 +686,7 @@ We will use a destructuring notation for the AST nodes.
                 else:
                     G3, L3, mode = E(G2, L2, post)
                     if mode is leave:
-                        G2, L3, leave
+                        G3, L3, leave
                     otherwise
                         E(G3, L3, for {} condition post body)
     E(G, L, break: BreakContinue) =
@@ -714,13 +728,15 @@ We will use a destructuring notation for the AST nodes.
         L'[$parami] = vi and L'[$reti] = 0 for all i.
         Let G'', L'', mode = E(Gn, L', block)
         G'', Ln, L''[$ret1], ..., L''[$retm]
-    E(G, L, l: StringLiteral) = G, L, utf8EncodeLeftAligned(l),
-        where utf8EncodeLeftAligned performs a UTF-8 encoding of l
-        and aligns it left into 32 bytes
+    E(G, L, l: StringLiteral) = G, L, str(l),
+        where str is the string evaluation function,
+        which for the EVM dialect is defined in the section 'Literals' above
     E(G, L, n: HexNumber) = G, L, hex(n)
-        where hex is the hexadecimal decoding function
+        where hex is the hexadecimal evaluation function,
+        which turns a sequence of hexadecimal digits into their big endian value
     E(G, L, n: DecimalNumber) = G, L, dec(n),
-        where dec is the decimal decoding function
+        where dec is the decimal evaluation function,
+        which turns a sequence of decimal digits into their big endian value
 
 .. _opcodes:
 
@@ -752,7 +768,7 @@ the ``dup`` and ``swap`` instructions as well as ``jump`` instructions, labels a
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | Instruction             |     |   | Explanation                                                     |
 +=========================+=====+===+=================================================================+
-| stop()                  + `-` | F | stop execution, identical to return(0, 0)                       |
+| stop()                  | `-` | F | stop execution, identical to return(0, 0)                       |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | add(x, y)               |     | F | x + y                                                           |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -959,10 +975,13 @@ to ``loadimmutable("name")`` in the runtime code.
 
 linkersymbol
 ^^^^^^^^^^^^
-
-The function ``linkersymbol("fq_library_name")`` is a placeholder for an address literal to be
-substituted by the linker. Its first and only argument must be a string literal and represents the
-fully qualified library name used with the ``--libraries`` option.
+The function ``linkersymbol("library_id")`` is a placeholder for an address literal to be substituted
+by the linker.
+Its first and only argument must be a string literal and uniquely represents the address to be inserted.
+Identifiers can be arbitrary but when the compiler produces Yul code from Solidity sources,
+it uses a library name qualified with the name of the source unit that defines that library.
+To link the code with a particular library address, the same identifier must be provided to the
+``--libraries`` option on the command line.
 
 For example this code
 
@@ -1107,6 +1126,11 @@ Above, ``Block`` refers to ``Block`` in the Yul code grammar explained in the pr
 
 .. note::
 
+    An object with a name that ends in ``_deployed`` is treated as deployed code by the Yul optimizer.
+    The only consequence of this is a different gas cost heuristic in the optimizer.
+
+.. note::
+
     Data objects or sub-objects whose names contain a ``.`` can be defined
     but it is not possible to access them through ``datasize``,
     ``dataoffset`` or ``datacopy`` because ``.`` is used as a separator
@@ -1138,6 +1162,7 @@ An example Yul Object is shown below:
         code {
             function allocate(size) -> ptr {
                 ptr := mload(0x40)
+                // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                 if iszero(ptr) { ptr := 0x60 }
                 mstore(0x40, add(ptr, size))
             }
@@ -1153,20 +1178,21 @@ An example Yul Object is shown below:
 
             // now return the runtime object (the currently
             // executing code is the constructor code)
-            size := datasize("runtime")
+            size := datasize("Contract1_deployed")
             offset := allocate(size)
             // This will turn into a memory->memory copy for Ewasm and
             // a codecopy for EVM
-            datacopy(offset, dataoffset("runtime"), size)
+            datacopy(offset, dataoffset("Contract1_deployed"), size)
             return(offset, size)
         }
 
         data "Table2" hex"4123"
 
-        object "runtime" {
+        object "Contract1_deployed" {
             code {
                 function allocate(size) -> ptr {
                     ptr := mload(0x40)
+                    // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                     if iszero(ptr) { ptr := 0x60 }
                     mstore(0x40, add(ptr, size))
                 }
@@ -1185,7 +1211,7 @@ An example Yul Object is shown below:
                 // code here ...
             }
 
-            object "runtime" {
+            object "Contract2_deployed" {
                 code {
                     // code here ...
                 }
@@ -1214,68 +1240,13 @@ and optionally specify the :ref:`expected number of contract executions <optimiz
 
 In Solidity mode, the Yul optimizer is activated together with the regular optimizer.
 
+.. _optimization-step-sequence:
+
 Optimization Step Sequence
 --------------------------
 
-By default the Yul optimizer applies its predefined sequence of optimization steps to the generated assembly.
-You can override this sequence and supply your own using the ``--yul-optimizations`` option:
-
-.. code-block:: sh
-
-    solc --optimize --ir-optimized --yul-optimizations 'dhfoD[xarrscLMcCTU]uljmul'
-
-The order of steps is significant and affects the quality of the output.
-Moreover, applying a step may uncover new optimization opportunities for others that were already
-applied so repeating steps is often beneficial.
-By enclosing part of the sequence in square brackets (``[]``) you tell the optimizer to repeatedly
-apply that part until it no longer improves the size of the resulting assembly.
-You can use brackets multiple times in a single sequence but they cannot be nested.
-
-The following optimization steps are available:
-
-============ ===============================
-Abbreviation Full name
-============ ===============================
-``f``        ``BlockFlattener``
-``l``        ``CircularReferencesPruner``
-``c``        ``CommonSubexpressionEliminator``
-``C``        ``ConditionalSimplifier``
-``U``        ``ConditionalUnsimplifier``
-``n``        ``ControlFlowSimplifier``
-``D``        ``DeadCodeEliminator``
-``v``        ``EquivalentFunctionCombiner``
-``e``        ``ExpressionInliner``
-``j``        ``ExpressionJoiner``
-``s``        ``ExpressionSimplifier``
-``x``        ``ExpressionSplitter``
-``I``        ``ForLoopConditionIntoBody``
-``O``        ``ForLoopConditionOutOfBody``
-``o``        ``ForLoopInitRewriter``
-``i``        ``FullInliner``
-``g``        ``FunctionGrouper``
-``h``        ``FunctionHoister``
-``F``        ``FunctionSpecializer``
-``T``        ``LiteralRematerialiser``
-``L``        ``LoadResolver``
-``M``        ``LoopInvariantCodeMotion``
-``r``        ``RedundantAssignEliminator``
-``R``        ``ReasoningBasedSimplifier`` - highly experimental
-``m``        ``Rematerialiser``
-``V``        ``SSAReverser``
-``a``        ``SSATransform``
-``t``        ``StructuralSimplifier``
-``u``        ``UnusedPruner``
-``p``        ``UnusedFunctionParameterPruner``
-``d``        ``VarDeclInitializer``
-============ ===============================
-
-Some steps depend on properties ensured by ``BlockFlattener``, ``FunctionGrouper``, ``ForLoopInitRewriter``.
-For this reason the Yul optimizer always applies them before applying any steps supplied by the user.
-
-The ReasoningBasedSimplifier is an optimizer step that is currently not enabled
-in the default set of steps. It uses an SMT solver to simplify arithmetic expressions
-and boolean conditions. It has not received thorough testing or validation yet and can produce
-non-reproducible results, so please use with care!
+Detailed information regrading the optimization sequence as well a list of abbreviations is
+available in the :ref:`optimizer docs <optimizer-steps>`.
 
 .. _erc20yul:
 

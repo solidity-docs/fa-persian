@@ -3,7 +3,12 @@
 سالیدیتی   یک زبان شیء گرا  و سطح بالا  برای پیاده سازی قراردادهای هوشمند  می‌باشد. قرارداد‌های هوشمند، برنامه‌هایی هستند که رفتار حساب‌ها  در داخل حالت اتریوم  را کنترل می‌کنند.
 
 
+<<<<<<< HEAD
 سالیدیتی یک `زبان آکلادی <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_ می‌باشد که از زبان‌هایی مانند سی پلاس پلاس ، پایتون و جاوا اسکریپت تأثیر گرفته و برای هدف قراردادن EVM  یا ماشینِ مجازیِ اتریوم  طراحی شده‌است.
+=======
+Solidity is a `curly-bracket language <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_ designed to target the Ethereum Virtual Machine (EVM).
+It is influenced by C++, Python and JavaScript. You can find more details about which languages Solidity has been inspired by in the :doc:`language influences <language-influences>` section.
+>>>>>>> 12f5612c65d1ca65d6067be7ace10f5fe915e4db
 
 
 سالیدیتی از نوع استاتیک   می‌باشد. از ویژگی‌های ارث بری ، کتابخانه‌ها  و انواع نوع‌های پیچیده تعریف شده توسط کاربر  پشتیبانی می‌کند.
@@ -12,6 +17,15 @@
 
 هنگام استقرار  قرارداد‌ها، باید از آخرین نسخه سالیدیتی منتشر شده استفاده کنید. به این دلیل که تغییرات جدید ، ویژگی‌های جدید  و رفع باگ‌ها  به طور منظم معرفی می‌شوند. ما در حال حاضر از نسخه 0.X برای `نشان دادن این تغییرات سریع <https://semver.org/#spec-item-4>`_ استفاده می‌کنیم.
 
+<<<<<<< HEAD
+=======
+When deploying contracts, you should use the latest released
+version of Solidity. Apart from exceptional cases, only the latest version receives
+`security fixes <https://github.com/ethereum/solidity/security/policy#supported-versions>`_.
+Furthermore, breaking changes as well as
+new features are introduced regularly. We currently use
+a 0.y.z version number `to indicate this fast pace of change <https://semver.org/#spec-item-4>`_.
+>>>>>>> 12f5612c65d1ca65d6067be7ace10f5fe915e4db
 
 .. warning::
 
@@ -19,8 +33,18 @@
 
 ایده‌های بهبود سالیدیتی یا این مستند همیشه مورد استقبال قرار میگیرد، برای جزئیات بیشتر :doc:`راهنمای همکاری <contributing>` را مطالعه کنید.
 
+<<<<<<< HEAD
 
 شروع
+=======
+.. Hint::
+
+  You can download this documentation as PDF, HTML or Epub by clicking on the versions
+  flyout menu in the bottom-left corner and selecting the preferred download format.
+
+
+Getting Started
+>>>>>>> 12f5612c65d1ca65d6067be7ace10f5fe915e4db
 ---------------
 
 **1. درک مبانی قراردادهای هوشمند**
@@ -62,13 +86,30 @@
 ترجمه‌ها
 ------------
 
+<<<<<<< HEAD
 داوطلبان جامعه سالیدیتی به ترجمه این مستندات به چندین زبان کمک می‌کنند. این‌ مستندات سطوح مختلفی از کامل و بروز بودن را دارند. نسخه انگلیسی به عنوان مرجع می‌باشد.
+=======
+Community contributors help translate this documentation into several languages.
+Note that they have varying degrees of completeness and up-to-dateness. The English
+version stands as a reference.
+>>>>>>> 12f5612c65d1ca65d6067be7ace10f5fe915e4db
+
+You can switch between languages by clicking on the flyout menu in the bottom-left corner
+and selecting the preferred language.
+
+* `French <https://docs.soliditylang.org/fr/latest/>`_
+* `Indonesian <https://github.com/solidity-docs/id-indonesian>`_
+* `Persian <https://github.com/solidity-docs/fa-persian>`_
+* `Japanese <https://github.com/solidity-docs/ja-japanese>`_
+* `Korean <https://github.com/solidity-docs/ko-korean>`_
+* `Chinese <https://github.com/solidity-docs/zh-cn-chinese/>`_
 
 .. note::
 
    
    We recently set up a new GitHub organization and translation workflow to help streamline the
    community efforts. Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_
+<<<<<<< HEAD
    for information on how to contribute to the community translations moving forward.
 
 * `فرانسوی <https://solidity-fr.readthedocs.io>`_ (در حال انجام)
@@ -79,6 +120,9 @@
 * `چینی <https://learnblockchain.cn/docs/solidity/>`_ (در حال انجام)
 * `اسپانیایی <https://solidity-es.readthedocs.io>`_
 * `ترکی <https://github.com/denizozzgur/Solidity_TR/blob/master/README.md>`_ (جزئی)
+=======
+   for information on how to start a new language or contribute to the community translations.
+>>>>>>> 12f5612c65d1ca65d6067be7ace10f5fe915e4db
 
 فهرست
 ========
@@ -113,6 +157,7 @@
 
    using-the-compiler.rst
    analysing-compilation-output.rst
+   ir-breaking-changes.rst
 
 .. toctree::
    :maxdepth: 2
