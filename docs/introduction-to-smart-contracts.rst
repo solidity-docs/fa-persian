@@ -8,7 +8,13 @@
 یک قرارداد هوشمند ساده 
 ***********************
 
+<<<<<<< HEAD
 بیایید با یک مثال ابتدایی شروع کنیم که مقدار یک متغیر را تعیین می‌کند و آن را در معرض دسترسی سایر قراردادها قرار می‌دهد. اینکه الان شما متوجه چیزی نمی‌شوید طبیعی می‌باشد، بعداً به جزئیات بیشتری خواهیم پرداخت.
+=======
+Let us begin with a basic example that sets the value of a variable and exposes
+it for other contracts to access. It is fine if you do not understand
+everything right now, we will go into more details later.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 مثال ذخیره سازی
 ===============
@@ -124,8 +130,8 @@ Mapping ‌ها را می‌توان به عنوان `جداول هش  <https://
 
 .. code-block:: solidity
 
-    function balances(address _account) external view returns (uint) {
-        return balances[_account];
+    function balances(address account) external view returns (uint) {
+        return balances[account];
     }
 
 شما می‌توانید برای جستجوی بالانس  یک حساب از این تابع استفاده کنید.
@@ -134,7 +140,15 @@ Mapping ‌ها را می‌توان به عنوان `جداول هش  <https://
 
 خط ``;event Sent(address from, address to, uint amount)`` یک :ref:`"event" <events>`  را مشخص می‌کند که در آخرین خط با تابع ``send``  منتشر می‌شود. کلاینت اتریوم مانند برنامه‌های کاربردی  وب می‌توانند به این رویداد ها که در بلاکچین منتشر شده‌اند، بدون هزینه زیاد گوش دهند. شنونده به محض انتشار، آرگومان‌های ``from`` ، ``to`` و ``amount`` را دریافت می‌کند، که امکان ردیابی تراکنش‌ها را فراهم می‌کند.
 
+<<<<<<< HEAD
 برای گوش دادن به این event، می‌توانید از کد جاوا اسکریپت زیر استفاده کنید که از `web3.js <https://github.com/ethereum/web3.js/>`_  برای ایجاد شیء قرارداد ``Coin``   استفاده می‌کند و هر رابط کاربری تابع ``balances``   که به صورت خودکار ایجاد شده را از بالا فراخوانی می‌کند::
+=======
+To listen for this event, you could use the following
+JavaScript code, which uses `web3.js <https://github.com/ethereum/web3.js/>`_ to create the ``Coin`` contract object,
+and any user interface calls the automatically generated ``balances`` function from above:
+
+.. code-block:: javascript
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
     Coin.Sent().watch({}, '', function(error, result) {
         if (!error) {
@@ -163,9 +177,19 @@ overflows, i.e., when ``balances[receiver] + amount`` in arbitrary precision ari
 than the maximum value of ``uint`` (``2**256 - 1``). This is also true for the statement
 ``balances[receiver] += amount;`` in the function ``send``.
 
+<<<<<<< HEAD
 
 :ref:`خطاها <errors>`  به شما امکان می‌دهند اطلاعات بیشتری در مورد علت شرایط یا شکست عملیات به فراخوانی کننده  ارائه دهید. خطاها همراه با  :ref:`دستورات revert <revert-statement>`   استفاده می‌شوند. دستورات revert بدون تغییر و بدون قید و شرط، تمام تغییرات مشابه با تابع ``require``  را نابود و برمی‌گردانند ، اما همچنین به شما امکان ارائه نام خطا و داده‌های اضافی را که به فراخوانی کننده (و در نهایت به برنامه سمت کاربر  یا جستوجوگر بلاک ) نشان دهید، را می‌دهند. به طوری که یک شکست  را می‌توان به راحتی عیب یابی  کرد یا به آن واکنش نشان داد.
 
+=======
+:ref:`Errors <errors>` allow you to provide more information to the caller about
+why a condition or operation failed. Errors are used together with the
+:ref:`revert statement <revert-statement>`. The ``revert`` statement unconditionally
+aborts and reverts all changes similar to the ``require`` function, but it also
+allows you to provide the name of an error and additional data which will be supplied to the caller
+(and eventually to the front-end application or block explorer) so that
+a failure can more easily be debugged or reacted upon.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 The ``send`` function can be used by anyone (who already
 has some of these coins) to send coins to anyone else. If the sender does not have
@@ -211,6 +235,11 @@ while providing the sender with error details using the ``InsufficientBalance`` 
 
     اگر می‌خواهید فراخوانی قراردادتان را در آینده زمان بندی کنید، می توانید از `alarm clock <https://www.ethereum-alarm-clock.com/>`_  یا سرویس اوراکل مشابه استفاده کنید.
 
+<<<<<<< HEAD
+=======
+    If you want to schedule future calls of your contract, you can use
+    a smart contract automation tool or an oracle service.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 .. _the-ethereum-virtual-machine:
 
@@ -261,18 +290,46 @@ while providing the sender with error details using the ``InsufficientBalance`` 
 گَس
 ===
 
+<<<<<<< HEAD
 به محض ایجاد، هر تراکنش با مقدار مشخصی **گَس** شارژ می شود، هدف آن محدود کردن میزان کار مورد نیاز برای انجام تراکنش و پرداخت همزمان هزینه این اجرا است. هنگامی که EVM تراکنش را انجام می‌دهد، گَس طبق قوانین خاص به تدریج خالی می‌شود.
 
 **gas price** مقداری است که توسط سازنده تراکنش تنظیم می‌شود و باید  ``gas_price * gas`` را قبل از حساب ارسالی پرداخت کند. اگر پس از اجرا مقداری گَس باقی مانده باشد، به همان روش به سازنده بازپرداخت می‌شود.
 
 اگر گَس در هر نقطه مصرف شود (یعنی منفی باشد)، یک استثناء اتمام گَس ایجاد می‌شود، که تمام تغییرات و اصلاحات ایجاد شده در حالت  را در این چارچوب فراخوانی فعلی، باز می‌گرداند .
+=======
+Upon creation, each transaction is charged with a certain amount of **gas**
+that has to be paid for by the originator of the transaction (``tx.origin``).
+While the EVM executes the
+transaction, the gas is gradually depleted according to specific rules.
+If the gas is used up at any point (i.e. it would be negative),
+an out-of-gas exception is triggered, which ends execution and reverts all modifications
+made to the state in the current call frame.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
+
+This mechanism incentivizes economical use of EVM execution time
+and also compensates EVM executors (i.e. miners / stakers) for their work.
+Since each block has a maximum amount of gas, it also limits the amount
+of work needed to validate a block.
+
+The **gas price** is a value set by the originator of the transaction, who
+has to pay ``gas_price * gas`` up front to the EVM executor.
+If some gas is left after execution, it is refunded to the transaction originator.
+In case of an exception that reverts changes, already used up gas is not refunded.
+
+Since EVM executors can choose to include a transaction or not,
+transaction senders cannot abuse the system by setting a low gas price.
 
 .. index:: ! storage, ! memory, ! stack
 
 فضای ذخیره سازی  ، حافظه مِمُوری  و پشته
 =============================
 
+<<<<<<< HEAD
 ماشین مجازی اتریوم دارای سه فضا برای ذخیره سازی داده می‌باشد: فضای ذخیره سازی یا storage، حافظه موقت یا مِمُوری و پشته، که در پاراگراف‌های زیر توضیح داده شده‌اند.
+=======
+The Ethereum Virtual Machine has three areas where it can store data:
+storage, memory and the stack.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 هر حساب دارای یک فضای داده به نام **storage** می‌باشد، که بین تابع فراخوانی و تراکنش‌ها ثابت است.
 
@@ -307,12 +364,22 @@ EVM یک ماشین ثبت نیست بلکه یک ماشین پشته است، �
 
 فراخوانی‌ها به عمق 1024 **محدود می‌‌شوند**، این بدان معنی است که برای انجام عملیات پیچیده‌تر، حلقه‌ها  بر فراخوانی‌های مکرر باید ترجیح داده شوند. بعلاوه، فقط 63/64امین از گَس می‌تواند در یک پیام فراخوانی فوروارد شود، که در عمل باعث ایجاد عمق کمتر از 1000 می‌شود.
 
-.. index:: delegatecall, callcode, library
+.. index:: delegatecall, library
 
+<<<<<<< HEAD
 Delegatecall / Callcode و کتابخانه ها
 =====================================
 
 نوع خاصی از پیام های فراخوانی به نام ** **delegatecall وجود دارد، که همانند یک پیام فراخوانی می‌باشند، جدا از این واقعیت که کد در آدرس مقصد در قرارداد فراخوانی کننده  اجرا می‌شود و ``msg.sender`` و ``msg.value``  مقادیر خود را تغییر نمی‌دهند.
+=======
+Delegatecall and Libraries
+==========================
+
+There exists a special variant of a message call, named **delegatecall**
+which is identical to a message call apart from the fact that
+the code at the target address is executed in the context (i.e. at the address) of the calling
+contract and ``msg.sender`` and ``msg.value`` do not change their values.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 این بدان معناست که یک قرارداد می‌تواند به صورت پویا در زمان اجرا، کد را از آدرس دیگری بارگیری کند. Storage، آدرس فعلی و بالانس هنوز به قرارداد فراخوانی کننده اشاره دارد و فقط کد از آدرس فراخوانی شده گرفته شده‌است.
 
@@ -331,7 +398,7 @@ delegatecall امکان ویژگی "کتابخانه" در سالیدیتی را
 
 قراردادها حتی می‌توانند قراردادهای دیگری را با استفاده از یک آپکد خاص  ایجاد کنند (یعنی آدرس صفر  را به عنوان یک تراکنش به سادگی صدا نمی‌زنند). تنها تفاوت بین **فراخوانی‌های ایجاد**  و پیام‌های فراخوانی عادی  این است که داده‌های پیلود  اجرا می‌شوند و نتیجه به عنوان کد  و فراخوانی کننده ، ذخیره می‌شود. ایجاد کننده، آدرس قرارداد جدید را روی پشته  دریافت می‌کند.
 
-.. index:: selfdestruct, self-destruct, deactivate
+.. index:: ! selfdestruct, deactivate
 
 غیرفعال کردن و خود تخریبی
 ============================
@@ -344,4 +411,31 @@ delegatecall امکان ویژگی "کتابخانه" در سالیدیتی را
 .. note::
    حتی اگر کد قرارداد فاقد فراخوانی  ``selfdestruct`` باشد، باز هم می‌تواند آن عملیات را با استفاده از  ``delegatecall``  یا  ``callcode`` انجام دهد.
 
+<<<<<<< HEAD
 اگر می‌خواهید قراردادهای خود را غیرفعال  کنید، در عوض باید آنها را با تغییر حالت داخلی  که باعث برگشت همه توابع می‌شود، **غیرفعال** کنید. این امر استفاده از قرارداد را غیرممکن می‌کند، زیرا بلافاصله اتر را برمی‌گرداند.
+=======
+If you want to deactivate your contracts, you should instead **disable** them
+by changing some internal state which causes all functions to revert. This
+makes it impossible to use the contract, as it returns Ether immediately.
+
+
+.. index:: ! precompiled contracts, ! precompiles, ! contract;precompiled
+
+.. _precompiledContracts:
+
+Precompiled Contracts
+=====================
+
+There is a small set of contract addresses that are special:
+The address range between ``1`` and (including) ``8`` contains
+"precompiled contracts" that can be called as any other contract
+but their behaviour (and their gas consumption) is not defined
+by EVM code stored at that address (they do not contain code)
+but instead is implemented in the EVM execution environment itself.
+
+Different EVM-compatible chains might use a different set of
+precompiled contracts. It might also be possible that new
+precompiled contracts are added to the Ethereum main chain in the future,
+but you can reasonably expect them to always be in the range between
+``1`` and ``0xffff`` (inclusive).
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2

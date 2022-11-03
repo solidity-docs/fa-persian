@@ -211,7 +211,13 @@ to the type of the left operand is always performed at the end, but not mentione
 -	``address``: دارای مقدار 20 بایت (اندازه آدرس اتریوم) است.
 -	``address payable``: همان  ``address`` است، اما با اعضای اضافی  ``transfer`` و   ``send`` .
 
+<<<<<<< HEAD
 ایده پشت این تمایز این است که  ``address payable`` آدرسی است که می‌توانید اتر را به آن بفرستید، در حالی که نمی‌توان با یک  ``address`` ساده اتر ارسال کرد.
+=======
+The idea behind this distinction is that ``address payable`` is an address you can send Ether to,
+while you are not supposed to send Ether to a plain ``address``, for example because it might be a smart contract
+that was not built to accept Ether.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 
 تبدیل‌های نوع::
@@ -229,6 +235,7 @@ to the type of the left operand is always performed at the end, but not mentione
 
 .. note::
 
+<<<<<<< HEAD
     اگر به متغیر نوع  ``address`` نیاز دارید و قصد دارید اتر را برای آن ارسال کنید، نوع آن را به عنوان 
     آدرس  ``address payable`` مشخص کنید تا این نیاز قابل مشاهده باشد. همچنین، سعی کنید این 
     تمایز یا تغییر را در اسرع وقت انجام دهید.
@@ -237,9 +244,23 @@ to the type of the left operand is always performed at the end, but not mentione
 عملگرها:
 
 *   ``<=``, ``<``, ``==``, ``!=``, ``>=`` و ``>``
+=======
+    The distinction between ``address`` and ``address payable`` was introduced with version 0.5.0.
+    Also starting from that version, contracts are not implicitly convertible to the ``address`` type, but can still be explicitly converted to
+    ``address`` or to ``address payable``, if they have a receive or payable fallback function.
+
+
+Operators:
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 
 .. warning::
+<<<<<<< HEAD
+=======
+    If you convert a type that uses a larger byte size to an ``address``, for example ``bytes32``, then the ``address`` is truncated.
+    To reduce conversion ambiguity, starting with version 0.4.24, the compiler will force you to make the truncation explicit in the conversion.
+    Take for example the 32-byte value ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
     اگر نوعی را که از اندازه بایت بزرگتری استفاده می‌کند به  ``address`` تبدیل کنید، به عنوان مثال 
     ``bytes32``  ، سپس به  ``address`` کوتاه می‌شود. برای کاهش ابهام تبدیل ورژن 0.4.24 و بالاتر 
@@ -253,11 +274,15 @@ to the type of the left operand is always performed at the end, but not mentione
 
 
 .. note::
+<<<<<<< HEAD
 
     تمایز بین ``address`` و ``address payable`` با ورژن 0.5.0 معرفی شده‌است. همچنین از آن 
     ورژن، قراردادها از نوع آدرس مشتق گرفته نمی‌شوند، اما اگر تابع  payable fallback یا receive 
     داشته باشند، هنوز میتوان به صورت صریح به ``address`` و ``address payable`` تبدیل شوند. 
 
+=======
+    Mixed-case hexadecimal numbers conforming to `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_ are automatically treated as literals of the ``address`` type. See :ref:`Address Literals<address_literals>`.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 .. _members-of-addresses:
 
@@ -275,7 +300,7 @@ to the type of the left operand is always performed at the end, but not mentione
 .. code-block:: solidity
     :force:
 
-    address payable x = address(0x123);
+    address payable x = payable(0x123);
     address myAddress = address(this);
     if (x.balance < 10 && myAddress.balance >= 10) x.transfer(10);
 
@@ -370,6 +395,12 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 .. note::
    بهتر است بدون توجه به اینکه آیا حالت از آن خوانده می شود یا روی آن نوشته شده است، از تکیه بر مقادیر گاز سخت رمزگذاری شده در کد قرارداد هوشمند خود جلوگیری کنید، زیرا این امر می تواند مشکلات زیادی را به همراه داشته باشد. همچنین، دسترسی به گاز ممکن است در آینده تغییر کند.
 
+
+* ``code`` and ``codehash``
+
+You can query the deployed code for any smart contract. Use ``.code`` to get the EVM bytecode as a
+``bytes memory``, which might be empty. Use ``.codehash`` to get the Keccak-256 hash of that code
+(as a ``bytes32``). Note that ``addr.codehash`` is cheaper than using ``keccak256(addr.code)``.
 
 .. note::
    
@@ -493,6 +524,7 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 لیترال‌های عدد گویا و صحیح
 -----------------------------
 
+<<<<<<< HEAD
 لیترال‌های عدد صحیح  از توالی اعداد در محدوده 0-9 تشکیل می شوند. آنها به عنوان دیسیمال تفسیر می 
 شوند. به عنوان مثال  ``69`` به معنای شصت و نه است. لیترال‌های Octal در سالیدیتی وجود ندارند و صفرهای 
 قبل از عدد نامعتبر هستند.
@@ -500,8 +532,28 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 
 لیترال‌های کسری دیسیمال توسط یک  ``.`` با حداقل یک عدد در یک طرف تشکیل می‌شوند. مثال‌ها 
 شامل ``.1`` ،  ``1.`` و  ``1.3`` است.
+=======
+Integer literals are formed from a sequence of digits in the range 0-9.
+They are interpreted as decimals. For example, ``69`` means sixty nine.
+Octal literals do not exist in Solidity and leading zeros are invalid.
+
+Decimal fractional literals are formed by a ``.`` with at least one number after the decimal point.
+Examples include ``.1`` and ``1.3`` (but not ``1.``).
+
+Scientific notation in the form of ``2e10`` is also supported, where the
+mantissa can be fractional but the exponent has to be an integer.
+The literal ``MeE`` is equivalent to ``M * 10**E``.
+Examples include ``2e10``, ``-2e10``, ``2e-10``, ``2.5e1``.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 
+<<<<<<< HEAD
+=======
+Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
+using them together with anything other than a number literal expression (like boolean literals) or by explicit conversion).
+This means that computations do not overflow and divisions do not truncate
+in number literal expressions.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 نشانه علمی نیز پشتیبانی می‌شود، جایی که پایه می‌تواند کسر داشته باشد و توان ‌تواند. برای مثال از 
 جمله  ``2e10`` ،  ``-2e10`` ،  ``2e-10`` ،  ``2.5e1`` .
@@ -536,6 +588,22 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 به عنوان عملوند  (توان) همیشه در   ``uint256`` (برای لیترال‌های غیر منفی) یا  ``int256`` (برای لیترال‌های 
 منفی)، بدون توجه به نوع سمت راست عملوند (توان)، عمل می‌کند.
 
+<<<<<<< HEAD
+=======
+.. warning::
+    While most operators produce a literal expression when applied to literals, there are certain operators that do not follow this pattern:
+
+    - Ternary operator (``... ? ... : ...``),
+    - Array subscript (``<array>[<index>]``).
+
+    You might expect expressions like ``255 + (true ? 1 : 0)`` or ``255 + [1, 2, 3][0]`` to be equivalent to using the literal 256
+    directly, but in fact they are computed within the type ``uint8`` and can overflow.
+
+Any operator that can be applied to integers can also be applied to number literal expressions as
+long as the operands are integers. If any of the two is fractional, bit operations are disallowed
+and exponentiation is disallowed if the exponent is fractional (because that might result in
+a non-rational number).
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 
 .. warning::
@@ -583,6 +651,10 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 
 به عنوان مثال، با  b``bytes32 samevar = "stringliteral"``  لیترال  رشته‌ای وقتی به نوع ``bytes32`` اختصاص یابد به معنای بایت خام  تفسیر می‌شود.
 
+<<<<<<< HEAD
+=======
+String literals can only contain printable ASCII characters, which means the characters between and including 0x20 .. 0x7E.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
   لیترال‌های رشته‌ای  فقط می‌توانند حاوی کارکترهای ASCII قابل چاپ باشند، این به معنای کارکترهای شامل و بین 0x1F .. 0x7E می‌باشند.
 
@@ -828,9 +900,33 @@ Function types are notated as follows:
 
 
 
+<<<<<<< HEAD
 -	توابع ``pure`` را می‌توان به  ``view`` و توابع  ``non-payable`` تبدیل کرد
 -	توابع  ``view`` را می‌توان به توابع  ``non-payable`` پرداخت تبدیل کرد
 -	توابع  ``payable`` را می‌توان به توابع  ``non-payable`` پرداخت تبدیل کرد
+=======
+A function of an internal type can be assigned to a variable of an internal function type regardless
+of where it is defined.
+This includes private, internal and public functions of both contracts and libraries as well as free
+functions.
+External function types, on the other hand, are only compatible with public and external contract
+functions.
+
+.. note::
+    External functions with ``calldata`` parameters are incompatible with external function types with ``calldata`` parameters.
+    They are compatible with the corresponding types with ``memory`` parameters instead.
+    For example, there is no function that can be pointed at by a value of type ``function (string calldata) external`` while
+    ``function (string memory) external`` can point at both ``function f(string memory) external {}`` and
+    ``function g(string calldata) external {}``.
+    This is because for both locations the arguments are passed to the function in the same way.
+    The caller cannot pass its calldata directly to an external function and always ABI-encodes the arguments into memory.
+    Marking the parameters as ``calldata`` only affects the implementation of the external function and is
+    meaningless in a function pointer on the caller's side.
+
+Libraries are excluded because they require a ``delegatecall`` and use :ref:`a different ABI
+convention for their selectors <library-selectors>`.
+Functions declared in interfaces do not have definitions so pointing at them does not make sense either.
+>>>>>>> 46a7ebd5b66c5638427295b9c3dbf15fc48c4ed2
 
 
 

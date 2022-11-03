@@ -17,17 +17,17 @@ that call them, similar to internal library functions.
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.1 <0.9.0;
 
-    function sum(uint[] memory _arr) pure returns (uint s) {
-        for (uint i = 0; i < _arr.length; i++)
-            s += _arr[i];
+    function sum(uint[] memory arr) pure returns (uint s) {
+        for (uint i = 0; i < arr.length; i++)
+            s += arr[i];
     }
 
     contract ArrayExample {
         bool found;
-        function f(uint[] memory _arr) public {
+        function f(uint[] memory arr) public {
             // This calls the free function internally.
             // The compiler will add its code to the contract.
-            uint s = sum(_arr);
+            uint s = sum(arr);
             require(s >= 10);
             found = true;
         }
@@ -35,10 +35,10 @@ that call them, similar to internal library functions.
 
 .. note::
     Functions defined outside a contract are still always executed
-    in the context of a contract. They still have access to the variable ``this``,
-    can call other contracts, send them Ether and destroy the contract that called them,
+    in the context of a contract.
+    They still can call other contracts, send them Ether and destroy the contract that called them,
     among other things. The main difference to functions defined inside a contract
-    is that free functions do not have direct access to storage variables and functions
+    is that free functions do not have direct access to the variable ``this``, storage variables and functions
     not in their scope.
 
 .. _function-parameters-return-variables:
@@ -65,22 +65,12 @@ with two integers, you would use something like the following:
 
     contract Simple {
         uint sum;
-        function taker(uint _a, uint _b) public {
-            sum = _a + _b;
+        function taker(uint a, uint b) public {
+            sum = a + b;
         }
     }
 
 Function parameters can be used as any other local variable and they can also be assigned to.
-
-.. note::
-
-  An :ref:`external function<external-function-calls>` cannot accept a
-  multi-dimensional array as an input
-  parameter. This functionality is possible if you enable the ABI coder v2
-  by adding ``pragma abicoder v2;`` to your source file.
-
-  An :ref:`internal function<external-function-calls>` can accept a
-  multi-dimensional array without enabling the feature.
 
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
@@ -99,13 +89,13 @@ two integers passed as function parameters, then you use something like:
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            o_sum = _a + _b;
-            o_product = _a * _b;
+            sum = a + b;
+            product = a * b;
         }
     }
 
@@ -126,12 +116,12 @@ statement:
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            return (_a + _b, _a * _b);
+            return (a + b, a * b);
         }
     }
 
@@ -139,12 +129,16 @@ If you use an early ``return`` to leave a function that has return variables,
 you must provide return values together with the return statement.
 
 .. note::
-    You cannot return some types from non-internal functions, notably
-    multi-dimensional dynamic arrays and structs. If you enable the
-    ABI coder v2 by adding ``pragma abicoder v2;``
-    to your source file then more types are available, but
-    ``mapping`` types are still limited to inside a single contract and you
-    cannot transfer them.
+    You cannot return some types from non-internal functions.
+    This includes the types listed below and any composite types that recursively contain them:
+
+    - mappings,
+    - internal function types,
+    - reference types with location set to ``storage``,
+    - multi-dimensional arrays (applies only to :ref:`ABI coder v1 <abi_coder>`),
+    - structs (applies only to :ref:`ABI coder v1 <abi_coder>`).
+
+    This restriction does not apply to library functions because of their different :ref:`internal ABI <library-selectors>`.
 
 .. _multi-return:
 
@@ -222,6 +216,9 @@ Pure Functions
 --------------
 
 Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
+In particular, it should be possible to evaluate a ``pure`` function at compile-time given
+only its inputs and ``msg.data``, but without any knowledge of the current blockchain state.
+This means that reading from ``immutable`` variables can be a non-pure operation.
 
 .. note::
   If the compiler's EVM target is Byzantium or newer (default) the opcode ``STATICCALL`` is used,
@@ -314,12 +311,13 @@ will consume more gas than the 2300 gas stipend:
 - Sending Ether
 
 .. warning::
-    Contracts that receive Ether directly (without a function call, i.e. using ``send`` or ``transfer``)
-    but do not define a receive Ether function or a payable fallback function
-    throw an exception, sending back the Ether (this was different
-    before Solidity v0.4.0). So if you want your contract to receive Ether,
+    When Ether is sent directly to a contract (without a function call, i.e. sender uses ``send`` or ``transfer``)
+    but the receiving contract does not define a receive Ether function or a payable fallback function,
+    an exception will be thrown, sending back the Ether (this was different
+    before Solidity v0.4.0). If you want your contract to receive Ether,
     you have to implement a receive Ether function (using payable fallback functions for receiving Ether is
-    not recommended, since it would not fail on interface confusions).
+    not recommended, since the fallback is invoked and would not fail for interface confusions
+    on the part of the sender).
 
 
 .. warning::
@@ -359,7 +357,7 @@ Fallback Function
 -----------------
 
 A contract can have at most one ``fallback`` function, declared using either ``fallback () external [payable]``
-or ``fallback (bytes calldata _input) external [payable] returns (bytes memory _output)``
+or ``fallback (bytes calldata input) external [payable] returns (bytes memory output)``
 (both without the ``function`` keyword).
 This function must have ``external`` visibility. A fallback function can be virtual, can override
 and can have modifiers.
@@ -370,8 +368,8 @@ all and there is no :ref:`receive Ether function <receive-ether-function>`.
 The fallback function always receives data, but in order to also receive Ether
 it must be marked ``payable``.
 
-If the version with parameters is used, ``_input`` will contain the full data sent to the contract
-(equal to ``msg.data``) and can return data in ``_output``. The returned data will not be
+If the version with parameters is used, ``input`` will contain the full data sent to the contract
+(equal to ``msg.data``) and can return data in ``output``. The returned data will not be
 ABI-encoded. Instead it will be returned without modifications (not even padding).
 
 In the worst case, if a payable fallback function is also used in
@@ -394,7 +392,7 @@ operations as long as there is enough gas passed on to it.
     for the function selector and then
     you can use ``abi.decode`` together with the array slice syntax to
     decode ABI-encoded data:
-    ``(c, d) = abi.decode(_input[4:], (uint256, uint256));``
+    ``(c, d) = abi.decode(input[4:], (uint256, uint256));``
     Note that this should only be used as a last resort and
     proper functions should be used instead.
 
@@ -483,13 +481,13 @@ The following example shows overloading of the function
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint _in) public pure returns (uint out) {
-            out = _in;
+        function f(uint value) public pure returns (uint out) {
+            out = value;
         }
 
-        function f(uint _in, bool _really) public pure returns (uint out) {
-            if (_really)
-                out = _in;
+        function f(uint value, bool really) public pure returns (uint out) {
+            if (really)
+                out = value;
         }
     }
 
@@ -503,12 +501,12 @@ externally visible functions differ by their Solidity types but not by their ext
 
     // This will not compile
     contract A {
-        function f(B _in) public pure returns (B out) {
-            out = _in;
+        function f(B value) public pure returns (B out) {
+            out = value;
         }
 
-        function f(address _in) public pure returns (address out) {
-            out = _in;
+        function f(address value) public pure returns (address out) {
+            out = value;
         }
     }
 
@@ -536,12 +534,12 @@ candidate, resolution fails.
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint8 _in) public pure returns (uint8 out) {
-            out = _in;
+        function f(uint8 val) public pure returns (uint8 out) {
+            out = val;
         }
 
-        function f(uint256 _in) public pure returns (uint256 out) {
-            out = _in;
+        function f(uint256 val) public pure returns (uint256 out) {
+            out = val;
         }
     }
 
