@@ -150,6 +150,7 @@
 توابع رمزگذاری و رمزگشایی ABI :
 -----------------------------------
 
+<<<<<<< HEAD
 // saracodic comment آ for be sorted in text
 
 - ``abi.decode(bytes memory encodedData, (...)) returns (...)`` : آABI داده‌های داده شده را رمزگشایی میکند، در حالی که انواع  آن در پرانتز به عنوان آرگومان دوم آورده شده است. مثال:
@@ -158,6 +159,14 @@
 - ``abi.encodePacked(...) returns (bytes memory)`` :  آ :ref:`packed encoding <abi_packed_mode>` آرگومان‌های داده شده را انجام می‌دهد. توجه داشته باشید که رمزگذاری بسته بندی شده می‌تواند مبهم باشد !
 - ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)`` : آBI-encodes آرگومان‌های داده شده را از دوم شروع می‌کند و انتخاب کننده چهار بایت داده شده را اضافه می‌کند.
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)`` : معادل با  ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)`` است.
+=======
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: ABI-decodes the given data, while the types are given in parentheses as second argument. Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)``: ABI-encodes the given arguments
+- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of the given arguments. Note that packed encoding can be ambiguous!
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``
+- ``abi.encodeCall(function functionPointer, (...)) returns (bytes memory)``: ABI-encodes a call to ``functionPointer`` with the arguments found in the tuple. Performs a full type-check, ensuring the types match the function signature. Result equals ``abi.encodeWithSelector(functionPointer.selector, (...))``
+>>>>>>> 2cc6610e406e25d48f2fa4bfffe1a507f87a9e7b
 
 .. note::
 
@@ -177,6 +186,14 @@
 ----------------
 
 - ``bytes.concat(...) returns (bytes memory)`` : :ref:`تعداد متغیر bytes و bytes1 ،… ، bytes32 آرگومان را به یک آرایه بایت متصل می‌کند<bytes-concat>`
+
+
+.. index:: string members
+
+Members of string
+-----------------
+
+- ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of string arguments to one string array<string-concat>`
 
 
 .. index:: assert, revert, require
@@ -281,9 +298,14 @@
     برای امضای _transaction_ ثابت شد ( `EIP-2 <https://eips.ethereum.org/EIPS/eip-2#specification>`_ را مشاهده کنید )، اما تابع ecrecover بدون تغییر باقی ماند.
     این معمولاً مشکلی ایجاد نمی‌کند مگر اینکه شما نیاز به امضا برای منحصر به فرد بودن یا استفاده از آنها برای 
 
+<<<<<<< HEAD
     شناسایی آیتم‌ها داشته باشید. OpenZeppelin `دارای یک کتابخانه کمکی ECDSA <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ است که می‌توانید 
     بدون این مشکل به عنوان یک  wrapper برای   ``ecrecover`` از آن استفاده کنید.
     
+=======
+    This is usually not a problem unless you require signatures to be unique or use them to identify items.
+    OpenZeppelin have a `ECDSA helper library <https://docs.openzeppelin.com/contracts/4.x/api/utils#ECDSA>`_ that you can use as a wrapper for ``ecrecover`` without this issue.
+>>>>>>> 2cc6610e406e25d48f2fa4bfffe1a507f87a9e7b
 
 .. note::
 
@@ -504,7 +526,22 @@
 
 
 ``type(T).max``
+<<<<<<< HEAD
 
     بزرگترین مقدار با تایپ  ``T`` قابل نمایش است.
 
     
+=======
+    The largest value representable by type ``T``.
+
+Reserved Keywords
+=================
+
+These keywords are reserved in Solidity. They might become part of the syntax in the future:
+
+``after``, ``alias``, ``apply``, ``auto``, ``byte``, ``case``, ``copyof``, ``default``,
+``define``, ``final``, ``implements``, ``in``, ``inline``, ``let``, ``macro``, ``match``,
+``mutable``, ``null``, ``of``, ``partial``, ``promise``, ``reference``, ``relocatable``,
+``sealed``, ``sizeof``, ``static``, ``supports``, ``switch``, ``typedef``, ``typeof``,
+``var``.
+>>>>>>> 2cc6610e406e25d48f2fa4bfffe1a507f87a9e7b
