@@ -287,8 +287,18 @@ Input Description
               // Improve allocation of stack slots for variables, can free up stack slots early.
               // Activated by default if the Yul optimizer is activated.
               "stackAllocation": true,
-              // Select optimization steps to be applied.
-              // Optional, the optimizer will use the default sequence if omitted.
+              // Select optimization steps to be applied. It is also possible to modify both the
+              // optimization sequence and the clean-up sequence. Instructions for each sequence
+              // are separated with the ":" delimiter and the values are provided in the form of
+              // optimization-sequence:clean-up-sequence. For more information see
+              // "The Optimizer > Selecting Optimizations".
+              // This field is optional, and if not provided, the default sequences for both
+              // optimization and clean-up are used. If only one of the options is provivded
+              // the other will not be run.
+              // If only the delimiter ":" is provided then neither the optimization nor the clean-up
+              // sequence will be run.
+              // If set to an empty value, only the default clean-up sequence is used and
+              // no optimization steps are applied.
               "optimizerSteps": "dhfoDgvulfnTUtnIf..."
             }
           }
@@ -298,7 +308,7 @@ Input Description
         // tangerineWhistle, spuriousDragon, byzantium, constantinople, petersburg, istanbul or berlin
         "evmVersion": "byzantium",
         // Optional: Change compilation pipeline to go through the Yul intermediate representation.
-        // This is a highly EXPERIMENTAL feature, not to be used for production. This is false by default.
+        // This is false by default.
         "viaIR": true,
         // Optional: Debugging settings
         "debug": {
@@ -323,6 +333,9 @@ Input Description
         },
         // Metadata settings (optional)
         "metadata": {
+          // The CBOR metadata is appended at the end of the bytecode by default.
+          // Setting this to false omits the metadata from the runtime and deploy time code.
+          "appendCBOR": true,
           // Use only literal content and not URLs (false by default)
           "useLiteralContent": true,
           // Use the given hash method for the metadata hash that is appended to the bytecode.
@@ -410,14 +423,17 @@ Input Description
             "source1.sol": ["contract1"],
             "source2.sol": ["contract2", "contract3"]
           },
-          // Choose whether division and modulo operations should be replaced by
-          // multiplication with slack variables. Default is `true`.
-          // Using `false` here is recommended if you are using the CHC engine
+          // Choose how division and modulo operations should be encoded.
+          // When using `false` they are replaced by multiplication with slack
+          // variables. This is the default.
+          // Using `true` here is recommended if you are using the CHC engine
           // and not using Spacer as the Horn solver (using Eldarica, for example).
           // See the Formal Verification section for a more detailed explanation of this option.
-          "divModWithSlacks": true,
+          "divModNoSlacks": false,
           // Choose which model checker engine to use: all (default), bmc, chc, none.
           "engine": "chc",
+          // Choose which types of invariants should be reported to the user: contract, reentrancy.
+          "invariants": ["contract", "reentrancy"],
           // Choose whether to output all unproved targets. The default is `false`.
           "showUnproved": true,
           // Choose which solvers should be used, if available.
@@ -611,8 +627,9 @@ Error Types
 10. ``Exception``: Unknown failure during compilation - this should be reported as an issue.
 11. ``CompilerError``: Invalid use of the compiler stack - this should be reported as an issue.
 12. ``FatalError``: Fatal error not processed correctly - this should be reported as an issue.
-13. ``Warning``: A warning, which didn't stop the compilation, but should be addressed if possible.
-14. ``Info``: Information that the compiler thinks the user might find useful, but is not dangerous and does not necessarily need to be addressed.
+13. ``YulException``: Error during Yul Code generation - this should be reported as an issue.
+14. ``Warning``: A warning, which didn't stop the compilation, but should be addressed if possible.
+15. ``Info``: Information that the compiler thinks the user might find useful, but is not dangerous and does not necessarily need to be addressed.
 
 
 .. _compiler-tools:
