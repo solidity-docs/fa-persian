@@ -63,7 +63,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Solidity'
-copyright = '2016-2021, Ethereum'
+project_copyright = '2016-2021, Ethereum'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -74,7 +74,7 @@ with open('../CMakeLists.txt', 'r', encoding='utf8') as f:
    # version = re.search('PROJECT_VERSION "([^"]+)"', f.read()).group(1)
    version="0.8.4"
 # The full version, including alpha/beta/rc tags.
-if os.path.isfile('../prerelease.txt') != True or os.path.getsize('../prerelease.txt') == 0:
+if not os.path.isfile('../prerelease.txt') or os.path.getsize('../prerelease.txt') == 0:
     release = version
 else:
     # This is a prerelease version
@@ -92,7 +92,7 @@ language = "fa"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'contracts', 'types', 'examples', 'grammar', 'ir']
+exclude_patterns = ['_build', 'contracts', 'types', 'examples', 'grammar']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
