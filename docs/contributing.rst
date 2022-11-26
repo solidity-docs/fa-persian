@@ -2,10 +2,15 @@
 همکاری
 #######
 
+<<<<<<< HEAD
 همیشه از کمک دیگران استقبال می شود و گزینه های زیادی وجود دارد که چگونه می توانید به سالیدیتی کمک کنید.
+=======
+Help is always welcome and there are plenty of options to contribute to Solidity.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 به ویژه، از حمایت های شما در زمینه های زیر قدردانی می کنیم:
 
+<<<<<<< HEAD
 * گزارش ایراد ها
 * رفع و پاسخگویی به `ایراد های سالیدیتی در گیت هاب
   <https://github.com/ethereum/solidity/issues>`_، مخصوصا مواردی که با عنوان "
@@ -14,13 +19,30 @@
 * ترجمه اسناد به زبان های بیشتر.
 * پاسخگویی به سوالات دیگر کاربر ها در `stackExchange <https://ethereum.stackexchange.com>`_ و سالیدیتی  `Solidity Gitter Chat <https://gitter.im/ethereum/solidity>`_.
 * با روند طراحی زبان مشغول شدن بوسیله پیشنهاد تغییرات زبانی یا ویژگی های جدید در `فروم سالیدتی <https://forum.soliditylang.org/>`_ با ارائه باز خورد.
+=======
+* Reporting issues.
+* Fixing and responding to `Solidity's GitHub issues
+  <https://github.com/ethereum/solidity/issues>`_, especially those tagged as
+  `"good first issue" <https://github.com/ethereum/solidity/labels/good%20first%20issue>`_ which are
+  meant as introductory issues for external contributors.
+* Improving the documentation.
+* `Translating <https://github.com/solidity-docs>`_ the documentation into more languages.
+* Responding to questions from other users on `StackExchange
+  <https://ethereum.stackexchange.com>`_ and the `Solidity Gitter Chat
+  <https://gitter.im/ethereum/solidity>`_.
+* Getting involved in the language design process by proposing language changes or new features in the `Solidity forum <https://forum.soliditylang.org/>`_ and providing feedback.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 در شروع، برای آشنایی با خود اجزا های سالیدیتی و روند ساخت (build) سالیدیتی، می توانید
 ساختن از منبع :ref:`building-from-source` را امتحان کنید. همچنین، داشتن مهارت کافی در نوشتن
 قرار داد های سالیدیتی ممکن است مفید باشد.
 
+<<<<<<< HEAD
 لطفا توجه داشته باشید که این پروژه `یک کد مشارکتی <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_ است.
 با شرکت در این پروژه – در ایرادها، درخواست های پول(pull)، یا کانال های gitter – شما قبول می کنید که قوانین آن را رعایت کنید.
+=======
+Please note that this project is released with a `Contributor Code of Conduct <https://raw.githubusercontent.com/ethereum/solidity/develop/CODE_OF_CONDUCT.md>`_. By participating in this project — in the issues, pull requests, or Gitter channels — you agree to abide by its terms.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 تماس های تیمی
 =============
@@ -29,10 +51,16 @@
 هستید که تیم و مشارکت کنندگان مشغول به چه کار هایی هستند، می توانید به تماس های
 تیمی عمومی ما بپیوندید: 
 
+<<<<<<< HEAD
 - دوشنبه ها ساعت 3 بعد از ظهر CET/CEST( به وقت مرکزی تابستانی اروپا)
 - چهارشنبه ها ساعت 2 بعد از ظهر CET/CEST( به وقت مرکزی تابستانی اروپا)
 
 هر دو وقت تماس در `Jitsi <https://meet.komputing.org/solidity>`_ بر قرار می شود.
+=======
+- Mondays and Wednesdays at 3PM CET/CEST.
+
+Both calls take place on `Jitsi <https://meet.soliditylang.org/>`_.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 چطوری ایراد ها را گزارش دهیم
 ============================
@@ -47,8 +75,16 @@
 * مراحلی که بتوان دوباره همان ایراد رخ دهد.
 * رفتار در عمل و رفتار مورد انتظار.
 
+<<<<<<< HEAD
 به حداقل رسانی کد منبع که باعث رخداد ایراد می شود همیشه بسیار مفید است و حتی بعضی
 اوقات یک سوء تفاهم را روشن می کند.
+=======
+Reducing the source code that caused the issue to a bare minimum is always
+very helpful, and sometimes even clarifies a misunderstanding.
+
+For technical discussions about language design, a post in the
+`Solidity forum <https://forum.soliditylang.org/>`_ is the correct place (see :ref:`solidity_language_design`).
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 روند کاری برای درخواست های pull
 ===============================
@@ -65,9 +101,15 @@
 علاوه بر این، اگر در حال نوشتن ویژگی جدید هستید، لطفا مطمئن شوید که موارد آزمایشی
 مناسب را بخش ``test/`` قرار داده اید/(به زیر توجه کنید) :
 
+<<<<<<< HEAD
 با این حال، اگر تغییر بزرگتری ایجاد می کنید، لطفا اول با کانال `Solidity Development Gitter channel
 <https://gitter.im/ethereum/solidity-dev>`_ توسعه سالیدیتی مشورت کنید
 ( متفاوت از یک مورد که در بالا ذکر شد، این مورد بجای کاربرد زبان ، به کامپایلر و توسعه زبان اشاره می کند)
+=======
+However, if you are making a larger change, please consult with the `Solidity Development Gitter channel
+<https://gitter.im/ethereum/solidity-dev>`_ (different from the one mentioned above — this one is
+focused on compiler and language development instead of language usage) first.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 ویژگی های جدید و رفع اشکالات باید به فایل ``Changelog.md`` اضافه شود: لطفا در صورت
 نیاز سبک نوشته های قبلی را دنبال کنید
@@ -76,7 +118,14 @@
 درسته که ما آزمایش CI را انجام می دهیم، لطفا کد خود را آزمایش کرده و قبل از ارسال
 درخواست pull اطمینان حاصل کنید که بصورت محلی قابل ساخت (build) است.
 
+<<<<<<< HEAD
 از کمک شما متشکریم!
+=======
+We highly recommend going through our `review checklist <https://github.com/ethereum/solidity/blob/develop/ReviewChecklist.md>`_ before submitting the pull request.
+We thoroughly review every PR and will help you get it right, but there are many common problems that can be easily avoided, making the review much smoother.
+
+Thank you for your help!
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 اجرای تست های کامپایلر
 ======================
@@ -88,12 +137,27 @@
 `libz3 <https://github.com/Z3Prover/z3>`_, و
 `libhera <https://github.com/ewasm/hera>`_).
 
+<<<<<<< HEAD
 در سیستم عامل مک برخی اسکریپت های تست انتظار دارند که GNU coreutils (ابزار های
 هسته) نصب شده باشند. با استفاده از دستور Homebrew می توان به راحتی ابراز های هسته
 را نصب کرد: ``brew install coreutils``.
 
 اجرای تست ها
 ------------
+=======
+On macOS systems, some of the testing scripts expect GNU coreutils to be installed.
+This can be easiest accomplished using Homebrew: ``brew install coreutils``.
+
+On Windows systems, make sure that you have a privilege to create symlinks,
+otherwise several tests may fail.
+Administrators should have that privilege, but you may also
+`grant it to other users <https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links#policy-management>`_
+or
+`enable Developer Mode <https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development>`_.
+
+Running the Tests
+-----------------
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 سالیدیتی شامل انواع مختلفی از تست ها است، بیشتر آنها وصل به بسته `Boost C++ Test Framework <https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html>`_
 برنامه ``soltest`` می باشند. اجرای ``build/test/soltest``  یا پوشش دهنده اش ``scripts/soltest.sh`` برای
@@ -105,7 +169,7 @@
 سیستم تست به صورت اتوماتیک از پوشه جاری سعی می کند مکان کتابخانه `evmone <https://github.com/ethereum/evmone/releases>`_ کشف کند .
 
 The ``evmone`` library must be located in the ``deps`` or ``deps/lib`` directory relative to the
-current working directory, to its parent or its parent's parent. Alternatively an explicit location
+current working directory, to its parent or its parent's parent. Alternatively, an explicit location
 for the ``evmone`` shared object can be specified via the ``ETH_EVMONE`` environment variable.
 
 ``evmone`` is needed mainly for running semantic and gas tests.
@@ -214,7 +278,11 @@ CI تست های اضافه تری را اجرا می کند ( شامل ``solc-j
     // ----
     // DeclarationError: (36-52): Identifier already declared.
 
+<<<<<<< HEAD
 اجرای ``build/test/isoltest/.`` دوباره منجر به تست ناموفق میشود : 
+=======
+Running ``./build/test/tools/isoltest`` again results in a test failure:
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 .. code-block:: text
 
@@ -240,7 +308,11 @@ CI تست های اضافه تری را اجرا می کند ( شامل ``solc-j
 - ``skip``:  اجرای این تست را رد می کند.
 - ``quit``: از ``isotest`` خارج می شود.
 
+<<<<<<< HEAD
 تمامی این گزینه ها بر قرار داد جاری اعمال می شوند به غیر از گزینه خروج ``quit`` که کل روند تست را متوقف می کند.
+=======
+All of these options apply to the current contract, except ``quit`` which stops the entire testing process.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 به صورت خودکار بروز رسانی تست بالا آن را تغییر می دهد به
 
@@ -290,7 +362,11 @@ code) را به عنوان ورودی می گیرید و هر زمان که با
     cmake .. -DCMAKE_C_COMPILER=path/to/afl-gcc -DCMAKE_CXX_COMPILER=path/to/afl-g++
     make solfuzzer
 
+<<<<<<< HEAD
 در این مرحله باید بتوانید پیامی مشابه پیام زیر را مشاهده کنید:
+=======
+At this stage, you should be able to see a message similar to the following:
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 .. code-block:: text
 
@@ -407,10 +483,15 @@ code) را به عنوان ورودی می گیرید و هر زمان که با
 
 .. note::
 
+<<<<<<< HEAD
     در حالی که مستندات رسمی سالیدیتی به زبان انگلیسی نوشته شده است، توسط
     مشارکت کنندگان جامعه ترجمه هایی :ref:`translations` به زبان های دیگر موجود است.
     
     Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_
+=======
+    While the official Solidity documentation is written in English, there are community contributed :ref:`translations`
+    in other languages available. Please refer to the `translation guide <https://github.com/solidity-docs#solidity-documentation-translation-guide>`_
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
     for information on how to contribute to the community translations.
 
 حروف بزرگ برای عناوین 
@@ -474,6 +555,7 @@ code) را به عنوان ورودی می گیرید و هر زمان که با
 اجرای تست های مستندات 
 ---------------------------
 
+<<<<<<< HEAD
 با اجرای ``scripts/docs.sh/.`` مطمئن شوید که مشارکت های شما از تست های مستندات ما با
 موفقیت خارج شده است  که وابستگی های مورد نیاز برای اسناد را نصب می کند و هرگونه
 مشکل مانند لینک های خراب و ایراد های نوشتاری را بررسی می کند.
@@ -483,6 +565,18 @@ code) را به عنوان ورودی می گیرید و هر زمان که با
 
 برای اینکه فعالانه در گیر فرایند طراحی زبان شوید و ایده های خود را در مورد آینده سالیدیتی
 به اشتراک بگذارید، لطفا به `انجمن سالیدتی <https://forum.soliditylang.org/>`_ بپیوندید.
+=======
+Make sure your contributions pass our documentation tests by running ``./docs/docs.sh`` that installs dependencies
+needed for documentation and checks for any problems such as broken links or syntax issues.
+
+.. _solidity_language_design:
+
+Solidity Language Design
+========================
+
+To actively get involved in the language design process and to share your ideas concerning the future of Solidity,
+please join the `Solidity forum <https://forum.soliditylang.org/>`_.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 انجمن سالیدیتی به عنوان محلی برای پیشنهاد و بحث در مورد ویژگی های جدید زبان و اجرای
 آنها در مراحل اولیه ایده پردازی یا اصلاح ویژگی در دسترس است.
@@ -502,7 +596,12 @@ code) را به عنوان ورودی می گیرید و هر زمان که با
 مورد بحث قرار می گیرند. با تغییر از شاخه پیش فرض (`توسعه`) به `شاخه جدید <https://github.com/ethereum/solidity/tree/breaking>`_، می توانید
 تغییرات بعدی را برای نسخه جدید بعدی مشاهده کنید.
 
+<<<<<<< HEAD
 برای موارد و سوالات موقتی می توانید از طریق کانال `Solidity-dev Gitter channel <https://gitter.im/ethereum/solidity-dev>`_ با ما ارتباط
 برقرار کنید، یک اتاق گفتگوی اختصاصی برای بحث در مورد کامپایلر سالیدیتی و توسعه زبان ایجاد شده است.
+=======
+For ad-hoc cases and questions, you can reach out to us via the `Solidity-dev Gitter channel <https://gitter.im/ethereum/solidity-dev>`_ — a
+dedicated chatroom for conversations around the Solidity compiler and language development.
+>>>>>>> 40f0329baa514ff16fe6ee8eea353ddce4879552
 
 ما نظرات شما را در مورد اینگه چگونه می توانیم روند طراحی زبان را بهبود بخشیم حتی با همکاری بیشتر یا نیمه خوشحال می شویم، بشنویم.
