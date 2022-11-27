@@ -1,297 +1,248 @@
 ********************************
-Solidity v0.5.0 Breaking Changes
+تغییرات خاص ورژن 0.5.0 سالیدیتی
 ********************************
 
-This section highlights the main breaking changes introduced in Solidity
-version 0.5.0, along with the reasoning behind the changes and how to update
-affected code.
-For the full list check
-`the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
+این بخش، تغییرات اصلی را که در سالیدیتی نسخه 0.5.0 معرفی شده است، به همراه استدلال پشت این
+تغییرات و نحوه به‌روزرسانی کدهای تحت تأثیر، برجسته می‌کند. برای لیست کامل، `تغییرات انتشار <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_. را بررسی
+کنید.
+
 
 .. note::
-   Contracts compiled with Solidity v0.5.0 can still interface with contracts
-   and even libraries compiled with older versions without recompiling or
-   redeploying them.  Changing the interfaces to include data locations and
-   visibility and mutability specifiers suffices. See the
-   :ref:`Interoperability With Older Contracts <interoperability>` section below.
+   قراردادهای کامپایل شده با سالیدیتی نسخه 0.5.0 همچنان می توانند با قراردادها و حتی کتابخانه هایی
+   که با نسخه های قدیمی کامپایل شده اند، بدون کامپایل مجدد یا استقرار مجدد آنها ارتباط برقرار کنند. تغییر
+   اینترفیس‌ها برای گنجاندن لوکیشین های داده و مشخص‌کننده‌های قابل مشاهده و تغییرپذیری کافی است.
+   بخش :ref:`همکاری با قراردادهای قدیمی <interoperability>` را
+   در زیر ببینید.
 
-Semantic Only Changes
-=====================
+فقط به صورت معنایی تغییر می کند
+===============================
 
-This section lists the changes that are semantic-only, thus potentially
-hiding new and different behavior in existing code.
+این بخش تغییراتی را لیست می‌کند که فقط معنایی هستند، بنابراین به طور بالقوه رفتارهای جدید و متفاوت را
+در کد موجود پنهان می‌کنند.
 
-* Signed right shift now uses proper arithmetic shift, i.e. rounding towards
-  negative infinity, instead of rounding towards zero.  Signed and unsigned
-  shift will have dedicated opcodes in Constantinople, and are emulated by
-  Solidity for the moment.
+* شیفت به راست امضا شده اکنون به جای گرد کردن به سمت صفر، از شیفت حسابی مناسب استفاده می
+  کند، یعنی گرد کردن به سمت بی نهایت منفی.  شیفت امضا یا ساین شده و بدون امضا دارای کدهای
+  عملیاتی اختصاصی خواهند بود و در حال حاضر توسط سالیدیتی تقلید می شوند.
 
-* The ``continue`` statement in a ``do...while`` loop now jumps to the
-  condition, which is the common behavior in such cases. It used to jump to the
-  loop body. Thus, if the condition is false, the loop terminates.
+* دستور ``continue`` در یک حلقه ``do...while`` اکنون به شرط می رود، که رفتار رایج در چنین مواردی
+  است.بنابراین، اگر شرط نادرست باشد، حلقه خاتمه می یابد.
 
-* The functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` do not
-  pad anymore when given a single ``bytes`` parameter.
+* توابع ``.call()``، ``.delegatecall()`` و ``.staticcall()`` دیگر هنگامی که یک پارامتر بایتی به آن داده می شود، پد
+  نمی شوند.
 
-* Pure and view functions are now called using the opcode ``STATICCALL``
-  instead of ``CALL`` if the EVM version is Byzantium or later. This
-  disallows state changes on the EVM level.
+* اگر نسخه EVM بیزانتیوم یا جدیدتر باشد، اکنون توابع خالص و view با استفاده از کد opcode
+  ``STATICCALL`` به جای ``CALL`` فراخوانی می شوند. این تغییر حالت را در سطح EVM مجاز نمی‌داند.
 
-* The ABI encoder now properly pads byte arrays and strings from calldata
-  (``msg.data`` and external function parameters) when used in external
-  function calls and in ``abi.encode``. For unpadded encoding, use
-  ``abi.encodePacked``.
+* رمزگذار ABI اکنون به درستی آرایه ها و رشته های بایت را از داده های فراخوانی (``msg.data`` و پارامترهای
+  تابع خارجی) هنگامی که در فراخوانی های تابع خارجی و در ``abi.encode`` استفاده می شود، پاک می کند. برای
+  رمزگذاری بدون پد، از ``abi.encodePacked`` استفاده کنید.
 
-* The ABI decoder reverts in the beginning of functions and in
-  ``abi.decode()`` if passed calldata is too short or points out of bounds.
-  Note that dirty higher order bits are still simply ignored.
+* رمزگشای ABI در ابتدای توابع و در ``abi.decode()`` در صورتی که داده فراخوانی ارسال شده خیلی کوتاه
+  باشد یا خارج از محدوده باشد، برمی گردد. توجه داشته باشید که بیت های مرتبه بالاتر هنوز نادیده گرفته می شوند.
 
-* Forward all available gas with external function calls starting from
-  Tangerine Whistle.
+* همه گس های موجود را با فراخوانی تابع خارجی با شروع از Tangerine Whistle هدایت کنید.
 
-Semantic and Syntactic Changes
+تغییرات معنایی و نحوی
 ==============================
 
-This section highlights changes that affect syntax and semantics.
+این بخش تغییراتی را که بر نحو و معنایی تأثیر می گذارد برجسته می کند.
 
-* The functions ``.call()``, ``.delegatecall()``, ``staticcall()``,
-  ``keccak256()``, ``sha256()`` and ``ripemd160()`` now accept only a single
-  ``bytes`` argument. Moreover, the argument is not padded. This was changed to
-  make more explicit and clear how the arguments are concatenated. Change every
-  ``.call()`` (and family) to a ``.call("")`` and every ``.call(signature, a,
-  b, c)`` to use ``.call(abi.encodeWithSignature(signature, a, b, c))`` (the
-  last one only works for value types).  Change every ``keccak256(a, b, c)`` to
-  ``keccak256(abi.encodePacked(a, b, c))``. Even though it is not a breaking
-  change, it is suggested that developers change
-  ``x.call(bytes4(keccak256("f(uint256)")), a, b)`` to
-  ``x.call(abi.encodeWithSignature("f(uint256)", a, b))``.
+* توابع ``.call()``، ``.delegatecall()``، ``staticcall()``، ``keccak256()``، ``sha256()`` و ``ripemd160()`` اکنون فقط
+  یک آرگومان بایتی را می پذیرند. این تغییر واضح‌تر و روشن‌تر می باشد که چگونه استدلال‌ها به هم پیوسته‌اند.
+  هر .``.call()`` (و خانواده) به یک ``.call("")`` و هر ``.call(signature, a,
+  b, c)`` برای استفاده از ``.call(abi.encodeWithSignature(signature, a, b, c))`` (آخرین مورد فقط برای انواع مقدار کار می کند). هر
+  ``keccak256(a, b, c)`` را به  ``keccak256(abi.encodePacked(a, b, c))`` تغییر دهید. حتی اگر این یک تغییر
+  قطعی نیست، پیشنهاد می شود که توسعه دهندگان ``x.call(bytes4(keccak256("f(uint256)")), a, b)`` را به
+  ``x.call(abi.encodeWithSignature("f(uint256)", a, b))`` تغییر دهند.
 
-* Functions ``.call()``, ``.delegatecall()`` and ``.staticcall()`` now return
-  ``(bool, bytes memory)`` to provide access to the return data.  Change
-  ``bool success = otherContract.call("f")`` to ``(bool success, bytes memory
-  data) = otherContract.call("f")``.
+* توابع ``.call()``، ``.delegatecall()`` و ``.staticcall()`` اکنون برمی گردند ``(bool, bytes memory)`` تا دسترسی به
+  داده های برگشتی را فراهم کنند. ``bool success = otherContract.call("f")`` را به ``(bool success, bytes memory
+  data) = otherContract.call("f")`` تغییر دهید.
 
-* Solidity now implements C99-style scoping rules for function local
-  variables, that is, variables can only be used after they have been
-  declared and only in the same or nested scopes. Variables declared in the
-  initialization block of a ``for`` loop are valid at any point inside the
-  loop.
+* سالیدیتی اکنون قوانین محدوده بندی به سبک C99 را برای متغیرهای محلی تابع پیاده سازی می کند، یعنی
+  متغیرها را فقط می توان پس از اعلام و فقط در محدوده های مشابه یا تودرتو مورد استفاده قرار داد.
+  متغیرهای اعلام شده در بلوک اولیه یک حلقه ``for`` در هر نقطه از حلقه معتبر هستند.
 
-Explicitness Requirements
+الزامات صراحت
 =========================
 
-This section lists changes where the code now needs to be more explicit.
-For most of the topics the compiler will provide suggestions.
+این بخش تغییراتی را لیست می‌کند که اکنون کد باید واضح‌تر باشد. برای بیشتر موضوعات، کامپایلر پیشنهاداتی
+را ارائه می دهد.
 
-* Explicit function visibility is now mandatory.  Add ``public`` to every
-  function and constructor, and ``external`` to every fallback or interface
-  function that does not specify its visibility already.
+* اکنون مشاهده عملکرد صریح اجباری است. عمومی ``public`` را به هر تابع و سازنده اضافه کنید، و به هر
+  توابع بازگشتی یا رابطی که نمایان بودن آن را قبلاً مشخص نکرده است، خارجی ``external`` اضافه کنید.
 
-* Explicit data location for all variables of struct, array or mapping types is
-  now mandatory. This is also applied to function parameters and return
-  variables.  For example, change ``uint[] x = m_x`` to ``uint[] storage x =
-  m_x``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
-  where ``memory`` is the data location and might be replaced by ``storage`` or
-  ``calldata`` accordingly.  Note that ``external`` functions require
-  parameters with a data location of ``calldata``.
+* مکان داده صریح برای همه متغیرهای ساختار، آرایه یا انواع نگاشت اکنون اجباری است. این همچنین برای
+  پارامترهای تابع و متغیرهای بازگشتی اعمال می شود. برای مثال، ``uint[] x = m_x`` را به ``uint[]`` ذخیره سازی
+  x = m_x، و تابع ``function f(uint[][] x)`` را به تابع ``function f(uint[][] memory x)`` تغییر دهید که در آن حافظه ``memory`` مکان داده است و
+  ممکن است بر این اساس با ذخیره سازی یا ``calldata`` جایگزین شود. توجه داشته باشید که توابع خارجی به
+  پارامترهایی با مکان داده ``calldata`` نیاز دارند.
 
-* Contract types do not include ``address`` members anymore in
-  order to separate the namespaces.  Therefore, it is now necessary to
-  explicitly convert values of contract type to addresses before using an
-  ``address`` member.  Example: if ``c`` is a contract, change
-  ``c.transfer(...)`` to ``address(c).transfer(...)``,
-  and ``c.balance`` to ``address(c).balance``.
+* انواع قراردادها دیگر شامل اعضای آدرس ``address``نمی شوند تا فضاهای نام جدا شوند. بنابراین، اکنون لازم است که
+  قبل از استفاده از یک عضو آدرس، مقادیر نوع قرارداد را به صراحت به آدرس تبدیل کنیم.
+  مثال: اگر ``c`` یک قرارداد است،  ``c.transfer(...)`` را به ``address(c).transfer(...)`` و ``c.balance`` را به ``address(c).balance`` تغییر دهید.
 
-* Explicit conversions between unrelated contract types are now disallowed. You can only
-  convert from a contract type to one of its base or ancestor types. If you are sure that
-  a contract is compatible with the contract type you want to convert to, although it does not
-  inherit from it, you can work around this by converting to ``address`` first.
-  Example: if ``A`` and ``B`` are contract types, ``B`` does not inherit from ``A`` and
-  ``b`` is a contract of type ``B``, you can still convert ``b`` to type ``A`` using ``A(address(b))``.
-  Note that you still need to watch out for matching payable fallback functions, as explained below.
 
-* The ``address`` type  was split into ``address`` and ``address payable``,
-  where only ``address payable`` provides the ``transfer`` function.  An
-  ``address payable`` can be directly converted to an ``address``, but the
-  other way around is not allowed. Converting ``address`` to ``address
-  payable`` is possible via conversion through ``uint160``. If ``c`` is a
-  contract, ``address(c)`` results in ``address payable`` only if ``c`` has a
-  payable fallback function. If you use the :ref:`withdraw pattern<withdrawal_pattern>`,
-  you most likely do not have to change your code because ``transfer``
-  is only used on ``msg.sender`` instead of stored addresses and ``msg.sender``
-  is an ``address payable``.
+* تبدیل صریح بین انواع قراردادهای نامرتبط اکنون مجاز نیست. شما فقط می توانید از نوع قراردادی به یکی
+  از انواع پایه یا اجداد آن تبدیل کنید. اگر مطمئن هستید که یک قرارداد با نوع قراردادی که می‌خواهید به آن
+  تبدیل کنید، سازگار است، اگرچه از آن ارث نمی‌برد، می‌توانید ابتدا با تبدیل به آدرس ``address``، این مشکل را برطرف کنید.
+  مثال: اگر ``A` و ``B`` از انواع قرارداد هستند، ``B`` از ``A`` ارث نمی برد و ``b`` قراردادی از نوع ``B`` است، همچنان می توانید
+  با استفاده از ``A(address(b))`` ``b`` را به نوع ``A`` تبدیل کنید. توجه داشته باشید که همانطور که در زیر توضیح داده
+  شده است، همچنان باید مراقب تطبیق عملکردهای بازگشتی قابل پرداخت باشید.
 
-* Conversions between ``bytesX`` and ``uintY`` of different size are now
-  disallowed due to ``bytesX`` padding on the right and ``uintY`` padding on
-  the left which may cause unexpected conversion results.  The size must now be
-  adjusted within the type before the conversion.  For example, you can convert
-  a ``bytes4`` (4 bytes) to a ``uint64`` (8 bytes) by first converting the
-  ``bytes4`` variable to ``bytes8`` and then to ``uint64``. You get the
-  opposite padding when converting through ``uint32``. Before v0.5.0 any
-  conversion between ``bytesX`` and ``uintY`` would go through ``uint8X``. For
-  example ``uint8(bytes3(0x291807))`` would be converted to ``uint8(uint24(bytes3(0x291807)))``
-  (the result is ``0x07``).
+* نوع آدرس به آدرس و آدرس قابل پرداخت تقسیم شد که در آن فقط آدرس قابل پرداخت عملکرد انتقال را
+  ارائه می دهد. آدرس قابل پرداخت را می توان مستقیماً به آدرس تبدیل کرد، اما برعکس آن مجاز نیست.
+  تبدیل آدرس به آدرس قابل پرداخت از طریق تبدیل از طریق ``uint160`` امکان پذیر است. اگر c یک قرارداد
+  باشد، آدرس(c) تنها در صورتی منجر به آدرس قابل پرداخت می شود که ``c`` تابع بازگشتی قابل پرداخت داشته
+  باشد. اگر از :ref:`الگوی برداشت<withdrawal_pattern>` استفاده می کنید، به احتمال زیاد مجبور نیستید کد خود را تغییر دهید زیرا انتقال به
+  جای آدرس های ذخیره شده فقط در ``msg.sender`` استفاده می شود و ``msg.sender`` یک آدرس قابل
+  پرداخت است.
 
-* Using ``msg.value`` in non-payable functions (or introducing it via a
-  modifier) is disallowed as a security feature. Turn the function into
-  ``payable`` or create a new internal function for the program logic that
-  uses ``msg.value``.
+* تبدیل بین ``bytesX`` و ``uintY`` با اندازه های مختلف اکنون به دلیل وجود لایه بایت ایکس در سمت راست و پد 
+  ``uintY`` در سمت چپ که ممکن است منجر به نتایج غیرمنتظره تبدیل شود، مجاز نیست. اکنون اندازه باید در
+  نوع قبل از تبدیل تنظیم شود. به عنوان مثال، با تبدیل متغیر ``bytes4`` به ``bytes8`` و سپس به ``uint64``، می
+  توانید بایت ``bytes4`` (4 بایت) را به ``uint64`` (8 بایت) تبدیل کنید. هنگام تبدیل از طریق ``uint32``، padding مخالف
+  دریافت می کنید. قبل از نسخه 0.5.0 هر تبدیل بین ``bytesX`` و ``uintY`` از طریق ``uint8X`` انجام می شد.
+  به عنوان مثال ``uint8(bytes3(0x291807))`` به ``uint8(uint24(bytes3(0x291807)))`` تبدیل می شود (نتیجه ``0x07`` است).
 
-* For clarity reasons, the command line interface now requires ``-`` if the
-  standard input is used as source.
+* استفاده از ``msg.value`` در توابع غیر قابل پرداخت (یا معرفی آن از طریق یک modifier) به عنوان یک
+  ویژگی امنیتی مجاز نیست.
+  تابع را به قابل پرداخت ``payable`` تبدیل کنید یا یک تابع داخلی جدید برای منطق برنامه ایجاد کنید که از ``msg.value``
+  استفاده می کند.
 
-Deprecated Elements
+* به دلایل وضوح، رابط خط فرمان اکنون نیاز دارد، ``-`` اگر ورودی استاندارد به عنوان منبع استفاده شود.
+
+عناصر منسوخ شده
 ===================
 
-This section lists changes that deprecate prior features or syntax.  Note that
-many of these changes were already enabled in the experimental mode
-``v0.5.0``.
+این بخش تغییراتی را لیست می کند که ویژگی ها یا نحو قبلی را منسوخ می کند. توجه داشته باشید که بسیاری
+از این تغییرات قبلاً در حالت آزمایشی نسخه ``v0.5.0`` فعال شده بودند.
 
-Command Line and JSON Interfaces
---------------------------------
+خط فرمان(کامند لاین) و رابط های JSON
+-------------------------------------
 
-* The command line option ``--formal`` (used to generate Why3 output for
-  further formal verification) was deprecated and is now removed.  A new
-  formal verification module, the SMTChecker, is enabled via ``pragma
-  experimental SMTChecker;``.
+* گزینه خط فرمان  ``--formal`` (برای تولید خروجی Why3 برای تأیید رسمی بیشتر استفاده می شود) منسوخ
+  شده و اکنون حذف شده است. یک ماژول تأیید رسمی جدید، SMTCchecker که 
+  از طریق ``pragma experimental SMTChecker;`` آزمایشی پراگما فعال می شود.
 
-* The command line option ``--julia`` was renamed to ``--yul`` due to the
-  renaming of the intermediate language ``Julia`` to ``Yul``.
+* گزینه خط فرمان ``--julia`` به دلیل تغییر نام زبان میانی ``Julia`` به ``Yul`` به ``--yul`` تغییر نام داد.
 
-* The ``--clone-bin`` and ``--combined-json clone-bin`` command line options
-  were removed.
+* گزینه های خط فرمان ``--clone-bin`` و ``--combined-json clone-bin`` حذف شدند.
 
-* Remappings with empty prefix are disallowed.
+* مپینگ مجدد با پیشوند خالی مجاز نیست.
 
-* The JSON AST fields ``constant`` and ``payable`` were removed. The
-  information is now present in the ``stateMutability`` field.
+* فیلدهای JSON AST ثابت ``constant`` و قابل پرداخت ``payable`` حذف شدند. اطلاعات اکنون در قسمت ``stateMutability`` وجود دارد. 
 
-* The JSON AST field ``isConstructor`` of the ``FunctionDefinition``
-  node was replaced by a field called ``kind`` which can have the
-  value ``"constructor"``, ``"fallback"`` or ``"function"``.
+* فیلد JSON AST سازنده نود ``FunctionDefinition`` با فیلدی به نام kind است که می تواند دارای مقدار
+  ``"constructor"``، ``"fallback"`` یا ``"function"`` باشد.
 
-* In unlinked binary hex files, library address placeholders are now
-  the first 36 hex characters of the keccak256 hash of the fully qualified
-  library name, surrounded by ``$...$``. Previously,
-  just the fully qualified library name was used.
-  This reduces the chances of collisions, especially when long paths are used.
-  Binary files now also contain a list of mappings from these placeholders
-  to the fully qualified names.
+* در فایل‌های هگز باینری غیرپیونده، متغیرهای آدرس کتابخانه اکنون 36 کاراکتر هگز اول هش keccak256
+  نام کتابخانه کاملاً واجد شرایط هستند که با ``$...$`` احاطه شده‌اند. قبلاً فقط از نام کتابخانه کاملاً واجد شرایط
+  استفاده می شد. این امر احتمال برخورد را کاهش می دهد، به خصوص زمانی که از مسیرهای طولانی
+  استفاده می شود. فایل‌های باینری اکنون حاوی فهرستی از مپینگ ها از این مکان‌ها به نام‌های کاملا واجد
+  شرایط هستند.
 
-Constructors
-------------
+سازنده ها(Constructors)
+------------------------
 
-* Constructors must now be defined using the ``constructor`` keyword.
+* اکنون سازنده ها باید با استفاده از کلمه کلیدی ``constructor`` تعریف شوند.
 
-* Calling base constructors without parentheses is now disallowed.
+* فراخوانی سازنده های پایه بدون پرانتز اکنون مجاز نیست.
 
-* Specifying base constructor arguments multiple times in the same inheritance
-  hierarchy is now disallowed.
+* تعیین آرگومان های سازنده پایه چندین بار در یک سلسله مراتب ارثی اکنون مجاز نیست.
 
-* Calling a constructor with arguments but with wrong argument count is now
-  disallowed.  If you only want to specify an inheritance relation without
-  giving arguments, do not provide parentheses at all.
+* فراخوانی سازنده با آرگومان اما با تعداد آرگومان اشتباه اکنون مجاز نیست. اگر فقط می خواهید یک رابطه
+  ارثی را بدون ارائه آرگومان مشخص کنید، اصلاً پرانتز ارائه نکنید.
 
-Functions
----------
+توابع(Functions)
+-----------------
 
-* Function ``callcode`` is now disallowed (in favor of ``delegatecall``). It
-  is still possible to use it via inline assembly.
+* کد تماس تابع اکنون غیرمجاز است (به نفع تماس نمایندگی یا همان ``delegatecall``). هنوز هم امکان
+  استفاده از آن از طریق اسمبلی درون خطی وجود دارد.
 
-* ``suicide`` is now disallowed (in favor of ``selfdestruct``).
+*  خودکشی(``suicide``) اکنون ممنوع است (به نفع خود تخریبی ``selfdestruct`` ).
 
-* ``sha3`` is now disallowed (in favor of ``keccak256``).
+* ``sha3`` اکنون غیرمجاز است (به نفع ``keccak256``).
 
-* ``throw`` is now disallowed (in favor of ``revert``, ``require`` and
-  ``assert``).
+* ``throw`` اکنون مجاز نیست (به نفع  ``revert``, ``require`` و ``assert``).
 
-Conversions
+تبدیل ها
 -----------
 
-* Explicit and implicit conversions from decimal literals to ``bytesXX`` types
-  is now disallowed.
+* تبدیل صریح و ضمنی از حروف اعشاری به انواع ``bytesXX`` اکنون مجاز نیست.
 
-* Explicit and implicit conversions from hex literals to ``bytesXX`` types
-  of different size is now disallowed.
+* تبدیل صریح و ضمنی از hex literals به انواع ``bytesXX`` با اندازه های مختلف اکنون مجاز نیست.
 
-Literals and Suffixes
----------------------
+لفظ و پسوند
+--------------
 
-* The unit denomination ``years`` is now disallowed due to complications and
-  confusions about leap years.
+* به دلیل پیچیدگی ها و سردرگمی ها ،اکنون سال های ``years`` واحد مجاز نیست.
 
-* Trailing dots that are not followed by a number are now disallowed.
+* نقطه های دنباله ای که عددی دنبال نمی شوند اکنون غیرمجاز هستند.
 
-* Combining hex numbers with unit denominations (e.g. ``0x1e wei``) is now
-  disallowed.
+* ترکیب اعداد هگز با نام واحد مثلاً ``0x1e wei``) اکنون مجاز نیست.
 
-* The prefix ``0X`` for hex numbers is disallowed, only ``0x`` is possible.
+* پیشوند ``0X`` برای اعداد هگز غیر مجاز است و فقط ``0x`` امکان پذیر است.
 
-Variables
+متغیرها
 ---------
 
-* Declaring empty structs is now disallowed for clarity.
+* اکنون برای وضوح، اعلام ساختارهای ``constant`` خالی مجاز نیست.
 
-* The ``var`` keyword is now disallowed to favor explicitness.
+* کلمه کلیدی ``var`` در حال حاضر غیرمجاز است تا صریح باشد.
 
-* Assignments between tuples with different number of components is now
-  disallowed.
+* انتساب بین تاپل ها(tuple) با تعداد مؤلفه های مختلف اکنون مجاز نیست.
 
-* Values for constants that are not compile-time constants are disallowed.
+* مقادیر ثابت هایی که ثابت زمان کامپایل نیستند مجاز نیستند.
 
-* Multi-variable declarations with mismatching number of values are now
-  disallowed.
+* اعلان های چند متغیره با تعداد مقادیر نامتناسب اکنون مجاز نیستند.
 
-* Uninitialized storage variables are now disallowed.
+* متغیرهای ذخیره سازی اولیه غیر مجاز هستند.
 
-* Empty tuple components are now disallowed.
+* اجزای چندگانه خالی اکنون غیرمجاز هستند.
 
-* Detecting cyclic dependencies in variables and structs is limited in
-  recursion to 256.
+* تشخیص وابستگی های چرخه ای در متغیرها و ساختارها در بازگشت به 256 محدود می شود.
 
-* Fixed-size arrays with a length of zero are now disallowed.
+* آرایه های با اندازه ثابت با طول صفر اکنون مجاز نیستند.
 
-Syntax
-------
+سینتکس
+--------
 
-* Using ``constant`` as function state mutability modifier is now disallowed.
+* استفاده از تغییرپذیری حالت ثابت به عنوان تابع اکنون مجاز نیست.
 
-* Boolean expressions cannot use arithmetic operations.
+* عبارات بولین نمی توانند از عملیات حسابی استفاده کنند.
 
-* The unary ``+`` operator is now disallowed.
+* اپراتور unary ``+`` اکنون غیرمجاز است.
 
-* Literals cannot anymore be used with ``abi.encodePacked`` without prior
-  conversion to an explicit type.
+* دیگر نمی توان از Literals با ``abi.encodePacked`` بدون تبدیل قبلی به یک نوع صریح استفاده کرد.
 
-* Empty return statements for functions with one or more return values are now
-  disallowed.
+* عبارات بازگشتی خالی برای توابع با یک یا چند مقدار بازگشتی اکنون غیرمجاز هستند.
 
-* The "loose assembly" syntax is now disallowed entirely, that is, jump labels,
-  jumps and non-functional instructions cannot be used anymore. Use the new
-  ``while``, ``switch`` and ``if`` constructs instead.
+* سینتکس "loose assembly" در حال حاضر به طور کامل غیر مجاز است، یعنی، jump labels، جهش ها
+  و دستورالعمل های غیر کاربردی دیگر نمی توانند استفاده شوند. به جای آن از ``while``، ``switch`` و ``if``
+  استفاده کنید.
 
-* Functions without implementation cannot use modifiers anymore.
+* توابع بدون پیاده سازی دیگر نمی توانند از modifier استفاده کنند.
 
-* Function types with named return values are now disallowed.
+* انواع تابع با مقادیر بازگشتی نامگذاری شده اکنون غیرمجاز هستند.
 
-* Single statement variable declarations inside if/while/for bodies that are
-  not blocks are now disallowed.
+* اعلان‌های متغیر منفرد در داخل if/while/for بدنه‌هایی که بلوک نیستند اکنون غیرمجاز هستند.
 
-* New keywords: ``calldata`` and ``constructor``.
+* کلمات کلیدی جدید: ``calldata`` و ``constructor``.
 
-* New reserved keywords: ``alias``, ``apply``, ``auto``, ``copyof``,
+* کلمات کلیدی رزرو شده جدید: ``alias``, ``apply``, ``auto``, ``copyof``,
   ``define``, ``immutable``, ``implements``, ``macro``, ``mutable``,
   ``override``, ``partial``, ``promise``, ``reference``, ``sealed``,
-  ``sizeof``, ``supports``, ``typedef`` and ``unchecked``.
+  ``sizeof``, ``supports``, ``typedef`` و ``unchecked``.
 
 .. _interoperability:
 
-Interoperability With Older Contracts
+قابلیت همکاری با قراردادهای قدیمی تر
 =====================================
 
-It is still possible to interface with contracts written for Solidity versions prior to
-v0.5.0 (or the other way around) by defining interfaces for them.
-Consider you have the following pre-0.5.0 contract already deployed:
+هنوز هم می‌توان با قراردادهایی که برای نسخه‌های سالیدیتی قبل از نسخه 5.5.0 (یا برعکس) نوشته شده‌اند،
+با تعریف واسط‌هایی برای آنها ارتباط برقرار کرد. در نظر بگیرید که قرارداد زیر قبل از 0.5.0 را قبلاً مستقر
+کرده اید:
 
 .. code-block:: solidity
 
@@ -309,7 +260,7 @@ Consider you have the following pre-0.5.0 contract already deployed:
         // ...
     }
 
-This will no longer compile with Solidity v0.5.0. However, you can define a compatible interface for it:
+که با سالیدیتی نسخه 0.5.0 کامپایل نخواهد شد. با این حال، می توانید یک رابط سازگار برای آن تعریف کنید:
 
 .. code-block:: solidity
 
@@ -320,14 +271,14 @@ This will no longer compile with Solidity v0.5.0. However, you can define a comp
         function anotherOldFunction() external returns (bool);
     }
 
-Note that we did not declare ``anotherOldFunction`` to be ``view``, despite it being declared ``constant`` in the original
-contract. This is due to the fact that starting with Solidity v0.5.0 ``staticcall`` is used to call ``view`` functions.
-Prior to v0.5.0 the ``constant`` keyword was not enforced, so calling a function declared ``constant`` with ``staticcall``
-may still revert, since the ``constant`` function may still attempt to modify storage. Consequently, when defining an
-interface for older contracts, you should only use ``view`` in place of ``constant`` in case you are absolutely sure that
-the function will work with ``staticcall``.
+توجه داشته باشید که ما یک تابع ``OldFunction`` را به عنوان ``view`` اعلام نکردیم، علیرغم اینکه در قرارداد
+اصلی ثابت ``constant`` اعلام شد که به این دلیل است که شروع با Solidity v0.5.0 ``staticcall`` برای فراخوانی توابع
+``view`` استفاده می شود. قبل از نسخه 0.5.0، کلمه کلیدی ثابت اعمال نمی شد، بنابراین فراخوانی تابعی که با
+``staticcall`` ثابت ``constant`` اعلام شده است، ممکن است بازگردانده شود، زیرا تابع ثابت ممکن است همچنان سعی کند
+فضای ذخیره سازی را تغییر دهد. در نتیجه، هنگام تعریف یک رابط برای قراردادهای قدیمی، فقط باید از view
+به جای ``constant`` استفاده کنید در صورتی که کاملاً مطمئن باشید که عملکرد با ``staticcall`` کار می کند.
 
-Given the interface defined above, you can now easily use the already deployed pre-0.5.0 contract:
+با توجه به رابط تعریف شده در بالا، اکنون می توانید به راحتی از قرارداد پیش از 0.5.0 مستقر شده استفاده کنید:
 
 .. code-block:: solidity
 
@@ -346,9 +297,9 @@ Given the interface defined above, you can now easily use the already deployed p
         }
     }
 
-Similarly, pre-0.5.0 libraries can be used by defining the functions of the library without implementation and
-supplying the address of the pre-0.5.0 library during linking (see :ref:`commandline-compiler` for how to use the
-commandline compiler for linking):
+به طور مشابه، کتابخانه‌های pre-0.5.0 را می‌توان با تعریف عملکردهای کتابخانه بدون پیاده‌سازی و ارائه
+آدرس کتابخانه pre-0.5.0 در حین پیوند استفاده کرد (برای نحوه استفاده از کامپایلر خط فرمان برای پیوند، به
+استفاده از :ref:`commandline-compiler` مراجعه کنید). :
 
 .. code-block:: solidity
 
@@ -367,13 +318,13 @@ commandline compiler for linking):
     }
 
 
-Example
+مثال
 =======
 
-The following example shows a contract and its updated version for Solidity
-v0.5.0 with some of the changes listed in this section.
+مثال زیر یک قرارداد و نسخه به روز شده آن را برای سالیدیتی v0.5.0 با برخی از تغییرات ذکر شده در این
+بخش نشان می دهد.
 
-Old version:
+نسخه قدیمی:
 
 .. code-block:: solidity
 
@@ -436,7 +387,7 @@ Old version:
         }
     }
 
-New version:
+نسخه جدید:
 
 .. code-block:: solidity
 
