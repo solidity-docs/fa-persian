@@ -72,11 +72,21 @@
 * اکنون مشاهده عملکرد صریح اجباری است. عمومی ``public`` را به هر تابع و سازنده اضافه کنید، و به هر
   توابع بازگشتی یا رابطی که نمایان بودن آن را قبلاً مشخص نکرده است، خارجی ``external`` اضافه کنید.
 
+<<<<<<< HEAD
 * مکان داده صریح برای همه متغیرهای ساختار، آرایه یا انواع نگاشت اکنون اجباری است. این همچنین برای
   پارامترهای تابع و متغیرهای بازگشتی اعمال می شود. برای مثال، ``uint[] x = m_x`` را به ``uint[]`` ذخیره سازی
   x = m_x، و تابع ``function f(uint[][] x)`` را به تابع ``function f(uint[][] memory x)`` تغییر دهید که در آن حافظه ``memory`` مکان داده است و
   ممکن است بر این اساس با ذخیره سازی یا ``calldata`` جایگزین شود. توجه داشته باشید که توابع خارجی به
   پارامترهایی با مکان داده ``calldata`` نیاز دارند.
+=======
+* Explicit data location for all variables of struct, array or mapping types is
+  now mandatory. This is also applied to function parameters and return
+  variables.  For example, change ``uint[] x = z`` to ``uint[] storage x =
+  z``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
+  where ``memory`` is the data location and might be replaced by ``storage`` or
+  ``calldata`` accordingly.  Note that ``external`` functions require
+  parameters with a data location of ``calldata``.
+>>>>>>> 7070a1721f6d96a8071946929feb6be0091eb366
 
 * انواع قراردادها دیگر شامل اعضای آدرس ``address``نمی شوند تا فضاهای نام جدا شوند. بنابراین، اکنون لازم است که
   قبل از استفاده از یک عضو آدرس، مقادیر نوع قرارداد را به صراحت به آدرس تبدیل کنیم.
@@ -434,7 +444,7 @@
             return data;
         }
 
-        using address_make_payable for address;
+        using AddressMakePayable for address;
         // Data location for 'arr' must be specified
         function g(uint[] memory /* arr */, bytes8 x, OtherContract otherContract, address unknownContract) public payable {
             // 'otherContract.transfer' is not provided.
@@ -451,7 +461,7 @@
             // 'address payable' should be used whenever possible.
             // To increase clarity, we suggest the use of a library for
             // the conversion (provided after the contract in this example).
-            address payable addr = unknownContract.make_payable();
+            address payable addr = unknownContract.makePayable();
             require(addr.send(1 ether));
 
             // Since uint32 (4 bytes) is smaller than bytes8 (8 bytes),
@@ -467,8 +477,8 @@
 
     // We can define a library for explicitly converting ``address``
     // to ``address payable`` as a workaround.
-    library address_make_payable {
-        function make_payable(address x) internal pure returns (address payable) {
+    library AddressMakePayable {
+        function makePayable(address x) internal pure returns (address payable) {
             return address(uint160(x));
         }
     }
