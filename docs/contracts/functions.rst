@@ -17,29 +17,38 @@
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.1 <0.9.0;
 
-    function sum(uint[] memory _arr) pure returns (uint s) {
-        for (uint i = 0; i < _arr.length; i++)
-            s += _arr[i];
+    function sum(uint[] memory arr) pure returns (uint s) {
+        for (uint i = 0; i < arr.length; i++)
+            s += arr[i];
     }
 
     contract ArrayExample {
         bool found;
-        function f(uint[] memory _arr) public {
+        function f(uint[] memory arr) public {
             // This calls the free function internally.
             // The compiler will add its code to the contract.
-            uint s = sum(_arr);
+            uint s = sum(arr);
             require(s >= 10);
             found = true;
         }
     }
 
 .. note::
+<<<<<<< HEAD
     توابعی که خارج از یک قرارداد تعریف شده اند همیشه در متن قرارداد اجرا می شوند.
     همچنان آنها به متغیر ``this`` دسترسی دارند، می توانند قراداد های دیگر را فراخوانی کنند، می
     توانند به قرارداد ها اتر ارسال و قرادادهایی که آنها را فراخوانی می کنند را نابود کنند، در میان
     چیز های دیگر. تفاوت اصلی بین توابع تعریف شده در داخل یک قرارداد با توابع آزاد این است
     که توابع آزاد دسترسی مستقیم به متغیر های ذخیره سازی و توابع دیگر ندارند و در میدان دید
     آنها نیست.
+=======
+    Functions defined outside a contract are still always executed
+    in the context of a contract.
+    They still can call other contracts, send them Ether and destroy the contract that called them,
+    among other things. The main difference to functions defined inside a contract
+    is that free functions do not have direct access to the variable ``this``, storage variables and functions
+    not in their scope.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 .. _function-parameters-return-variables:
 
@@ -65,13 +74,14 @@
 
     contract Simple {
         uint sum;
-        function taker(uint _a, uint _b) public {
-            sum = _a + _b;
+        function taker(uint a, uint b) public {
+            sum = a + b;
         }
     }
 
 پارامتر های تابع می توانند به عنوان متغیر های محلی استفاده شده و مقدار دهی شوند.
 
+<<<<<<< HEAD
 .. note::
 
   یک :ref:`تابع خارجی<external-function-calls>` نمی تواند یک آرایه چند بعدی را به عنوان یک ورودی قبول کند. این قابلیت
@@ -81,6 +91,8 @@
   یک :ref:`تابع داخلی<external-function-calls>` می تواند یک آرایه چند بعدی را بدون اضافه کردن این قابلیت به عنوان ورودی
   قبول کند.
 
+=======
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 .. index:: return array, return string, array, string, array of strings, dynamic array, variably sized array, return struct, struct
 
 متغیر های بازگشتی 
@@ -97,13 +109,13 @@
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            o_sum = _a + _b;
-            o_product = _a * _b;
+            sum = a + b;
+            product = a * b;
         }
     }
 
@@ -121,12 +133,12 @@
     pragma solidity >=0.4.16 <0.9.0;
 
     contract Simple {
-        function arithmetic(uint _a, uint _b)
+        function arithmetic(uint a, uint b)
             public
             pure
-            returns (uint o_sum, uint o_product)
+            returns (uint sum, uint product)
         {
-            return (_a + _b, _a * _b);
+            return (a + b, a * b);
         }
     }
 
@@ -134,11 +146,24 @@
 استفاده کرده اید، باید به همراه دستور return  مقادیر بازگشتی را نیز فراهم کنید. 
 
 .. note::
+<<<<<<< HEAD
     شما نمی توانید بعضی از نوع های متغیر را از توابع غیر-داخلی باز گردانید، بویژه آرایه های
     چند-بعدی پویا و ساختار های داده ای. اگر شما ABI کدر v2 را توسط  ``;pragma abicoder v2`` 
     فعال کرده باشید، فایل منبع کد شما نوع های بیشتری را قبول می کند، اما نوع های  ``mapping``
     هنوز دارای محدودیت هستند و فقط در داخل یک قرارداد استفاده می شوند و قابل انتقال
     نیستند.
+=======
+    You cannot return some types from non-internal functions.
+    This includes the types listed below and any composite types that recursively contain them:
+
+    - mappings,
+    - internal function types,
+    - reference types with location set to ``storage``,
+    - multi-dimensional arrays (applies only to :ref:`ABI coder v1 <abi_coder>`),
+    - structs (applies only to :ref:`ABI coder v1 <abi_coder>`).
+
+    This restriction does not apply to library functions because of their different :ref:`internal ABI <library-selectors>`.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 .. _multi-return:
 
@@ -212,7 +237,14 @@
 توابع خالص
 --------------
 
+<<<<<<< HEAD
 توابعی خالص ``pure`` نامیده می شوند که قول دهند که از وضعیت نخوانند و تغییرش ندهند.
+=======
+Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
+In particular, it should be possible to evaluate a ``pure`` function at compile-time given
+only its inputs and ``msg.data``, but without any knowledge of the current blockchain state.
+This means that reading from ``immutable`` variables can be a non-pure operation.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 .. note::
   اگر کامپایلر EVM بر روی Byzantium یا جدیدتر(پیش فرض) کد ``STATICCALL`` استفاده
@@ -281,12 +313,23 @@
 این تابع نمی تواند ورودی و مقدار بازگشتی داشته باشد، و باید میدان دید ``external``  خارجی و وضعیت ``payable`` تغییرناپذیر داشته باشد.
 می تواند مجازی باشد ، می تواند بازنویسی(override) و تغییر دهنده داشته باشد.
 
+<<<<<<< HEAD
 تابع دریافت زمان فراخوانی می شود که به قرارداد،
 فراخوانی به همراه فراخوانی داده خالی ارسال شود.
 این همان تابعی است که در انتقال های اتر اجرا می شود( مثل ``()send.`` یا ``()transfer.`` ).
 اگر چنین تابعی وجود نداشته باشد، اما یک :ref:`تابع عقبگرد <fallback-function>` قابل پرداخت وجود داشته
 باشد، تابع عقبگرد در انتقال اتر فراخوانی می شود. اگر هر دو تابع وجود نداشته باشد، قرارداد
 قادر به دریافت تراکنسهای اتری به روش های عادی نخواهد بود و خطایی استثنا بروز خواهد داد.
+=======
+The receive function is executed on a
+call to the contract with empty calldata. This is the function that is executed
+on plain Ether transfers (e.g. via ``.send()`` or ``.transfer()``). If no such
+function exists, but a payable :ref:`fallback function <fallback-function>`
+exists, the fallback function will be called on a plain Ether transfer. If
+neither a receive Ether nor a payable fallback function is present, the
+contract cannot receive Ether through a transaction that does not represent a payable function call and throws an
+exception.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 در بدترین حالت ، تابع ``receive`` تنها می تواند توسط 2300 گاز در دسترس باشد( برای مثال
 زمانی که از ``send`` یا ``transfer`` استفاده شود)، فضای کمی برای انجام عملیات دیگر بجز ورود
@@ -299,12 +342,22 @@
 - ارسال اتر
 
 .. warning::
+<<<<<<< HEAD
     قراردادهایی که مستقیما اتر دریافت می کنند (بدون یک فراخوانی تابع، مثل ``send``  یا ``transfer``)
     اما تابع دریافت اتر ندارند یا یک تابع عقبگرد ندارند یک استثنا از خود بروز می دهند،
     و اتر ارسالی را باز می گردانند( این روش تا قبل از سالیدیتی نسخه 0.4.0 متفاوت بود).
     بنابراین اگر می خواهید قرارداد شما اتر دریافت کند ، شما مجبور هستید یک تابع دریافت اتر
     پیاده سازی کنید. (استفاده از تابع عقبگرد قابل پرداخت برای دریافت اتر پیشنهاد نمی شود، زیرا
     امکان دارد در تداخلات رابط خطا ندهد).
+=======
+    When Ether is sent directly to a contract (without a function call, i.e. sender uses ``send`` or ``transfer``)
+    but the receiving contract does not define a receive Ether function or a payable fallback function,
+    an exception will be thrown, sending back the Ether (this was different
+    before Solidity v0.4.0). If you want your contract to receive Ether,
+    you have to implement a receive Ether function (using payable fallback functions for receiving Ether is
+    not recommended, since the fallback is invoked and would not fail for interface confusions
+    on the part of the sender).
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 
 .. warning::
@@ -339,18 +392,32 @@
 تابع عقبگرد
 -----------------
 
+<<<<<<< HEAD
 یک قرارداد می تواند حداکثر یک تابع ``fallback`` داشته باشد، با ساتفاده از ``fallback () external [payable]`` 
 یا ``fallback (bytes calldata _input) external [payable] returns (bytes memory _output)`` (هر دو بدون استفاده از کلمه کیلیدی ``function`` )
 تعریف می شوند. این تابع باید دارای میدان دید خارجی ``external`` باشد. یک تابع عقبگرد می
 تواند مجازی در بدترباشد ، می تواند بازنویسی یا دارای تغییردهنده باشد.
+=======
+A contract can have at most one ``fallback`` function, declared using either ``fallback () external [payable]``
+or ``fallback (bytes calldata input) external [payable] returns (bytes memory output)``
+(both without the ``function`` keyword).
+This function must have ``external`` visibility. A fallback function can be virtual, can override
+and can have modifiers.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 تابع عقبگرد هنگام فراخوانی قرارداد اجرا شده و اگر دیگر توابع با امضاء این تابع همخوانی
 نداشته باشد یا اگر داده ای درکل فراهم نشده و یا اگر :ref:`تابع گیرنده اتر <receive-ether-function>` تعریف نشده باشد. تابع
 عقبگرد همیشه داده دریافت می کند ، اما برای دریافت اتر باید بصورت ``payable`` نشان گذاری شده باشد.
 
+<<<<<<< HEAD
 اگر نسخه به همراه پارامترها استفاده شده باشد، ``input_`` شامل کل داده ارسالی توسط قرارداد (برابر
 است یا ``msg.data`` ) است و ``output_`` می تواند داده را بازگرداند. داده برگشتی بصورت ABI-
 encoded نخواهد بود. در عوض بدون تغییرات برگشت خواهد شد( حتی بدون لایه بندی).
+=======
+If the version with parameters is used, ``input`` will contain the full data sent to the contract
+(equal to ``msg.data``) and can return data in ``output``. The returned data will not be
+ABI-encoded. Instead it will be returned without modifications (not even padding).
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 در بدترین حالت، اگر یک تابع عقبگرد قابل پرداخت بجای تابع گیرنده مورد استفاده قرار گیرد،
 فقط با توسل به 2300 گاز در دسترس خواهد بود( بخش :ref:`تابع گیرنده اتر <receive-ether-function>` برای توضیحات و
@@ -366,11 +433,21 @@ encoded نخواهد بود. در عوض بدون تغییرات برگشت خو
     جلوگیری می کند. 
 
 .. note::
+<<<<<<< HEAD
     اگر شما می خواهید داده ورودی رمزگشایی(decode) کنید، شما می توانید با بررسی
     کردن چهار بایت اول از تابع انتخابگر و سپس با استفاده از ``abi.decode`` به همراه تکه ای از
     آرایه نوشتاری رمزگشایی داده کدشده-ABI استفاده کنید: 
     ``(c, d) = ;abi.decode(_input[4:], (uint256, uint256))``
     نکته اینکه این روش باید به عنوان آخرین راه حل مورد استفاده قرار گیرد و  بجای آن باید از توابع مناسب استفاده کرد.
+=======
+    If you want to decode the input data, you can check the first four bytes
+    for the function selector and then
+    you can use ``abi.decode`` together with the array slice syntax to
+    decode ABI-encoded data:
+    ``(c, d) = abi.decode(input[4:], (uint256, uint256));``
+    Note that this should only be used as a last resort and
+    proper functions should be used instead.
+>>>>>>> 40b24850d2d9d4b69fbbd5eec469255cb0a19308
 
 
 .. code-block:: solidity
@@ -456,13 +533,13 @@ encoded نخواهد بود. در عوض بدون تغییرات برگشت خو
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint _in) public pure returns (uint out) {
-            out = _in;
+        function f(uint value) public pure returns (uint out) {
+            out = value;
         }
 
-        function f(uint _in, bool _really) public pure returns (uint out) {
-            if (_really)
-                out = _in;
+        function f(uint value, bool really) public pure returns (uint out) {
+            if (really)
+                out = value;
         }
     }
 
@@ -476,12 +553,12 @@ encoded نخواهد بود. در عوض بدون تغییرات برگشت خو
 
     // This will not compile
     contract A {
-        function f(B _in) public pure returns (B out) {
-            out = _in;
+        function f(B value) public pure returns (B out) {
+            out = value;
         }
 
-        function f(address _in) public pure returns (address out) {
-            out = _in;
+        function f(address value) public pure returns (address out) {
+            out = value;
         }
     }
 
@@ -509,12 +586,12 @@ encoded نخواهد بود. در عوض بدون تغییرات برگشت خو
     pragma solidity >=0.4.16 <0.9.0;
 
     contract A {
-        function f(uint8 _in) public pure returns (uint8 out) {
-            out = _in;
+        function f(uint8 val) public pure returns (uint8 out) {
+            out = val;
         }
 
-        function f(uint256 _in) public pure returns (uint256 out) {
-            out = _in;
+        function f(uint256 val) public pure returns (uint256 out) {
+            out = val;
         }
     }
 
