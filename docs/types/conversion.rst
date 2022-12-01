@@ -197,9 +197,19 @@ because ``uint256`` cannot hold values such as ``-1``.
 می‌کنند از نوع  ``address`` هستند. هیچ لیترال دیگری را نمی‌توان به طور ضمنی به 
 نوع  ``address`` تبدیل کرد.
 
+<<<<<<< HEAD
 
 تبدیل صریح از  ``bytes20``  یا هر نوع عدد صحیح به  ``address`` منجر به ``address payable``  می‌شود.
 
 
 ``address a``  را می‌توان به ``address payable``  از طریق  ``payable(a)`` تبدیل کرد.
 
+=======
+Explicit conversions to ``address`` are allowed only from ``bytes20`` and ``uint160``.
+
+An ``address a`` can be converted explicitly to ``address payable`` via ``payable(a)``.
+
+.. note::
+    Prior to version 0.8.0, it was possible to explicitly convert from any integer type (of any size, signed or unsigned) to  ``address`` or ``address payable``.
+    Starting with in 0.8.0 only conversion from ``uint160`` is allowed.
+>>>>>>> c6ee18a5072641f42d5514d9c4523e4708b9b2c7
