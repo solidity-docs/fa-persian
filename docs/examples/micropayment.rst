@@ -2,7 +2,15 @@
 کانال پرداخت خرد
 ********************
 
+<<<<<<< HEAD
 در این بخش نحوه ساختن نمونه پیاده سازی کانال پرداخت  را خواهیم آموخت. کانال پرداخت از امضاهای رمزنگاری شده برای انتقال مکرر اتر بین طرف‌های مشابه به صورت ایمن، آنی و بدون کارمزد استفاده می‌کند. برای مثال، باید نحوه امضا و تأیید امضاها و راه اندازی کانال پرداخت را درک کنیم.
+=======
+In this section, we will learn how to build an example implementation
+of a payment channel. It uses cryptographic signatures to make
+repeated transfers of Ether between the same parties secure, instantaneous, and
+without transaction fees. For the example, we need to understand how to
+sign and verify signatures, and setup the payment channel.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
 
 ایجاد و تأیید امضا
 =================================
@@ -11,23 +19,47 @@
 
 آلیس فقط باید پیام های خارج از زنجیرهِ امضا شده با رمزنگاری (مثلاً از طریق ایمیل) را به باب بفرستد و این شبیه چک نوشتن است.
 
+<<<<<<< HEAD
  آلیس و باب برای تأیید تراکنش‌ها از امضاها استفاده می‌کنند که با قراردادهای هوشمند در اتریوم امکان پذیر است. آلیس یک قرارداد هوشمند ساده خواهد ساخت که به او امکان می‌دهد اتر را منتقل کند، اما به جای اینکه خودش یک تابع را برای شروع پرداخت فراخوانی کند، به باب اجازه این کار را می‌دهد و بنابراین هزینه تراکنش را پرداخت می‌کند.
+=======
+Alice and Bob use signatures to authorize transactions, which is possible with smart contracts on Ethereum.
+Alice will build a simple smart contract that lets her transmit Ether, but instead of calling a function herself
+to initiate a payment, she will let Bob do that, and therefore pay the transaction fee.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
 
 قرارداد به شرح زیر کار می‌کند:
 
+<<<<<<< HEAD
     1.	آلیس قرارداد ``ReceiverPays``  را دیپلوی می‌کند، به اندازه کافی اتر را برای پوشش پرداخت‌هایی که انجام خواهد شد، پیوست می‌کند.
     2.	آلیس با امضای پیام با کلید خصوصی خود اجازه پرداخت را می‌دهد.
     3.	آلیس پیام امضا شده با رمزنگاری را برای باب می‌فرستد. نیازی به مخفی نگه داشتن پیام نیست (بعداً توضیح داده خواهد شد) و سازوکار ارسال آن اهمیتی ندارد.
     4.	باب با ارائه پیام امضا شده به قرارداد هوشمند، پرداخت خود را مدعی می‌شود. قرارداد صحت پیام را تأیید می‌کند و سپس وجوه را آزاد می‌کند.
+=======
+    1. Alice deploys the ``ReceiverPays`` contract, attaching enough Ether to cover the payments that will be made.
+    2. Alice authorizes a payment by signing a message with her private key.
+    3. Alice sends the cryptographically signed message to Bob. The message does not need to be kept secret
+       (explained later), and the mechanism for sending it does not matter.
+    4. Bob claims his payment by presenting the signed message to the smart contract, it verifies the
+       authenticity of the message and then releases the funds.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
 
 
 ایجاد امضا
 ----------------------
 
+<<<<<<< HEAD
 
 آلیس برای امضای تراکنش نیازی به تعامل با شبکه اتریوم ندارد، روند کار کاملا آفلاین است. در این آموزش، ما با استفاده از روش توصیف شده در `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_  پیام‌ها را در مرورگر با استفاده از  `web3.js <https://github.com/ethereum/web3.js>`_  و `MetaMask <https://metamask.io>`_, امضا خواهیم کرد، زیرا تعدادی از مزایای امنیتی دیگر را فراهم می‌کند.
 
 
+=======
+Alice does not need to interact with the Ethereum network
+to sign the transaction, the process is completely offline.
+In this tutorial, we will sign messages in the browser
+using `web3.js <https://github.com/ethereum/web3.js>`_ and
+`MetaMask <https://metamask.io>`_, using the method described in `EIP-712 <https://github.com/ethereum/EIPs/pull/712>`_,
+as it provides a number of other security benefits.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
 
 .. code-block:: javascript
 
@@ -205,8 +237,13 @@
 
 هر پیام شامل اطلاعات زیر است:
 
+<<<<<<< HEAD
     *	آدرسِ قراردادِ هوشمند استفاده شده برای جلوگیری از حملات مجدد  بین قراردادی.
     *	مقدارِ کلِ اتری که تاکنون به گیرنده بدهکار است.
+=======
+    * The smart contract's address, used to prevent cross-contract replay attacks.
+    * The total amount of Ether that is owed to the recipient so far.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
 
 در پایان یک سری انتقال‌ها، فقط یک بار کانال پرداخت بسته می‌شود. به همین دلیل، فقط یکی از پیام‌های ارسالی استفاده می‌شود. به همین دلیل است که هر پیام مجموع مقدار کل اتر بدهکار  را  به جای مقدار جداگانه کانال پرداخت  مشخص می‌کند.گیرنده به طور طبیعی آخرین پیام را بخاطر اینکه بالاترین جمع کل  را دارد، برای بازخرید   انتخاب خواهد کرد. دیگر به نانس  برای هر پیام نیاز نمی‌باشد زیرا قرارداد هوشمند فقط به یک پیام پایبند‌است. برای جلوگیری از استفاده پیامی که در نظر گرفته شده برای یک کانال پرداخت در کانال دیگر، از آدرس قرارداد هوشمند همچنان استفاده می‌شود.
 

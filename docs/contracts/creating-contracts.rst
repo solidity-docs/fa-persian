@@ -51,7 +51,7 @@ IDE هایی، مانند `Remix <https://remix.ethereum.org/>`_ ، فرآیند
 
         // This is the constructor which registers the
         // creator and the assigned name.
-        constructor(bytes32 _name) {
+        constructor(bytes32 name_) {
             // State variables are accessed via their name
             // and not via e.g. `this.owner`. Functions can
             // be accessed directly or through `this.f`,
@@ -68,7 +68,7 @@ IDE هایی، مانند `Remix <https://remix.ethereum.org/>`_ ، فرآیند
             // no real way to verify that.
             // This does not create a new contract.
             creator = TokenCreator(msg.sender);
-            name = _name;
+            name = name_;
         }
 
         function changeName(bytes32 newName) public {

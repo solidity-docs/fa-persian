@@ -1,5 +1,4 @@
-.. index:: ! error, revert
-
+.. index:: ! error, revert, ! selector; of an error
 .. _errors:
 
 *******************************
@@ -71,7 +70,21 @@ This makes this a very cheap and convenient error-reporting feature at the same 
 ``Panic(uint256)`` خواهد بود.
 
 .. note::
+<<<<<<< HEAD
     داده های خطا فقط باید برای نشان دادن خطا مورد استفاده قرار گیرند، نه برای کنترل
     جریان. دلیل آن این است که داده های بازگشتی از فراخوانی داخلی به صورت پیش فرض از
     طریق زنجیره فراخوانی های خارجی پخش می شوند. این بدان معناست که یک فراخوانی
     داخلی می تواند "جعل" کند، داده هایی را که به نظر می رسد از آن قرارداد فراخانی شده است.
+=======
+    Error data should only be used to give an indication of failure, but
+    not as a means for control-flow. The reason is that the revert data
+    of inner calls is propagated back through the chain of external calls
+    by default. This means that an inner call
+    can "forge" revert data that looks like it could have come from the
+    contract that called it.
+
+Members of Errors
+=================
+
+- ``error.selector``: A ``bytes4`` value containing the error selector.
+>>>>>>> 591df042115c6df190faa26a1fb87617f7772db3
