@@ -95,6 +95,7 @@
         function delegate(address to) external {
             // assigns reference
             Voter storage sender = voters[msg.sender];
+            require(sender.weight != 0, "You have no right to vote");
             require(!sender.voted, "You already voted.");
 
             require(to != msg.sender, "Self-delegation is disallowed.");
@@ -114,11 +115,16 @@
                 require(to != msg.sender, "Found loop in delegation.");
             }
 
+            Voter storage delegate_ = voters[to];
+
+            // Voters cannot delegate to accounts that cannot vote.
+            require(delegate_.weight >= 1);
+
             // Since `sender` is a reference, this
-            // modifies `voters[msg.sender].voted`
+            // modifies `voters[msg.sender]`.
             sender.voted = true;
             sender.delegate = to;
-            Voter storage delegate_ = voters[to];
+
             if (delegate_.voted) {
                 // If the delegate already voted,
                 // directly add to the number of votes
@@ -173,4 +179,12 @@
 بهبودهای احتمالی
 =====================
 
+<<<<<<< HEAD
 در حال حاضر، تراکنش‌ها زیادی برای واگذاری حق رأی به همه شرکت کنندگان مورد نیاز است. آیا می‌توانید به راه بهتری فکر کنید؟
+=======
+Currently, many transactions are needed to
+assign the rights to vote to all participants.
+Moreover, if two or more proposals have the same
+number of votes, ``winningProposal()`` is not able
+to register a tie. Can you think of a way to fix these issues?
+>>>>>>> 1c8745c54a239d20b6fb0f79a8bd2628d779b27e
