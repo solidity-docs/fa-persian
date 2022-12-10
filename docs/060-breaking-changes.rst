@@ -49,7 +49,51 @@
   مشاهده با همان نام در هیچ یک از پایه های آن وجود نداشته باشد.
 
 
+<<<<<<< HEAD
 تغییرات معنایی و نحوی
+=======
+Explicitness Requirements
+=========================
+
+This section lists changes where the code now needs to be more explicit,
+but the semantics do not change.
+For most of the topics the compiler will provide suggestions.
+
+* Functions can now only be overridden when they are either marked with the
+  ``virtual`` keyword or defined in an interface. Functions without
+  implementation outside an interface have to be marked ``virtual``.
+  When overriding a function or modifier, the new keyword ``override``
+  must be used. When overriding a function or modifier defined in multiple
+  parallel bases, all bases must be listed in parentheses after the keyword
+  like so: ``override(Base1, Base2)``.
+
+* Member-access to ``length`` of arrays is now always read-only, even for storage arrays. It is no
+  longer possible to resize storage arrays by assigning a new value to their length. Use ``push()``,
+  ``push(value)`` or ``pop()`` instead, or assign a full array, which will of course overwrite the existing content.
+  The reason behind this is to prevent storage collisions of gigantic
+  storage arrays.
+
+* The new keyword ``abstract`` can be used to mark contracts as abstract. It has to be used
+  if a contract does not implement all its functions. Abstract contracts cannot be created using the ``new`` operator,
+  and it is not possible to generate bytecode for them during compilation.
+
+* Libraries have to implement all their functions, not only the internal ones.
+
+* The names of variables declared in inline assembly may no longer end in ``_slot`` or ``_offset``.
+
+* Variable declarations in inline assembly may no longer shadow any declaration outside the inline assembly block.
+  If the name contains a dot, its prefix up to the dot may not conflict with any declaration outside the inline
+  assembly block.
+
+* In inline assembly, opcodes that do not take arguments are now represented as "built-in functions" instead of standalone identifiers. So ``gas`` is now ``gas()``.
+
+* State variable shadowing is now disallowed.  A derived contract can only
+  declare a state variable ``x``, if there is no visible state variable with
+  the same name in any of its bases.
+
+
+Semantic and Syntactic Changes
+>>>>>>> a9fe05e8c0e6792dc68f8fd28f64bf1a23ca2b74
 ==============================
 
 این بخش تغییراتی را لیست می کند که در آن باید کد خود را تغییر دهید و پس از آن کار دیگری انجام می دهد.
@@ -151,4 +195,15 @@ this change consistent, ``solidity_free`` was renamed to ``solidity_reset``, the
 
 * شناسه‌های منحصربه‌فرد را برای اعلان‌های متغیر در مجموعه درون خطی انتخاب کنید که با اعلان‌های خارج از بلوک اسمبلی درون خطی تضاد ندارند.
 
+<<<<<<< HEAD
 * مجازی ``virtual`` را به هر تابع غیر رابطی که قصد لغو آن را دارید اضافه کنید. ``virtual`` را به همه توابع بدون اجرای رابط های خارجی اضافه کنید. برای وراثت تکی، به هر تابع نادیده ``override`` اضافه کنید. برای وراثت چندگانه، ``override(A, B, ..)`` را اضافه کنید، جایی که تمام قراردادهایی را که تابع لغو را در پرانتز تعریف می کنند، لیست می کنید. هنگامی که چندین پایه یک تابع را تعریف می کنند، قرارداد ارثی باید همه عملکردهای متضاد را لغو کند.
+=======
+* Add ``virtual`` to every non-interface function you intend to override. Add ``virtual``
+  to all functions without implementation outside interfaces. For single inheritance, add
+  ``override`` to every overriding function. For multiple inheritance, add ``override(A, B, ..)``,
+  where you list all contracts that define the overridden function in the parentheses. When
+  multiple bases define the same function, the inheriting contract must override all conflicting functions.
+
+* In inline assembly, add ``()`` to all opcodes that do not otherwise accept an argument.
+  For example, change ``pc`` to ``pc()``, and ``gas`` to ``gas()``.
+>>>>>>> a9fe05e8c0e6792dc68f8fd28f64bf1a23ca2b74
