@@ -113,6 +113,9 @@
                 // before `send` returns.
                 pendingReturns[msg.sender] = 0;
 
+                // msg.sender is not of type `address payable` and must be
+                // explicitly converted using `payable(msg.sender)` in order
+                // use the member function `send()`.
                 if (!payable(msg.sender).send(amount)) {
                     // No need to call throw here, just reset the amount owing
                     pendingReturns[msg.sender] = amount;
@@ -158,11 +161,30 @@
 
 مزایده باز  قبلی در ادامه به مزایده کور  توسعه یافته‌است. مزیت مزایده کور این است که هیچ گونه فشار زمانی نسبت به پایان دوره مناقصه  وجود ندارد. ایجاد مزایده کور بر روی یک پلتفرم محاسباتی شفاف ممکن است متناقض به نظر برسد، اما رمزنگاری به کمک شما می‌آید.
 
+<<<<<<< HEAD
 در طول دوره مناقصه، **یک پیشنهاد دهنده** در واقع پیشنهاد  خود را ارسال نمی‌کند، بلکه فقط یک نسخه هش شده از آن را ارسال می‌کند. از آنجا که در حال حاضر یافتن دو مقدار (به اندازه کافی طولانی) که مقادیر هش آنها برابر باشد، عملاً غیرممکن تلقی می‌شود، مناقصه‌گر  با این کار متعهد به مناقصه می‌شود. پس از پایان دوره مناقصه، مناقصه‌گران باید پیشنهادات خود را آشکار کنند: آنها مقادیر خود را بدون رمزگذاری ارسال می‌کنند و قرارداد بررسی می‌کند که مقدار هش همان مقدار ارائه شده در دوره مناقصه است. 
+=======
+During the **bidding period**, a bidder does not actually send their bid, but
+only a hashed version of it.  Since it is currently considered practically
+impossible to find two (sufficiently long) values whose hash values are equal,
+the bidder commits to the bid by that.  After the end of the bidding period,
+the bidders have to reveal their bids: They send their values unencrypted, and
+the contract checks that the hash value is the same as the one provided during
+the bidding period.
+>>>>>>> 73fcf69188fed78c3ad91f81ce7d6ed7c6ee79c6
 
 چالش دیگر این است که چگونه مزایده را به طور همزمان **اجباری و پنهان یا کور** جلوه دهید: تنها راه جلوگیری از ارسال نکردن مبلغ توسط داوطلب پس از برنده شدن در مزایده، ارسال آنها به همراه پیشنهاد است. از آنجا که انتقال مقدار در اتریوم  پنهان یا کور نمی‌شود، هر کسی می‌تواند مقدار را ببیند.
 
+<<<<<<< HEAD
  قرارداد زیر با قبول هر مقداری که بزرگتر از بالاترین پیشنهاد  باشد، این مشکل را حل می‌کند. از آنجایی که این فقط در مرحله آشکار شدن قابل بررسی است، ممکن است برخی از پیشنهادات نامعتبر باشند، و این هدفمند است (حتی یک فلَگ  صریح برای قرار دادن پیشنهادات **نامعتبر** با انتقال مقدار بالا ارائه می‌دهد): مناقصه‌گران  با قرار دادن چند پیشنهاد زیاد یا کم اعتبار، می‌توانند رقابت را  مختل کنند.
+=======
+The following contract solves this problem by accepting any value that is
+larger than the highest bid. Since this can of course only be checked during
+the reveal phase, some bids might be **invalid**, and this is on purpose (it
+even provides an explicit flag to place invalid bids with high-value
+transfers): Bidders can confuse competition by placing several high or low
+invalid bids.
+>>>>>>> 73fcf69188fed78c3ad91f81ce7d6ed7c6ee79c6
 
 
 .. code-block:: solidity
