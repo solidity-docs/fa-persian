@@ -4,16 +4,33 @@
 انواع  نگاشت‌ها (Mapping Types)
 =============
 
+<<<<<<< HEAD
 نوع‌های نگاشت از سینتکس  ``mapping(_KeyType => _ValueType)`` استفاده می‌کنند و 
 متغیرهای نوع نگاشت با استفاده از سینتکس 
 ``mapping(_KeyType => _ValueType) _VariableName``  مشخص می‌شوند. ``KeyType_`` می‌تواند هر نوع مقدار داخلی،  ``bytes`` ،  ``string`` یا هر نوع قرارداد یا enum 
 باشد. سایر نوع‌های پیچیده یا تعریف شده توسط کاربر، مانند نگاشت یا (mapping)‌، struct‌ها یا انواع آرایه مجاز نیستند. ``ValueType_``  می‌تواند هر نوعی باشد، از جمله نگاشت‌ها، آرایه‌ها و struct‌ها.
+=======
+Mapping types use the syntax ``mapping(KeyType => ValueType)`` and variables
+of mapping type are declared using the syntax ``mapping(KeyType => ValueType) VariableName``.
+The ``KeyType`` can be any
+built-in value type, ``bytes``, ``string``, or any contract or enum type. Other user-defined
+or complex types, such as mappings, structs or array types are not allowed.
+``ValueType`` can be any type, including mappings, arrays and structs.
+>>>>>>> english/develop
 
 
 می‌‍‌‌‌‌توانید نگاشت‍‌ها را به صورت  `جداول هش <https://en.wikipedia.org/wiki/Hash_table>`_  در نظر بگیرید که عملاً مقداردهی اولیه می‌شوند به گونه ای که هر 
 کلید ممکن وجود دارد و به مقداری نگاشت می‌شود که پیش نمایش بایت همه‌ی آن صفر می‌باشند، یک نوع :ref:`مقدار پیش فرض<default-value>` . شباهت در اینجا پایان می‌یابد، داده‌های کلیدی در نگاشت ذخیره نمی‌شوند، فقط از هش  ``keccak256`` برای جستجوی مقدار استفاده می‌شود.
 
 
+<<<<<<< HEAD
+=======
+You can mark state variables of mapping type as ``public`` and Solidity creates a
+:ref:`getter <visibility-and-getters>` for you. The ``KeyType`` becomes a parameter for the getter.
+If ``ValueType`` is a value type or a struct, the getter returns ``ValueType``.
+If ``ValueType`` is an array or a mapping, the getter has one parameter for
+each ``KeyType``, recursively.
+>>>>>>> english/develop
 
 به همین دلیل، نگاشت‌ها طول یا مفهومی از کلید یا مقدار تنظیم شده ندارند و بنابراین بدون اطلاعات اضافی در مورد کلیدهای اختصاص داده شده پاک نمی‌شوند (به قسمت :ref:`clearing-mappings` مراجعه کنید).
 
@@ -83,23 +100,24 @@
         }
 
         function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+            require(_allowances[sender][msg.sender] >= amount, "ERC20: Allowance not high enough.");
+            _allowances[sender][msg.sender] -= amount;
             _transfer(sender, recipient, amount);
-            approve(sender, msg.sender, amount);
             return true;
         }
 
-        function approve(address owner, address spender, uint256 amount) public returns (bool) {
-            require(owner != address(0), "ERC20: approve from the zero address");
+        function approve(address spender, uint256 amount) public returns (bool) {
             require(spender != address(0), "ERC20: approve to the zero address");
 
-            _allowances[owner][spender] = amount;
-            emit Approval(owner, spender, amount);
+            _allowances[msg.sender][spender] = amount;
+            emit Approval(msg.sender, spender, amount);
             return true;
         }
 
         function _transfer(address sender, address recipient, uint256 amount) internal {
             require(sender != address(0), "ERC20: transfer from the zero address");
             require(recipient != address(0), "ERC20: transfer to the zero address");
+            require(_balances[sender] >= amount, "ERC20: Not enough funds.");
 
             _balances[sender] -= amount;
             _balances[recipient] += amount;
@@ -114,17 +132,25 @@
 نگاشت های تکرارپذیر 
 -----------------
 
+<<<<<<< HEAD
 نمی‌توانید بر روی نگاشت‌ها تکرار کنید، یعنی نمی‌توانید کلیدهای آنها را بشمارید.گرچند امکان اجرای یک 
 ساختار داده در بالای آنها و تکرار آن وجود دارد. به عنوان مثال، کد زیر یک 
 کتابخانه  ``IterableMapping`` را پیاده سازی می‌کند که قرارداد ``User`` سپس داده‌ها را نیز اضافه 
 می‌کند و تابع ``sum`` تکرار می‌شود تا تمام مقادیر را جمع کند.
 
+=======
+You cannot iterate over mappings, i.e. you cannot enumerate their keys.
+It is possible, though, to implement a data structure on
+top of them and iterate over that. For example, the code below implements an
+``IterableMapping`` library that the ``User`` contract then adds data to, and
+the ``sum`` function iterates over to sum all the values.
+>>>>>>> english/develop
 
 .. code-block:: solidity
     :force:
 
     // SPDX-License-Identifier: GPL-3.0
-    pragma solidity >=0.6.8 <0.9.0;
+    pragma solidity ^0.8.8;
 
     struct IndexValue { uint keyIndex; uint value; }
     struct KeyFlag { uint key; bool deleted; }
@@ -134,6 +160,8 @@
         KeyFlag[] keys;
         uint size;
     }
+
+    type Iterator is uint;
 
     library IterableMapping {
         function insert(itmap storage self, uint key, uint value) internal returns (bool replaced) {
@@ -164,24 +192,28 @@
             return self.data[key].keyIndex > 0;
         }
 
-        function iterate_start(itmap storage self) internal view returns (uint keyIndex) {
-            return iterate_next(self, type(uint).max);
+        function iterateStart(itmap storage self) internal view returns (Iterator) {
+            return iteratorSkipDeleted(self, 0);
         }
 
-        function iterate_valid(itmap storage self, uint keyIndex) internal view returns (bool) {
-            return keyIndex < self.keys.length;
+        function iterateValid(itmap storage self, Iterator iterator) internal view returns (bool) {
+            return Iterator.unwrap(iterator) < self.keys.length;
         }
 
-        function iterate_next(itmap storage self, uint keyIndex) internal view returns (uint r_keyIndex) {
-            keyIndex++;
-            while (keyIndex < self.keys.length && self.keys[keyIndex].deleted)
-                keyIndex++;
-            return keyIndex;
+        function iterateNext(itmap storage self, Iterator iterator) internal view returns (Iterator) {
+            return iteratorSkipDeleted(self, Iterator.unwrap(iterator) + 1);
         }
 
-        function iterate_get(itmap storage self, uint keyIndex) internal view returns (uint key, uint value) {
+        function iterateGet(itmap storage self, Iterator iterator) internal view returns (uint key, uint value) {
+            uint keyIndex = Iterator.unwrap(iterator);
             key = self.keys[keyIndex].key;
             value = self.data[key].value;
+        }
+
+        function iteratorSkipDeleted(itmap storage self, uint keyIndex) private view returns (Iterator) {
+            while (keyIndex < self.keys.length && self.keys[keyIndex].deleted)
+                keyIndex++;
+            return Iterator.wrap(keyIndex);
         }
     }
 
@@ -204,11 +236,11 @@
         // Computes the sum of all stored data.
         function sum() public view returns (uint s) {
             for (
-                uint i = data.iterate_start();
-                data.iterate_valid(i);
-                i = data.iterate_next(i)
+                Iterator i = data.iterateStart();
+                data.iterateValid(i);
+                i = data.iterateNext(i)
             ) {
-                (, uint value) = data.iterate_get(i);
+                (, uint value) = data.iterateGet(i);
                 s += value;
             }
         }
