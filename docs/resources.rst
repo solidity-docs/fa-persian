@@ -14,7 +14,7 @@ General Resources
 * `Solidity Compiler Developers Chat <https://matrix.to/#/#ethereum_solidity-dev:gitter.im>`_
 * `Awesome Solidity <https://github.com/bkrem/awesome-solidity>`_
 * `Solidity by Example <https://solidity-by-example.org/>`_
-
+* `Solidity Documentation Community Translations <https://github.com/solidity-docs>`_
 
 Integrated (Ethereum) Development Environments
 ==============================================
@@ -28,31 +28,20 @@ Integrated (Ethereum) Development Environments
     * `Embark <https://framework.embarklabs.io/>`_
         Developer platform for building and deploying decentralized applications.
 
+    * `Foundry <https://github.com/gakonst/foundry>`_
+        Fast, portable and modular toolkit for Ethereum application development written in Rust.
+
     * `Hardhat <https://hardhat.org/>`_
         Ethereum development environment with local Ethereum network, debugging features and plugin ecosystem.
 
     * `Remix <https://remix.ethereum.org/>`_
         Browser-based IDE with integrated compiler and Solidity runtime environment without server-side components.
 
-    * `Scaffold-ETH <https://github.com/austintgriffith/scaffold-eth>`_
-        Ethereum development stack focused on fast product iterations.
-
     * `Truffle <https://www.trufflesuite.com/truffle>`_
         Ethereum development framework.
 
 Editor Integrations
 ===================
-
-* Atom
-
-    * `Etheratom <https://github.com/0mkara/etheratom>`_
-        Plugin for the Atom editor that features syntax highlighting, compilation and a runtime environment (Backend node & VM compatible).
-
-    * `Atom Solidity Linter <https://atom.io/packages/linter-solidity>`_
-        Plugin for the Atom editor that provides Solidity linting.
-
-    * `Atom Solium Linter <https://atom.io/packages/linter-solium>`_
-        Configurable Solidity linter for Atom using Solium (now Ethlint) as a base.
 
 * Emacs
 
@@ -62,25 +51,40 @@ Editor Integrations
 * IntelliJ
 
     * `IntelliJ IDEA plugin <https://plugins.jetbrains.com/plugin/9475-intellij-solidity>`_
-        Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs)
+        Solidity plugin for IntelliJ IDEA (and all other JetBrains IDEs).
 
-* Sublime
+* Sublime Text
 
     * `Package for SublimeText - Solidity language syntax <https://packagecontrol.io/packages/Ethereum/>`_
         Solidity syntax highlighting for SublimeText editor.
 
 * Vim
 
-    * `Vim Solidity <https://github.com/tomlion/vim-solidity/>`_
-        Plugin for the Vim editor providing syntax highlighting.
+    * `Vim Solidity by Thesis <https://github.com/thesis/vim-solidity/>`_
+        Syntax highlighting for Solidity in Vim.
+
+    * `Vim Solidity by TovarishFin <https://github.com/TovarishFin/vim-solidity>`_
+        Vim syntax file for Solidity.
 
     * `Vim Syntastic <https://github.com/vim-syntastic/syntastic>`_
         Plugin for the Vim editor providing compile checking.
 
-* Visual Studio Code
+* Visual Studio Code (VS Code)
 
-    * `Visual Studio Code extension <https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/>`_
+    * `Ethereum Remix Visual Studio Code extension <https://marketplace.visualstudio.com/items?itemName=RemixProject.ethereum-remix>`_
+        Ethereum Remix extension pack for VS Code
+
+    * `Solidity Visual Studio Code extension, by Juan Blanco <https://juan.blanco.ws/solidity-contracts-in-visual-studio-code/>`_
         Solidity plugin for Microsoft Visual Studio Code that includes syntax highlighting and the Solidity compiler.
+
+    * `Solidity Visual Studio Code extension, by Nomic Foundation <https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity>`_
+        Solidity and Hardhat support by the Hardhat team, including: syntax highlighting, jump to definition, renames, quick fixes and inline solc warnings and errors.
+
+    * `Solidity Visual Auditor extension <https://marketplace.visualstudio.com/items?itemName=tintinweb.solidity-visual-auditor>`_
+        Adds security centric syntax and semantic highlighting to Visual Studio Code.
+
+    * `Truffle for VS Code <https://marketplace.visualstudio.com/items?itemName=trufflesuite-csi.truffle-vscode>`_
+        Build, debug and deploy smart contracts on Ethereum and EVM-compatible blockchains.
 
 Solidity Tools
 ==============
@@ -112,6 +116,9 @@ Solidity Tools
 * `PIET <https://piet.slock.it/>`_
     A tool to develop, audit and use Solidity smart contracts through a simple graphical interface.
 
+* `Scaffold-ETH <https://github.com/scaffold-eth/scaffold-eth>`_
+    Forkable Ethereum development stack focused on fast product iterations.
+
 * `sol2uml <https://www.npmjs.com/package/sol2uml>`_
     Unified Modeling Language (UML) class diagram generator for Solidity contracts.
 
@@ -129,6 +136,9 @@ Solidity Tools
 
 * `Solhint <https://github.com/protofire/solhint>`_
     Solidity linter that provides security, style guide and best practice rules for smart contract validation.
+
+* `Sourcify <https://sourcify.dev/>`_
+    Decentralized automated contract verification service and public repository of contract metadata.
 
 * `Sūrya <https://github.com/ConsenSys/surya/>`_
     Utility tool for smart contract systems, offering a number of visual outputs and information about the contracts' structure. Also supports querying the function call graph.

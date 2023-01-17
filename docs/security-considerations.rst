@@ -45,7 +45,7 @@ Everything you use in a smart contract is publicly visible, even
 local variables and state variables marked ``private``.
 
 Using random numbers in smart contracts is quite tricky if you do not want
-miners to be able to cheat.
+block builders to be able to cheat.
 
 Re-Entrancy
 ===========
@@ -98,7 +98,7 @@ as it uses ``call`` which forwards all remaining gas by default:
     }
 
 To avoid re-entrancy, you can use the Checks-Effects-Interactions pattern as
-outlined further below:
+demonstrated below:
 
 .. code-block:: solidity
 
@@ -115,6 +115,13 @@ outlined further below:
             payable(msg.sender).transfer(share);
         }
     }
+
+The Checks-Effects-Interactions pattern ensures that all code paths through a contract complete all required checks
+of the supplied parameters before modifying the contract's state (Checks); only then it makes any changes to the state (Effects);
+it may make calls to functions in other contracts *after* all planned state changes have been written to
+storage (Interactions). This is a common foolproof way to prevent *re-entrancy attacks*, where an externally called
+malicious contract is able to double-spend an allowance, double-withdraw a balance, among other things, by using logic that calls back into the
+original contract before it has finalized its transaction.
 
 Note that re-entrancy is not only an effect of Ether transfer but of any
 function call on another contract. Furthermore, you also have to take
@@ -210,9 +217,9 @@ using a second proxy:
     contract ProxyWithMoreFunctionality {
         PermissionlessProxy proxy;
 
-        function callOther(address _addr, bytes memory _payload) public
+        function callOther(address addr, bytes memory payload) public
                 returns (bool, bytes memory) {
-            return proxy.callOther(_addr, _payload);
+            return proxy.callOther(addr, payload);
         }
         // Other functions and other functionality
     }
@@ -220,9 +227,9 @@ using a second proxy:
     // This is the full contract, it has no other functionality and
     // requires no privileges to work.
     contract PermissionlessProxy {
-        function callOther(address _addr, bytes memory _payload) public
+        function callOther(address addr, bytes memory payload) public
                 returns (bool, bytes memory) {
-            return _addr.call(_payload);
+            return addr.call(payload);
         }
     }
 
@@ -331,17 +338,17 @@ field of a ``struct`` that is the base type of a dynamic storage array.  The
     contract Map {
         mapping (uint => uint)[] array;
 
-        function allocate(uint _newMaps) public {
-            for (uint i = 0; i < _newMaps; i++)
+        function allocate(uint newMaps) public {
+            for (uint i = 0; i < newMaps; i++)
                 array.push();
         }
 
-        function writeMap(uint _map, uint _key, uint _value) public {
-            array[_map][_key] = _value;
+        function writeMap(uint map, uint key, uint value) public {
+            array[map][key] = value;
         }
 
-        function readMap(uint _map, uint _key) public view returns (uint) {
-            return array[_map][_key];
+        function readMap(uint map, uint key) public view returns (uint) {
+            return array[map][key];
         }
 
         function eraseMaps() public {
