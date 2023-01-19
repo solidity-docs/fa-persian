@@ -69,9 +69,9 @@
     }
 
 
-    // Multiple inheritance is possible. Note that `owned` is
+    // Multiple inheritance is possible. Note that `Owned` is
     // also a base class of `Destructible`, yet there is only a single
-    // instance of `owned` (as for virtual inheritance in C++).
+    // instance of `Owned` (as for virtual inheritance in C++).
     contract Named is Owned, Destructible {
         constructor(bytes32 name) {
             Config config = Config(0xD5f9D8D94886E70b06E474c3fB14Fd43E2f23970);
@@ -397,8 +397,8 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
     abstract contract A {
         uint public a;
 
-        constructor(uint _a) {
-            a = _a;
+        constructor(uint a_) {
+            a = a_;
         }
     }
 
@@ -420,7 +420,7 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
     ``public`` مشخص می کردید.
 
 
-.. index:: ! base;constructor
+.. index:: ! base;constructor, inheritance list, contract;abstract, abstract contract
 
 آرگومانها برای سازنده های پایه 
 ===============================
@@ -436,7 +436,7 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 
     contract Base {
         uint x;
-        constructor(uint _x) { x = _x; }
+        constructor(uint x_) { x = x_; }
     }
 
     // Either directly specify in the inheritance list...
@@ -444,11 +444,21 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
         constructor() {}
     }
 
-    // or through a "modifier" of the derived constructor.
+    // or through a "modifier" of the derived constructor...
     contract Derived2 is Base {
-        constructor(uint _y) Base(_y * _y) {}
+        constructor(uint y) Base(y * y) {}
     }
 
+    // or declare abstract...
+    abstract contract Derived3 is Base {
+    }
+
+    // and have the next concrete derived contract initialize it.
+    contract DerivedFromDerived is Derived3 {
+        constructor() Base(10 + 10) {}
+    }
+
+<<<<<<< HEAD
 روش اول مستقیما از طریق لیست ورارثت است (``is Base(7)``). روش دیگر از روش اول به این
 صورت است که یک اصلاح کننده به عنوان بخشی از سازنده فراخوانی شده استفاده یم شود
 (``Base(_y * _y)``). انجام روش اول راحت تر است اگر ورودی سازنده یک ثابت باید و رفتار
@@ -459,6 +469,26 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 
 اگر یک قرارداد ارث گرفته شده ورودی های همه سازنده های قرارداد پایه خود را مشخص نکند،
 abstract خواهد بود.
+=======
+One way is directly in the inheritance list (``is Base(7)``).  The other is in
+the way a modifier is invoked as part of
+the derived constructor (``Base(y * y)``). The first way to
+do it is more convenient if the constructor argument is a
+constant and defines the behaviour of the contract or
+describes it. The second way has to be used if the
+constructor arguments of the base depend on those of the
+derived contract. Arguments have to be given either in the
+inheritance list or in modifier-style in the derived constructor.
+Specifying arguments in both places is an error.
+
+If a derived contract does not specify the arguments to all of its base
+contracts' constructors, it must be declared abstract. In that case, when
+another contract derives from it, that other contract's inheritance list
+or constructor must provide the necessary parameters
+for all base classes that haven't had their parameters specified (otherwise,
+that other contract must be declared abstract as well). For example, in the above
+code snippet, see ``Derived3`` and ``DerivedFromDerived``.
+>>>>>>> english/develop
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
