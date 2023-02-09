@@ -9,7 +9,26 @@
 نسخه بندی 
 ==========
 
+<<<<<<< HEAD
 نسخه‌های سالیدیتی از `نسخه بندی سمننتیکی <https://semver.org>`_  پیروی می‌کنند و علاوه بر این نسخه‌ها، **نسخه‌های توسعه شبانه**  نیز در دسترس هستند. کارکردن نسخه‌های نسخه شبانه تضمین نمی‌شود و علی‌رغم همه تلاش‌ها ممکن است تغییرات غیرمستند و یا تغییرات جدید  را شامل شوند. توصیه می‌کنیم از آخرین نسخه استفاده کنید. بسته‌های نصبی زیر از آخرین نسخه استفاده خواهند کرد.
+=======
+Solidity versions follow `Semantic Versioning <https://semver.org>`_. In
+addition, patch level releases with major release 0 (i.e. 0.x.y) will not
+contain breaking changes. That means code that compiles with version 0.x.y
+can be expected to compile with 0.x.z where z > y.
+
+In addition to releases, we provide **nightly development builds** with the
+intention of making it easy for developers to try out upcoming features and
+provide early feedback. Note, however, that while the nightly builds are usually
+very stable, they contain bleeding-edge code from the development branch and are
+not guaranteed to be always working. Despite our best efforts, they might
+contain undocumented and/or broken changes that will not become a part of an
+actual release. They are not meant for production use.
+
+When deploying contracts, you should use the latest released version of Solidity. This
+is because breaking changes, as well as new features and bug fixes are introduced regularly.
+We currently use a 0.x version number `to indicate this fast pace of change <https://semver.org/#spec-item-4>`_.
+>>>>>>> english/develop
 
 ریمیکس
 =====
@@ -93,7 +112,22 @@ self-contained (i.e. it does not refer to any external files that would have to 
     sudo apt-get update
     sudo apt-get install solc
 
+<<<<<<< HEAD
 ما همچنین یک `بسته اسنپ <https://snapcraft.io/>`_  را منتشر می‌کنیم که در `توزیع‌های پشتیبانی شده لینوکس <https://snapcraft.io/docs/core/install>`_  قابل نصب است. برای نصب آخرین نسخه پایدار solc:
+=======
+Furthermore, some Linux distributions provide their own packages. These packages are not directly
+maintained by us, but usually kept up-to-date by the respective package maintainers.
+
+For example, Arch Linux has packages for the latest development version:
+
+.. code-block:: bash
+
+    pacman -S solidity
+
+There is also a `snap package <https://snapcraft.io/solc>`_, however, it is **currently unmaintained**.
+It is installable in all the `supported Linux distros <https://snapcraft.io/docs/core/install>`_. To
+install the latest stable version of solc:
+>>>>>>> english/develop
 
 .. code-block:: bash
 
@@ -109,6 +143,7 @@ self-contained (i.e. it does not refer to any external files that would have to 
 
    اسنپ  ``solc`` از سختگیری شدید استفاده می‌کند. این حالت امن‌ترین حالت برای بسته‌های فوری است اما با محدودیت‌هایی همراه است، مثلاً شما فقط به فایل‌های موجود در دایرکتوری‌های ``home/``   و  ``media/``  دسترسی خواهید داشت. برای کسب اطلاعات بیشتر، به `Demystifying Snap Confinement <https://snapcraft.io/blog/demystifying-snap-confinement>`_.  مراجعه کنید.
 
+<<<<<<< HEAD
 آرک لینوکس  همچنین دارای بسته‌هایی است، البته محدود به آخرین نسخه توسعه می‌باشد:
 
 .. code-block:: bash
@@ -120,6 +155,8 @@ self-contained (i.e. it does not refer to any external files that would have to 
 .. code-block:: bash
 
     emerge dev-lang/solidity
+=======
+>>>>>>> english/develop
 
 بسته‌های مک‌او اس
 ==============
@@ -236,14 +273,15 @@ self-contained (i.e. it does not refer to any external files that would have to 
 +-----------------------------------+-------------------------------------------------------+
 | Software                          | Notes                                                 |
 +===================================+=======================================================+
-| `CMake`_ (version 3.13+)          | Cross-platform build file generator.                  |
+| `CMake`_ (version 3.21.3+ on      | Cross-platform build file generator.                  |
+| Windows, 3.13+ otherwise)         |                                                       |
 +-----------------------------------+-------------------------------------------------------+
-| `Boost`_ (version 1.77+ on        | C++ libraries.                                        |
+| `Boost`_ (version 1.77 on         | C++ libraries.                                        |
 | Windows, 1.65+ otherwise)         |                                                       |
 +-----------------------------------+-------------------------------------------------------+
 | `Git`_                            | Command-line tool for retrieving source code.         |
 +-----------------------------------+-------------------------------------------------------+
-| `z3`_ (version 4.8+, Optional)    | For use with SMT checker.                             |
+| `z3`_ (version 4.8.16+, Optional) | For use with SMT checker.                             |
 +-----------------------------------+-------------------------------------------------------+
 | `cvc4`_ (Optional)                | For use with SMT checker.                             |
 +-----------------------------------+-------------------------------------------------------+
@@ -273,7 +311,22 @@ self-contained (i.e. it does not refer to any external files that would have to 
     If you do this, however, please remember to pass the ``--no-smt`` option to ``scripts/tests.sh``
     to skip the SMT tests.
 
+<<<<<<< HEAD
 حداقل نسخه‌های کامپایلر
+=======
+.. note::
+    By default the build is performed in *pedantic mode*, which enables extra warnings and tells the
+    compiler to treat all warnings as errors.
+    This forces developers to fix warnings as they arise, so they do not accumulate "to be fixed later".
+    If you are only interested in creating a release build and do not intend to modify the source code
+    to deal with such warnings, you can pass ``-DPEDANTIC=OFF`` option to CMake to disable this mode.
+    Doing this is not recommended for general use but may be necessary when using a toolchain we are
+    not testing with or trying to build an older version with newer tools.
+    If you encounter such warnings, please consider
+    `reporting them <https://github.com/ethereum/solidity/issues/new>`_.
+
+Minimum Compiler Versions
+>>>>>>> english/develop
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 کامپایلرهای ++ C زیر و حداقل نسخه‌های آنها می‌توانند پایگاه کد  سالیدیتی را ایجاد کنند:
@@ -311,7 +364,7 @@ self-contained (i.e. it does not refer to any external files that would have to 
 +-----------------------------------+-------------------------------------------------------+
 | `Visual Studio 2019`_  (Optional) | C++ compiler and dev environment.                     |
 +-----------------------------------+-------------------------------------------------------+
-| `Boost`_ (version 1.77+)          | C++ libraries.                                        |
+| `Boost`_ (version 1.77)           | C++ libraries.                                        |
 +-----------------------------------+-------------------------------------------------------+
 
 اگر از قبل یک ویرایشگر  دارید و فقط به کامپایلر و کتابخانه نیاز دارید، می‌توانید ابزارهای نسخه 2019 ویژوال استودیو  را نصب کنید.
@@ -329,6 +382,7 @@ self-contained (i.e. it does not refer to any external files that would have to 
 .. _Visual Studio 2019: https://www.visualstudio.com/vs/
 .. _Visual Studio 2019 Build Tools: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
+<<<<<<< HEAD
 اسکریپت کمکی وابستگی‌ها 
 --------------------------
 
@@ -339,11 +393,18 @@ self-contained (i.e. it does not refer to any external files that would have to 
     ./scripts/install_deps.sh
 
 یا در ویندوز:
+=======
+We have a helper script which you can use to install all required external dependencies:
+>>>>>>> english/develop
 
 .. code-block:: bat
 
     scripts\install_deps.ps1
 
+<<<<<<< HEAD
+=======
+This will install ``boost`` and ``cmake`` to the ``deps`` subdirectory.
+>>>>>>> english/develop
 
 توجه داشته باشید که دستور دوم   ``boost`` و   ``cmake`` را در زیر شاخه  ``deps`` نصب می‌کند، در حالی که دستور قبلی سعی می‌کند وابستگی‌ها را به صورت جهانی نصب کند.
 
@@ -460,6 +521,11 @@ self-contained (i.e. it does not refer to any external files that would have to 
 - کامیت در قالب  ``commit.GITHASH``
 - پلتفرم، که دارای تعداد دلخواه موارد است، حاوی جزئیات مربوط به پلتفرم و کامپایلر
 
+<<<<<<< HEAD
+=======
+These parts are combined as required by SemVer, where the Solidity pre-release tag equals to the SemVer pre-release
+and the Solidity commit and platform combined make up the SemVer build metadata.
+>>>>>>> english/develop
 
 
 اگر تغییرات محلی وجود داشته باشد، کامیت‌ها با ``mod.`` پسوند داده می‌شود.
@@ -475,7 +541,14 @@ self-contained (i.e. it does not refer to any external files that would have to 
 اطلاعات مهم در مورد نسخه بندی
 ======================================
 
+<<<<<<< HEAD
 پس از انتشار، سطح نسخه پَچ   بامپ  ‌شده است، زیرا ما فرض می‌کنیم که فقط تغییرات سطح پَچ دنبال می‌شود. وقتی تغییرات ادغام می‌شوند، نسخه باید با توجه به semver و شدت تغییرات بامپ شود. سرانجام، همیشه نسخه‌ای از نسخه فعلی شبانه منتشر می‌شود، اما بدون تعیین ``prerelease`` .
+=======
+After a release is made, the patch version level is bumped, because we assume that only
+patch level changes follow. When changes are merged, the version should be bumped according
+to SemVer and the severity of the change. Finally, a release is always made with the version
+of the current nightly build, but without the ``prerelease`` specifier.
+>>>>>>> english/develop
 
 مثال:
 
@@ -490,4 +563,12 @@ self-contained (i.e. it does not refer to any external files that would have to 
 
 این رفتار با :ref:`نسخه پراگما  <version_pragma>`  به خوبی کار می‌کند.
 
+<<<<<<< HEAD
+=======
+1. The 0.4.0 release is made.
+2. The nightly build has a version of 0.4.1 from now on.
+3. Non-breaking changes are introduced --> no change in version.
+4. A breaking change is introduced --> version is bumped to 0.5.0.
+5. The 0.5.0 release is made.
+>>>>>>> english/develop
 
