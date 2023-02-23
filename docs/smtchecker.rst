@@ -82,12 +82,12 @@ Overflow
         uint immutable x;
         uint immutable y;
 
-        function add(uint _x, uint _y) internal pure returns (uint) {
-            return _x + _y;
+        function add(uint x_, uint y_) internal pure returns (uint) {
+            return x_ + y_;
         }
 
-        constructor(uint _x, uint _y) {
-            (x, y) = (_x, _y);
+        constructor(uint x_, uint y_) {
+            (x, y) = (x_, y_);
         }
 
         function stateAdd() public view returns (uint) {
@@ -116,7 +116,7 @@ Here, it reports the following:
         Overflow.add(1, 115792089237316195423570985008687907853269984665640564039457584007913129639935) -- internal call
      --> o.sol:9:20:
       |
-    9 |             return _x + _y;
+    9 |             return x_ + y_;
       |                    ^^^^^^^
 
 If we add ``require`` statements that filter out overflow cases,
@@ -131,12 +131,12 @@ the SMTChecker proves that no overflow is reachable (by not reporting warnings):
         uint immutable x;
         uint immutable y;
 
-        function add(uint _x, uint _y) internal pure returns (uint) {
-            return _x + _y;
+        function add(uint x_, uint y_) internal pure returns (uint) {
+            return x_ + y_;
         }
 
-        constructor(uint _x, uint _y) {
-            (x, y) = (_x, _y);
+        constructor(uint x_, uint y_) {
+            (x, y) = (x_, y_);
         }
 
         function stateAdd() public view returns (uint) {
@@ -155,7 +155,7 @@ An assertion represents an invariant in your code: a property that must be true
 
 The code below defines a function ``f`` that guarantees no overflow.
 Function ``inv`` defines the specification that ``f`` is monotonically increasing:
-for every possible pair ``(_a, _b)``, if ``_b > _a`` then ``f(_b) > f(_a)``.
+for every possible pair ``(a, b)``, if ``b > a`` then ``f(b) > f(a)``.
 Since ``f`` is indeed monotonically increasing, the SMTChecker proves that our
 property is correct. You are encouraged to play with the property and the function
 definition to see what results come out!
@@ -166,14 +166,14 @@ definition to see what results come out!
     pragma solidity >=0.8.0;
 
     contract Monotonic {
-        function f(uint _x) internal pure returns (uint) {
-            require(_x < type(uint128).max);
-            return _x * 42;
+        function f(uint x) internal pure returns (uint) {
+            require(x < type(uint128).max);
+            return x * 42;
         }
 
-        function inv(uint _a, uint _b) public pure {
-            require(_b > _a);
-            assert(f(_b) > f(_a));
+        function inv(uint a, uint b) public pure {
+            require(b > a);
+            assert(f(b) > f(a));
         }
     }
 
@@ -188,14 +188,14 @@ equal every element in the array.
     pragma solidity >=0.8.0;
 
     contract Max {
-        function max(uint[] memory _a) public pure returns (uint) {
+        function max(uint[] memory a) public pure returns (uint) {
             uint m = 0;
-            for (uint i = 0; i < _a.length; ++i)
-                if (_a[i] > m)
-                    m = _a[i];
+            for (uint i = 0; i < a.length; ++i)
+                if (a[i] > m)
+                    m = a[i];
 
-            for (uint i = 0; i < _a.length; ++i)
-                assert(m >= _a[i]);
+            for (uint i = 0; i < a.length; ++i)
+                assert(m >= a[i]);
 
             return m;
         }
@@ -222,15 +222,15 @@ For example, changing the code to
     pragma solidity >=0.8.0;
 
     contract Max {
-        function max(uint[] memory _a) public pure returns (uint) {
-            require(_a.length >= 5);
+        function max(uint[] memory a) public pure returns (uint) {
+            require(a.length >= 5);
             uint m = 0;
-            for (uint i = 0; i < _a.length; ++i)
-                if (_a[i] > m)
-                    m = _a[i];
+            for (uint i = 0; i < a.length; ++i)
+                if (a[i] > m)
+                    m = a[i];
 
-            for (uint i = 0; i < _a.length; ++i)
-                assert(m > _a[i]);
+            for (uint i = 0; i < a.length; ++i)
+                assert(m > a[i]);
 
             return m;
         }
@@ -243,7 +243,7 @@ gives us:
     Warning: CHC: Assertion violation happens here.
     Counterexample:
 
-    _a = [0, 0, 0, 0, 0]
+    a = [0, 0, 0, 0, 0]
      = 0
 
     Transaction trace:
@@ -251,7 +251,7 @@ gives us:
     Test.max([0, 0, 0, 0, 0])
       --> max.sol:14:4:
        |
-    14 |            assert(m > _a[i]);
+    14 |            assert(m > a[i]);
 
 
 State Properties
@@ -383,9 +383,9 @@ anything, including reenter the caller contract.
 
         Unknown immutable unknown;
 
-        constructor(Unknown _u) {
-            require(address(_u) != address(0));
-            unknown = _u;
+        constructor(Unknown u) {
+            require(address(u) != address(0));
+            unknown = u;
         }
 
         modifier mutex {
@@ -395,8 +395,8 @@ anything, including reenter the caller contract.
             lock = false;
         }
 
-        function set(uint _x) mutex public {
-            x = _x;
+        function set(uint x_) mutex public {
+            x = x_;
         }
 
         function run() mutex public {
@@ -412,7 +412,7 @@ is already "locked", so it would not be possible to change the value of ``x``,
 regardless of what the unknown called code does.
 
 If we "forget" to use the ``mutex`` modifier on function ``set``, the
-SMTChecker is able to synthesize the behavior of the externally called code so
+SMTChecker is able to synthesize the behaviour of the externally called code so
 that the assertion fails:
 
 .. code-block:: text
@@ -518,6 +518,205 @@ which has the following form:
         "source2.sol": ["contract2", "contract3"]
     }
 
+Trusted External Calls
+======================
+
+By default, the SMTChecker does not assume that compile-time available code
+is the same as the runtime code for external calls. Take the following contracts
+as an example:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.0;
+
+    contract Ext {
+        uint public x;
+        function setX(uint _x) public { x = _x; }
+    }
+    contract MyContract {
+        function callExt(Ext _e) public {
+            _e.setX(42);
+            assert(_e.x() == 42);
+        }
+    }
+
+When ``MyContract.callExt`` is called, an address is given as the argument.
+At deployment time, we cannot know for sure that address ``_e`` actually
+contains a deployment of contract ``Ext``.
+Therefore, the SMTChecker will warn that the assertion above can be violated,
+which is true, if ``_e`` contains another contract than ``Ext``.
+
+However, it can be useful to treat these external calls as trusted, for example,
+to test that different implementations of an interface conform to the same property.
+This means assuming that address ``_e`` indeed was deployed as contract ``Ext``.
+This mode can be enabled via the CLI option ``--model-checker-ext-calls=trusted``
+or the JSON field ``settings.modelChecker.extCalls: "trusted"``.
+
+Please be aware that enabling this mode can make the SMTChecker analysis much more
+computationally costly.
+
+An important part of this mode is that it is applied to contract types and high
+level external calls to contracts, and not low level calls such as ``call`` and
+``delegatecall``. The storage of an address is stored per contract type, and
+the SMTChecker assumes that an externally called contract has the type of the
+caller expression.  Therefore, casting an ``address`` or a contract to
+different contract types will yield different storage values and can give
+unsound results if the assumptions are inconsistent, such as the example below:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.0;
+
+    contract D {
+        constructor(uint _x) { x = _x; }
+        uint public x;
+        function setX(uint _x) public { x = _x; }
+    }
+
+    contract E {
+        constructor() { x = 2; }
+        uint public x;
+        function setX(uint _x) public { x = _x; }
+    }
+
+    contract C {
+        function f() public {
+            address d = address(new D(42));
+
+            // `d` was deployed as `D`, so its `x` should be 42 now.
+            assert(D(d).x() == 42); // should hold
+            assert(D(d).x() == 43); // should fail
+
+            // E and D have the same interface, so the following
+            // call would also work at runtime.
+            // However, the change to `E(d)` is not reflected in `D(d)`.
+            E(d).setX(1024);
+
+            // Reading from `D(d)` now will show old values.
+            // The assertion below should fail at runtime,
+            // but succeeds in this mode's analysis (unsound).
+            assert(D(d).x() == 42);
+            // The assertion below should succeed at runtime,
+            // but fails in this mode's analysis (false positive).
+            assert(D(d).x() == 1024);
+        }
+    }
+
+Due to the above, make sure that the trusted external calls to a certain
+variable of ``address`` or ``contract`` type always have the same caller
+expression type.
+
+It is also helpful to cast the called contract's variable as the type of the
+most derived type in case of inheritance.
+
+   .. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.0;
+
+    interface Token {
+        function balanceOf(address _a) external view returns (uint);
+        function transfer(address _to, uint _amt) external;
+    }
+
+    contract TokenCorrect is Token {
+        mapping (address => uint) balance;
+        constructor(address _a, uint _b) {
+            balance[_a] = _b;
+        }
+        function balanceOf(address _a) public view override returns (uint) {
+            return balance[_a];
+        }
+        function transfer(address _to, uint _amt) public override {
+            require(balance[msg.sender] >= _amt);
+            balance[msg.sender] -= _amt;
+            balance[_to] += _amt;
+        }
+    }
+
+    contract Test {
+        function property_transfer(address _token, address _to, uint _amt) public {
+            require(_to != address(this));
+
+            TokenCorrect t = TokenCorrect(_token);
+
+            uint xPre = t.balanceOf(address(this));
+            require(xPre >= _amt);
+            uint yPre = t.balanceOf(_to);
+
+            t.transfer(_to, _amt);
+            uint xPost = t.balanceOf(address(this));
+            uint yPost = t.balanceOf(_to);
+
+            assert(xPost == xPre - _amt);
+            assert(yPost == yPre + _amt);
+        }
+    }
+
+Note that in function ``property_transfer``, the external calls are
+performed on variable ``t``
+
+Another caveat of this mode are calls to state variables of contract type
+outside the analyzed contract. In the code below, even though ``B`` deploys
+``A``, it is also possible for the address stored in ``B.a`` to be called by
+anyone outside of ``B`` in between transactions to ``B`` itself. To reflect the
+possible changes to ``B.a``, the encoding allows an unbounded number of calls
+to be made to ``B.a`` externally. The encoding will keep track of ``B.a``'s
+storage, therefore assertion (2) should hold. However, currently the encoding
+allows such calls to be made from ``B`` conceptually, therefore assertion (3)
+fails.  Making the encoding stronger logically is an extension of the trusted
+mode and is under development. Note that the encoding does not keep track of
+storage for ``address`` variables, therefore if ``B.a`` had type ``address``
+the encoding would assume that its storage does not change in between
+transactions to ``B``.
+
+   .. code-block:: solidity
+
+    pragma solidity >=0.8.0;
+
+    contract A {
+        uint public x;
+        address immutable public owner;
+        constructor() {
+            owner = msg.sender;
+        }
+        function setX(uint _x) public {
+            require(msg.sender == owner);
+            x = _x;
+        }
+    }
+
+    contract B {
+        A a;
+        constructor() {
+            a = new A();
+            assert(a.x() == 0); // (1) should hold
+        }
+        function g() public view {
+            assert(a.owner() == address(this)); // (2) should hold
+            assert(a.x() == 0); // (3) should hold, but fails due to a false positive
+        }
+    }
+
+Reported Inferred Inductive Invariants
+======================================
+
+For properties that were proved safe with the CHC engine,
+the SMTChecker can retrieve inductive invariants that were inferred by the Horn
+solver as part of the proof.
+Currently two types of invariants can be reported to the user:
+
+- Contract Invariants: these are properties over the contract's state variables
+  that are true before and after every possible transaction that the contract may ever run. For example, ``x >= y``, where ``x`` and ``y`` are a contract's state variables.
+- Reentrancy Properties: they represent the behavior of the contract
+  in the presence of external calls to unknown code. These properties can express a relation
+  between the value of the state variables before and after the external call, where the external call is free to do anything, including making reentrant calls to the analyzed contract. Primed variables represent the state variables' values after said external call. Example: ``lock -> x = x'``.
+
+The user can choose the type of invariants to be reported using the CLI option ``--model-checker-invariants "contract,reentrancy"`` or as an array in the field ``settings.modelChecker.invariants`` in the :ref:`JSON input<compiler-api>`.
+By default the SMTChecker does not report invariants.
+
 Division and Modulo With Slack Variables
 ========================================
 
@@ -597,20 +796,26 @@ which is primarily an SMT solver and makes `Spacer
 <https://github.com/uuverifiers/eldarica>`_ which does both.
 
 The user can choose which solvers should be used, if available, via the CLI
-option ``--model-checker-solvers {all,cvc4,smtlib2,z3}`` or the JSON option
+option ``--model-checker-solvers {all,cvc4,eld,smtlib2,z3}`` or the JSON option
 ``settings.modelChecker.solvers=[smtlib2,z3]``, where:
 
 - ``cvc4`` is only available if the ``solc`` binary is compiled with it. Only BMC uses ``cvc4``.
+- ``eld`` is used via its binary which must be installed in the system. Only CHC uses ``eld``, and only if ``z3`` is not enabled.
 - ``smtlib2`` outputs SMT/Horn queries in the `smtlib2 <http://smtlib.cs.uiowa.edu/>`_ format.
   These can be used together with the compiler's `callback mechanism <https://github.com/ethereum/solc-js>`_ so that
   any solver binary from the system can be employed to synchronously return the results of the queries to the compiler.
-  This is currently the only way to use Eldarica, for example, since it does not have a C++ API.
   This can be used by both BMC and CHC depending on which solvers are called.
 - ``z3`` is available
 
   - if ``solc`` is compiled with it;
-  - if a dynamic ``z3`` library of version 4.8.x is installed in a Linux system (from Solidity 0.7.6);
+  - if a dynamic ``z3`` library of version >=4.8.x is installed in a Linux system (from Solidity 0.7.6);
   - statically in ``soljson.js`` (from Solidity 0.6.9), that is, the Javascript binary of the compiler.
+
+.. note::
+  z3 version 4.8.16 broke ABI compatibility with previous versions and cannot
+  be used with solc <=0.8.13. If you are using z3 >=4.8.16 please use solc
+  >=0.8.14, and conversely, only use older z3 with older solc releases.
+  We also recommend using the latest z3 release which is what SMTChecker also does.
 
 Since both BMC and CHC use ``z3``, and ``z3`` is available in a greater variety
 of environments, including in the browser, most users will almost never need to be
@@ -662,7 +867,7 @@ Types that are not yet supported are abstracted by a single 256-bit unsigned
 integer, where their unsupported operations are ignored.
 
 For more details on how the SMT encoding works internally, see the paper
-`SMT-based Verification of Solidity Smart Contracts <https://github.com/leonardoalt/text/blob/master/solidity_isola_2018/main.pdf>`_.
+`SMT-based Verification of Solidity Smart Contracts <https://github.com/chriseth/solidity_isola/blob/master/main.pdf>`_.
 
 Function Calls
 ==============
@@ -737,15 +942,15 @@ not mean loss of proving power.
     {
         function f(
             bytes32 hash,
-            uint8 _v1, uint8 _v2,
-            bytes32 _r1, bytes32 _r2,
-            bytes32 _s1, bytes32 _s2
+            uint8 v1, uint8 v2,
+            bytes32 r1, bytes32 r2,
+            bytes32 s1, bytes32 s2
         ) public pure returns (address) {
-            address a1 = ecrecover(hash, _v1, _r1, _s1);
-            require(_v1 == _v2);
-            require(_r1 == _r2);
-            require(_s1 == _s2);
-            address a2 = ecrecover(hash, _v2, _r2, _s2);
+            address a1 = ecrecover(hash, v1, r1, s1);
+            require(v1 == v2);
+            require(r1 == r2);
+            require(s1 == s2);
+            address a2 = ecrecover(hash, v2, r2, s2);
             assert(a1 == a2);
             return a1;
         }
