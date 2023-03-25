@@ -18,6 +18,7 @@
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.1 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -59,7 +60,7 @@
     }
 
     contract Register is priced, destructible {
-        mapping (address => bool) registeredAddresses;
+        mapping(address => bool) registeredAddresses;
         uint price;
 
         constructor(uint initialPrice) { price = initialPrice; }
@@ -71,8 +72,8 @@
             registeredAddresses[msg.sender] = true;
         }
 
-        function changePrice(uint _price) public onlyOwner {
-            price = _price;
+        function changePrice(uint price_) public onlyOwner {
+            price = price_;
         }
     }
 
@@ -112,9 +113,21 @@
 داده و یا مقادیر بازگشتی را برگردانند. مقادیر آنها فقط به صراحت هنگام فراخوانی به آنها
 منتقل می شود.
 
+<<<<<<< HEAD
 بازگشت واضح(Explicit) از یک اصلاح کننده یا بدنه تابع فقط از اصلاح کننده جاری و یا بنده تابع
 خارج می شود. متغیر های اختصاص داده شده باز می گردند و کنترل جریان ``_`` از اصلاح کننده
 قبلی ادامه می یابد.
+=======
+In function modifiers, it is necessary to specify when you want the function to which the modifier is
+applied to be run. The placeholder statement (denoted by a single underscore character ``_``) is used to
+denote where the body of the function being modified should be inserted. Note that the
+placeholder operator is different from using underscores as leading or trailing characters in variable
+names, which is a stylistic choice.
+
+Explicit returns from a modifier or function body only leave the current
+modifier or function body. Return variables are assigned and
+control flow continues after the ``_`` in the preceding modifier.
+>>>>>>> english/develop
 
 .. warning::
    در نسخه قدیمی سالیدیتی، دستورات ``return`` در توابع اصلاح کننده ها با رفتار متفاوت
