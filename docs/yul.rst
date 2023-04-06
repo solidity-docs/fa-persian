@@ -9,11 +9,17 @@
 یول ( قبلا جولیا (JULIA) یا یولیا (IULIA) نام داشت) 
 یک زبان میانی کامپایل شده به بایت کد(bytecode) است که برای بک اند (backend) های مختلف بکار می رود.
 
+<<<<<<< HEAD
 برای پشتیبانی از EVM 1.0 ، EVM1.5  و Ewasm برنامه ریزی شده است، برای استفاده کلی
 در تمامی پلتفرم ها طراحی شده است. در حال حاضر بصورت جداگانه و هم در داخل سالیدیتی
 با عنوان “inline assembly” قابل استفاده است و کامپایلر سالیدیتی از یک پیاده سازی تجربی
 بنام یول به عنوان زبان میانی استفاده می کند. یول گزینه خوبی برا بهینه سازی است که این
 بهینه سازی در تمامی پلتفرم های هدف بصورت یکسان عمل می کند.
+=======
+It can be used in stand-alone mode and for "inline assembly" inside Solidity.
+The compiler uses Yul as an intermediate language in the IR-based code generator ("new codegen" or "IR-based codegen").
+Yul is a good target for high-level optimisation stages that can benefit all target platforms equally.
+>>>>>>> english/develop
 
 انگیزه و شرح سطح-بالا
 ========================
@@ -78,8 +84,13 @@
         }
     }
 
+<<<<<<< HEAD
 همچنین می توان بجای تابع برگشتی از یک حلقه for استفاده کرد. اینجا ``lt(a, b)`` زمانی اجرا
 می شوند که ``a``  کوچکتر از ``b``  باشد. مقایسه کوچکتر-از
+=======
+It is also possible to implement the same function using a for-loop
+instead of with recursion. Here, ``lt(a, b)`` computes whether ``a`` is less than ``b``.
+>>>>>>> english/develop
 
 .. code-block:: yul
 
@@ -143,6 +154,7 @@
 داخل یک بلوک کد، عناصر زیر قابل استفاده هستند 
 ( بخش بعدی را برای کسب جزئیات بیشتر نگاه کنید):
 
+<<<<<<< HEAD
 - حرف ها مثل : ``0x123`` ،  ``42`` یا ``“abc”`` (رشته ها تا 32 کاراکتر)
 - فراخوانی های توابع داخلی مثل: ``add(1, mload(0))``
 - تعریف های متغیر مثل : ``let x := 7`` , ``let x := add(y, 3)`` یا ``let x`` (مقدار اولیه صفر داده می شود)
@@ -153,6 +165,18 @@
 - بیانیه switch مثل : ``switch mload(0) case 0 { revert() } default { mstore(0, 1) }``
 - چرخه for loop مثل : ``for { let i := 0} lt(i, 10) { i := add(i, 1) } { mstore(i, 7) }``
 - تعاریف تابع مثل : ``function f(a, b) -> c { c := add(a, b) }```
+=======
+- literals, e.g. ``0x123``, ``42`` or ``"abc"`` (strings up to 32 characters)
+- calls to builtin functions, e.g. ``add(1, mload(0))``
+- variable declarations, e.g. ``let x := 7``, ``let x := add(y, 3)`` or ``let x`` (initial value of 0 is assigned)
+- identifiers (variables), e.g. ``add(3, x)``
+- assignments, e.g. ``x := add(y, 3)``
+- blocks where local variables are scoped inside, e.g. ``{ let x := 3 { let y := add(x, 1) } }``
+- if statements, e.g. ``if lt(a, b) { sstore(0, 1) }``
+- switch statements, e.g. ``switch mload(0) case 0 { revert() } default { mstore(0, 1) }``
+- for loops, e.g. ``for { let i := 0} lt(i, 10) { i := add(i, 1) } { mstore(i, 7) }``
+- function definitions, e.g. ``function f(a, b) -> c { c := add(a, b) }``
+>>>>>>> english/develop
 
 عناصر می توانند همدیگر را دنبال کنند و توسط فاصله (فضای خالی) از هم جدا شوند،
  نیازی به کاراکتر اتمام خط مثل ``;`` و یا سطر جدید نیست.
@@ -221,9 +245,17 @@ In the EVM dialect of Yul, literals represent 256-bit words as follows:
     // Here, the user-defined function `f` returns two values.
     let x, y := f(1, mload(0))
 
+<<<<<<< HEAD
 برای توابع داخلی EVM، عبارات عملکردی می توانند مستقیما به یک رشته ای از کد گذاری
 ترجمه شوند: شما فقط برای بدست آوردن کد کذاری از راست به چپ عبارات را می خوانید.
 در مورد اولین خط مثال : ``PUSH1 3 PUSH1 0x80 MLOAD ADD PUSH1 0x80 MSTORE``.
+=======
+For built-in functions of the EVM, functional expressions
+can be directly translated to a stream of opcodes:
+You just read the expression from right to left to obtain the
+opcodes. In the case of the second line in the example, this
+is ``PUSH1 3 PUSH1 0x80 MLOAD ADD PUSH1 0x80 MSTORE``.
+>>>>>>> english/develop
 
 برای فراخوانی های توابع تعریف شده کاربر، مقادیر وروردی داخل پشته از راست به چپ داخل
 پشته قرار می گیرند این ترتیب ارزیابی لیست های وروردی است. مقادیر برگشتی، انتظار می
@@ -492,9 +524,30 @@ Loops
 
 در تمام شرایط دیگر ، عبارات باید دقیقا به یک ارزش سنجیده شوند.
 
+<<<<<<< HEAD
 دستورات ``continue`` و ``break`` در داخل بدنه حلقه ها قابل استفاده است و باید همان عملکرد را
 که در حلقه دارند نشان دهند( یا هر دو باید در سطح بالایی باشند). از دستورات ``continue`` و
 ``break`` نمی توان در قسمت های دیگر حلقه استفاده کرد ، حتی در داخل حلقه دوم یک حلقه تو در تو.
+=======
+A ``continue`` or ``break`` statement can only be used inside the body of a for-loop, as follows.
+Consider the innermost loop that contains the statement.
+The loop and the statement must be in the same function, or both must be at the top level.
+The statement must be in the loop's body block;
+it cannot be in the loop's initialization block or update block.
+It is worth emphasizing that this restriction applies just
+to the innermost loop that contains the ``continue`` or ``break`` statement:
+this innermost loop, and therefore the ``continue`` or ``break`` statement,
+may appear anywhere in an outer loop, possibly in an outer loop's initialization block or update block.
+For example, the following is legal,
+because the ``break`` occurs in the body block of the inner loop,
+despite also occurring in the update block of the outer loop:
+
+.. code-block:: yul
+
+    for {} true { for {} true {} { break } }
+    {
+    }
+>>>>>>> english/develop
 
 قسمت شرط حلقه باید دقیقا یک مقدار سنجیده شود.
 
@@ -588,10 +641,10 @@ object state) و نود AST را می گیرد و دو وضعیت آبجکت (ob
     E(G, L, <var_1, ..., var_n := rhs>: Assignment) =
         let G1, L1, v1, ..., vn = E(G, L, rhs)
         let L2 be a copy of L1 where L2[$var_i] = vi for i = 1, ..., n
-        G, L2, regular
+        G1, L2, regular
     E(G, L, <for { i1, ..., in } condition post body>: ForLoop) =
         if n >= 1:
-            let G1, L, mode = E(G, L, i1, ..., in)
+            let G1, L1, mode = E(G, L, i1, ..., in)
             // mode has to be regular or leave due to the syntactic restrictions
             if mode is leave then
                 G1, L1 restricted to variables of L, leave
@@ -611,7 +664,7 @@ object state) و نود AST را می گیرد و دو وضعیت آبجکت (ob
                 else:
                     G3, L3, mode = E(G2, L2, post)
                     if mode is leave:
-                        G2, L3, leave
+                        G3, L3, leave
                     otherwise
                         E(G3, L3, for {} condition post body)
     E(G, L, break: BreakContinue) =
@@ -653,13 +706,15 @@ object state) و نود AST را می گیرد و دو وضعیت آبجکت (ob
         L'[$parami] = vi and L'[$reti] = 0 for all i.
         Let G'', L'', mode = E(Gn, L', block)
         G'', Ln, L''[$ret1], ..., L''[$retm]
-    E(G, L, l: StringLiteral) = G, L, utf8EncodeLeftAligned(l),
-        where utf8EncodeLeftAligned performs a UTF-8 encoding of l
-        and aligns it left into 32 bytes
+    E(G, L, l: StringLiteral) = G, L, str(l),
+        where str is the string evaluation function,
+        which for the EVM dialect is defined in the section 'Literals' above
     E(G, L, n: HexNumber) = G, L, hex(n)
-        where hex is the hexadecimal decoding function
+        where hex is the hexadecimal evaluation function,
+        which turns a sequence of hexadecimal digits into their big endian value
     E(G, L, n: DecimalNumber) = G, L, dec(n),
-        where dec is the decimal decoding function
+        where dec is the decimal evaluation function,
+        which turns a sequence of decimal digits into their big endian value
 
 .. _opcodes:
 
@@ -674,9 +729,15 @@ object state) و نود AST را می گیرد و دو وضعیت آبجکت (ob
 از عملکرد/کد گذاری را ارئه می دهد. این سند نمی خواهد شرح کاملی از ماشین مجازی اتریوم
 باشد. اگر علاقه مندبه معتای دقیق هستید، لطفا به سند دیگری مراجعه کنید.
 
+<<<<<<< HEAD
 کد ها با علامت – نشانه گذاری شده اند نتیجه ای بر نمی گردانند و تمامی آنها یک مقدار را بر
 می گرداند. کد هایی که با ``F``، ``H``، ``B`` و ``C`` یا ``I`` و ``L``  نشانه گذاری شده اند به ترتیب از زمان
 Frontainter،  Homestead ، Byzantium  و Constantinople یا Istanbul و London وجود دارند.
+=======
+Opcodes marked with ``-`` do not return a result and all others return exactly one value.
+Opcodes marked with ``F``, ``H``, ``B``, ``C``, ``I``, ``L`` and ``P`` are present since Frontier,
+Homestead, Byzantium, Constantinople, Istanbul, London or Paris respectively.
+>>>>>>> english/develop
 
 در ادامه ``(mem[a...b`` نشانگر بایت های حافظه است که از موقعیت ``a`` شروع و تا ``b`` منتهی
 میشوند در حالی خود خانه b شامل حافظه نیست و ``storage[p]`` بیانگر محتوای داخل فضای
@@ -689,7 +750,7 @@ Frontainter،  Homestead ، Byzantium  و Constantinople یا Istanbul و London
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | Instruction             |     |   | Explanation                                                     |
 +=========================+=====+===+=================================================================+
-| stop()                  + `-` | F | stop execution, identical to return(0, 0)                       |
+| stop()                  | `-` | F | stop execution, identical to return(0, 0)                       |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | add(x, y)               |     | F | x + y                                                           |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -824,18 +885,19 @@ Frontainter،  Homestead ، Byzantium  و Constantinople یا Istanbul و London
 | revert(p, s)            | `-` | B | end execution, revert state changes, return data mem[p...(p+s)) |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | selfdestruct(a)         | `-` | F | end execution, destroy current contract and send funds to a     |
+|                         |     |   | (deprecated)                                                    |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | invalid()               | `-` | F | end execution with invalid instruction                          |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| log0(p, s)              | `-` | F | log without topics and data mem[p...(p+s))                      |
+| log0(p, s)              | `-` | F | log data mem[p...(p+s))                                         |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| log1(p, s, t1)          | `-` | F | log with topic t1 and data mem[p...(p+s))                       |
+| log1(p, s, t1)          | `-` | F | log data mem[p...(p+s)) with topic t1                           |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| log2(p, s, t1, t2)      | `-` | F | log with topics t1, t2 and data mem[p...(p+s))                  |
+| log2(p, s, t1, t2)      | `-` | F | log data mem[p...(p+s)) with topics t1, t2                      |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| log3(p, s, t1, t2, t3)  | `-` | F | log with topics t1, t2, t3 and data mem[p...(p+s))              |
+| log3(p, s, t1, t2, t3)  | `-` | F | log data mem[p...(p+s)) with topics t1, t2, t3                  |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| log4(p, s, t1, t2, t3,  | `-` | F | log with topics t1, t2, t3, t4 and data mem[p...(p+s))          |
+| log4(p, s, t1, t2, t3,  | `-` | F | log data mem[p...(p+s)) with topics t1, t2, t3, t4              |
 | t4)                     |     |   |                                                                 |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | chainid()               |     | I | ID of the executing chain (EIP-1344)                            |
@@ -854,7 +916,9 @@ Frontainter،  Homestead ، Byzantium  و Constantinople یا Istanbul و London
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | number()                |     | F | current block number                                            |
 +-------------------------+-----+---+-----------------------------------------------------------------+
-| difficulty()            |     | F | difficulty of the current block                                 |
+| difficulty()            |     | F | difficulty of the current block (see note below)                |
++-------------------------+-----+---+-----------------------------------------------------------------+
+| prevrandao()            |     | P | randomness provided by the beacon chain (see note below)        |
 +-------------------------+-----+---+-----------------------------------------------------------------+
 | gaslimit()              |     | F | block gas limit of the current block                            |
 +-------------------------+-----+---+-----------------------------------------------------------------+
@@ -871,7 +935,26 @@ Frontainter،  Homestead ، Byzantium  و Constantinople یا Istanbul و London
   بررسی کدام بخش از حافظه شامل داده های برگشتی است، استفاده کنید. بایت های باقی
   مانده مقداری را برمی گردانند که توسط فراخوانی های قبلی آنها مقدار دهی شده بوده اند.
 
+<<<<<<< HEAD
 بعضی از گویش های داخلی، توابع اضافی دارند:
+=======
+.. note::
+  The `difficulty()` instruction is disallowed in EVM version >= Paris.
+  With the Paris network upgrade the semantics of the instruction that was previously called
+  ``difficulty`` have been changed and the instruction was renamed to ``prevrandao``.
+  It can now return arbitrary values in the full 256-bit range, whereas the highest recorded
+  difficulty value within Ethash was ~54 bits.
+  This change is described in `EIP-4399 <https://eips.ethereum.org/EIPS/eip-4399>`_.
+  Please note that irrelevant to which EVM version is selected in the compiler, the semantics of
+  instructions depend on the final chain of deployment.
+
+.. warning::
+    From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
+    deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behaviour
+    as stated in `EIP-6049 <https://eips.ethereum.org/EIPS/eip-6049>`_.
+
+In some internal dialects, there are additional functions:
+>>>>>>> english/develop
 
 datasize, dataoffset, datacopy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -895,10 +978,20 @@ to ``loadimmutable("name")`` in the runtime code.
 
 linkersymbol
 ^^^^^^^^^^^^
+<<<<<<< HEAD
 
 تابع  ``linkersymbol("fq_library_name")`` یک آدرس لیترال (literal) است که توسط لینکر(
 linker) جایگزین می شود. اولین و تنها ورودی باید یک رشته لیترال (literal) باشد و با گزینه ``libraries--``
 که نشان دهنده نام کامل کتابخانه منتخب است استفاده می شود.
+=======
+The function ``linkersymbol("library_id")`` is a placeholder for an address literal to be substituted
+by the linker.
+Its first and only argument must be a string literal and uniquely represents the address to be inserted.
+Identifiers can be arbitrary but when the compiler produces Yul code from Solidity sources,
+it uses a library name qualified with the name of the source unit that defines that library.
+To link the code with a particular library address, the same identifier must be provided to the
+``--libraries`` option on the command line.
+>>>>>>> english/develop
 
 برای مثال این کد
 
@@ -1040,6 +1133,11 @@ it can be removed.
 
 .. note::
 
+    An object with a name that ends in ``_deployed`` is treated as deployed code by the Yul optimizer.
+    The only consequence of this is a different gas cost heuristic in the optimizer.
+
+.. note::
+
     Data objects or sub-objects whose names contain a ``.`` can be defined
     but it is not possible to access them through ``datasize``,
     ``dataoffset`` or ``datacopy`` because ``.`` is used as a separator
@@ -1071,6 +1169,7 @@ it can be removed.
         code {
             function allocate(size) -> ptr {
                 ptr := mload(0x40)
+                // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                 if iszero(ptr) { ptr := 0x60 }
                 mstore(0x40, add(ptr, size))
             }
@@ -1082,24 +1181,25 @@ it can be removed.
             datacopy(offset, dataoffset("Contract2"), size)
             // constructor parameter is a single number 0x1234
             mstore(add(offset, size), 0x1234)
-            pop(create(offset, add(size, 32), 0))
+            pop(create(0, offset, add(size, 32)))
 
             // now return the runtime object (the currently
             // executing code is the constructor code)
-            size := datasize("runtime")
+            size := datasize("Contract1_deployed")
             offset := allocate(size)
             // This will turn into a memory->memory copy for Ewasm and
             // a codecopy for EVM
-            datacopy(offset, dataoffset("runtime"), size)
+            datacopy(offset, dataoffset("Contract1_deployed"), size)
             return(offset, size)
         }
 
         data "Table2" hex"4123"
 
-        object "runtime" {
+        object "Contract1_deployed" {
             code {
                 function allocate(size) -> ptr {
                     ptr := mload(0x40)
+                    // Note that Solidity generated IR code reserves memory offset ``0x60`` as well, but a pure Yul object is free to use memory as it chooses.
                     if iszero(ptr) { ptr := 0x60 }
                     mstore(0x40, add(ptr, size))
                 }
@@ -1118,7 +1218,7 @@ it can be removed.
                 // code here ...
             }
 
-            object "runtime" {
+            object "Contract2_deployed" {
                 code {
                     // code here ...
                 }
@@ -1148,6 +1248,7 @@ and optionally specify the :ref:`expected number of contract executions <optimiz
 
 در حالت سالیدیتی، بهینه ساز یول به همراه بهینه ساز معمولی فعال هستند.
 
+<<<<<<< HEAD
 ترتیب قدم بهینه سازی
 --------------------
 
@@ -1212,6 +1313,15 @@ ReasoningBasedSimplifier یک مرحله بهینه سازی است که در ح
 شرط های که از نوع بولئن(Boolean condition) هستند ، از یک تجزیه کننده SMT استفاده
 می کند. هنوز آزمایش یا راستی آزمایی دریافت نکرده است و می تواند نتایج غیر قابل تولید
 مجدد ایجاد کند لطفا با احتیاط استفاده کنید!
+=======
+.. _optimization-step-sequence:
+
+Optimization Step Sequence
+--------------------------
+
+Detailed information regrading the optimization sequence as well a list of abbreviations is
+available in the :ref:`optimizer docs <optimizer-steps>`.
+>>>>>>> english/develop
 
 .. _erc20yul:
 
