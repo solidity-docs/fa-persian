@@ -12,10 +12,11 @@ options { tokenVocab=SolidityLexer; }
 sourceUnit: (
 	pragmaDirective
 	| importDirective
+	| usingDirective
 	| contractDefinition
 	| interfaceDefinition
 	| libraryDefinition
-	| functionDefinition
+	| freeFunctionDefinition
 	| constantVariableDeclaration
 	| structDefinition
 	| enumDefinition
@@ -84,7 +85,7 @@ inheritanceSpecifier: name=identifierPath arguments=callArgumentList?;
  */
 contractBodyElement:
 	constructorDefinition
-	| functionDefinition
+	| contractFunctionDefinition
 	| modifierDefinition
 	| fallbackFunctionDefinition
 	| receiveFunctionDefinition
@@ -155,12 +156,12 @@ overrideSpecifier: Override (LParen overrides+=identifierPath (Comma overrides+=
  * Depending on the context in which the function is defined, further restrictions may apply,
  * e.g. functions in interfaces have to be unimplemented, i.e. may not contain a body block.
  */
-functionDefinition
+contractFunctionDefinition
 locals[
 	boolean visibilitySet = false,
 	boolean mutabilitySet = false,
 	boolean virtualSet = false,
-	boolean overrideSpecifierSet = false
+	boolean overrideSpecifierSet = false,
 ]
 :
 	Function (identifier | Fallback | Receive)
@@ -174,6 +175,17 @@ locals[
 	 )*
 	(Returns LParen returnParameters=parameterList RParen)?
 	(Semicolon | body=block);
+
+/**
+ * The definition of a free function.
+ */
+ freeFunctionDefinition:
+ 	Function (identifier | Fallback | Receive)
+ 	LParen (arguments=parameterList)? RParen
+ 	stateMutability?
+ 	(Returns LParen returnParameters=parameterList RParen)?
+ 	(Semicolon | body=block);
+
 /**
  * The definition of a modifier.
  * Note that within the body block of a modifier, the underscore cannot be used as identifier,
@@ -311,10 +323,30 @@ errorDefinition:
 	Semicolon;
 
 /**
- * Using directive to bind library functions to types.
- * Can occur within contracts and libraries.
+ * Operators that users are allowed to implement for some types with `using for`.
  */
-usingDirective: Using identifierPath For (Mul | typeName) Semicolon;
+userDefinableOperator:
+	BitAnd
+	| BitNot
+	| BitOr
+	| BitXor
+	| Add
+	| Div
+	| Mod
+	| Mul
+	| Sub
+	| Equal
+	| GreaterThan
+	| GreaterThanOrEqual
+	| LessThan
+	| LessThanOrEqual
+	| NotEqual;
+
+/**
+ * Using directive to attach library functions and free functions to types.
+ * Can occur within contracts and libraries and at the file level.
+ */
+usingDirective: Using (identifierPath | (LBrace identifierPath (As userDefinableOperator)? (Comma identifierPath (As userDefinableOperator)?)* RBrace)) For (Mul | typeName) Global? Semicolon;
 /**
  * A type name can be an elementary type, a function type, a mapping type, a user-defined type
  * (e.g. a contract or struct) or an array type.
@@ -373,6 +405,7 @@ expression:
  	| (
 		identifier
 		| literal
+		| literalWithSubDenomination
 		| elementaryTypeName[false]
 	  ) # PrimaryExpression
 ;
@@ -388,9 +421,12 @@ inlineArrayExpression: LBrack (expression ( Comma expression)* ) RBrack;
 /**
  * Besides regular non-keyword Identifiers, some keywords like 'from' and 'error' can also be used as identifiers.
  */
-identifier: Identifier | From | Error | Revert;
+identifier: Identifier | From | Error | Revert | Global;
 
 literal: stringLiteral | numberLiteral | booleanLiteral | hexStringLiteral | unicodeStringLiteral;
+
+literalWithSubDenomination: numberLiteral SubDenomination;
+
 booleanLiteral: True | False;
 /**
  * A full string literal consists of either one or several consecutive quoted strings.
@@ -408,7 +444,8 @@ unicodeStringLiteral: UnicodeStringLiteral+;
 /**
  * Number literals can be decimal or hexadecimal numbers with an optional unit.
  */
-numberLiteral: (DecimalNumber | HexNumber) NumberUnit?;
+numberLiteral: DecimalNumber | HexNumber;
+
 /**
  * A curly-braced block of statements. Opens its own scope.
  */
@@ -476,7 +513,13 @@ revertStatement: Revert expression callArgumentList Semicolon;
  * The contents of an inline assembly block use a separate scanner/lexer, i.e. the set of keywords and
  * allowed identifiers is different inside an inline assembly block.
  */
-assemblyStatement: Assembly AssemblyDialect? AssemblyLBrace yulStatement* YulRBrace;
+assemblyStatement: Assembly AssemblyDialect? assemblyFlags? AssemblyLBrace yulStatement* YulRBrace;
+
+/**
+ * Assembly flags.
+ * Comma-separated list of double-quoted strings as flags.
+ */
+assemblyFlags: AssemblyBlockLParen AssemblyFlagString (AssemblyBlockComma AssemblyFlagString)* AssemblyBlockRParen;
 
 //@doc:inline
 variableDeclarationList: variableDeclarations+=variableDeclaration (Comma variableDeclarations+=variableDeclaration)*;
@@ -497,7 +540,7 @@ variableDeclarationTuple:
 variableDeclarationStatement: ((variableDeclaration (Assign expression)?) | (variableDeclarationTuple Assign expression)) Semicolon;
 expressionStatement: expression Semicolon;
 
-mappingType: Mapping LParen key=mappingKeyType DoubleArrow value=typeName RParen;
+mappingType: Mapping LParen key=mappingKeyType name=identifier? DoubleArrow value=typeName name=identifier? RParen;
 /**
  * Only elementary types or user defined types are viable as mapping keys.
  */
@@ -564,7 +607,7 @@ yulFunctionDefinition:
  * While only identifiers without dots can be declared within inline assembly,
  * paths containing dots can refer to declarations outside the inline assembly block.
  */
-yulPath: YulIdentifier (YulPeriod YulIdentifier)*;
+yulPath: YulIdentifier (YulPeriod (YulIdentifier | YulEVMBuiltin))*;
 /**
  * A call to a function with return values can only occur as right-hand side of an assignment or
  * a variable declaration.
