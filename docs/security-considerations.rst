@@ -1,60 +1,37 @@
 .. _security_considerations:
 
-#######################
-Security Considerations
-#######################
+##############
+ملاحظات امنیتی
+##############
 
-While it is usually quite easy to build software that works as expected,
-it is much harder to check that nobody can use it in a way that was **not** anticipated.
+درحالیکه معمولاً ساختن نرم‌افزاری که مطابق انتظارات عمل کند آسان است، بررسی اینکه کسی نتواند از آن به نحو غیرقابل پیشبینی‌شده‌ای سوء استفاده کند بسیار دشوارتر است.  
 
-In Solidity, this is even more important because you can use smart contracts
-to handle tokens or, possibly, even more valuable things. Furthermore, every
-execution of a smart contract happens in public and, in addition to that,
-the source code is often available.
+در سالیدیتی این امر حتی مهمتر است زیرا قراردادهای هوشمند می‌توانند به منظور مدیریت توکن‌ها یا حتی چیزهایی باارزش‌تر استفاده شوند. علاوه بر آن هر عملی که توسط یک قرارداد هوشمند صورت گیرد عمومی‌ست و گذشته از این، `کد منبع <https://fa.wikipedia.org/wiki/%DA%A9%D8%AF_%D9%85%D9%86%D8%A8%D8%B9>`_ غالباً در دسترس عام است.
 
-Of course you always have to consider how much is at stake:
-You can compare a smart contract with a web service that is open to the
-public (and thus, also to malicious actors) and perhaps even open source.
-If you only store your grocery list on that web service, you might not have
-to take too much care, but if you manage your bank account using that web service,
-you should be more careful.
+البته همواره باید در نظر گرفته شود که چه مقدار ریسک در گرو است:
+می‌توان یک قرارداد هوشمند را با یک `خدمت وب <https://fa.wikipedia.org/wiki/%D8%AE%D8%AF%D9%85%D8%AA_%D9%88%D8%A8>`_ (وب سرویس، web service) مقایسه کرد که برای عموم (متعاقباً برای عوامل مخرب) آزاد بوده و احتمالاً `متن‌باز <https://fa.wikipedia.org/wiki/%D9%85%D8%AA%D9%86%E2%80%8C%D8%A8%D8%A7%D8%B2>`_ نیز است. اگر فقط لیست مواد غذایی خود را در آن وب سرویس ذخیره کنید شاید نیازی به مراقب بیش از حد نداشته باشید، ولی اگر حساب بانکی خود را با استفاده از آن وب سرویس مدیریت می‌کنید، باید بیشتر مواظب باشید. 
 
-This section will list some pitfalls and general security recommendations but
-can, of course, never be complete.  Also, keep in mind that even if your smart
-contract code is bug-free, the compiler or the platform itself might have a
-bug. A list of some publicly known security-relevant bugs of the compiler can
-be found in the :ref:`list of known bugs<known_bugs>`, which is also
-machine-readable. Note that there is a bug bounty program that covers the code
-generator of the Solidity compiler.
+این بخش فهرستی از برخی تله‌های مشکل‌آفرین و توصیه‌های امنیتی کلی است ولیکن مشخصاً هیچگاه نمی‌تواند کامل باشد. همچنین به خاطر داشته باشید که هرچند کد شما می‌تواند عاری از اشکال (bug) باشد، ولی ممکن است کامپایلر یا خودِ پلتفرم دارای باگ باشد. فهرستی از برخی اشکالات امنیتی مرتبط با کامپایلر که بصورت عمومی شناخته شده‌اند را می‌توانید در :ref:`فهرست باگ‌های شناخته شده<known_bugs>` که `ماشین‌خوانا <https://fa.wikipedia.org/wiki/%D8%B1%D8%B3%D8%A7%D9%86%D9%87_%D9%85%D8%A7%D8%B4%DB%8C%D9%86%E2%80%8C%D8%AE%D9%88%D8%A7%D9%86%D8%A7>`_ نیز است، بیابید. قابل ذکر است که یک `برنامهٔ باگ باونتی <https://fa.wikipedia.org/wiki/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87_%D8%A8%D8%A7%DA%AF_%D8%A8%D8%A7%D9%88%D9%86%D8%AA%DB%8C>`_ نیز وجود دارد که مولد کد کامپایلر سالیدیتی را تحت پوشش قرار می‌دهد.
 
-As always, with open source documentation, please help us extend this section
-(especially, some examples would not hurt)!
+طبق روال مستندات متن‌باز از شما درخواست می‌شود که به ما در توسعهٔ این بخش یاری دهید (مخصوصاً اضافه کردن چند مثال ضرری ندارد!)
 
-NOTE: In addition to the list below, you can find more security recommendations and best practices
-`in Guy Lando's knowledge list <https://github.com/guylando/KnowledgeLists/blob/master/EthereumSmartContracts.md>`_ and
-`the Consensys GitHub repo <https://consensys.github.io/smart-contract-best-practices/>`_.
+توجه: علاوه بر فهرست زیر شما می‌توانید توصیه‌های امنیتی و شگردهای بیشتری در `Guy Lando's knowledge list <https://github.com/guylando/KnowledgeLists/blob/master/EthereumSmartContracts.md>`_ و `Consensys GitHub repo <https://consensys.github.io/smart-contract-best-practices/>`_ بیابید.
 
-********
-Pitfalls
-********
+******
+تله‌ها
+******
 
-Private Information and Randomness
-==================================
+اطلاعات خصوصی و تصادفیدگی
+=========================
 
-Everything you use in a smart contract is publicly visible, even
-local variables and state variables marked ``private``.
+هرچیزی که در یک قرارداد هوشمند استفاده شود بصورت عمومی قابل مشاهده است، حتی متغیرهای محلی (local) و حالت (state) که با ``private`` علامت‌گذاری شده باشند.
 
-Using random numbers in smart contracts is quite tricky if you do not want
-block builders to be able to cheat.
+استفاده از `اعداد تصادفی <https://fa.wikipedia.org/wiki/%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C>`_ در قراردادهای هوشمند می‌تواند بسیار دشوار باشد چراکه سازندگان بلاک در این حالت می‌توانند تقلب کنند.
 
-Reentrancy
-===========
+بازدُخولی (Reentrancy)
+=====================
 
-Any interaction from a contract (A) with another contract (B) and any transfer
-of Ether hands over control to that contract (B). This makes it possible for B
-to call back into A before this interaction is completed. To give an example,
-the following code contains a bug (it is just a snippet and not a
-complete contract):
+هرگونه تعاملی از یک قرارداد (A) با قراردادی دیگر (B)، و هرگونه انتقال اتر، کنترل را به آن قرارداد (B) تحویل می‌دهد. این انتقال کنترل به B امکان می‌دهد که A را قبل از تکمیل تعامل فراخوانی کند. برای مثال، کد زیر را که حاوی باگ است در نظر بگیرید (این کد فقط یک قطعه بوده و یک قرارداد کامل نیست):
 
 .. code-block:: solidity
 
@@ -72,13 +49,7 @@ complete contract):
         }
     }
 
-The problem is not too serious here because of the limited gas as part
-of ``send``, but it still exposes a weakness: Ether transfer can always
-include code execution, so the recipient could be a contract that calls
-back into ``withdraw``. This would let it get multiple refunds and
-basically retrieve all the Ether in the contract. In particular, the
-following contract will allow an attacker to refund multiple times
-as it uses ``call`` which forwards all remaining gas by default:
+مشکل در اینجا بدلیل محدود بودن گاز بعنوان جزئی از ``send`` زیاد جدی نیست، با این وجود همچنان ضعف وجود دارد: انتقال اتر همیشه می‌تواند شامل اجرای کد باشد، بنابراین دریافت‌کننده می‌تواند قراردادی باشد که توانایی بازفراخوانی ``withdraw`` را دارد که به آن اجازهٔ دریافت چندین بازپرداخت و اساساً تمام اتر موجود در قرارداد را می‌دهد. به ویژه قرارداد زیر به مهاجم امکان بازپرداخت چندباره را می‌دهد، چراکه از ``call``، که بطور پیش‌فرض تمام گاز باقی‌مانده را ارسال می‌کند، استفاده شده است. 
 
 .. code-block:: solidity
 
@@ -97,8 +68,7 @@ as it uses ``call`` which forwards all remaining gas by default:
         }
     }
 
-To avoid reentrancy, you can use the Checks-Effects-Interactions pattern as
-demonstrated below:
+به منظور جلوگیری از `بازدُخولی <https://fa.wikipedia.org/wiki/%D8%A8%D8%A7%D8%B2%D8%AF%D8%AE%D9%88%D9%84%DB%8C>`_ شما می‌توانید از الگوی بررسی‌ها-اثرات-تعاملات (Checks-Effects-Interactions) بصورتیکه در زیر نشان داده شده است استفاده کنید:
 
 .. code-block:: solidity
 
@@ -116,99 +86,46 @@ demonstrated below:
         }
     }
 
-The Checks-Effects-Interactions pattern ensures that all code paths through a contract complete all required checks
-of the supplied parameters before modifying the contract's state (Checks); only then it makes any changes to the state (Effects);
-it may make calls to functions in other contracts *after* all planned state changes have been written to
-storage (Interactions). This is a common foolproof way to prevent *reentrancy attacks*, where an externally called
-malicious contract is able to double-spend an allowance, double-withdraw a balance, among other things, by using logic that calls back into the
-original contract before it has finalized its transaction.
+الگوی بررسی‌ها-اثرات-تعاملات تضمین می‌کند که تمامی مسیرهای کدِ سرتاسر یک قرارداد قبل از تغییر حالت (state) آن، همهٔ بررسی‌های لازمهٔ پارامترهای ارائه شده را تکمیل کنند (بررسی‌ها)؛ تنها پس از این بررسی‌ها هرگونه تغییری در حالت را اعمال کنند (اثرات)؛ و نهایتاً فراخوانی توابع از قراردادهای دیگر فقط زمانی صورت گیرد که همهٔ تغییرات حالت برنامه‌ریزی شده ذخیره شده باشند (تعاملات). این یک روش محافظه‌کارانهٔ رایج برای مقابله با حملات بازدُخولی است، حملاتی که در آن یک قرارداد مخرب با استفاده از منطق فراخوانیِ قرارداد اصلی قبل از تکمیل تراکنش، توانایی `دوبار خرج کردن <https://fa.wikipedia.org/wiki/%D8%AF%D9%88%D8%A8%D8%A7%D8%B1_%D8%AE%D8%B1%D8%AC_%DA%A9%D8%B1%D8%AF%D9%86>`_ مستمری، دوبار بازگیری تتمهٔ حساب، و حملات مشابه را دارد.
 
-Note that reentrancy is not only an effect of Ether transfer but of any
-function call on another contract. Furthermore, you also have to take
-multi-contract situations into account. A called contract could modify the
-state of another contract you depend on.
+توجه داشته باشید که بازدخولی نه تنها بر انتقال اتر، بلکه بر روی هر فراخوانی از توابع قراردادهای دیگر تأثیر دارد. علاوه بر این شما باید شرایط چندقراردادی را نیز در نظر داشته باشید. یک قرارداد فراخوانی شده می‌تواند حالت قراردادی دیگر را که به آن وابسته‌اید، تغییر دهد.
 
-Gas Limit and Loops
+محدودیت گاز و حلقه‌ها
+====================
+
+از حلقه‌هایی که تعداد تکرار مشخص و ثابتی ندارند، مثلاً حلقه‌هایی که به مقادیر ذخیره شده وابسته‌اند، بایستی با دقت استفاده کرد:
+با توجه به محدودیت گاز بلوک، تراکنش‌ها می‌توانند تنها مقدار مشخصی گاز مصرف کنند. صراحتاً، یا صرفاً بدلیل عملکرد عادی، تعداد تکرارها در یک حلقه می‌تواند به مقداری فراتر از حد گاز بلوک افزایش یافته و متعاقباً باعث توقف کل قرارداد در نقطه‌ای معین شود. این خاصیت شامل توابع ``view`` نمی‌شود چراکه این توابع تنها به منظور خواندن داده‌ها از بلاکچین استفاده می‌شوند. با این حال چنین توابعی همچنین می‌توانند توسط قراردادهای دیگر بعنوان بخشی از عملیات زنجیره‌ای فراخوانی شده و باعث توقف آنها شوند. لطفاً در مستندات قراردادهای خود در مورد استفاده از چنین مواردی توسط دیگران، صریح باشید. 
+
+ارسال و دریافت اتر
 ===================
 
-Loops that do not have a fixed number of iterations, for example, loops that depend on storage values, have to be used carefully:
-Due to the block gas limit, transactions can only consume a certain amount of gas. Either explicitly or just due to
-normal operation, the number of iterations in a loop can grow beyond the block gas limit which can cause the complete
-contract to be stalled at a certain point. This may not apply to ``view`` functions that are only executed
-to read data from the blockchain. Still, such functions may be called by other contracts as part of on-chain operations
-and stall those. Please be explicit about such cases in the documentation of your contracts.
+- در حال حاظر نه قراردادها و نه «حساب‌های خارجی» توانایی ممانعت از دریافت اتر ارسالی توسط دیگران را ندارند.
+  قراردادها می‌توانند به یک انتقال متداول واکنش نشان داده و آنرا رد کنند، لکن راه‌هایی برای انتقال اتر بدون ایجاد پیام وجود دارد. یکی از راه‌ها این است که بسادگی آدرس قرارداد را استخراج کنند و راه دوم استفاده از ``selfdestruct(x)`` است.
+  
+- اگر قراردادی (بدون فراخوانی هیچ تابعی) اتر دریافت کند یکی از توابع :ref:`receive Ether <receive-ether-function>` یا :ref:`fallback <fallback-function>` اجرا می‌شود.
+  اگر این قرارداد تابع دریافت یا عقب‌نشینی (fallback) نداشته باشد، اتر دریافتی (با پرتاب یک استثنا) رد می‌شود. در حین اجرای یکی از این توابع، قرارداد فقط می‌تواند به «دستمزد گاز» که در اختیارش قرار گرفته (۲۳۰۰ گاز) و در آن زمان در دسترسش است، متکی باشد. این دستمزد برای تغییر فضای ذخیره‌سازی کافی نیست (این موضوع را سهل نگیرید چراکه مقدار دستمزد گاز ممکن است در `هارد فورک‌های <https://fa.wikipedia.org/wiki/%D9%81%D9%88%D8%B1%DA%A9_(%D8%B2%D9%86%D8%AC%DB%8C%D8%B1%D9%87_%D8%A8%D9%84%D9%88%DA%A9%DB%8C)#%D9%87%D8%A7%D8%B1%D8%AF_%D9%81%D9%88%D8%B1%DA%A9>`_ آینده تغییر کند). برای اطمینان از اینکه قرارداد شما می‌تواند اتر را به این طریق دریافت کند لزومات گاز تابع دریافت و تاب عقب‌نشینی (fallback) را بررسی کنید (برای مثال بخش «جزئیات» را در Remix ببینید).
+  
+- راهی برای رساندن گاز بیشتر به قرارداد دریافت کننده با استفاده از ``addr.call{value: x}("")`` وجود دارد. این اساساً همانند ``addr.transfer(x)`` عمل می‌کند تنها با این تفاوت که تمام گاز مازاد را ارسال می‌کند و امکان انجام اعمال گرانتر را برای گیرنده فراهم می‌آورد (و بجای انتشار خودکار خطا، یک کد شکست یا همان عدم موفقیت را برمی‌گرداند). این ممکن است شامل بازفراخوانی به قرارداد ارسال کننده یا تغییرات وضعیتی دیگری باشد که به آن توجه نکرده بودید. بدین‌سبب، این راه انعطاف‌پذیری زیادی برای کاربران عادل و همچنین بازیگران مخرب اعطاء می‌کند.
 
-Sending and Receiving Ether
-===========================
+- از دقیق‌ترین واحدها برای نشان دادن مقدار wei استفاده کنید زیرا هرچه که از روی عدم دقت گرد شده باشد، از دست خواهد رفت.
 
-- Neither contracts nor "external accounts" are currently able to prevent that someone sends them Ether.
-  Contracts can react on and reject a regular transfer, but there are ways
-  to move Ether without creating a message call. One way is to simply "mine to"
-  the contract address and the second way is using ``selfdestruct(x)``.
+- اگر می‌خواهید اتر را با استفاده از ``address.transfer`` ارسال کنید جزئیات خاصی وجود دارند که باید از آنها آگاه باشید:
 
-- If a contract receives Ether (without a function being called),
-  either the :ref:`receive Ether <receive-ether-function>`
-  or the :ref:`fallback <fallback-function>` function is executed.
-  If it does not have a receive nor a fallback function, the Ether will be
-  rejected (by throwing an exception). During the execution of one of these
-  functions, the contract can only rely on the "gas stipend" it is passed (2300
-  gas) being available to it at that time. This stipend is not enough to modify
-  storage (do not take this for granted though, the stipend might change with
-  future hard forks). To be sure that your contract can receive Ether in that
-  way, check the gas requirements of the receive and fallback functions
-  (for example in the "details" section in Remix).
+  1. اگر گیرنده یک قرارداد باشد، باعث می شود تابع دریافت یا عقب‌نشینی آن اجرا شود که به نوبهٔ خود می تواند قرارداد ارسالی را فراخوانی کند.
+  2. ارسال اتر ممکن است به دلیل عمق تماس بالاتر از ۱۰۲۴ با شکست مواجه شود. از آنجاییکه تماس گیرنده کنترل کاملِ عمق تماس دارد می‌تواند انتقال را وادار به شکست کند؛ شما می‌توانید این احتمال را لحاظ کنید یا از ``send`` استفاده کرده و توجه داشته باشید که مقدار بازگشتی همواره بررسی می‌شود. یا حتی بهتر از آن، قرارداد خود را با استفاده از الگویی بنویسید که گیرنده توانایی بازگیری (withdraw) اتر را داشته باشد.
+  3. همچنین ارسال اتر ممکن است به این دلیل با شکست مواجه شود که قرارداد دریافت کننده مقداری بیش از میزانِ گازِ اختصاص داده شده درخواست کند (یا صراحتاً با استفاده از :ref:`require <assert-and-require>` یا :ref:`assert <assert-and-require>` یا :ref:`revert <assert-and-require>` و یا گران بودن بیش از حدِ عملیات) - «گاز تمام شده است» (it runs out of gas, OOG). اگر از ``transfer`` یا ``send`` بهمراه بررسیِ مقدارِ برگشتی استفاده کنید ممکن است راهی برای گیرنده ایجاد شود تا پیشرفت قرارداد ارسالی را مسدود کند. مجدداً لازم به ذکر است که بهترین راهکار در اینجا نیز استفاده از یک :ref:`الگوی "withdraw" بجای الگوی "send" است <withdrawal_pattern>`.
 
-- There is a way to forward more gas to the receiving contract using
-  ``addr.call{value: x}("")``. This is essentially the same as ``addr.transfer(x)``,
-  only that it forwards all remaining gas and opens up the ability for the
-  recipient to perform more expensive actions (and it returns a failure code
-  instead of automatically propagating the error). This might include calling back
-  into the sending contract or other state changes you might not have thought of.
-  So it allows for great flexibility for honest users but also for malicious actors.
+عمق پشتهٔ تماس (Call Stack Depth)
+================================
 
-- Use the most precise units to represent the wei amount as possible, as you lose
-  any that is rounded due to a lack of precision.
+فراخوانی توابع خارجی هر لحظه ممکن است با شکست روبرو شود چراکه این فراخوانی‌ها از حداکثر اندازهٔ `پشتهٔ تماس <https://fa.wikipedia.org/wiki/%D9%BE%D8%B4%D8%AA%D9%87_%D8%AA%D9%85%D8%A7%D8%B3>`_ که ۱۰۲۴ است تجاوز می‌کنند. در چنین مواقعی سالیدیتی یک استثنا پرتاب می‌کند. بازیگران مخرب ممکن است بتوانند قبل از اینکه با قرارداد شما تعاملی داشته باشند، پشتهٔ تماس را وادار به افزایش به مقدار بالایی کنند. توجه داشته باشید که پس از هاردفورکِ `Tangerine Whistle <https://eips.ethereum.org/EIPS/eip-608>`_، `قانون ۶۳/۶۴ <https://eips.ethereum.org/EIPS/eip-150>`_ حملهٔ عمق پشتهٔ تماس را غیرعملی کرده است. همچنین قابل ذکر است که پشتهٔ تماس (call stack) و پشتهٔ عبارت (expression stack) ارتباطی باهم ندارند هرچند هردو دارای محدودیت اندازهٔ ۱۰۲۴ `اسلات <https://fa.wikipedia.org/wiki/%D8%A7%D8%B3%D9%84%D8%A7%D8%AA_(%D9%85%D8%B9%D9%85%D8%A7%D8%B1%DB%8C_%DA%A9%D8%A7%D9%85%D9%BE%DB%8C%D9%88%D8%AA%D8%B1)>`_ پشته هستند.
 
-- If you want to send Ether using ``address.transfer``, there are certain details to be aware of:
+توجه داشته باشید که ``.send()`` در صورتیکه پشتهٔ تماس خالی شود استثنایی پرتاب **نمی‌کند** بلکه در آن حالت ``false`` برمی‌گرداند. توابع سطح پایین ``.call()``، ``.delegatecall()`` و ``.staticcall()`` به همین روال رفتار می‌کنند.
 
-  1. If the recipient is a contract, it causes its receive or fallback function
-     to be executed which can, in turn, call back the sending contract.
-  2. Sending Ether can fail due to the call depth going above 1024. Since the
-     caller is in total control of the call depth, they can force the
-     transfer to fail; take this possibility into account or use ``send`` and
-     make sure to always check its return value. Better yet, write your
-     contract using a pattern where the recipient can withdraw Ether instead.
-  3. Sending Ether can also fail because the execution of the recipient
-     contract requires more than the allotted amount of gas (explicitly by
-     using :ref:`require <assert-and-require>`, :ref:`assert <assert-and-require>`,
-     :ref:`revert <assert-and-require>` or because the
-     operation is too expensive) - it "runs out of gas" (OOG).  If you
-     use ``transfer`` or ``send`` with a return value check, this might
-     provide a means for the recipient to block progress in the sending
-     contract. Again, the best practice here is to use a :ref:`"withdraw"
-     pattern instead of a "send" pattern <withdrawal_pattern>`.
+پروکسی‌های مجاز
+==============
 
-Call Stack Depth
-================
-
-External function calls can fail any time because they exceed the maximum
-call stack size limit of 1024. In such situations, Solidity throws an exception.
-Malicious actors might be able to force the call stack to a high value
-before they interact with your contract. Note that, since `Tangerine Whistle <https://eips.ethereum.org/EIPS/eip-608>`_ hardfork, the `63/64 rule <https://eips.ethereum.org/EIPS/eip-150>`_ makes call stack depth attack impractical. Also note that the call stack and the expression stack are unrelated, even though both have a size limit of 1024 stack slots.
-
-Note that ``.send()`` does **not** throw an exception if the call stack is
-depleted but rather returns ``false`` in that case. The low-level functions
-``.call()``, ``.delegatecall()`` and ``.staticcall()`` behave in the same way.
-
-Authorized Proxies
-==================
-
-If your contract can act as a proxy, i.e. if it can call arbitrary contracts
-with user-supplied data, then the user can essentially assume the identity
-of the proxy contract. Even if you have other protective measures in place,
-it is best to build your contract system such that the proxy does not have
-any permissions (not even for itself). If needed, you can accomplish that
-using a second proxy:
+اگر قرارداد شما می‌تواند بعنوان یک پروکسی عمل کند، یعنی اگر بتواند هر قرارداد دلخواهی را با داده‌های ارائه شده توسط کاربر فراخوانی کند، آن کاربر اساساً می‌تواند هویت قرارداد پروکسی را تقلید کند. حتی اگر از اقدامات حفاظتی دیگری نیز استفاده کرده باشید بهتر است سیستم قرارداد خود را طوری بسازید که پروکسی هیچ مجوزی (حتی برای خودش) نداشته باشد. درصورت نیاز می‌توانید با استفاده از یک پروکسی دوم به این امر دست یابید: 
 
 .. code-block:: solidity
 
@@ -233,10 +150,10 @@ using a second proxy:
         }
     }
 
-tx.origin
-=========
+متغیر سراسری tx.origin
+======================
 
-Never use tx.origin for authorization. Let's say you have a wallet contract like this:
+هرگز از tx.origin بعنوان مجوز استفاده نکنید. برای مثال فرض کنید یک قرارداد کیف پول مانند این دارید:
 
 .. code-block:: solidity
 
@@ -257,7 +174,7 @@ Never use tx.origin for authorization. Let's say you have a wallet contract like
         }
     }
 
-Now someone tricks you into sending Ether to the address of this attack wallet:
+اکنون فردی شما را فریب می‌دهد تا مقداری اتر به آدرس این کیف پولِ حمله ارسال کنید:
 
 .. code-block:: solidity
 
@@ -279,18 +196,16 @@ Now someone tricks you into sending Ether to the address of this attack wallet:
         }
     }
 
-If your wallet had checked ``msg.sender`` for authorization, it would get the address of the attack wallet, instead of the owner address. But by checking ``tx.origin``, it gets the original address that kicked off the transaction, which is still the owner address. The attack wallet instantly drains all your funds.
+اگر کیف پول شما ``msg.sender`` را برای صدور جواز بررسی کرده بود، بجای آدرس مالک آدرسی کیف پول حمله را دریافت می‌کرد. اما با بررسی ``tx.origin`` آدرس اصلی، که آغاز کنندهٔ تراکنش بود، را دریافت می‌کند، که همچنان آدرس مالک است. کیف پول حمله بلافاصله تمام سرمایهٔ شما را تخلیه می‌کند.
 
 .. _underflow-overflow:
 
-Two's Complement / Underflows / Overflows
+مکمل دو \ سرریز \ کمبود
 =========================================
 
-As in many programming languages, Solidity's integer types are not actually integers.
-They resemble integers when the values are small, but cannot represent arbitrarily large numbers.
+در سالیدیتی، همانند بسیاری از زبان‌های برنامه‌نویسی، `انواع <https://fa.wikipedia.org/wiki/%D9%86%D9%88%D8%B9_%D8%AF%D8%A7%D8%AF%D9%87>`_ عدد صحیح در واقع اعداد صحیح نیستند. وقتی مقادیر کوچک باشند اعداد صحیح را تشبیه می‌کنند، ولی نمی‌توانند هر عدد بزرگ دلخواه را نمایش دهند. 
 
-The following code causes an overflow because the result of the addition is too large
-to be stored in the type ``uint8``:
+کد زیر باعث `سرریزی <https://fa.wikipedia.org/wiki/%D8%B3%D8%B1%D8%B1%DB%8C%D8%B2_%D8%B9%D8%AF%D8%AF_%D8%B5%D8%AD%DB%8C%D8%AD>`_ می‌شود، زیرا نتیجه عمل جمع برای ذخیره شدن در نوع ``uint8`` بیش‌ازحد بزرگ است:
 
 .. code-block:: solidity
 
@@ -298,37 +213,23 @@ to be stored in the type ``uint8``:
   uint8 y = 1;
   return x + y;
 
-Solidity has two modes in which it deals with these overflows: Checked and Unchecked or "wrapping" mode.
+سالیدیتی دارای دو حالت است که در آن با این سرریزها سروکار دارد: چک‌شده (Checked) و چک‌نشده (Unchecked) یا حالت «بسته‌بندی» (wrapping).
 
-The default checked mode will detect overflows and cause a failing assertion. You can disable this check
-using ``unchecked { ... }``, causing the overflow to be silently ignored. The above code would return
-``0`` if wrapped in ``unchecked { ... }``.
+حالت پیش‌فرض چک‌شده سرریزها را تشخیص داده و باعث عدم موفقیت در تصدیق می‌شود. شما می‌توانید این بررسی را با استفاده از ``unchecked {...}`` غیرفعال نمایید، که این امر باعث می‌شود سرریزی بطور بی‌صدا نادیده گرفته شود. کد بالا اگر با ``unchecked {...}`` پیچیده شود، ``0`` برمی‌گرداند.
 
-Even in checked mode, do not assume you are protected from overflow bugs.
-In this mode, overflows will always revert. If it is not possible to avoid the
-overflow, this can lead to a smart contract being stuck in a certain state.
+حتی در حالت چک‌شده تصور نکنید که از باگ‌های سرریز در امان هستید. در این حالت سرریزها همیشه بازگشت داده می‌شوند. اگر امکان جلوگیری از سرریز وجود نداشته باشد، این امر می‌تواند منجر به گیر کردن قرارداد هوشمند در حالت خاصی شود.
 
-In general, read about the limits of two's complement representation, which even has some
-more special edge cases for signed numbers.
+بطور کلی بهتر است راجع به محدودیت‌های نمایش `مکمل دو <https://fa.wikipedia.org/wiki/%D9%85%DA%A9%D9%85%D9%84_%D8%AF%D9%88>`_، که حتی موارد لبه‌ای خاص‌تری برای اعداد علامت‌دار دارند، بخوانید.
 
-Try to use ``require`` to limit the size of inputs to a reasonable range and use the
-:ref:`SMT checker<smt_checker>` to find potential overflows.
+سعی کنید از ``require`` به منظور محدود کردن اندازهٔ ورودی‌ها به یک حوزهٔ مناسب و از :ref:`SMT checker<smt_checker>` برای یافتن سرریزهای احتمالی استفاده کنید.
 
 .. _clearing-mappings:
 
-Clearing Mappings
-=================
+پاک کردن نگاشت‌ها (Mappings)
+==========================
 
-The Solidity type ``mapping`` (see :ref:`mapping-types`) is a storage-only
-key-value data structure that does not keep track of the keys that were
-assigned a non-zero value.  Because of that, cleaning a mapping without extra
-information about the written keys is not possible.
-If a ``mapping`` is used as the base type of a dynamic storage array, deleting
-or popping the array will have no effect over the ``mapping`` elements.  The
-same happens, for example, if a ``mapping`` is used as the type of a member
-field of a ``struct`` that is the base type of a dynamic storage array.  The
-``mapping`` is also ignored in assignments of structs or arrays containing a
-``mapping``.
+نگاشت (``mapping``، در :ref:`mapping-types` بیشتر بخوانید) بعنوان نوعِ (type) سالیدیتی یک ساختمان دادهٔ مخصوص ذخیره‌سازی و `کلید-مقدار <https://fa.wikipedia.org/wiki/%D9%BE%D8%A7%DB%8C%DA%AF%D8%A7%D9%87_%D8%AF%D8%A7%D8%AF%D9%87_%DA%A9%D9%84%DB%8C%D8%AF%E2%80%93%D9%85%D9%82%D8%AF%D8%A7%D8%B1>`_ است که کلیدهایی را که مقدار غیرصفر به آنها اختصاص داده شده، پیگیری نمیکند. به همین خاطر تمیز کردن یک نگاشت بدون اطلاعات اضافی درمورد کلیدهای نوشته شده، جایز نیست.
+اگر یک ``mapping`` بعنوان نوع پایهٔ یک آرایه با ذخیره‌سازیِ پویا استفاده شود، حذف کردن یا پاپ کردن (popping) آرایه هیچ تأثیری روی اعضای نگاشت نخواهد گذاشت. برای مثال اگر یک ``mapping`` بعنوان نوعی از فیلدِ عضو یک ``struct`` استفاده شود که خود نوع پایهٔ یک آرایهٔ ذخیره‌سازیِ پویا باشد، باز همین اتفاق رخ می‌دهد. نگاشت همچنین در تخصیص ساختارها یا آرایه‌هایی که خود حاوی نگاشت باشند، نادیده گرفته می‌شود.
 
 .. code-block:: solidity
 
@@ -356,105 +257,59 @@ field of a ``struct`` that is the base type of a dynamic storage array.  The
         }
     }
 
-Consider the example above and the following sequence of calls: ``allocate(10)``,
-``writeMap(4, 128, 256)``.
-At this point, calling ``readMap(4, 128)`` returns 256.
-If we call ``eraseMaps``, the length of state variable ``array`` is zeroed, but
-since its ``mapping`` elements cannot be zeroed, their information stays alive
-in the contract's storage.
-After deleting ``array``, calling ``allocate(5)`` allows us to access
-``array[4]`` again, and calling ``readMap(4, 128)`` returns 256 even without
-another call to ``writeMap``.
+مثال بالا و این دنباله از فراخوانی‌ها را در نظر بگیرید: ``allocate(10)``، ```writeMap(4, 128, 256)``. در این مرحله فراخوانیِ ``readMap(4, 128)`` عدد 256 را برمی‌گرداند. اگر ``eraseMaps`` را فراخوانی کنیم طول متغیر حالت ``array`` صفر می‌شود ولی از آنجاییکه نمی‌توان اعضای نگاشتِ آنرا صفر کرد، اطلاعات آنها در مخزنِ قرارداد، زنده می‌مانند. پس از حذف ``array``، فراخوانی ``allocate(5)`` به ما امکان دسترسی دوباره به ``array[4]`` را می‌دهد و فراخوانی ``readMap(4, 128)`` عدد 256 را، حتی بدون فراخوانی دوبارهٔ ``writeMap``، برمی‌گرداند.
 
-If your ``mapping`` information must be deleted, consider using a library similar to
-`iterable mapping <https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol>`_,
-allowing you to traverse the keys and delete their values in the appropriate ``mapping``.
+اگر اطلاعات ``mapping`` شما بایستی حذف شود، استفاده از کتابخانه‌ای مانند `iterable mapping <https://github.com/ethereum/dapp-bin/blob/master/library/iterable_mapping.sol>`_ را در نظر داشته باشید چراکه به شما در یک نگاشت مناسب، امکان پیمودن کلیدها و حذف کردن مقدارشان را فراهم می‌آورد.
 
-Minor Details
-=============
+جزئیات کوچک
+============
 
-- Types that do not occupy the full 32 bytes might contain "dirty higher order bits".
-  This is especially important if you access ``msg.data`` - it poses a malleability risk:
-  You can craft transactions that call a function ``f(uint8 x)`` with a raw byte argument
-  of ``0xff000001`` and with ``0x00000001``. Both are fed to the contract and both will
-  look like the number ``1`` as far as ``x`` is concerned, but ``msg.data`` will
-  be different, so if you use ``keccak256(msg.data)`` for anything, you will get different results.
+- نوع‌هایی که ۳۲ بیت را بصورت کامل اشغال نمی‌کنند ممکن است حاوی «بیت‌های کثیف از مرتبهٔ بالاتر» باشند. این امر به‌ویژه زمانی مهم است که از دسترسی به ``msg.data`` استفاده کنید - که ریسک قابلیت انعطاف را بهمراه دارد: بعنوان مثال می‌توانید تراکنش‌هایی ایجاد کنید که تابع ``f(uint8 x)`` را با آرگومان بایت خام ``0xff000001`` و ``0xff000001`` فراخوانی کنند. هردو به قرارداد داده می‌شوند و هردو تاجاییکه به ``x`` مربوط باشد مانند عدد ``1`` بنظر می‌آیند، درحالیکه ``msg.data`` متفاوت است؛ پس اگر از ``keccak256(msg.data)`` استفاده کنید، نتایج گوناگونی دریافت خواهید کرد.
 
-***************
-Recommendations
-***************
+*******
+توصیه‌ها
+*******
 
-Take Warnings Seriously
+هشدارها را جدی بگیرید
+=====================
+
+اگر کامپایلر در مورد چیزی به شما هشدار (warning) داد باید آنرا تغییر دهید. حتی اگر فکر نمی‌کنید که این هشدار خاص پیامدهای امنیتی داشته باشد، این امکان وجود دارد که مشکل دیگری پشت آن پنهان باشد. هر اخطار کامپایلری که ما صادر می‌کنیم می‌تواند با تغییرات جزئی در کد به حالت بی‌صدا درآید.
+
+همواره از آخرین نسخهٔ کامپایلر استفاده کنید تا از همهٔ هشدارهایی که اخیراً صادر شده‌اند مطلع شوید.
+
+پیام‌هایی که از نوع ``info`` توسط کامپایلر صادر شده‌اند خطرناک نیستند و صرفاً پیشنهادات اضافی و اطلاعات اختیاری را نشان می‌دهند که کامپایلر فکر می‌کند ممکن است برای کاربر مفید باشند. 
+
+مقدار اتر را محدود کنید
 =======================
 
-If the compiler warns you about something, you should change it.
-Even if you do not think that this particular warning has security
-implications, there might be another issue buried beneath it.
-Any compiler warning we issue can be silenced by slight changes to the
-code.
+مقدار اتر (یا توکن‌های دیگر) را که می‌توان در یک قرارداد هوشمند ذخیره کرد، محدود کنید. اگر کد منبع، کامپایلر، یا پلتفرم دارای باگ باشد این سرمایه ممکن است از بین برود. با محدود سازی مقدار اتر، ضرر خود را محدود کنید.
 
-Always use the latest version of the compiler to be notified about all recently
-introduced warnings.
+قرارداد را کوچک و ماژولی نگه دارید
+==================================
 
-Messages of type ``info`` issued by the compiler are not dangerous, and simply
-represent extra suggestions and optional information that the compiler thinks
-might be useful to the user.
+قراردادهای خود را کوچک و طوری که به آسانی قابل درک باشند، نگه دارید. عملکردهای نامربوط را جداگانه در قراردادهای دیگر یا کتابخانه‌ها نگهداری نمایید. توصیه‌های کلی دربارهٔ کیفیت کدِ منبع مسلماً قابل اعمال هستند: مقدار متغیرهای محلی، طول توابع و غیره را محدود کنید. توابع خود را مستند کنید تا دیگران هدف و قصد شما را دیده و اگر تفاوتی بین اسناد و آنچه که کد انجام می‌دهد وجود داشته باشد را آشکار کنند.
 
-Restrict the Amount of Ether
-============================
+از الگوی بررسی‌ها-اثرات-تعاملات استفاده کنید
+==========================================
 
-Restrict the amount of Ether (or other tokens) that can be stored in a smart
-contract. If your source code, the compiler or the platform has a bug, these
-funds may be lost. If you want to limit your loss, limit the amount of Ether.
+اکثر توابع ابتدا برخی از بررسی‌ها را بجا می‌آورند (چه کسی تابع را فراخوانی کرد، آیا آرگومان‌ها در محدوده هستند، آیا اتر کافی ارسال کرده‌اند، آیا فرد توکن دارد، ...). این بررسی‌ها باید اول از همه انجام شوند.
 
-Keep it Small and Modular
-=========================
+پس از اینکه همهٔ بررسی‌ها گذرانده شدند، بعنوان گام دوم، تأثیرات می‌توانند روی قرارداد جاری اعمال شوند. تعامل با سایر قراردادها باید بعنوان آخرین مرحله در هر تابعی اعمال شود.
 
-Keep your contracts small and easily understandable. Single out unrelated
-functionality in other contracts or into libraries. General recommendations
-about source code quality of course apply: Limit the amount of local variables,
-the length of functions and so on. Document your functions so that others
-can see what your intention was and whether it is different than what the code does.
+قراردادهای اولیه برخی از اثرات را به تعویق می‌انداختند و منتظر فراخوانی‌هایی توسط تابع خارجی می‌شدند. بدلیل مشکل بازدُخولی که در بالا به آن پرداخته شده، این غالباً یک اشتباه جدی به حساب می‌آید.
 
-Use the Checks-Effects-Interactions Pattern
-===========================================
+همچنین توجه داشته باشید که فراخوانی به قراردادهای شناخته شده ممکن است به نوبهٔ خود باعث ایجاد فراخوانی به قراردادهای ناشناخته شود. بنابراین بهتر است که همیشه از این الگو پیروی کنید.
 
-Most functions will first perform some checks (who called the function,
-are the arguments in range, did they send enough Ether, does the person
-have tokens, etc.). These checks should be done first.
+یک حالت شکست امن قرار دهید
+==========================
 
-As the second step, if all checks passed, effects to the state variables
-of the current contract should be made. Interaction with other contracts
-should be the very last step in any function.
+درحالیکه غیرمتمرکز کردن سیستم بطور کامل، هرگونه واسطه‌ای را از میان می‌برد، شاید قرار دادن نوعی مکانیسم `شکست امن <https://fa.wikipedia.org/wiki/%D8%B4%DA%A9%D8%B3%D8%AA_%D8%A7%D9%85%D9%86>`_، مخصوصاً برای کد جدید، ایدهٔ خوبی باشد:
 
-Early contracts delayed some effects and waited for external function
-calls to return in a non-error state. This is often a serious mistake
-because of the reentrancy problem explained above.
+شما می‌توانید تابعی را به قرارداد هوشمند خود اضافه کنید که برخی از بررسی‌ها را بصورت خودآزمایی انجام دهد، مثلاً «آیا اتری نشت کرده است؟»، «آیا مجموع توکن‌ها با موجودی قرارداد برابر است؟»، یا مواردی از این قبیل. بخاطر داشته باشید که نمی‌توانید بیش از حد گاز برای این منظور استفاده کنید، پس یاری گرفتن از محاسبات جایی خارج از زنجیره (off-chain) ممکن است نیاز باشد.
 
-Note that, also, calls to known contracts might in turn cause calls to
-unknown contracts, so it is probably better to just always apply this pattern.
+اگر خودآزمایی با شکست مواجه شود قرارداد بصورت خودکار به نوعی حالت «شکست امن» تغییر می‌کند، که برای مثال اکثر ویژگی‌ها را غیرفعال کرده، کنترل را به شخص ثالثی که ثابت و قابل اعتماد است واگذار می‌کند، یا اینکه قرارداد را به یک قرارداد ساده‌ای مانند «پولم را پس بده» تبدیل می‌کند.
 
-Include a Fail-Safe Mode
-========================
+از دوست خود درخواست بررسی کنید
+================================
 
-While making your system fully decentralised will remove any intermediary,
-it might be a good idea, especially for new code, to include some kind
-of fail-safe mechanism:
-
-You can add a function in your smart contract that performs some
-self-checks like "Has any Ether leaked?",
-"Is the sum of the tokens equal to the balance of the contract?" or similar things.
-Keep in mind that you cannot use too much gas for that, so help through off-chain
-computations might be needed there.
-
-If the self-check fails, the contract automatically switches into some kind
-of "failsafe" mode, which, for example, disables most of the features, hands over
-control to a fixed and trusted third party or just converts the contract into
-a simple "give me back my money" contract.
-
-Ask for Peer Review
-===================
-
-The more people examine a piece of code, the more issues are found.
-Asking people to review your code also helps as a cross-check to find out whether your code
-is easy to understand - a very important criterion for good smart contracts.
+هرچه افراد بیشتری یک قطعه کد را بررسی کنند مشکلات بیشتری کشف می‌شوند. همچنین درخواست از دیگران برای مرور کد به شما امکان بررسی متقابل را می‌دهد که باعث می‌شود دریابید آیا به آسانی قابل درک است یا نه - معیاری بسیار مهم برای قراردادهای هوشمند خوب.
