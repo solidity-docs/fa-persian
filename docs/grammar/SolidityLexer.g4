@@ -9,10 +9,9 @@ ReservedKeywords:
 	| 'partial' | 'promise' | 'reference' | 'relocatable' | 'sealed' | 'sizeof' | 'static'
 	| 'supports' | 'switch' | 'typedef' | 'typeof' | 'var';
 
-Pragma: 'pragma' -> pushMode(PragmaMode);
 Abstract: 'abstract';
-Anonymous: 'anonymous';
 Address: 'address';
+Anonymous: 'anonymous';
 As: 'as';
 Assembly: 'assembly' -> pushMode(AssemblyBlockMode);
 Bool: 'bool';
@@ -30,13 +29,11 @@ Else: 'else';
 Emit: 'emit';
 Enum: 'enum';
 Error: 'error'; // not a real keyword
-Revert: 'revert'; // not a real keyword
 Event: 'event';
 External: 'external';
 Fallback: 'fallback';
 False: 'false';
 Fixed: 'fixed' | ('fixed' [1-9][0-9]* 'x' [1-9][0-9]*);
-From: 'from'; // not a real keyword
 /**
  * Bytes types of fixed length.
  */
@@ -46,7 +43,9 @@ FixedBytes:
 	'bytes17' | 'bytes18' | 'bytes19' | 'bytes20' | 'bytes21' | 'bytes22' | 'bytes23' | 'bytes24' |
 	'bytes25' | 'bytes26' | 'bytes27' | 'bytes28' | 'bytes29' | 'bytes30' | 'bytes31' | 'bytes32';
 For: 'for';
+From: 'from'; // not a real keyword
 Function: 'function';
+Global: 'global'; // not a real keyword
 Hex: 'hex';
 If: 'if';
 Immutable: 'immutable';
@@ -63,15 +62,17 @@ New: 'new';
 /**
  * Unit denomination for numbers.
  */
-NumberUnit: 'wei' | 'gwei' | 'ether' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'years';
+SubDenomination: 'wei' | 'gwei' | 'ether' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'years';
 Override: 'override';
 Payable: 'payable';
+Pragma: 'pragma' -> pushMode(PragmaMode);
 Private: 'private';
 Public: 'public';
 Pure: 'pure';
 Receive: 'receive';
 Return: 'return';
 Returns: 'returns';
+Revert: 'revert'; // not a real keyword
 /**
  * Sized signed integer types.
  * int is an alias of int256.
@@ -89,6 +90,7 @@ Try: 'try';
 Type: 'type';
 Ufixed: 'ufixed' | ('ufixed' [1-9][0-9]+ 'x' [1-9][0-9]+);
 Unchecked: 'unchecked';
+Unicode: 'unicode';
 /**
  * Sized unsigned integer types.
  * uint is an alias of uint256.
@@ -197,9 +199,7 @@ fragment EscapeSequence:
 /**
  * A single quoted string literal allowing arbitrary unicode characters.
  */
-UnicodeStringLiteral:
-	'unicode"' DoubleQuotedUnicodeStringCharacter* '"'
-	| 'unicode\'' SingleQuotedUnicodeStringCharacter* '\'';
+UnicodeStringLiteral: 'unicode' (('"' DoubleQuotedUnicodeStringCharacter* '"') | ('\'' SingleQuotedUnicodeStringCharacter* '\''));
 //@doc:inline
 fragment DoubleQuotedUnicodeStringCharacter: ~["\r\n\\] | EscapeSequence;
 //@doc:inline
@@ -222,6 +222,14 @@ fragment EvenHexDigits: HexCharacter HexCharacter ('_'? HexCharacter HexCharacte
 fragment HexCharacter: [0-9A-Fa-f];
 
 /**
+ * Scanned but not used by any rule, i.e, disallowed.
+ * solc parser considers number starting with '0', not immediately followed by '.' or 'x' as
+ * octal, even if non octal digits '8' and '9' are present.
+ */
+OctalNumber: '0' DecimalDigits ('.' DecimalDigits)?;
+
+
+/**
  * A decimal number literal consists of decimal digits that may be delimited by underscores and
  * an optional positive or negative exponent.
  * If the digits contain a decimal point, the literal has fixed point type.
@@ -229,6 +237,12 @@ fragment HexCharacter: [0-9A-Fa-f];
 DecimalNumber: (DecimalDigits | (DecimalDigits? '.' DecimalDigits)) ([eE] '-'? DecimalDigits)?;
 //@doc:inline
 fragment DecimalDigits: [0-9] ('_'? [0-9])* ;
+
+
+/**
+ * This is needed to avoid successfully parsing a number followed by a string with no whitespace between.
+ */
+DecimalNumberFollowedByIdentifier: DecimalNumber Identifier;
 
 
 /**
@@ -250,6 +264,12 @@ mode AssemblyBlockMode;
 //@doc:inline
 AssemblyDialect: '"evmasm"';
 AssemblyLBrace: '{' -> popMode, pushMode(YulMode);
+
+AssemblyFlagString: '"' DoubleQuotedStringCharacter+ '"';
+
+AssemblyBlockLParen: '(';
+AssemblyBlockRParen: ')';
+AssemblyBlockComma: ',';
 
 AssemblyBlockWS: [ \t\r\n\u000C]+ -> skip ;
 AssemblyBlockCOMMENT: '/*' .*? '*/' -> channel(HIDDEN) ;
@@ -284,8 +304,8 @@ YulEVMBuiltin:
 	| 'returndatacopy' | 'extcodehash' | 'create' | 'create2' | 'call' | 'callcode'
 	| 'delegatecall' | 'staticcall' | 'return' | 'revert' | 'selfdestruct' | 'invalid'
 	| 'log0' | 'log1' | 'log2' | 'log3' | 'log4' | 'chainid' | 'origin' | 'gasprice'
-	| 'blockhash' | 'coinbase' | 'timestamp' | 'number' | 'difficulty' | 'gaslimit'
-	| 'basefee';
+	| 'blockhash' | 'coinbase' | 'timestamp' | 'number' | 'difficulty' | 'prevrandao'
+	| 'gaslimit' | 'basefee';
 
 YulLBrace: '{' -> pushMode(YulMode);
 YulRBrace: '}' -> popMode;
