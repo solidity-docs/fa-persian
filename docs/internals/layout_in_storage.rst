@@ -56,7 +56,8 @@ as individual values.
      of Solidity due to the fact that storage pointers can be passed to libraries. This means that
      any change to the rules outlined in this section is considered a breaking change
      of the language and due to its critical nature should be considered very carefully before
-     being executed.
+     being executed. In the event of such a breaking change, we would want to release a
+     compatibility mode in which the compiler would generate bytecode supporting the old layout.
 
 
 Mappings and Dynamic Arrays
@@ -90,7 +91,7 @@ The value corresponding to a mapping key ``k`` is located at ``keccak256(h(k) . 
 where ``.`` is concatenation and ``h`` is a function that is applied to the key depending on its type:
 
 - for value types, ``h`` pads the value to 32 bytes in the same way as when storing the value in memory.
-- for strings and byte arrays, ``h`` computes the ``keccak256`` hash of the unpadded data.
+- for strings and byte arrays, ``h(k)`` is just the unpadded data.
 
 If the mapping value is a
 non-value type, the computed slot marks the start of the data. If the value is of struct type,
@@ -139,8 +140,7 @@ by checking if the lowest bit is set: short (not set) and long (set).
 
 .. note::
   Handling invalidly encoded slots is currently not supported but may be added in the future.
-  If you are compiling via the experimental IR-based compiler pipeline, reading an invalidly encoded
-  slot results in a ``Panic(0x22)`` error.
+  If you are compiling via IR, reading an invalidly encoded slot results in a ``Panic(0x22)`` error.
 
 JSON Output
 ===========
@@ -153,7 +153,7 @@ the :ref:`standard JSON interface <compiler-api>`.  The output is a JSON object 
 element has the following form:
 
 
-.. code::
+.. code-block:: json
 
 
     {
@@ -181,7 +181,7 @@ The given ``type``, in this case ``t_uint256`` represents an element in
 ``types``, which has the form:
 
 
-.. code::
+.. code-block:: json
 
     {
         "encoding": "inplace",
@@ -208,7 +208,7 @@ of types), arrays have its ``base`` type, and structs list their ``members`` in
 the same format as the top-level ``storage`` (see :ref:`above
 <storage-layout-top-level>`).
 
-.. note ::
+.. note::
   The JSON output format of a contract's storage layout is still considered experimental
   and is subject to change in non-breaking releases of Solidity.
 
@@ -232,13 +232,13 @@ value and reference types, types that are encoded packed, and nested types.
         uint y;
         S s;
         address addr;
-        mapping (uint => mapping (address => bool)) map;
+        mapping(uint => mapping(address => bool)) map;
         uint[] array;
         string s1;
         bytes b1;
     }
 
-.. code:: json
+.. code-block:: json
 
     {
       "storage": [
