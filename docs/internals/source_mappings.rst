@@ -29,7 +29,14 @@ Mappingهای سورس
 
 
 
+<<<<<<< HEAD
 .. note ::
+=======
+.. note::
+    In the case of instructions that are not associated with any particular source file,
+    the source mapping assigns an integer identifier of ``-1``. This may happen for
+    bytecode sections stemming from compiler-generated inline assembly statements.
+>>>>>>> english/develop
 
     در مورد دستورالعمل‌هایی که با هیچ سورس فایل خاصی مرتبط نیستند، سورس  mapping یک مشخص 
     کننده عدد اینتیجر   ``1-`` را اختصاص می‌دهد. این ممکن است برای بخش‌های بایت‌کد ناشی از دستورات 
