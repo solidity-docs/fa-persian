@@ -33,7 +33,7 @@
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
-
+    // This will report a warning due to deprecated selfdestruct
 
     contract Owned {
         constructor() { owner = payable(msg.sender); }
@@ -47,7 +47,7 @@
     // accessed externally via `this`, though.
     contract Destructible is Owned {
         // The keyword `virtual` means that the function can change
-        // its behaviour in derived classes ("overriding").
+        // its behavior in derived classes ("overriding").
         function destroy() virtual public {
             if (msg.sender == owner) selfdestruct(owner);
         }
@@ -69,9 +69,9 @@
     }
 
 
-    // Multiple inheritance is possible. Note that `owned` is
+    // Multiple inheritance is possible. Note that `Owned` is
     // also a base class of `Destructible`, yet there is only a single
-    // instance of `owned` (as for virtual inheritance in C++).
+    // instance of `Owned` (as for virtual inheritance in C++).
     contract Named is Owned, Destructible {
         constructor(bytes32 name) {
             Config config = Config(0xD5f9D8D94886E70b06E474c3fB14Fd43E2f23970);
@@ -108,7 +108,7 @@
 
         // Here, we only specify `override` and not `virtual`.
         // This means that contracts deriving from `PriceFeed`
-        // cannot change the behaviour of `destroy` anymore.
+        // cannot change the behavior of `destroy` anymore.
         function destroy() public override(Destructible, Named) { Named.destroy(); }
         function get() public view returns(uint r) { return info; }
 
@@ -122,6 +122,7 @@
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -154,6 +155,7 @@
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -274,8 +276,13 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 وراثتی که از قرارداد مورد نظر شروع و در یک قرارداد اشاره شده یک تابع به همراه امضا آن
 که بازنویسی نشده است پایان می یابد.
 
+<<<<<<< HEAD
 اگر تابعی را به عنوان ``virtual`` که بازنویسی شده است نشان گذاری نکنید، قرارداد هایی که آن
 تابع را به ارث می برند نمی توانند رفتار آن را تغییر دهند.
+=======
+If you do not mark a function that overrides as ``virtual``, derived
+contracts can no longer change the behavior of that function.
+>>>>>>> english/develop
 
 .. note::
 
@@ -397,8 +404,8 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
     abstract contract A {
         uint public a;
 
-        constructor(uint _a) {
-            a = _a;
+        constructor(uint a_) {
+            a = a_;
         }
     }
 
@@ -411,6 +418,7 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 مقادیر معتبر از خارج داد، بلکه فقط از طریق سازنده ی قرادادی که از آن اجرا شده است
 امکان پذیر می باشد.
 
+<<<<<<< HEAD
 .. warning ::
     تا قبل از نسخه 0.4.22، سازنده ها به عنوان تابع هم نام با نام قرارداد تعریف می
     شدند. این نحوه نوشتاری منسوخ شد و دیگر از نسخه 0.5.0 مجاز نیست.
@@ -418,9 +426,18 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 .. warning ::
     تا قبل از نسخه 0.7.0، شما باید محدوده ی دید سازنده ها را توسط ``internal`` یا
     ``public`` مشخص می کردید.
+=======
+.. warning::
+    Prior to version 0.4.22, constructors were defined as functions with the same name as the contract.
+    This syntax was deprecated and is not allowed anymore in version 0.5.0.
+
+.. warning::
+    Prior to version 0.7.0, you had to specify the visibility of constructors as either
+    ``internal`` or ``public``.
+>>>>>>> english/develop
 
 
-.. index:: ! base;constructor
+.. index:: ! base;constructor, inheritance list, contract;abstract, abstract contract
 
 آرگومانها برای سازنده های پایه 
 ===============================
@@ -436,7 +453,7 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 
     contract Base {
         uint x;
-        constructor(uint _x) { x = _x; }
+        constructor(uint x_) { x = x_; }
     }
 
     // Either directly specify in the inheritance list...
@@ -444,11 +461,21 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
         constructor() {}
     }
 
-    // or through a "modifier" of the derived constructor.
+    // or through a "modifier" of the derived constructor...
     contract Derived2 is Base {
-        constructor(uint _y) Base(_y * _y) {}
+        constructor(uint y) Base(y * y) {}
     }
 
+    // or declare abstract...
+    abstract contract Derived3 is Base {
+    }
+
+    // and have the next concrete derived contract initialize it.
+    contract DerivedFromDerived is Derived3 {
+        constructor() Base(10 + 10) {}
+    }
+
+<<<<<<< HEAD
 روش اول مستقیما از طریق لیست ورارثت است (``is Base(7)``). روش دیگر از روش اول به این
 صورت است که یک اصلاح کننده به عنوان بخشی از سازنده فراخوانی شده استفاده یم شود
 (``Base(_y * _y)``). انجام روش اول راحت تر است اگر ورودی سازنده یک ثابت باید و رفتار
@@ -459,6 +486,26 @@ owned) تعلق دارد. تابع واقعی که هنگام استفاده ا�
 
 اگر یک قرارداد ارث گرفته شده ورودی های همه سازنده های قرارداد پایه خود را مشخص نکند،
 abstract خواهد بود.
+=======
+One way is directly in the inheritance list (``is Base(7)``).  The other is in
+the way a modifier is invoked as part of
+the derived constructor (``Base(y * y)``). The first way to
+do it is more convenient if the constructor argument is a
+constant and defines the behavior of the contract or
+describes it. The second way has to be used if the
+constructor arguments of the base depend on those of the
+derived contract. Arguments have to be given either in the
+inheritance list or in modifier-style in the derived constructor.
+Specifying arguments in both places is an error.
+
+If a derived contract does not specify the arguments to all of its base
+contracts' constructors, it must be declared abstract. In that case, when
+another contract derives from it, that other contract's inheritance list
+or constructor must provide the necessary parameters
+for all base classes that haven't had their parameters specified (otherwise,
+that other contract must be declared abstract as well). For example, in the above
+code snippet, see ``Derived3`` and ``DerivedFromDerived``.
+>>>>>>> english/develop
 
 .. index:: ! inheritance;multiple, ! linearization, ! C3 linearization
 
