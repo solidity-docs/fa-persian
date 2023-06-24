@@ -106,6 +106,7 @@ message call و نه مستقیماً از طریق jump ها، از هر دو �
 
 .. warning::
 
+<<<<<<< HEAD
 مراقب باشید ``feed.info{value: 10, gas: 800}``  فقط  ``value`` و مقدار  ``gas`` ارسال 
 شده با فراخوانی تابع را به صورت محلی تعیین کند و پرانتز در انتها فراخوانی واقعی  را انجام دهد. 
 بنابراین  ``feed.info{value: 10, gas: 800}``   تابع را فراخوانی نمی‌کند و تنظیمات ``value`` و ``gas`` از بین 
@@ -117,6 +118,26 @@ message call و نه مستقیماً از طریق jump ها، از هر دو �
 :ref:`فراخوانی‌های سطح پایین<address_related>` که به جای قرارداد instances روی آدرس‌ها کار می‌کنند، انجام نمی‌شود.
 
 اگر قرارداد فراخوانی شده خودش یک اکستنشن ایجاد کند یا گاز تمام شود، توابع فراخوانی باعث ایجاد اکستنشن می‌شوند.
+=======
+Due to the fact that the EVM considers a call to a non-existing contract to
+always succeed, Solidity uses the ``extcodesize`` opcode to check that
+the contract that is about to be called actually exists (it contains code)
+and causes an exception if it does not. This check is skipped if the return
+data will be decoded after the call and thus the ABI decoder will catch the
+case of a non-existing contract.
+
+Note that this check is not performed in case of :ref:`low-level calls <address_related>` which
+operate on addresses rather than contract instances.
+
+.. note::
+    Be careful when using high-level calls to
+    :ref:`precompiled contracts <precompiledContracts>`,
+    since the compiler considers them non-existing according to the
+    above logic even though they execute code and can return data.
+
+Function calls also cause exceptions if the called contract itself
+throws an exception or goes out of gas.
+>>>>>>> english/develop
 
 .. warning::
 
@@ -133,12 +154,17 @@ message call و نه مستقیماً از طریق jump ها، از هر دو �
 
 .. note::
 
+<<<<<<< HEAD
     قبل از  سالیدیتی 0.6.2 ، روش توصیه شده برای تعیین مقدار و گاز استفاده 
     از  ``()f.value(x).gas(g)`` بود. این در سالیدیتی 0.6.2 منسوخ شد و دیگر از سالیدیتی 0.7.0 دیگر امکان پذیر نیست.
 
 
 فراخوان‌های نامگذاری شده و پارامترهای تابع ناشناس 
 ---------------------------------------------
+=======
+Function Calls with Named Parameters
+------------------------------------
+>>>>>>> english/develop
 
 آرگومان‌های فراخوانی تابع را می‌توان با نام، به هر ترتیب، در صورتی که در ``{ }``  محصور شده باشد، ارائه دهید، 
 همانطور که در مثال زیر مشاهده می‌شود. لیست آرگومان باید توسط نام با پارامترهای اعلان تابع منطبق شود، 
@@ -160,15 +186,24 @@ message call و نه مستقیماً از طریق jump ها، از هر دو �
         function set(uint key, uint value) public {
             data[key] = value;
         }
-
     }
 
+<<<<<<< HEAD
 نام پارامترهای تابع حذف شده
 --------------------------------
 
 نام پارامترهای استفاده نشده (به ویژه پارامترهای برگشتی) را می توان حذف کرد. این پارامترها هنوز روی پشته 
 وجود دارند، اما قابل دسترسی نیستند.
 
+=======
+Omitted Names in Function Definitions
+-------------------------------------
+
+The names of parameters and return values in the function declaration can be omitted.
+Those items with omitted names will still be present on the stack, but they are
+inaccessible by name. An omitted return value name
+can still return a value to the caller by use of the ``return`` statement.
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -272,7 +307,7 @@ instance از  ``D`` با استفاده از گزینه  ``value`` وجود د�
                 salt,
                 keccak256(abi.encodePacked(
                     type(D).creationCode,
-                    arg
+                    abi.encode(arg)
                 ))
             )))));
 
@@ -282,6 +317,16 @@ instance از  ``D`` با استفاده از گزینه  ``value`` وجود د�
     }
 
 .. warning::
+<<<<<<< HEAD
+=======
+    There are some peculiarities in relation to salted creation. A contract can be
+    re-created at the same address after having been destroyed. Yet, it is possible
+    for that newly created contract to have a different deployed bytecode even
+    though the creation bytecode has been the same (which is a requirement because
+    otherwise the address would change). This is due to the fact that the constructor
+    can query external state that might have changed between the two creations
+    and incorporate that into the deployed bytecode before it is stored.
+>>>>>>> english/develop
 
     یک سری ویژگی‌های مربوط به  salted creationوجود دارد. پس از از بین رفتن، می‌توان یک قرارداد را 
     در همان آدرس دوباره ایجاد کرد. با این وجود، آن قرارداد تازه ایجاد شده ممکن است دارای بایت‌کد دیپلوی 
@@ -355,6 +400,12 @@ instance از  ``D`` با استفاده از گزینه  ``value`` وجود د�
 
 
 .. warning::
+<<<<<<< HEAD
+=======
+    Be careful when assigning to multiple variables at the same time when
+    reference types are involved, because it could lead to unexpected
+    copying behavior.
+>>>>>>> english/develop
 
     هنگام اختصاص دادن چند متغیر به طور همزمان هنگامی که انواع مرجع درگیر هستند، مراقب باشید، زیرا 
     ممکن است منجر به رفتار کپی غیر منتظره شود.
@@ -364,6 +415,7 @@ instance از  ``D`` با استفاده از گزینه  ``value`` وجود د�
 عوارض آرایه‌ها و ساختارها
 ------------------------------------
 
+<<<<<<< HEAD
 سمنتیک assignment ها برای تایپ‎‌های non-value مانند آرایه‌ها و ساختارها، از جمله  ``bytes`` 
 و  ``string``  پیچیده تر است، برای اطلاعات بیشتر به قسمت  :ref:`Data location و assignment behaviour <data-location-assignment>` 
 مراجعه کنید.
@@ -374,6 +426,10 @@ instance از  ``D`` با استفاده از گزینه  ``value`` وجود د�
 مِمُوری ایجاد می‌کند. با این حال،  ``h(x)`` با موفقیت  ``x`` را تغییر می‌دهد زیرا فقط یک رفرنس منتقل می‌شود 
 و نه یک کپی.
 
+=======
+The semantics of assignments are more complicated for non-value types like arrays and structs,
+including ``bytes`` and ``string``, see :ref:`Data location and assignment behavior <data-location-assignment>` for details.
+>>>>>>> english/develop
 
 
 .. code-block:: solidity
@@ -506,6 +562,7 @@ overflow  یا  underflow وضعیتی است که در آن مقدار حاصل
 
 
 
+<<<<<<< HEAD
 قبل از سالیدیتی 0.8.0 ، عملیات حسابی همیشه در صورت overflow  یا  underflow شدن منجر به 
 استفاده گسترده از کتابخانه هایی می‌شود که چک‌های اضافی  را ایجاد می‌کنند.
 
@@ -518,6 +575,9 @@ overflow  یا  underflow وضعیتی است که در آن مقدار حاصل
 
 برای به دست آوردن رفتار قبلی، می‌توان از یک بلوک  ``unchecked`` استفاده کرد:
 
+=======
+To obtain the previous behavior, an ``unchecked`` block can be used:
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -665,6 +725,12 @@ s
 یک اکسپشن ``Error(string)``  (یا یک اکسپشن بدون داده) توسط کامپایلر در شرایط زیر ایجاد می‌شود:
 
 
+<<<<<<< HEAD
+=======
+For the following cases, the error data from the external call
+(if provided) is forwarded. This means that it can either cause
+an ``Error`` or a ``Panic`` (or whatever else was given):
+>>>>>>> english/develop
 
 
 #.	فراخوانی  ``require(x)``  در جایی که ``x``  به صورت  ``false`` ارزیابی شود.
@@ -712,7 +778,7 @@ and ``assert`` for internal error checking.
             addr.transfer(msg.value / 2);
             // Since transfer throws an exception on failure and
             // cannot call back here, there should be no way for us to
-            // still have half of the money.
+            // still have half of the Ether.
             assert(address(this).balance == balanceBeforeTransfer - msg.value / 2);
             return address(this).balance;
         }
@@ -727,6 +793,11 @@ and ``assert`` for internal error checking.
 در هر دو حالت، فراخوانی کننده می‌تواند با استفاده از ``try``/``catch`` واکنش نشان دهد، اما تغییرات در 
 فراخوانی گیرنده همیشه برمی‌گردد.
 
+<<<<<<< HEAD
+=======
+In both cases, the caller can react on such failures using ``try``/``catch``, but
+the changes in the callee will always be reverted.
+>>>>>>> english/develop
 
 .. note::
 
@@ -745,6 +816,11 @@ revert مستقیم را می‌توان با استفاده از دستور  ``
 
 دستور  ``revert`` یک خطای سفارشی را به عنوان آرگومان مستقیم و بدون پرانتز می‌گیرد:
 
+<<<<<<< HEAD
+=======
+For backward-compatibility reasons, there is also the ``revert()`` function, which uses parentheses
+and accepts a string:
+>>>>>>> english/develop
 
 
     ;revert CustomError(arg1, arg2)
@@ -886,7 +962,12 @@ NatSpec ارائه کرد که هیچ هزینه‌ای را متحمل نمی�
 پس از بلوک های گرفتن ادامه می یابد.
 
 
+<<<<<<< HEAD
 سالیدیتی بسته به نوع خطا از تایپ‌های مختلف بلوک‌های catch پشتیبانی می‌کند:
+=======
+It is planned to support other types of error data in the future.
+The strings ``Error`` and ``Panic`` are currently parsed as is and are not treated as identifiers.
+>>>>>>> english/develop
 
 
 
@@ -928,6 +1009,7 @@ NatSpec ارائه کرد که هیچ هزینه‌ای را متحمل نمی�
 
 
 .. note::
+<<<<<<< HEAD
 
     دلیل یک فراخوانی ناموفق می‌تواند manifold باشد. تصور نکنید که پیام خطا مستقیماً از قرارداد فراخوانی 
     شده می‌آید: ممکن است خطا در اعماق فراخوانی زنجیره رخ داده باشد و قرارداد فراخوانی شده فقط آن را 
@@ -935,3 +1017,13 @@ NatSpec ارائه کرد که هیچ هزینه‌ای را متحمل نمی�
     عمدی: فراخوانی کننده همیشه 63/64 گاز را در فراخوانی حفظ می‌کند و بنابراین حتی اگر قرارداد فراخوانی 
     کننده از بین برود، فراخوانی کننده هنوز مقداری گاز باقی مانده دارد.
 
+=======
+    The reason behind a failed call can be manifold. Do not assume that
+    the error message is coming directly from the called contract:
+    The error might have happened deeper down in the call chain and the
+    called contract just forwarded it. Also, it could be due to an
+    out-of-gas situation and not a deliberate error condition:
+    The caller always retains at least 1/64th of the gas in a call and thus
+    even if the called contract goes out of gas, the caller still
+    has some gas left.
+>>>>>>> english/develop
