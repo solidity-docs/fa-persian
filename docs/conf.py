@@ -31,7 +31,10 @@ def setup(sphinx):
     sphinx.add_lexer('Solidity', SolidityLexer)
     sphinx.add_lexer('Yul', YulLexer)
 
+    sphinx.add_css_file('css/fonts.css')
     sphinx.add_css_file('css/custom.css')
+    sphinx.add_css_file('css/custom-dark.css')
+    sphinx.add_css_file('css/pygments.css')
 
 # -- General configuration ------------------------------------------------
 
@@ -45,6 +48,7 @@ extensions = [
     'sphinx_a4doc',
     'html_extra_template_renderer',
     'remix_code_links',
+    'sphinx.ext.imgconverter',
 ]
 
 a4_base_path = os.path.dirname(__file__) + '/grammar'
@@ -63,7 +67,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Solidity'
-copyright = '2016-2021, Ethereum'
+project_copyright = '2016-2023, The Solidity Authors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -74,7 +78,7 @@ with open('../CMakeLists.txt', 'r', encoding='utf8') as f:
    # version = re.search('PROJECT_VERSION "([^"]+)"', f.read()).group(1)
    version="0.8.4"
 # The full version, including alpha/beta/rc tags.
-if os.path.isfile('../prerelease.txt') != True or os.path.getsize('../prerelease.txt') == 0:
+if not os.path.isfile('../prerelease.txt') or os.path.getsize('../prerelease.txt') == 0:
     release = version
 else:
     # This is a prerelease version
@@ -92,7 +96,7 @@ language = "fa"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'contracts', 'types', 'examples', 'grammar', 'ir']
+exclude_patterns = ['_build', 'contracts', 'types', 'examples', 'grammar']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -132,7 +136,6 @@ html_theme = 'sphinx_rtd_theme'
 # documentation.
 html_theme_options = {
     'logo_only': True,
-    'style_nav_header_background': '#65afff',
     'display_version': True,
 }
 
@@ -148,12 +151,12 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "logo.svg"
+# html_logo = "logo.svg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = "_static/img/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -162,12 +165,12 @@ html_static_path = ['_static']
 
 html_css_files = ["css/toggle.css"]
 
-html_js_files = ["js/toggle.js"]
+html_js_files = ["js/constants.js", "js/initialize.js", "js/toggle.js"]
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
 # directly to the root of the documentation.
-html_extra_path = ["_static/css"]
+html_extra_path = ["_static/css", "_static/fonts"]
 
 # List of templates of static files to be included in the HTML output.
 # Keys represent paths to input files and values are dicts containing:
@@ -210,7 +213,7 @@ html_extra_templates = {
 #html_show_sourcelink = True
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-#html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True
