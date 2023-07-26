@@ -15,9 +15,16 @@
 توصیه نمی شود زیرا خطر بالقوه امنیتی ایجاد می کند. ممکن است در مورد این موضوع در
 صفحه ی ملاحظات امنیتی :ref:`security_considerations` بیشتر مطالعه کنید.
 
+<<<<<<< HEAD
 در زیر نمونه کاربردی از الگوی برداشت در یک قرارداد است که هدف آن ارسال بیشترین مبلغ
 به قرارداد جهت تبدیل شدن به "ثروتمندترین"  است.
 که از `King of the Ether <https://www.kingoftheether.com/>`_ الهام گرفته شده است.
+=======
+The following is an example of the withdrawal pattern in practice in
+a contract where the goal is to send the most of some compensation, e.g. Ether, to the
+contract in order to become the "richest", inspired by
+`King of the Ether <https://www.kingoftheether.com/>`_.
+>>>>>>> english/develop
 
 
 در قرارداد ذیل ، اگر شما دیگر ثروتمند ترین نباشید، شما بودجه شخصی را دریافت می کنید که
@@ -32,7 +39,7 @@
         address public richest;
         uint public mostSent;
 
-        mapping (address => uint) pendingWithdrawals;
+        mapping(address => uint) pendingWithdrawals;
 
         /// The amount of Ether sent was not higher than
         /// the currently highest amount.
@@ -53,7 +60,7 @@
         function withdraw() public {
             uint amount = pendingWithdrawals[msg.sender];
             // Remember to zero the pending refund before
-            // sending to prevent re-entrancy attacks
+            // sending to prevent reentrancy attacks
             pendingWithdrawals[msg.sender] = 0;
             payable(msg.sender).transfer(amount);
         }
@@ -155,9 +162,9 @@
         // prepend a check that only passes
         // if the function is called from
         // a certain address.
-        modifier onlyBy(address _account)
+        modifier onlyBy(address account)
         {
-            if (msg.sender != _account)
+            if (msg.sender != account)
                 revert Unauthorized();
             // Do not forget the "_;"! It will
             // be replaced by the actual function
@@ -165,17 +172,17 @@
             _;
         }
 
-        /// Make `_newOwner` the new owner of this
+        /// Make `newOwner` the new owner of this
         /// contract.
-        function changeOwner(address _newOwner)
+        function changeOwner(address newOwner)
             public
             onlyBy(owner)
         {
-            owner = _newOwner;
+            owner = newOwner;
         }
 
-        modifier onlyAfter(uint _time) {
-            if (block.timestamp < _time)
+        modifier onlyAfter(uint time) {
+            if (block.timestamp < time)
                 revert TooEarly();
             _;
         }
@@ -197,21 +204,21 @@
         // refunded, but only after the function body.
         // This was dangerous before Solidity version 0.4.0,
         // where it was possible to skip the part after `_;`.
-        modifier costs(uint _amount) {
-            if (msg.value < _amount)
+        modifier costs(uint amount) {
+            if (msg.value < amount)
                 revert NotEnoughEther();
 
             _;
-            if (msg.value > _amount)
-                payable(msg.sender).transfer(msg.value - _amount);
+            if (msg.value > amount)
+                payable(msg.sender).transfer(msg.value - amount);
         }
 
-        function forceOwnerChange(address _newOwner)
+        function forceOwnerChange(address newOwner)
             public
             payable
             costs(200 ether)
         {
-            owner = _newOwner;
+            owner = newOwner;
             // just some example condition
             if (uint160(owner) & 0 == 1)
                 // This did not refund for Solidity
@@ -291,8 +298,8 @@
 
         uint public creationTime = block.timestamp;
 
-        modifier atStage(Stages _stage) {
-            if (stage != _stage)
+        modifier atStage(Stages stage_) {
+            if (stage != stage_)
                 revert FunctionInvalidAtThisStage();
             _;
         }
