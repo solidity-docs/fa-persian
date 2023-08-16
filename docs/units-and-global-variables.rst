@@ -1,8 +1,10 @@
+.. index:: ! denomination
+
 **************************************
 واحدها و متغیرهای موجود در سطح جهانی
 **************************************
 
-.. index:: wei, finney, szabo, gwei, ether
+.. index:: ! wei, ! finney, ! szabo, ! gwei, ! ether, ! denomination;ether
 
 واحدهای اتر
 ===========
@@ -24,7 +26,7 @@
 
     واحدهای ``finney`` و  ``szabo`` در نسخه 0.7.0 حذف شده اند.
 
-.. index:: time, seconds, minutes, hours, days, weeks, years
+.. index:: ! seconds, ! minutes, ! hours, ! days, ! weeks, ! years, ! denomination;time
 
 واحد‌های زمان (Time Units)
 ==========
@@ -57,7 +59,7 @@
 
     function f(uint start, uint daysAfter) public {
         if (block.timestamp >= start + daysAfter * 1 days) {
-          // ...
+            // ...
         }
     }
 
@@ -70,12 +72,13 @@
 مورد بلاکچین یا توابع کاربردی عمومی استفاده می‌شوند.
 
 
-.. index:: abi, block, coinbase, difficulty, encode, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
+.. index:: abi, block, coinbase, difficulty, prevrandao, encode, number, block;number, timestamp, block;timestamp, msg, data, gas, sender, value, gas price, origin
 
 
 بلاک و ویژگی‌های تراکنش
 --------------------------------
 
+<<<<<<< HEAD
 -	``blockhash(uint blockNumber) returns (bytes32)``  : هش بلاک داده شده زمانی که ``blocknumber`` یکی از 256 بلاک اخیر باشد. در غیر این صورت صفر را برمی گرداند.
 -   ``block.basefee`` (``uint``): بِیس فی بلاک فعلی ( `EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ و `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
 -	``block.chainid (uint)`` :  آی دی (id) زنجیره فعلی
@@ -92,6 +95,24 @@
 -	``tx.gasprice (uint)`` : قیمت گَس  تراکنش
 -	``tx.origin (address)`` : فرستنده تراکنش (فراخوانی کامل زنجیره)
 
+=======
+- ``blockhash(uint blockNumber) returns (bytes32)``: hash of the given block when ``blocknumber`` is one of the 256 most recent blocks; otherwise returns zero
+- ``block.basefee`` (``uint``): current block's base fee (`EIP-3198 <https://eips.ethereum.org/EIPS/eip-3198>`_ and `EIP-1559 <https://eips.ethereum.org/EIPS/eip-1559>`_)
+- ``block.chainid`` (``uint``): current chain id
+- ``block.coinbase`` (``address payable``): current block miner's address
+- ``block.difficulty`` (``uint``): current block difficulty (``EVM < Paris``). For other EVM versions it behaves as a deprecated alias for ``block.prevrandao`` (`EIP-4399 <https://eips.ethereum.org/EIPS/eip-4399>`_ )
+- ``block.gaslimit`` (``uint``): current block gaslimit
+- ``block.number`` (``uint``): current block number
+- ``block.prevrandao`` (``uint``): random number provided by the beacon chain (``EVM >= Paris``)
+- ``block.timestamp`` (``uint``): current block timestamp as seconds since unix epoch
+- ``gasleft() returns (uint256)``: remaining gas
+- ``msg.data`` (``bytes calldata``): complete calldata
+- ``msg.sender`` (``address``): sender of the message (current call)
+- ``msg.sig`` (``bytes4``): first four bytes of the calldata (i.e. function identifier)
+- ``msg.value`` (``uint``): number of wei sent with the message
+- ``tx.gasprice`` (``uint``): gas price of the transaction
+- ``tx.origin`` (``address``): sender of the transaction (full call chain)
+>>>>>>> english/develop
 
 .. note::
 
@@ -111,6 +132,7 @@
 
 .. note::
 
+<<<<<<< HEAD
        به  ``block.timestamp`` یا  ``blockhash`` به عنوان منبع تصادفی اعتماد نکنید، مگر اینکه بدانید در حال انجام چه کاری هستید. 
 
     timestamp و   block hash تا حدی می‌توانند تحت تأثیر ماینرها قرار بگیرند. به عنوان مثال بازیگران 
@@ -119,6 +141,11 @@
 
     زمانبندی بلاک فعلی باید بسیار بزرگتر از زمانبندی آخرین بلاک باشد، اما تنها تضمین در جایی است که بین 
     زمانبندی دو بلاک متوالی در زنجیره متعارف  قرار گیرد.
+=======
+    Both the timestamp and the block hash can be influenced by miners to some degree.
+    Bad actors in the mining community can for example run a casino payout function on a chosen hash
+    and just retry a different hash if they did not receive any compensation, e.g. Ether.
+>>>>>>> english/develop
 
 
 .. note::
@@ -150,6 +177,7 @@
 توابع رمزگذاری و رمزگشایی ABI :
 -----------------------------------
 
+<<<<<<< HEAD
 // saracodic comment آ for be sorted in text
 
 - ``abi.decode(bytes memory encodedData, (...)) returns (...)`` : آABI داده‌های داده شده را رمزگشایی میکند، در حالی که انواع  آن در پرانتز به عنوان آرگومان دوم آورده شده است. مثال:
@@ -158,6 +186,14 @@
 - ``abi.encodePacked(...) returns (bytes memory)`` :  آ :ref:`packed encoding <abi_packed_mode>` آرگومان‌های داده شده را انجام می‌دهد. توجه داشته باشید که رمزگذاری بسته بندی شده می‌تواند مبهم باشد !
 - ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)`` : آBI-encodes آرگومان‌های داده شده را از دوم شروع می‌کند و انتخاب کننده چهار بایت داده شده را اضافه می‌کند.
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)`` : معادل با  ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)`` است.
+=======
+- ``abi.decode(bytes memory encodedData, (...)) returns (...)``: ABI-decodes the given data, while the types are given in parentheses as second argument. Example: ``(uint a, uint[2] memory b, bytes memory c) = abi.decode(data, (uint, uint[2], bytes))``
+- ``abi.encode(...) returns (bytes memory)``: ABI-encodes the given arguments
+- ``abi.encodePacked(...) returns (bytes memory)``: Performs :ref:`packed encoding <abi_packed_mode>` of the given arguments. Note that packed encoding can be ambiguous!
+- ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
+- ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)``
+- ``abi.encodeCall(function functionPointer, (...)) returns (bytes memory)``: ABI-encodes a call to ``functionPointer`` with the arguments found in the tuple. Performs a full type-check, ensuring the types match the function signature. Result equals ``abi.encodeWithSelector(functionPointer.selector, (...))``
+>>>>>>> english/develop
 
 .. note::
 
@@ -177,6 +213,14 @@
 ----------------
 
 - ``bytes.concat(...) returns (bytes memory)`` : :ref:`تعداد متغیر bytes و bytes1 ،… ، bytes32 آرگومان را به یک آرایه بایت متصل می‌کند<bytes-concat>`
+
+
+.. index:: string members
+
+Members of string
+-----------------
+
+- ``string.concat(...) returns (string memory)``: :ref:`Concatenates variable number of string arguments to one string array<string-concat>`
 
 
 .. index:: assert, revert, require
@@ -281,9 +325,14 @@
     برای امضای _transaction_ ثابت شد ( `EIP-2 <https://eips.ethereum.org/EIPS/eip-2#specification>`_ را مشاهده کنید )، اما تابع ecrecover بدون تغییر باقی ماند.
     این معمولاً مشکلی ایجاد نمی‌کند مگر اینکه شما نیاز به امضا برای منحصر به فرد بودن یا استفاده از آنها برای 
 
+<<<<<<< HEAD
     شناسایی آیتم‌ها داشته باشید. OpenZeppelin `دارای یک کتابخانه کمکی ECDSA <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ است که می‌توانید 
     بدون این مشکل به عنوان یک  wrapper برای   ``ecrecover`` از آن استفاده کنید.
     
+=======
+    This is usually not a problem unless you require signatures to be unique or use them to identify items.
+    OpenZeppelin has an `ECDSA helper library <https://docs.openzeppelin.com/contracts/4.x/api/utils#ECDSA>`_ that you can use as a wrapper for ``ecrecover`` without this issue.
+>>>>>>> english/develop
 
 .. note::
 
@@ -355,6 +404,7 @@
     از بررسی نوع، بررسی وجود تابع و بسته بندی  آرگومان می‌شود.
 
 .. warning::
+<<<<<<< HEAD
 
     برخی از خطرات استفاده از  ``send`` وجود دارد: اگر عمق فراخوانی پشته 1024 باشد، انتقال با شکست مواجه 
     می‌شود (این امر همیشه می‌تواند توسط تماس گیرنده اجبار شود) و همچنین در صورت تمام شدن گَس گیرنده 
@@ -362,6 +412,12 @@
     یا حتی بهتر است از  ``transfer`` استفاده کنید: از الگویی استفاده کنید که گیرنده پول را برداشت می‌کند.
 
    
+=======
+    There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
+    (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
+    to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
+    Use a pattern where the recipient withdraws the Ether.
+>>>>>>> english/develop
 
 .. warning::
 
@@ -412,8 +468,9 @@
   
 
 
-.. index:: this, selfdestruct
+.. index:: this, selfdestruct, super
 
+<<<<<<< HEAD
 مربوط به قرارداد (Contract Related)
 ----------------
 
@@ -421,12 +478,23 @@
 
     قرارداد فعلی، به صراحت قابل تبدیل به :ref:`آدرس<address>` است
 
+=======
+Contract-related
+----------------
+
+``this`` (current contract's type)
+    The current contract, explicitly convertible to :ref:`address`
+
+``super``
+    A contract one level higher in the inheritance hierarchy
+>>>>>>> english/develop
 
 ``selfdestruct(address payable recipient)``
 
     قرارداد فعلی را از بین ببرید، وجوه آن را به :ref:`آدرس<address>`  داده شده ارسال کرده و اجرا را پایان دهید. توجه داشته باشید 
     که  ``selfdestruct`` برخی از ویژگی‌های به ارث برده شده از EVM را دارد:
 
+<<<<<<< HEAD
 
 
     -	تابع دریافت قراردادِ دریافت کننده اجرا نمی‌شود.
@@ -437,6 +505,14 @@
 علاوه بر این، تمام توابع قرارداد فعلی مستقیماً از جمله تابع فعلی قابل فراخوانی هستند.
 
 
+=======
+Furthermore, all functions of the current contract are callable directly including the current function.
+>>>>>>> english/develop
+
+.. warning::
+    From version 0.8.18 and up, the use of ``selfdestruct`` in both Solidity and Yul will trigger a
+    deprecation warning, since the ``SELFDESTRUCT`` opcode will eventually undergo breaking changes in behavior
+    as stated in `EIP-6049 <https://eips.ethereum.org/EIPS/eip-6049>`_.
 
 .. note::
 
@@ -487,7 +563,14 @@
 
 
 
+<<<<<<< HEAD
 ``type(I).interfaceId``:
+=======
+``type(I).interfaceId``
+    A ``bytes4`` value containing the `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_
+    interface identifier of the given interface ``I``. This identifier is defined as the ``XOR`` of all
+    function selectors defined within the interface itself - excluding all inherited functions.
+>>>>>>> english/develop
 
     مقدار ``bytes4``  حاوی مشخص کننده   اینترفیس `EIP-165 <https://eips.ethereum.org/EIPS/eip-165>`_ اینترفیس ``I`` داده شده‌است. این مشخص 
     کننده به عنوان ``XOR``  ، همه انتخاب کننده‌های  تابع تعریف شده در داخل اینترفیس تعریف می‌شود - بدون 
@@ -504,7 +587,22 @@
 
 
 ``type(T).max``
+<<<<<<< HEAD
 
     بزرگترین مقدار با تایپ  ``T`` قابل نمایش است.
 
     
+=======
+    The largest value representable by type ``T``.
+
+Reserved Keywords
+=================
+
+These keywords are reserved in Solidity. They might become part of the syntax in the future:
+
+``after``, ``alias``, ``apply``, ``auto``, ``byte``, ``case``, ``copyof``, ``default``,
+``define``, ``final``, ``implements``, ``in``, ``inline``, ``let``, ``macro``, ``match``,
+``mutable``, ``null``, ``of``, ``partial``, ``promise``, ``reference``, ``relocatable``,
+``sealed``, ``sizeof``, ``static``, ``supports``, ``switch``, ``typedef``, ``typeof``,
+``var``.
+>>>>>>> english/develop
