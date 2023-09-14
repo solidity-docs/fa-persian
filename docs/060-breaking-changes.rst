@@ -10,8 +10,13 @@
 تغییراتی که کامپایلر ممکن است در مورد آن هشدار ندهد
 ====================================================
 
+<<<<<<< HEAD
 این بخش تغییراتی را لیست می کند که در آن رفتار کد شما ممکن است تغییر کند بدون اینکه کامپایلر در مورد
 آن به شما بگوید.
+=======
+This section lists changes where the behavior of your code might
+change without the compiler telling you about it.
+>>>>>>> english/develop
 
 *  نوع حاصل از یک توان، نوع پایه است. قبلاً کوچکترین نوع بود که می تواند هم نوع پایه و هم نوع توان را
   مانند عملیات متقارن نگه دارد. علاوه بر این، انواع علامت‌دار برای پایه قدرت مجاز هستند.
@@ -49,7 +54,51 @@
   مشاهده با همان نام در هیچ یک از پایه های آن وجود نداشته باشد.
 
 
+<<<<<<< HEAD
 تغییرات معنایی و نحوی
+=======
+Explicitness Requirements
+=========================
+
+This section lists changes where the code now needs to be more explicit,
+but the semantics do not change.
+For most of the topics the compiler will provide suggestions.
+
+* Functions can now only be overridden when they are either marked with the
+  ``virtual`` keyword or defined in an interface. Functions without
+  implementation outside an interface have to be marked ``virtual``.
+  When overriding a function or modifier, the new keyword ``override``
+  must be used. When overriding a function or modifier defined in multiple
+  parallel bases, all bases must be listed in parentheses after the keyword
+  like so: ``override(Base1, Base2)``.
+
+* Member-access to ``length`` of arrays is now always read-only, even for storage arrays. It is no
+  longer possible to resize storage arrays by assigning a new value to their length. Use ``push()``,
+  ``push(value)`` or ``pop()`` instead, or assign a full array, which will of course overwrite the existing content.
+  The reason behind this is to prevent storage collisions of gigantic
+  storage arrays.
+
+* The new keyword ``abstract`` can be used to mark contracts as abstract. It has to be used
+  if a contract does not implement all its functions. Abstract contracts cannot be created using the ``new`` operator,
+  and it is not possible to generate bytecode for them during compilation.
+
+* Libraries have to implement all their functions, not only the internal ones.
+
+* The names of variables declared in inline assembly may no longer end in ``_slot`` or ``_offset``.
+
+* Variable declarations in inline assembly may no longer shadow any declaration outside the inline assembly block.
+  If the name contains a dot, its prefix up to the dot may not conflict with any declaration outside the inline
+  assembly block.
+
+* In inline assembly, opcodes that do not take arguments are now represented as "built-in functions" instead of standalone identifiers. So ``gas`` is now ``gas()``.
+
+* State variable shadowing is now disallowed.  A derived contract can only
+  declare a state variable ``x``, if there is no visible state variable with
+  the same name in any of its bases.
+
+
+Semantic and Syntactic Changes
+>>>>>>> english/develop
 ==============================
 
 این بخش تغییراتی را لیست می کند که در آن باید کد خود را تغییر دهید و پس از آن کار دیگری انجام می دهد.
@@ -87,22 +136,42 @@
 تغییرات رابط یا همان اینترفیس
 =================
 
+<<<<<<< HEAD
 این بخش تغییراتی را لیست می‌کند که به خود زبان ارتباطی ندارند، اما روی رابط‌های کامپایلر تأثیر دارند. اینها ممکن است نحوه استفاده از کامپایلر را 
 در خط فرمان یا همان کامند لاین، نحوه استفاده از رابط قابل برنامه ریزی آن، یا نحوه تجزیه و تحلیل خروجی تولید شده توسط آن را تغییر دهند.
+=======
+This section lists changes that are unrelated to the language itself, but that have an effect on the interfaces of
+the compiler. These may change the way how you use the compiler on the command-line, how you use its programmable
+interface, or how you analyze the output produced by it.
+>>>>>>> english/develop
 
 
 گزارشگر خطای جدید
 ~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 گزارشگر خطای جدیدی معرفی شد که هدف آن تولید پیام های خطا در دسترس تر در خط فرمان است. به طور پیش فرض فعال است، اما ارسال ``--old-reporter`` به گزارشگر خطای قدیمی منسوخ برمی گردد.
+=======
+A new error reporter was introduced, which aims at producing more accessible error messages on the command-line.
+It is enabled by default, but passing ``--old-reporter`` falls back to the deprecated old error reporter.
+>>>>>>> english/develop
 
 گزینه های هش متادیتا
 ~~~~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 کامپایلر اکنون هش `IPFS <https://ipfs.io/>`_  فایل فراداده را به‌طور پیش‌فرض به انتهای بایت کد اضافه می‌کند (برای جزئیات، مستندات مربوط به :doc:`contract metadata <metadata>` را ببینید). قبل از ورژن 0.6.0، کامپایلر هش سوارم `Swarm <https://ethersphere.github.io/swarm-home/>`_ را به طور پیش‌فرض اضافه می‌کرد و برای اینکه همچنان از این رفتار پشتیبانی 
 کند، گزینه جدید خط فرمان ``--metadata-hash`` معرفی شد که به شما اجازه می دهد تا با ارسال ``ipfs`` یا ``swarm`` به عنوان مقدار به گزینه خط 
 فرمان ``--metadata-hash`` هش مورد نظر برای تولید و الحاق را انتخاب کنید. 
 ارسال مقدار ``none`` به طور کامل هش را حذف می کند.
+=======
+The compiler now appends the `IPFS <https://ipfs.io/>`_ hash of the metadata file to the end of the bytecode by default
+(for details, see documentation on :doc:`contract metadata <metadata>`). Before 0.6.0, the compiler appended the
+`Swarm <https://ethersphere.github.io/swarm-home/>`_ hash by default, and in order to still support this behavior,
+the new command-line option ``--metadata-hash`` was introduced. It allows you to select the hash to be produced and
+appended, by passing either ``ipfs`` or ``swarm`` as value to the ``--metadata-hash`` command-line option.
+Passing the value ``none`` completely removes the hash.
+>>>>>>> english/develop
 
 
 این تغییرات همچنین می تواند از طریق رابط :ref:`Standard JSON Interface<compiler-api>` مورد استفاده قرار گیرد و فراداده JSON تولید شده توسط کامپایلر را تحت تأثیر قرار 
@@ -151,4 +220,15 @@ this change consistent, ``solidity_free`` was renamed to ``solidity_reset``, the
 
 * شناسه‌های منحصربه‌فرد را برای اعلان‌های متغیر در مجموعه درون خطی انتخاب کنید که با اعلان‌های خارج از بلوک اسمبلی درون خطی تضاد ندارند.
 
+<<<<<<< HEAD
 * مجازی ``virtual`` را به هر تابع غیر رابطی که قصد لغو آن را دارید اضافه کنید. ``virtual`` را به همه توابع بدون اجرای رابط های خارجی اضافه کنید. برای وراثت تکی، به هر تابع نادیده ``override`` اضافه کنید. برای وراثت چندگانه، ``override(A, B, ..)`` را اضافه کنید، جایی که تمام قراردادهایی را که تابع لغو را در پرانتز تعریف می کنند، لیست می کنید. هنگامی که چندین پایه یک تابع را تعریف می کنند، قرارداد ارثی باید همه عملکردهای متضاد را لغو کند.
+=======
+* Add ``virtual`` to every non-interface function you intend to override. Add ``virtual``
+  to all functions without implementation outside interfaces. For single inheritance, add
+  ``override`` to every overriding function. For multiple inheritance, add ``override(A, B, ..)``,
+  where you list all contracts that define the overridden function in the parentheses. When
+  multiple bases define the same function, the inheriting contract must override all conflicting functions.
+
+* In inline assembly, add ``()`` to all opcodes that do not otherwise accept an argument.
+  For example, change ``pc`` to ``pc()``, and ``gas`` to ``gas()``.
+>>>>>>> english/develop
