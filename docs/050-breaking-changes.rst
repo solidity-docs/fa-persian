@@ -72,11 +72,21 @@
 * اکنون مشاهده عملکرد صریح اجباری است. عمومی ``public`` را به هر تابع و سازنده اضافه کنید، و به هر
   توابع بازگشتی یا رابطی که نمایان بودن آن را قبلاً مشخص نکرده است، خارجی ``external`` اضافه کنید.
 
+<<<<<<< HEAD
 * مکان داده صریح برای همه متغیرهای ساختار، آرایه یا انواع نگاشت اکنون اجباری است. این همچنین برای
   پارامترهای تابع و متغیرهای بازگشتی اعمال می شود. برای مثال، ``uint[] x = m_x`` را به ``uint[]`` ذخیره سازی
   x = m_x، و تابع ``function f(uint[][] x)`` را به تابع ``function f(uint[][] memory x)`` تغییر دهید که در آن حافظه ``memory`` مکان داده است و
   ممکن است بر این اساس با ذخیره سازی یا ``calldata`` جایگزین شود. توجه داشته باشید که توابع خارجی به
   پارامترهایی با مکان داده ``calldata`` نیاز دارند.
+=======
+* Explicit data location for all variables of struct, array or mapping types is
+  now mandatory. This is also applied to function parameters and return
+  variables.  For example, change ``uint[] x = z`` to ``uint[] storage x =
+  z``, and ``function f(uint[][] x)`` to ``function f(uint[][] memory x)``
+  where ``memory`` is the data location and might be replaced by ``storage`` or
+  ``calldata`` accordingly.  Note that ``external`` functions require
+  parameters with a data location of ``calldata``.
+>>>>>>> english/develop
 
 * انواع قراردادها دیگر شامل اعضای آدرس ``address``نمی شوند تا فضاهای نام جدا شوند. بنابراین، اکنون لازم است که
   قبل از استفاده از یک عضو آدرس، مقادیر نوع قرارداد را به صراحت به آدرس تبدیل کنیم.
@@ -105,10 +115,15 @@
   دریافت می کنید. قبل از نسخه 0.5.0 هر تبدیل بین ``bytesX`` و ``uintY`` از طریق ``uint8X`` انجام می شد.
   به عنوان مثال ``uint8(bytes3(0x291807))`` به ``uint8(uint24(bytes3(0x291807)))`` تبدیل می شود (نتیجه ``0x07`` است).
 
+<<<<<<< HEAD
 * استفاده از ``msg.value`` در توابع غیر قابل پرداخت (یا معرفی آن از طریق یک modifier) به عنوان یک
   ویژگی امنیتی مجاز نیست.
   تابع را به قابل پرداخت ``payable`` تبدیل کنید یا یک تابع داخلی جدید برای منطق برنامه ایجاد کنید که از ``msg.value``
   استفاده می کند.
+=======
+* For clarity reasons, the command-line interface now requires ``-`` if the
+  standard input is used as source.
+>>>>>>> english/develop
 
 * به دلایل وضوح، رابط خط فرمان اکنون نیاز دارد، ``-`` اگر ورودی استاندارد به عنوان منبع استفاده شود.
 
@@ -118,6 +133,7 @@
 این بخش تغییراتی را لیست می کند که ویژگی ها یا نحو قبلی را منسوخ می کند. توجه داشته باشید که بسیاری
 از این تغییرات قبلاً در حالت آزمایشی نسخه ``v0.5.0`` فعال شده بودند.
 
+<<<<<<< HEAD
 خط فرمان(کامند لاین) و رابط های JSON
 -------------------------------------
 
@@ -128,6 +144,21 @@
 * گزینه خط فرمان ``--julia`` به دلیل تغییر نام زبان میانی ``Julia`` به ``Yul`` به ``--yul`` تغییر نام داد.
 
 * گزینه های خط فرمان ``--clone-bin`` و ``--combined-json clone-bin`` حذف شدند.
+=======
+Command-line and JSON Interfaces
+--------------------------------
+
+* The command-line option ``--formal`` (used to generate Why3 output for
+  further formal verification) was deprecated and is now removed.  A new
+  formal verification module, the SMTChecker, is enabled via ``pragma
+  experimental SMTChecker;``.
+
+* The command-line option ``--julia`` was renamed to ``--yul`` due to the
+  renaming of the intermediate language ``Julia`` to ``Yul``.
+
+* The ``--clone-bin`` and ``--combined-json clone-bin`` command-line options
+  were removed.
+>>>>>>> english/develop
 
 * مپینگ مجدد با پیشوند خالی مجاز نیست.
 
@@ -434,7 +465,7 @@
             return data;
         }
 
-        using address_make_payable for address;
+        using AddressMakePayable for address;
         // Data location for 'arr' must be specified
         function g(uint[] memory /* arr */, bytes8 x, OtherContract otherContract, address unknownContract) public payable {
             // 'otherContract.transfer' is not provided.
@@ -451,7 +482,7 @@
             // 'address payable' should be used whenever possible.
             // To increase clarity, we suggest the use of a library for
             // the conversion (provided after the contract in this example).
-            address payable addr = unknownContract.make_payable();
+            address payable addr = unknownContract.makePayable();
             require(addr.send(1 ether));
 
             // Since uint32 (4 bytes) is smaller than bytes8 (8 bytes),
@@ -467,8 +498,8 @@
 
     // We can define a library for explicitly converting ``address``
     // to ``address payable`` as a workaround.
-    library address_make_payable {
-        function make_payable(address x) internal pure returns (address payable) {
+    library AddressMakePayable {
+        function makePayable(address x) internal pure returns (address payable) {
             return address(uint160(x));
         }
     }
