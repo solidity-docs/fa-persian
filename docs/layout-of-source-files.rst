@@ -2,29 +2,58 @@
 چیدمان یک فایل منبع سالیدیتی 
 ********************************
 
+<<<<<<< HEAD
 فایل‌های منبع  می‌توانند حاوی تعداد دلخواهی از :ref:`تعاریف قرارداد<contract_structure>`  ، دستور‌های ایمپورت ، دستور‌های :ref:`pragma directives<pragma>`  ، :ref:`struct<structs>` ، :ref:`enum<enums>`  ، :ref:`توابع<functions>`  ، :ref:`خطا<errors>`،  تعاریف :ref:`متغیر ثابت<constants>` باشند.
+=======
+Source files can contain an arbitrary number of
+:ref:`contract definitions<contract_structure>`, import_ ,
+:ref:`pragma<pragma>` and :ref:`using for<using-for>` directives and
+:ref:`struct<structs>`, :ref:`enum<enums>`, :ref:`function<functions>`, :ref:`error<errors>`
+and :ref:`constant variable<constants>` definitions.
+>>>>>>> english/develop
 
 .. index:: ! license, spdx
 
 مشخص کننده‌ی لایسنس  SPDX
 =======================
 
+<<<<<<< HEAD
 در صورت در دسترس بودن کد منبع ، اعتماد به قرارداد هوشمند می‌تواند بهتر ایجاد شود. از آنجا که در دسترس قرار دادن کد منبع همیشه مشکلات حقوقی مربوط به حق چاپ را تحت تأثیر قرار می دهد، کامپایلر سالیدیتی استفاده از  `مشخص کنندهِ لایسنس SPDX <https://spdx.org>`_  قابلِ خوانده شدن توسطِ ماشین را ترغیب می‌کند. هر فایل منبع باید با یک کامنت که نشان دهد لایسنس آن است شروع شود:
 
+=======
+Trust in smart contracts can be better established if their source code
+is available. Since making source code available always touches on legal problems
+with regards to copyright, the Solidity compiler encourages the use
+of machine-readable `SPDX license identifiers <https://spdx.org>`_.
+Every source file should start with a comment indicating its license:
+>>>>>>> english/develop
 
 ``// SPDX-License-Identifier: MIT``
 
 
+<<<<<<< HEAD
+=======
+If you do not want to specify a license or if the source code is
+not open-source, please use the special value ``UNLICENSED``.
+Note that ``UNLICENSED`` (no usage allowed, not present in SPDX license list)
+is different from ``UNLICENSE`` (grants all rights to everyone).
+Solidity follows `the npm recommendation <https://docs.npmjs.com/cli/v7/configuring-npm/package-json#license>`_.
+>>>>>>> english/develop
 
 کامپایلر تأیید نمی‌کند که مجوز بخشی از  `لیستی <https://spdx.org/licenses/>`_   است که توسط SPDX مجاز است، اما رشته ارائه شده در :ref:`فرداداده بایت‌کد<metadata>` را شامل می‌شود. 
 
  اگر نمی‌خواهید مجوزی را تعیین نکنید یا اگر کد منبع، منبع باز نیست؛ لطفاً از مقدار ویژه  ``UNLICENSED``استفاده کنید. 
 
+<<<<<<< HEAD
 البته ارائه این کامنت شما را از سایر تعهدات مربوط به صدور لایسنس مانند نیاز به ذکر مجوز خاص در هِدر هر فایل منبع یا دارنده اصلی حق چاپ خلاص نمی کند.
 
 کامنت توسط کامپایلر در هر کجای فایل در سطح فایل شناسایی می‌شود، اما توصیه می‌شود آن را در بالای فایل قرار دهید.
 
 اطلاعات بیشتر در مورد نحوه استفاده از مشخص کننده لایسنس SPDX را می‌توانید در  `وب سایت  SPDX <https://spdx.org/ids-how>`_  بیابید.
+=======
+More information about how to use SPDX license identifiers
+can be found at the `SPDX website <https://spdx.dev/learn/handling-license-info/#how>`_.
+>>>>>>> english/develop
 
 
 .. index:: ! pragma
@@ -38,7 +67,7 @@
 
 کلمه کلیدی  ``pragma`` یا پراگما برای فعال کردن برخی از ویژگی‌های کامپایلر یا بررسی‌ها استفاده می‌شود. یک دستورالعمل پراگما همیشه محلی برای یک فایل منبع است، بنابراین اگر می‌خواهید آن را در کل پروژه خود فعال کنید، باید پراگما را به تمام فایل‌های خود اضافه کنید. اگر فایل‌ دیگری را  :ref:`ایمپورت<import>`  کنید، پراگمای آن فایل به طور خودکار در فایل وارد شده اعمال نمی‌شود.
 
-.. index:: ! pragma, version
+.. index:: ! pragma;version
 
 .. _version_pragma:
 
@@ -58,12 +87,24 @@
 .. note::
  با استفاده از نسخه pragma نسخه کامپایلر *تغییر نمی‌کند*. همچنین ویژگی‌های کامپایلر را *فعال یا غیرفعال نمی‌کند*. این فقط به کامپایلر دستور می‌دهد که بررسی کند آیا نسخه آن با نسخه مورد نیاز پراگما مطابقت دارد یا خیر. اگر مطابقت نداشته باشد، کامپایلر خطایی را صادر می‌کند.
 
+.. index:: ! ABI coder, ! pragma; abicoder, pragma; ABIEncoderV2
+.. _abi_coder:
+
 ABI Coder Pragma
 ----------------
 
   با استفاده از  ``pragma abicoder v1``  یا ``pragma abicoder v2``  می‌توانید از بین دو پیاده سازی رمزگذار  و رمزگشای  ABI یکی را انتخاب کنید.
 
+<<<<<<< HEAD
 رمزگذار جدید ABI (v2) قادر به رمزگذاری و رمزگشایی آرایه‌ها و structهای دلخواه تو در تو است. ممکن است کد بهینه کمتری تولید کند و به اندازه رمزگذار قدیمی تست نشده باشد، اما از نظر سالیدیتی نسخه 0.6.0 غیر آزمایشی محسوب می‌شود. شما هنوز هم باید با استفاده از  ``;pragma abicoder v2``  آن را صریحاً فعال کنید. در سالیدیتی نسخه 0.8.0 به طور پیش فرض فعال می‌شود، گزینه‌ای برای انتخاب کدگذار قدیمی با استفاده از  ``;pragma abicoder v1`` وجود دارد.
+=======
+The new ABI coder (v2) is able to encode and decode arbitrarily nested
+arrays and structs. Apart from supporting more types, it involves more extensive
+validation and safety checks, which may result in higher gas costs, but also heightened
+security. It is considered
+non-experimental as of Solidity 0.6.0 and it is enabled by default starting
+with Solidity 0.8.0. The old ABI coder can still be selected using ``pragma abicoder v1;``.
+>>>>>>> english/develop
 
 مجموعه نوع‌های  پشتیبانی شده توسط رمزگذار جدید یک مجموعه فوق العاده دقیق از نوع‌های پشتیبانی شده توسط رمزگذار قدیمی است. قراردادهایی که از آن استفاده می‌کنند می‌توانند با قراردادهایی که بدون محدودیت نیستند ارتباط برقرار کنند. بازگشت  فقط تا زمانی امکان پذیر است که قرارداد غیر ``abicoder v2``  سعی در فراخوانی‌هایی نداشته باشد که نیاز به انواع رمزگشایی داشته باشند که فقط توسط رمزگذار جدید پشتیبانی می‌شوند. کامپایلر می‌تواند این مورد را تشخیص دهد و خطایی ایجاد کند. فعال کردن ``abicoder v2``  قرارداد برای اینکه خطا برطرف شود، کافی است.
 
@@ -74,8 +115,7 @@ ABI Coder Pragma
     تا سالیدیتی نسخه 0.7.4، می‌توان با استفاده از ``pragma experimental ABIEncoderV2`` ، رمزگذار ABI v2 را انتخاب کرد، اما صریحاً رمزگذار v1 را نمی‌توان انتخاب کرد زیرا پیش فرض بود.
   
 
-.. index:: ! pragma, experimental
-
+.. index:: ! pragma; experimental
 .. _experimental_pragma:
 
 پراگما آزمایشی 
@@ -84,6 +124,7 @@ ABI Coder Pragma
 پراگما دوم ، پراگما آزمایشی است. می‌توانند برای فعال کردن ویژگی‌های کامپایلر یا زبان استفاده شوند که هنوز به طور پیش فرض فعال نشده‌اند. پراگماهای آزمایشی زیر در حال حاضر پشتیبانی می‌شوند:
 
 
+.. index:: ! pragma; ABIEncoderV2
 
 ABIEncoderV2
 ~~~~~~~~~~~~
@@ -93,6 +134,7 @@ ABIEncoderV2
 
 
 
+.. index:: ! pragma; SMTChecker
 .. _smt_checker:
 
 کنترل کننده SMTC 
@@ -115,10 +157,17 @@ ABIEncoderV2
    سینتکس و سمنتیک 
 --------------------
 
+<<<<<<< HEAD
 سالیدیتی برای کمک به ماژولی بودن کد شما که مشابه آنچه در جاوا اسکریپت در دسترس است (از ES6 به بعد)، از دستورات ایمپورت   پشتیبانی می‌کند. با این حال، سالیدیتی مفهوم  `اکسپورت به صورت پیشفرش <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#Description>`_ را پشتیبانی نمی‌کند. 
 
 در سطح جهانی، می‌توانید از دستورات ایمپور  به شکل زیر استفاده کنید:
 
+=======
+Solidity supports import statements to help modularise your code that
+are similar to those available in JavaScript
+(from ES6 on). However, Solidity does not support the concept of
+a `default export <https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export#description>`_.
+>>>>>>> english/develop
 
 
 .. code-block:: solidity
