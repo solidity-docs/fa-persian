@@ -49,7 +49,17 @@ because ``uint256`` cannot hold values such as ``-1``.
   ویژگی‌های امنیتی کامپایلر را دور بزنید، بنابراین مطمئن شوید که نتیجه همان چیزی است که شما می‌خواهید 
   و انتظار دارید!
 
+<<<<<<< HEAD
  مثال زیر را در نظر بگیرید که  ``int`` منفی را به  ``uint`` تبدیل می‌کند:
+=======
+If the compiler does not allow implicit conversion but you are confident a conversion will work,
+an explicit type conversion is sometimes possible. This may
+result in unexpected behavior and allows you to bypass some security
+features of the compiler, so be sure to test that the
+result is what you want and expect!
+
+Take the following example that converts a negative ``int`` to a ``uint``:
+>>>>>>> english/develop
 
 .. code-block:: solidity
 
@@ -135,6 +145,7 @@ because ``uint256`` cannot hold values such as ``-1``.
         }
     }
 
+.. index:: ! literal;conversion, literal;rational, literal;hexadecimal number
 .. _types-conversion-literals:
 
 تبدیل بین لیترال‌ها و نوع‌های اصلی 
@@ -154,11 +165,17 @@ because ``uint256`` cannot hold values such as ``-1``.
 
 .. note::
 
+<<<<<<< HEAD
       قبل از نسخه 0.8.0، هر عدد تحت اعشاری یا هگزا دسیمال می‌تواند به ضمنی به یک نوع صحیح تبدیل 
       شود. از 0.8.0، چنین تبدیل‌های صریح به اندازه تبدیل‌های ضمنی سختگیرانه هستند، یعنی تنها در صورتی 
       مجاز هستند که کلمه تحت اللفظی در محدوده حاصله مطابقت داشته باشد.
 
 آرایه‌های بایت با اندازه ثابت 
+=======
+.. index:: literal;string, literal;hexadecimal
+
+Fixed-Size Byte Arrays
+>>>>>>> english/develop
 ----------------------
 
 اعداد اعشاری لیترال را نمی‌توان به صورت ضمنی به آرایه‌های بایت با اندازه ثابت تبدیل کرد. می‌تواند لیترال‌های 
@@ -190,16 +207,32 @@ because ``uint256`` cannot hold values such as ``-1``.
     bytes2 e = "x"; // not allowed
     bytes2 f = "xyz"; // not allowed
 
+<<<<<<< HEAD
 آدرس‌ها
+=======
+.. index:: literal;address
+
+Addresses
+>>>>>>> english/develop
 ---------
 
 همانطور که در :ref:`آدرس لیترال‌ها<address_literals>` توضیح داده شد، لیترال‌های هگز با اندازه صحیح که از آزمون چک‌سام  عبور 
 می‌کنند از نوع  ``address`` هستند. هیچ لیترال دیگری را نمی‌توان به طور ضمنی به 
 نوع  ``address`` تبدیل کرد.
 
+<<<<<<< HEAD
 
 تبدیل صریح از  ``bytes20``  یا هر نوع عدد صحیح به  ``address`` منجر به ``address payable``  می‌شود.
 
 
 ``address a``  را می‌توان به ``address payable``  از طریق  ``payable(a)`` تبدیل کرد.
 
+=======
+Explicit conversions to ``address`` are allowed only from ``bytes20`` and ``uint160``.
+
+An ``address a`` can be converted explicitly to ``address payable`` via ``payable(a)``.
+
+.. note::
+    Prior to version 0.8.0, it was possible to explicitly convert from any integer type (of any size, signed or unsigned) to  ``address`` or ``address payable``.
+    Starting with in 0.8.0 only conversion from ``uint160`` is allowed.
+>>>>>>> english/develop
