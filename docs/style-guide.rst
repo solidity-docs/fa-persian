@@ -8,23 +8,44 @@
 مقدمه
 *****
 
+<<<<<<< HEAD
 این راهنما در نظر دارد در مورد نحوه ی کد نویسی سالیدیتی صحبت کند. این راهنما همواره در حال تکامل است و با
 گذشت زمان امکان دارد قواعد جدید جایگزین قواعد قبلی شود.
+=======
+This guide is intended to provide coding conventions for writing Solidity code.
+This guide should be thought of as an evolving document that will change over
+time as useful conventions are found and old conventions are rendered obsolete.
+>>>>>>> english/develop
 
 بسیاری از پروژه ها سبک نوشتاری خود را پیاده سازی می کنند. درصورتی که تداخلی رخ دهد، سبک نوشتاری خاص
 در پروژه الویت پیدا می کند.
 
+<<<<<<< HEAD
 ساختار بسیاری از سبک نوشتاری های پیشنهاد شده (recommended) از  `سبک نوشتاری pep8 <https://www.python.org/dev/peps/pep-0008/>`_ بر
 گرفته شده است.
 
 هدف این راهنما ارائه روش صحیح و یا بهترین روش برای کد نویسی سالیدیتی نیست. هدف این راهنما یکپارچگی است.
 `pep8 <https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_ صراحتا این مفهوم را نشان بیان می کند.
+=======
+The structure and many of the recommendations within this style guide were
+taken from Python's
+`pep8 style guide <https://peps.python.org/pep-0008/>`_.
+
+The goal of this guide is *not* to be the right way or the best way to write
+Solidity code.  The goal of this guide is *consistency*.  A quote from Python's
+`pep8 <https://peps.python.org/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds>`_
+captures this concept well.
+>>>>>>> english/develop
 
 .. note::
 
     یک سبک نوشتار در مورد یکپارچگی است. سبک نوشتاری به همراه یکپارچگی مهم است. یکپارچگی در یک پروژه بسیار مهم است.یکپارچگی در یک ماژول یا تابع از همه مهمتر است.
 
+<<<<<<< HEAD
     اما مهمتر از همه: **دانستن زمان غیر یکپارچه بودن است** -- بعضی اوغات یکپارچگی در نظر گرفته نمی شود. در صورت شک، به امثال دیگر نگاه کنید و تصمیم بگیرید کدام بهتر است و از پرسیدن سوال دریغ نکنید!
+=======
+    But most importantly: **know when to be inconsistent** -- sometimes the style guide just doesn't apply. When in doubt, use your best judgment. Look at other examples and decide what looks best. And do not hesitate to ask!
+>>>>>>> english/develop
 
 
 ***********
@@ -47,7 +68,11 @@ Tabs یا Spaces
 خط های خالی
 ===========
 
+<<<<<<< HEAD
 تعاریف های سطح اول خود را به دو خط خالی در سورس کد(source code) سالیدتی احاطه کنید.
+=======
+Surround top level declarations in Solidity source with two blank lines.
+>>>>>>> english/develop
 
 بله:
 
@@ -142,7 +167,11 @@ Tabs یا Spaces
 ماکسیموم طول خط
 ===================
 
+<<<<<<< HEAD
 `طبق پیشنهاد PEP8 <https://www.python.org/dev/peps/pep-0008/#maximum-line-length>`_ ماکسیموم طول هرخط 79 (یا 99) کاراکتر باشد به خواننده کمک می کند تا به راحتی کد رابخواند.
+=======
+Maximum suggested line length is 120 characters.
+>>>>>>> english/develop
 
 خط های پیچیده باید قوانین ذیل را رعایت کنند:
 
@@ -199,7 +228,7 @@ Tabs یا Spaces
 
 .. code-block:: solidity
 
-    thisIsALongNestedMapping[being][set][to_some_value] = someFunction(
+    thisIsALongNestedMapping[being][set][toSomeValue] = someFunction(
         argument1,
         argument2,
         argument3,
@@ -210,7 +239,7 @@ Tabs یا Spaces
 
 .. code-block:: solidity
 
-    thisIsALongNestedMapping[being][set][to_some_value] = someFunction(argument1,
+    thisIsALongNestedMapping[being][set][toSomeValue] = someFunction(argument1,
                                                                        argument2,
                                                                        argument3,
                                                                        argument4);
@@ -229,7 +258,7 @@ Tabs یا Spaces
         bytes32[] options
     );
 
-    LongAndLotsOfArgs(
+    emit LongAndLotsOfArgs(
         sender,
         recipient,
         publicKey,
@@ -247,7 +276,7 @@ Tabs یا Spaces
                             uint256 amount,
                             bytes32[] options);
 
-    LongAndLotsOfArgs(sender,
+    emit LongAndLotsOfArgs(sender,
                       recipient,
                       publicKey,
                       amount,
@@ -275,6 +304,7 @@ Imports
     contract A {
         // ...
     }
+
 
     contract B is Owned {
         // ...
@@ -433,17 +463,21 @@ Imports
 
     x = 1;
     y = 2;
-    long_variable = 3;
+    longVariable = 3;
 
 خیر:
 
 .. code-block:: solidity
 
-    x             = 1;
-    y             = 2;
-    long_variable = 3;
+    x            = 1;
+    y            = 2;
+    longVariable = 3;
 
+<<<<<<< HEAD
 فضای خالی را در توابع دریافت و عقبگرد قرار ندهید:
+=======
+Do not include a whitespace in the receive and fallback functions:
+>>>>>>> english/develop
 
 بله:
 
@@ -666,9 +700,16 @@ block and the opening brace.
         selfdestruct(owner);
     }
 
+<<<<<<< HEAD
 برای تعاریف طولانی تابع، توصیه می شود که هر ورودی (argument) را در همان سطح تو
 رفتگی بدنه تابع قرار دهید. پرانتز بسته و آکولاد باز باید در خط خود قرار بگیرند و همان سطح
 تورفتگی تابع را داشته باشند. 
+=======
+For long function declarations, it is recommended to drop each argument onto
+its own line at the same indentation level as the function body.  The closing
+parenthesis and opening bracket should be placed on their own line as well at
+the same indentation level as the function declaration.
+>>>>>>> english/develop
 
 بله:
 
@@ -734,7 +775,7 @@ block and the opening brace.
     function thisFunctionNameIsReallyLong(
         address x,
         address y,
-        address z,
+        address z
     )
         public
         onlyOwner
@@ -833,14 +874,19 @@ block and the opening brace.
         constructor(uint) {
         }
     }
+
+
     contract C {
         constructor(uint, uint) {
         }
     }
+
+
     contract D {
         constructor(uint) {
         }
     }
+
 
     contract A is B, C, D {
         uint x;
@@ -913,8 +959,14 @@ block and the opening brace.
 
     function shortFunction() public { doSomething(); }
 
+<<<<<<< HEAD
 این آموزه ها برای بهبود خوانایی تعریف توابع بودند. نویسندگان باید از بهترین قضاوت خود
 استفاده کنند راهنمای وی نمی تواند تمامی جایگزینی های احتمالی تعریف توابع را پوشش دهد.
+=======
+These guidelines for function declarations are intended to improve readability.
+Authors should use their best judgment as this guide does not try to cover all
+possible permutations for function declarations.
+>>>>>>> english/develop
 
 نگاشت ها
 ========
@@ -1000,9 +1052,16 @@ block and the opening brace.
     x += 3+4;
     x |= y&&z;
 
+<<<<<<< HEAD
 * عملگر هایی که دارای الویت بالایی نسبت به دیگر عملگر ها دارند می توانند فضای خالی نداشته
   باشند. برای افزایش خوانایی در عبارات پیچیده مجاز است. فضای خالی در هر دو طرف عملگر
   باید به یک مقدار (یکسان) باشد:
+=======
+* Operators with a higher priority than others can exclude surrounding
+  whitespace in order to denote precedence.  This is meant to allow for
+  improved readability for complex statements. You should always use the same
+  amount of whitespace on either side of an operator:
+>>>>>>> english/develop
 
 بله:
 
@@ -1024,6 +1083,7 @@ block and the opening brace.
 ترتیب چیدمان
 ************
 
+<<<<<<< HEAD
 چیدمان عناصر قرارداد به ترتیب ذیل است:
 
 1. بیانیه Pragma
@@ -1031,21 +1091,72 @@ block and the opening brace.
 3. رابط ها (Interfaces)
 4. کتابخانه ها (Libraries)
 5. قرارداد ها
+=======
+Contract elements should be laid out in the following order:
+
+1. Pragma statements
+2. Import statements
+3. Events
+4. Errors
+5. Interfaces
+6. Libraries
+7. Contracts
+>>>>>>> english/develop
 
 در داخل هر قرارداد، کتابخانه یا رابط به ترتیب ذیل است:
 
+<<<<<<< HEAD
 1. تعاریف نوع (Type declarations)
 2. متغیر های وضعیت (State variables)
 3. رخداد ها (Events)
 4. توابع
+=======
+1. Type declarations
+2. State variables
+3. Events
+4. Errors
+5. Modifiers
+6. Functions
+>>>>>>> english/develop
 
 .. note::
 
     امکان دارد تعریف نوع ها نزدیک رخداد ها یا متغیر های وضعیت کد را واضح تر کند.
 
+<<<<<<< HEAD
 *************
 اصول نامگذاری
 *************
+=======
+Yes:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.4 <0.9.0;
+
+    abstract contract Math {
+        error DivideByZero();
+        function divide(int256 numerator, int256 denominator) public virtual returns (uint256);
+    }
+
+No:
+
+.. code-block:: solidity
+
+    // SPDX-License-Identifier: GPL-3.0
+    pragma solidity >=0.8.4 <0.9.0;
+
+    abstract contract Math {
+        function divide(int256 numerator, int256 denominator) public virtual returns (uint256);
+        error DivideByZero();
+    }
+
+
+******************
+Naming Conventions
+******************
+>>>>>>> english/develop
 
 اصول نامگذاری زمانی قدرتمند هستند که به صورت سرتاسری وفق داده و استفاده شوند.
 استفاده از اصول مختلف اطلاعات *اضافی* منتقل می کند یا به بیان دیگر بلافاصله در دسترس
@@ -1065,6 +1176,7 @@ block and the opening brace.
 برای جلوگیری از سردرگمی، از نام های زیر برای اشاره به سبک های مختلف نامگذاری استفاده
 خواهد شد.
 
+<<<<<<< HEAD
 * ``b`` ( تک کلمه کوچک-چین(lowercase))
 * ``B`` ( تک کلمه بزرگ-چین(uppercase))
 * ``lowercase`` (کوچک-چین)
@@ -1074,6 +1186,15 @@ block and the opening brace.
 * ``CapitalizedWords`` (or CapWords) ( یا کلمات با حروف بزرگ اول) (CapWord)
 * ``mixedCase`` (مثل نوع قبل است با این تفاوت که حرف اول کلمه اول کوچک و باقی حرف اول کلمات دیگر بزرگ)
 * ``Capitalized_Words_With_Underscores``  ( مثل نوع ما قبل با این تفاوت که از خط زیر نیر استفاده می شود)
+=======
+* ``b`` (single lowercase letter)
+* ``B`` (single uppercase letter)
+* ``lowercase``
+* ``UPPERCASE``
+* ``UPPER_CASE_WITH_UNDERSCORES``
+* ``CapitalizedWords`` (or CapWords)
+* ``mixedCase`` (differs from CapitalizedWords by initial lowercase character!)
+>>>>>>> english/develop
 
 .. note:: هنگام استفاده از CapitalizedWords تمام حروف کلمه اولیه را با حروف بزرگ وارد کنید. بنابراین HTTPServerError بهتر از HttpServerError است. هنگام استفاده از mixedCase تمام حروف کلمه اولیه کوچک و بقیه کلمات را با حرف بزرگ اول بنویسید. بنابراین xmlHTTPRequest بهتر از XMLHTTPRequest است.
 
@@ -1110,13 +1231,13 @@ block and the opening brace.
     contract Owned {
         address public owner;
 
-        constructor() {
-            owner = msg.sender;
-        }
-
         modifier onlyOwner {
             require(msg.sender == owner);
             _;
+        }
+
+        constructor() {
+            owner = msg.sender;
         }
 
         function transferOwnership(address newOwner) public onlyOwner {
@@ -1149,13 +1270,13 @@ block and the opening brace.
     contract owned {
         address public owner;
 
-        constructor() {
-            owner = msg.sender;
-        }
-
         modifier onlyOwner {
             require(msg.sender == owner);
             _;
+        }
+
+        constructor() {
+            owner = msg.sender;
         }
 
         function transferOwnership(address newOwner) public onlyOwner {
@@ -1233,10 +1354,30 @@ Enums در سبک تعاریف ساده باید از روش نام گذاری C
 اجتناب از تداخل نام گذاری
 ===========================
 
-* ``single_trailing_underscore_``
+* ``singleTrailingUnderscore_``
 
+<<<<<<< HEAD
 این اصول زمانی پیشنهاد می شود که نام مورد نظر با نام داخلی یا نام دیگر رزرو شده ای
 تداخل داشته باشد.
+=======
+This convention is suggested when the desired name collides with that of
+an existing state variable, function, built-in or otherwise reserved name.
+
+Underscore Prefix for Non-external Functions and Variables
+==========================================================
+
+* ``_singleLeadingUnderscore``
+
+This convention is suggested for non-external functions and state variables (``private`` or ``internal``). State variables without a specified visibility are ``internal`` by default.
+
+When designing a smart contract, the public-facing API (functions that can be called by any account)
+is an important consideration.
+Leading underscores allow you to immediately recognize the intent of such functions,
+but more importantly, if you change a function from non-external to external (including ``public``)
+and rename it accordingly, this forces you to review every call site while renaming.
+This can be an important manual check against unintended external functions
+and a common source of security vulnerabilities (avoid find-replace-all tooling for this change).
+>>>>>>> english/develop
 
 .. _style_guide_natspec:
 
