@@ -6,9 +6,15 @@
 اصلاح کننده های تابع
 ********************
 
+<<<<<<< HEAD
 اصلاح کننده ها جهت تغییر رفتار توابع به روش تعریف وار استفاده می شوند. برای مثال، شما
 می توانید از یک اصلاح کننده جهت اعمال پیش شرط به صورت اتوماتیک برای اجرای آن تابع
 استفاده کنید.
+=======
+Modifiers can be used to change the behavior of functions in a declarative way.
+For example,
+you can use a modifier to automatically check a condition prior to executing the function.
+>>>>>>> english/develop
 
 اصلاح کننده ها ویژگی های وراثتی قرارداد ها هستند و ممکن است توسط قرارداد هایی که
 نشات گرفته شده اند باز نویسی شوند. اما فقط زمانی که بصورت ``virtual`` نشانه گذاری شده
@@ -18,6 +24,7 @@
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.1 <0.9.0;
+    // This will report a warning due to deprecated selfdestruct
 
     contract owned {
         constructor() { owner = payable(msg.sender); }
@@ -59,7 +66,7 @@
     }
 
     contract Register is priced, destructible {
-        mapping (address => bool) registeredAddresses;
+        mapping(address => bool) registeredAddresses;
         uint price;
 
         constructor(uint initialPrice) { price = initialPrice; }
@@ -71,8 +78,8 @@
             registeredAddresses[msg.sender] = true;
         }
 
-        function changePrice(uint _price) public onlyOwner {
-            price = _price;
+        function changePrice(uint price_) public onlyOwner {
+            price = price_;
         }
     }
 
@@ -112,9 +119,21 @@
 داده و یا مقادیر بازگشتی را برگردانند. مقادیر آنها فقط به صراحت هنگام فراخوانی به آنها
 منتقل می شود.
 
+<<<<<<< HEAD
 بازگشت واضح(Explicit) از یک اصلاح کننده یا بدنه تابع فقط از اصلاح کننده جاری و یا بنده تابع
 خارج می شود. متغیر های اختصاص داده شده باز می گردند و کنترل جریان ``_`` از اصلاح کننده
 قبلی ادامه می یابد.
+=======
+In function modifiers, it is necessary to specify when you want the function to which the modifier is
+applied to be run. The placeholder statement (denoted by a single underscore character ``_``) is used to
+denote where the body of the function being modified should be inserted. Note that the
+placeholder operator is different from using underscores as leading or trailing characters in variable
+names, which is a stylistic choice.
+
+Explicit returns from a modifier or function body only leave the current
+modifier or function body. Return variables are assigned and
+control flow continues after the ``_`` in the preceding modifier.
+>>>>>>> english/develop
 
 .. warning::
    در نسخه قدیمی سالیدیتی، دستورات ``return`` در توابع اصلاح کننده ها با رفتار متفاوت
@@ -125,7 +144,12 @@
 متغیر های باز گشتی بر روی :ref:`مقادیر پیش فرض<default-value>` خود تنظیم می شوند درست مانند اینکه تابع
 دارای یک بدن خالی باشد.
 
+<<<<<<< HEAD
 نماد ``_`` می تواند چندین بار در اصلاح کننده ظاهر شود. هر رخداد با بدنه تابع جایگزین می شود.
+=======
+The ``_`` symbol can appear in the modifier multiple times. Each occurrence is replaced with
+the function body, and the function returns the return value of the final occurrence.
+>>>>>>> english/develop
 
 عبارت های دلخواه برای ورودی (آرگومان) های اصلاح کننده مجاز هستند و در این مورد ، همه
 نماد های قابل مشاهده در تابع در اصلاح کننده نیز قابل مشاهده هستند.
