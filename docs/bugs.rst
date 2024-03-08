@@ -6,10 +6,18 @@
 لیست باگهای شناخته شده
 #######################
 
+<<<<<<< HEAD
 در زیر ، می توانید لیستی از برخی اشکالات شناخته شده مربوط به امنیت در کامپایلر سالیدیتی
 را در قالب جیسون پیدا کنید. خود فایل در `مخزن گیت هاب <https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_ . میزبانی می شود.
 این لیست تا نسخه 0.3.0 امتداد دارد، اشکالات قبلی حاضر هستند و اشکالاتی که بعد از ارائه شدن نسخه
 نبودند در این لیست وجود دارد.
+=======
+Below, you can find a JSON-formatted list of some of the known security-relevant bugs in the
+Solidity compiler. The file itself is hosted in the `GitHub repository
+<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_.
+The list stretches back as far as version 0.3.0, bugs known to be present only
+in versions preceding that are not listed.
+>>>>>>> english/develop
 
 فایل دیگری بنام `bugs_by_version.json <https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_ وجود دارد ، که می تواند برای بررسی اشکالات
 موجود بر نسخه خاصی از کامپایلر مورد استفاده قرار گیرد.
@@ -34,6 +42,7 @@ uid
     Unique identifier given to the bug in the form of ``SOL-<year>-<number>``.
     It is possible that multiple entries exists with the same uid. This means
     multiple version ranges are affected by the same bug.
+<<<<<<< HEAD
 نام
     نام اختصاری داده شده به اشکال(bug)
 خلاصه
@@ -71,6 +80,50 @@ uid
     فشرده برنامه سالیدتی اعمال کرد.(“ast-compact-json-path”). عبارت مشخص شده
     جستجو عبارتی از نوع `JsonPath <https://github.com/json-path/JsonPath>`_  است. اگر حداقل یک مسیر از AST سالیدتی با عبارت
     جستجو شده تطابق کند، اشکال به احتمال زیاد وجود دارد.
+=======
+name
+    Unique name given to the bug
+summary
+    Short description of the bug
+description
+    Detailed description of the bug
+link
+    URL of a website with more detailed information, optional
+introduced
+    The first published compiler version that contained the bug, optional
+fixed
+    The first published compiler version that did not contain the bug anymore
+publish
+    The date at which the bug became known publicly, optional
+severity
+    Severity of the bug: very low, low, medium, high. Takes into account
+    discoverability in contract tests, likelihood of occurrence and
+    potential damage by exploits.
+conditions
+    Conditions that have to be met to trigger the bug. The following
+    keys can be used:
+    ``optimizer``, Boolean value which
+    means that the optimizer has to be switched on to enable the bug.
+    ``evmVersion``, a string that indicates which EVM version compiler
+    settings trigger the bug. The string can contain comparison
+    operators. For example, ``">=constantinople"`` means that the bug
+    is present when the EVM version is set to ``constantinople`` or
+    later.
+    If no conditions are given, assume that the bug is present.
+check
+    This field contains different checks that report whether the smart contract
+    contains the bug or not. The first type of check are JavaScript regular
+    expressions that are to be matched against the source code ("source-regex")
+    if the bug is present.  If there is no match, then the bug is very likely
+    not present. If there is a match, the bug might be present.  For improved
+    accuracy, the checks should be applied to the source code after stripping
+    comments.
+    The second type of check are patterns to be checked on the compact AST of
+    the Solidity program ("ast-compact-json-path"). The specified search query
+    is a `JsonPath <https://github.com/json-path/JsonPath>`_ expression.
+    If at least one path of the Solidity AST matches the query, the bug is
+    likely present.
+>>>>>>> english/develop
 
 .. literalinclude:: bugs.json
    :language: js
